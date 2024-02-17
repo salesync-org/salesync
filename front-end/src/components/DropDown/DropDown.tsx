@@ -78,18 +78,6 @@ const DropDown: React.FC<DropdownButtonProps> = ({
                 }
                 target = target.parentNode as HTMLElement;
             }
-        }
-        if (event.key === "ArrowUp" || event.key === "ArrowDown") {
-            var focusedElement = document.activeElement as HTMLElement;
-
-            // Find the next focusable element
-            var nextElement = (event.key === "ArrowDown") ? focusedElement.nextElementSibling as HTMLElement :
-            focusedElement.previousElementSibling as HTMLElement;
-
-            // If there is a next focusable element, set focus to it
-            if (nextElement) {
-                nextElement.focus();
-            }
         }}
 
     return (
@@ -109,11 +97,11 @@ const DropDown: React.FC<DropdownButtonProps> = ({
                 rounded bg-button-background-light dark:bg-button-background-dark px-2 border-2 border-button-stroke-light dark:border-button-stroke-dark
                 absolute z-10 max-h-80 overflow-y-auto ${
                     shoulDropUp
-                        ? "origin-top top-12"
+                        ? "origin-top top-[4.8rem]"
                         : "origin-bottom bottom-12"
                 }
                 ${
-                    isOpen ? "scale-100" : "scale-0"
+                    isOpen ? "scale-100" : "scale-0 *:hidden"
                 } transition-all duration-100 ease-in-out`}
                 onClick={(event) => {
                     let target = event.target as HTMLElement;

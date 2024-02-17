@@ -5,6 +5,7 @@ import ComponentPanel from "./ComponentPanel/ComponentPanel";
 import TypographyPanel from "./TypographyPanel/TypographyPanel";
 import themeSwitcher from "../../utils/themeSwitcher";
 import Icon from "../../components/Icon/Icon";
+import PalettePanel from "./PalettePanel/PalettePanel";
 
 function Cheatsheet() {
     return (
@@ -25,6 +26,7 @@ function Cheatsheet() {
             </div>
             <TypographyPanel />
             <ComponentPanel />
+            <PalettePanel />
         </div>
     );
 }

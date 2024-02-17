@@ -14,12 +14,12 @@ function ComponentPanel() {
             <p>
                 These are all of the predefined UI components to be used in the project.
             </p>
-            <div className="flex flex-wrap my-6 *:my-6 *:mx-10">
+            <div className="flex flex-wrap my-6 *:my-6 *:mx-8">
                 <div>
                     <h2 className="mb-4">Primary Button</h2>
                     <PrimaryButton onClick={function (): void {}} header="Normal" showHeader={true}>Primary</PrimaryButton>
                     <PrimaryButton onClick={function (): void {}} header="Disabled" disabled={true} showHeader={true}>Primary</PrimaryButton>
-                    <PrimaryButton onClick={function (): void {}} header="Icon" showHeader={true}>
+                    <PrimaryButton onClick={function (): void {}} header="With Icon" showHeader={true}>
                         <Icon name="search" />
                         <p>Primary</p>
                     </PrimaryButton>
@@ -28,7 +28,7 @@ function ComponentPanel() {
                     <h2 className="mb-4">Secondary Button</h2>
                     <Button onClick={function (): void {}} header="Normal" showHeader={true}>Secondary</Button>
                     <Button onClick={function (): void {}} header="Disabled" disabled={true} showHeader={true}>Secondary</Button>
-                    <Button onClick={function (): void {}} header="Icon" showHeader={true}>
+                    <Button onClick={function (): void {}} header="With Icon" showHeader={true}>
                         <Icon name="edit" />
                         <p>Secondary</p>
                     </Button>
@@ -48,14 +48,19 @@ function ComponentPanel() {
                 <div>
                     <h2 className="mb-4">Input Button</h2>
                     <DropDown header="Normal" value="Select a value">
-                        <Item icon={<Icon name="person" size="1rem" />} title="Complex Item" subTitle="With Subtitle" href="#"/>
-                        <Item title="Simple Item" subTitle="With Subtitle"/>
+                        <Item title="Item 1"/>
+                        <Item title="Item 2"/>
+                        <Item title="Item 3"/>
+                        <Item title="Item 4"/>
+                    </DropDown>
+                    <DropDown header="With Complex Items" value="Select a value">
+                        <Item icon={<Icon name="person" size="1rem" />} title="Complex" subTitle="With Subtitle" href="#"/>
                         <Item title="Detailed" subTitle="And Subtitle" additionalInfo="With Additional Info"/>
-                        <Item title="Simpliest Item"/>
+                        <Item title="Simple" subTitle="With Subtitle"/>
                     </DropDown>
                 </div>
             </div>
-            
+            <h5>Comming more.</h5>
         </Panel>
     );
 }

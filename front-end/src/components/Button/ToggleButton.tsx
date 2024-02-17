@@ -40,13 +40,15 @@ const ToggleButton: React.FC<ButtonProps> = ({
                 className={`${className} ${disabled? 'opacity-80': 'hover:scale-105 active:scale-100 cursor-pointer'} inline-flex items-center rounded-full border-2 border-button-stroke dark:border-button-stroke-dark`}
                 onClick={handleOnClick}
                 onKeyDown={handleKeyDown}
-                tabIndex={0}
+                tabIndex={disabled ? undefined : 0}
             >
                 <input
                     type="checkbox"
                     aria-label={label ? label : " "}
                     value=""
                     checked={isChecked}
+                    disabled={disabled}
+                    tabIndex={-1}
                     className="sr-only peer"
                     onChange={() => {}}
                 />

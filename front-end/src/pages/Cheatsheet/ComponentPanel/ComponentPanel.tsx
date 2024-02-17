@@ -4,6 +4,8 @@ import Panel from "../../../components/Panel/Panel";
 import ToggleButton from "../../../components/Button/ToggleButton";
 import Icon from "../../../components/Icon/Icon";
 import TextInput from "../../../components/TextInput/TextInput";
+import DropDown from "../../../components/DropDown/DropDown";
+import Item from "../../../components/Item/Item";
 
 function ComponentPanel() {
     return (
@@ -12,7 +14,7 @@ function ComponentPanel() {
             <p>
                 These are all of the predefined UI components to be used in the project.
             </p>
-            <div className="flex flex-wrap my-6 *:my-6 space-x-10 justify-center">
+            <div className="flex flex-wrap my-6 *:my-6 *:mx-10">
                 <div>
                     <h2 className="mb-4">Primary Button</h2>
                     <PrimaryButton onClick={function (): void {}} header="Normal" showHeader={true}>Primary</PrimaryButton>
@@ -39,8 +41,18 @@ function ComponentPanel() {
                 </div>
                 <div>
                     <h2 className="mb-4">Input Button</h2>
-                    <TextInput header="Normal" value="" placeholder="Something"/>
-                    <TextInput header="With Icon" value="" placeholder="Something" prefixIcon="search"/>
+                    <TextInput header="Normal" value="" placeholder="Search for something"/>
+                    <TextInput header="With Icon" value="" placeholder="Search for anything" prefixIcon="search"/>
+                    <TextInput header="Disabled" value="" disabled placeholder="Search for nothing" prefixIcon="home"/>
+                </div>
+                <div>
+                    <h2 className="mb-4">Input Button</h2>
+                    <DropDown header="Normal" value="Select a value">
+                        <Item icon={<Icon name="person" size="1rem" />} title="Complex Item" subTitle="With Subtitle" href="#"/>
+                        <Item title="Simple Item" subTitle="With Subtitle"/>
+                        <Item title="Detailed" subTitle="And Subtitle" additionalInfo="With Additional Info"/>
+                        <Item title="Simpliest Item"/>
+                    </DropDown>
                 </div>
             </div>
             

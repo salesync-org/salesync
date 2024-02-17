@@ -21,7 +21,7 @@ export default {
         'none': '0',
         'sm': '.5rem',
         DEFAULT: '.8rem',
-        'lg': '1rem',
+        'lg': '1.2rem',
         'full': '9999px',
       },
       colors: {
@@ -57,7 +57,7 @@ export default {
         'secondary': {
           'light': '#cee7ff',
           DEFAULT: '#cee7ff',
-          'dark': '#cefaff',
+          'dark': '#304F8D',
         },
         'link-text': {
           'light': '#304f8d',

@@ -23,7 +23,7 @@ const PrimaryButton: React.FC<ButtonProps> = ({
             <button
                 className={`bg-primary disabled:opacity-80 border-2 border-primary-stroke dark:border-primary-stroke-dark
                 enabled:hover:bg-primary-hover enabled:hover:scale-105 
-                enabled:active:scale-100 enabled:active:bg-primary-active enabled:active:translate-y-[0.1rem] enabled:active:text-opacity-80 
+                enabled:scale-100 enabled:active:bg-primary-active enabled:active:translate-y-[0.1rem] enabled:active:text-opacity-80 
                 text-on-primary py-2 px-4 rounded ${className}`}
                 onClick={onClick}
                 disabled={disabled}

@@ -8,7 +8,6 @@ type ButtonProps = {
     header?: string;
     showHeader?: boolean;
 };
-
 const Button: React.FC<ButtonProps> = ({
     onClick,
     className,

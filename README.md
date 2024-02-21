@@ -14,3 +14,9 @@
 
 note: có thể thao tác với DB thông qua entity manager hoặc jpa repository, jpa repository  code đơn giản hơn(?)
 
+## Dependencies
+![Screenshot 2024-02-21 105031](https://github.com/salesync-org/test-salesync/assets/113912946/3b574094-ddf5-4d4b-ae21-83f1567efc46) ![Screenshot 2024-02-21 105002](https://github.com/salesync-org/test-salesync/assets/113912946/f7375010-8220-47b6-a29c-12e1bc06e35c)
+
+
+## Project
+![Screenshot 2024-02-21 105124](https://github.com/salesync-org/test-salesync/assets/113912946/616a419b-6d9f-4034-b1d8-b2cbf972472b)

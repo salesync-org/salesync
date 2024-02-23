@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { cn } from '../../../utils/utils';
-import './modal.css';
 
 interface Props {
   children: React.ReactNode;
@@ -47,7 +46,7 @@ const Modal = ({ children, title, isOpen, onOpenChange, isStatic = true }: Props
           className='fixed left-0 right-0 top-0 z-50 flex h-[calc(100%-1rem)] max-h-full w-full items-center justify-center overflow-y-auto overflow-x-hidden bg-black bg-opacity-50 transition-all dark:bg-gray-900 dark:bg-opacity-50 md:inset-0'
           onClick={handleCloseWhenClickOutside}
         >
-          <div className='relative max-h-full w-full max-w-2xl' id='modal'>
+          <div className='animate-modal relative max-h-full w-full max-w-2xl origin-[0_50%]' id='modal'>
             {/* <!-- Modal content --> */}
             <div className='relative rounded-lg bg-white px-3 py-4 shadow dark:bg-input-stroke-dark'>
               {/* <!-- Modal header --> */}

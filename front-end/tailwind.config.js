@@ -94,6 +94,15 @@ export default {
         'on-primary': {
           DEFAULT: '#ffffff'
         }
+      },
+      animation: {
+        modal: 'modal 0.1s ease-in-out'
+      },
+      keyframes: {
+        modal: {
+          '0%': { transform: 'scale(0.5)', opacity: '0' },
+          '100%': { transform: 'scale(1)', opacity: '1' }
+        }
       }
     }
   },

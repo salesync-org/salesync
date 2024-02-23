@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { cn } from '../../../utils/utils';
+import FocusTrap from '../../FocusTrap/FocusTrap';
 
 interface Props {
   children: React.ReactNode;
@@ -50,33 +51,35 @@ const Modal = ({ children, title, isOpen, onOpenChange, isStatic = true }: Props
             {/* <!-- Modal content --> */}
             <div className='relative rounded-lg bg-white px-3 py-4 shadow dark:bg-input-stroke-dark'>
               {/* <!-- Modal header --> */}
-              <div className='flex items-center justify-between p-4 md:p-5'>
-                <h3 className='text-2xl font-bold'>{title}</h3>
-                <button
-                  type='button'
-                  className='ms-auto inline-flex h-8 w-8 items-center justify-center rounded-sm bg-transparent text-sm transition-all hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white'
-                  data-modal-hide='default-modal'
-                  onClick={() => onOpenChange(false)}
-                >
-                  <svg
-                    className='h-4 w-4'
-                    aria-hidden='true'
-                    xmlns='http://www.w3.org/2000/svg'
-                    fill='none'
-                    viewBox='0 0 14 14'
+              <FocusTrap>
+                <div className='flex items-center justify-between p-4 md:p-5'>
+                  <h3 className='text-2xl font-bold'>{title}</h3>
+                  <button
+                    type='button'
+                    className='ms-auto inline-flex h-8 w-8 items-center justify-center rounded-sm bg-transparent text-sm transition-all hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white'
+                    data-modal-hide='default-modal'
+                    onClick={() => onOpenChange(false)}
                   >
-                    <path
-                      stroke='currentColor'
-                      stroke-linecap='round'
-                      stroke-linejoin='round'
-                      stroke-width='2'
-                      d='m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6'
-                    />
-                  </svg>
-                </button>
-              </div>
-              {/* <!-- Modal body --> */}
-              <div className='space-y-4 p-4 md:p-5'>{children}</div>
+                    <svg
+                      className='h-4 w-4'
+                      aria-hidden='true'
+                      xmlns='http://www.w3.org/2000/svg'
+                      fill='none'
+                      viewBox='0 0 14 14'
+                    >
+                      <path
+                        stroke='currentColor'
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        strokeWidth='2'
+                        d='m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6'
+                      />
+                    </svg>
+                  </button>
+                </div>
+                {/* <!-- Modal body --> */}
+                <div className='space-y-4 p-4 md:p-5'>{children}</div>
+              </FocusTrap>
             </div>
           </div>
         </div>

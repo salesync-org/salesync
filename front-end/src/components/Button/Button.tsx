@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 type ButtonProps = {
     onClick: () => void;
@@ -7,6 +7,7 @@ type ButtonProps = {
     children: React.ReactNode;
     header?: string;
     showHeader?: boolean;
+    type?: 'button' | 'submit' | 'reset';
 };
 const Button: React.FC<ButtonProps> = ({
     onClick,
@@ -15,9 +16,10 @@ const Button: React.FC<ButtonProps> = ({
     children,
     header,
     showHeader = true,
+    type = 'button',
 }) => {
     return (
-        <div className="w-fit">
+        <div>
             {showHeader && header && <p className="my-1">{header}</p>}
             <button
                 className={`bg-button-background dark:bg-button-background-dark text-text-light dark:text-text-dark border-2 border-button-stroke dark:border-button-stroke-dark
@@ -27,10 +29,9 @@ const Button: React.FC<ButtonProps> = ({
                 py-2 px-4 rounded ${className}`}
                 onClick={onClick}
                 disabled={disabled}
+                type={type}
             >
-                <div className="flex justify-center items-center space-x-2">
-                    {children}
-                </div>
+                <div className="flex justify-center items-center space-x-2">{children}</div>
             </button>
         </div>
     );

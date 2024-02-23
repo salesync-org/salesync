@@ -7,6 +7,7 @@ import themeSwitcher from '../../utils/themeSwitcher';
 import Icon from '../../components/Icon/Icon';
 import PalettePanel from './PalettePanel/PalettePanel';
 import ReactRouterDomPanel from './ReactRouterDomPanel/ReactRouterDomPanel';
+import ModalPanel from './ModalPanel/ModalPanel';
 
 function Cheatsheet() {
     return (
@@ -32,6 +33,7 @@ function Cheatsheet() {
             <ComponentPanel />
             <PalettePanel />
             <ReactRouterDomPanel />
+            <ModalPanel />
         </div>
     );
 }

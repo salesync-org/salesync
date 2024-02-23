@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { cn } from '../../../utils/utils';
 import './modal.css';
@@ -31,6 +31,22 @@ const Modal = ({ children, title, isOpen, onOpenChange, isStatic = true }: Props
             onOpenChange(false);
         }
     };
+
+    useEffect(() => {
+        const keyPressHandler = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                onOpenChange(false);
+            }
+        };
+
+        if (isOpen) {
+            window.addEventListener('keydown', keyPressHandler);
+        }
+
+        return () => {
+            window.removeEventListener('keydown', keyPressHandler);
+        };
+    }, [isOpen, onOpenChange]);
 
     return ReactDOM.createPortal(
         <>

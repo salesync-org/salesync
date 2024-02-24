@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { cn } from '../../../utils/utils';
-import FocusTrap from '../../FocusTrap/FocusTrap';
+import FocusTrap from '../FocusTrap/FocusTrap';
 
 interface Props {
   children: React.ReactNode;
@@ -49,7 +49,7 @@ const Modal = ({ children, title, isOpen, onOpenChange, isStatic = true }: Props
         >
           <div className='animate-modal relative max-h-full w-full max-w-2xl origin-[0_50%]' id='modal'>
             {/* <!-- Modal content --> */}
-            <div className='relative rounded-lg bg-white px-3 py-4 shadow dark:bg-input-stroke-dark'>
+            <div className='relative rounded-lg bg-panel px-3 py-4 shadow dark:bg-panel-dark'>
               {/* <!-- Modal header --> */}
               <FocusTrap>
                 <div className='flex items-center justify-between p-4 md:p-5'>

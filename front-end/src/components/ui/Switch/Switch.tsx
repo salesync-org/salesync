@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { cn } from 'utils/utils';
 
 type ButtonProps = {
   onClick: () => void;
@@ -10,15 +11,7 @@ type ButtonProps = {
   showHeader?: boolean;
 };
 
-const ToggleButton: React.FC<ButtonProps> = ({
-  onClick,
-  className,
-  disabled,
-  label,
-  checked,
-  header,
-  showHeader = true
-}) => {
+const Switch: React.FC<ButtonProps> = ({ onClick, className, disabled, label, checked, header, showHeader = true }) => {
   const [isChecked, setIsChecked] = useState(checked);
 
   const handleOnClick = () => {
@@ -37,7 +30,12 @@ const ToggleButton: React.FC<ButtonProps> = ({
     <div className='w-fit'>
       {showHeader && header && <p className='my-1'>{header}</p>}
       <div
-        className={`${className} ${disabled ? 'opacity-80' : 'cursor-pointer hover:scale-105 active:scale-100'} inline-flex items-center rounded-full border-2 border-button-stroke dark:border-button-stroke-dark`}
+        className={cn(
+          disabled ? 'opacity-80' : 'cursor-pointer hover:scale-105 active:scale-100',
+          'inline-flex items-center rounded-full',
+          'border-2 border-button-stroke dark:border-button-stroke-dark',
+          className
+        )}
         onClick={handleOnClick}
         onKeyDown={handleKeyDown}
         tabIndex={disabled ? undefined : 0}
@@ -52,10 +50,18 @@ const ToggleButton: React.FC<ButtonProps> = ({
           className='peer sr-only'
           onChange={() => {}}
         />
-        <div className="after:bord-input-stroke peer relative h-6 w-11 rounded-full bg-input-stroke-light after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:bg-white after:transition-all after:content-[''] peer-checked:bg-primary peer-checked:after:translate-x-full peer-checked:after:border-white dark:border-x-input-stroke-dark dark:bg-input-stroke-dark rtl:peer-checked:after:-translate-x-full"></div>
+        <div
+          className={cn(
+            'peer relative h-6 w-11 rounded-full',
+            'after:h-5 after:w-5 after:transition-all after:ease-in-out',
+            'bg-input-stroke-light  dark:border-x-input-stroke-dark dark:bg-input-stroke-dark',
+            'peer-checked:bg-primary peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full',
+            "  after:bord-input-stroke after:absolute after:start-[2px] after:top-[2px] after:rounded-full after:border after:bg-white after:content-['']"
+          )}
+        ></div>
       </div>
     </div>
   );
 };
 
-export default ToggleButton;
+export default Switch;

@@ -1,6 +1,6 @@
 import salesyncLogo from '../../assets/salesync_logo.png';
 import salesyncLogoDark from '../../assets/salesync_logo_dark.png';
-import ToggleButton from '../../components/Button/ToggleButton';
+import Switch from '../../components/Switch/Switch';
 import ComponentPanel from './ComponentPanel/ComponentPanel';
 import TypographyPanel from './TypographyPanel/TypographyPanel';
 import themeSwitcher from '../../utils/themeSwitcher';
@@ -22,10 +22,10 @@ function Cheatsheet() {
                 <h1 className="flex justify-center">UI Cheatsheet</h1>
                 <div className="mx-auto flex justify-center my-4 space-x-2 align-middle">
                     <Icon name="light_mode" size="1rem" />
-                    <ToggleButton
+                    <Switch
                         checked={document.documentElement.classList.contains('dark')}
                         onClick={themeSwitcher}
-                    ></ToggleButton>
+                    ></Switch>
                     <Icon name="dark_mode" size="1rem" />
                 </div>
             </div>

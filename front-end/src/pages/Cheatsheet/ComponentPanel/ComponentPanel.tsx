@@ -1,7 +1,7 @@
 import PrimaryButton from "../../../components/Button/PrimaryButton";
 import Button from "../../../components/Button/Button";
 import Panel from "../../../components/Panel/Panel";
-import ToggleButton from "../../../components/Button/ToggleButton";
+import Switch from "../../../components/Switch/Switch";
 import Icon from "../../../components/Icon/Icon";
 import TextInput from "../../../components/TextInput/TextInput";
 import DropDown from "../../../components/DropDown/DropDown";
@@ -35,9 +35,9 @@ function ComponentPanel() {
                 </div>
                 <div>
                     <h2 className="mb-4">Toggle Button</h2>
-                    <ToggleButton header="Normal" onClick={function (): void {}} checked={false} />
-                    <ToggleButton header="Disabled & Off" disabled onClick={function (): void {}} checked={false} />
-                    <ToggleButton header="Disabled & On" disabled onClick={function (): void {}} checked={true} />
+                    <Switch header="Normal" onClick={function (): void {}} checked={false} />
+                    <Switch header="Disabled & Off" disabled onClick={function (): void {}} checked={false} />
+                    <Switch header="Disabled & On" disabled onClick={function (): void {}} checked={true} />
                 </div>
                 <div>
                     <h2 className="mb-4">Input Button</h2>

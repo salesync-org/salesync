@@ -1,4 +1,5 @@
 import React from 'react';
+import { cn } from '../../utils/utils';
 
 type Props = {
     name: string;
@@ -8,7 +9,7 @@ type Props = {
 
 // name: the name of the icon according to Google Material 3 Icon names
 const Icon: React.FC<Props> = ({ name, className, size }) => {
-    return <span className={`material-symbols-rounded ${size ? `text-[${size}]` : "text-icon"} ${className}`}>{name}</span>;
+    return <span className={cn("material-symbols-rounded", size ? `text-[${size}]` : "text-icon", className)}>{name}</span>;
 };
 
 export default Icon;

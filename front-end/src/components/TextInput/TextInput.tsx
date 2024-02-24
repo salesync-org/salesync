@@ -24,14 +24,14 @@ const TextInput: React.FC<TextInputProps> = ({
     onChange,
     ...restProps
 }) => {
-    const [inputValue, setInputValue] = useState(value);
-    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-        if (onChange) {
-            onChange!(event.target.value);
-        } else {
-            setInputValue(event.target.value);
-        }
-    };
+  const [inputValue, setInputValue] = useState(value);
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (onChange) {
+      onChange!(event.target.value);
+    } else {
+      setInputValue(event.target.value);
+    }
+  };
 
     return (
         <div>

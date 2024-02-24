@@ -5,11 +5,11 @@ import { useDropDown } from "../../hooks/useDropDown";
 import { cn } from "../../utils/utils";
 
 interface DropdownButtonProps {
-    value: string;
-    children: React.ReactNode;
-    header?: string;
-    showHeader?: boolean;
-    disabled?: boolean;
+  value: string;
+  children: React.ReactNode;
+  header?: string;
+  showHeader?: boolean;
+  disabled?: boolean;
 }
 
 const DropDown: React.FC<DropdownButtonProps> = ({
@@ -30,10 +30,10 @@ const DropDown: React.FC<DropdownButtonProps> = ({
         menuRef,
     } = useDropDown();
 
-    const handleOptionClick = (option: string) => {
-        setSelectedOption(option);
-        setIsOpen(false);
-    };
+  const handleOptionClick = (option: string) => {
+    setSelectedOption(option);
+    setIsOpen(false);
+  };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
         if (event.key === "Escape") {

@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import buttonVariants from '../../../components/Button/ButtonProps';
+import buttonVariants from '../../../components/ui/Button/ButtonProps';
 
 interface Props {
   name: string;

@@ -1,8 +1,8 @@
 import React from 'react';
 import Button from '../Button/Button';
 import Icon from '../Icon/Icon';
-import { useDropDown } from '../../hooks/useDropDown';
-import { cn } from '../../utils/utils';
+import { useDropDown } from '../../../hooks/useDropDown';
+import { cn } from '../../../utils/utils';
 
 interface DropdownButtonProps {
   value: string;

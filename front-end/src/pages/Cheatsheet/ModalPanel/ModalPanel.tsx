@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import PrimaryButton from '../../../components/Button/PrimaryButton';
+import PrimaryButton from '../../../components/ui/Button/PrimaryButton';
 import Modal, { ModalFooter } from '../../../components/ui/modal/Modal';
-import TextInput from '../../../components/TextInput/TextInput';
-import DropDown from '../../../components/DropDown/DropDown';
-import Item from '../../../components/Item/Item';
-import Button from '../../../components/Button/Button';
+import TextInput from '../../../components/ui/TextInput/TextInput';
+import DropDown from '../../../components/ui/DropDown/DropDown';
+import Item from '../../../components/ui/Item/Item';
+import Button from '../../../components/ui/Button/Button';
 
 function ModalPanel() {
   const [isOpen, setIsOpen] = useState(false);

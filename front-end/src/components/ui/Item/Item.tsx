@@ -1,6 +1,6 @@
 import React from 'react';
 import Icon from '../Icon/Icon';
-import { cn } from '../../utils/utils';
+import { cn } from '../../../utils/utils';
 
 interface ItemProps extends React.HTMLAttributes<HTMLDivElement> {
   href?: string;

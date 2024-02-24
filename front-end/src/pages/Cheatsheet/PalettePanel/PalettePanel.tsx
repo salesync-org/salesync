@@ -1,4 +1,4 @@
-import Panel from '../../../components/Panel/Panel';
+import Panel from '../../../components/ui/Panel/Panel';
 import ColorInfo from './ColorInfo';
 
 function PalettePanel() {

@@ -7,7 +7,6 @@ import themeSwitcher from '../../utils/themeSwitcher';
 import Icon from '../../components/Icon/Icon';
 import PalettePanel from './PalettePanel/PalettePanel';
 import ReactRouterDomPanel from './ReactRouterDomPanel/ReactRouterDomPanel';
-import ModalPanel from './ModalPanel/ModalPanel';
 
 function Cheatsheet() {
   return (
@@ -22,10 +21,7 @@ function Cheatsheet() {
         <h1 className='flex justify-center'>UI Cheatsheet</h1>
         <div className='mx-auto my-4 flex justify-center space-x-2 align-middle'>
           <Icon name='light_mode' size='1rem' />
-          <Switch
-            checked={document.documentElement.classList.contains('dark')}
-            onClick={themeSwitcher}
-          ></Switch>
+          <Switch checked={document.documentElement.classList.contains('dark')} onClick={themeSwitcher}></Switch>
           <Icon name='dark_mode' size='1rem' />
         </div>
       </div>
@@ -33,7 +29,6 @@ function Cheatsheet() {
       <ComponentPanel />
       <PalettePanel />
       <ReactRouterDomPanel />
-      <ModalPanel />
     </div>
   );
 }

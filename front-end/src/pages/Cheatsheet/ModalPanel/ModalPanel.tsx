@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import PrimaryButton from '../../../components/Button/PrimaryButton';
-import Panel from '../../../components/Panel/Panel';
 import Modal, { ModalFooter } from '../../../components/ui/modal/Modal';
 import TextInput from '../../../components/TextInput/TextInput';
 import DropDown from '../../../components/DropDown/DropDown';
@@ -10,8 +9,7 @@ import Button from '../../../components/Button/Button';
 function ModalPanel() {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <Panel>
-      <h1 className='mb-5'>Modal</h1>
+    <>
       <PrimaryButton onClick={() => setIsOpen(true)}>Open modal</PrimaryButton>
 
       <Modal isOpen={isOpen} onOpenChange={setIsOpen} title='Create new Type'>
@@ -35,7 +33,7 @@ function ModalPanel() {
           </ModalFooter>
         </form>
       </Modal>
-    </Panel>
+    </>
   );
 }
 

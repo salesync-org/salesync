@@ -1,5 +1,5 @@
 import React from 'react';
-import buttonVariants, { ButtonProps } from './ButtonProps';
+import buttonVariants, { ButtonProps } from 'ui/Button/ButtonProps';
 
 const Button: React.FC<ButtonProps> = ({
   onClick,

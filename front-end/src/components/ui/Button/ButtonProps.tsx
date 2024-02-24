@@ -20,7 +20,7 @@ const buttonVariants = cva(
         ),
         primary: cn(
           'bg-primary',
-          'text-text-light dark:text-text-dark',
+          'text-on-primary',
           'border-primary-stroke dark:border-primary-stroke-dark',
           'enabled:hover:bg-primary-hover',
           'enabled:active:bg-primary-active'

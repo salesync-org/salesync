@@ -1,11 +1,11 @@
-import Cheatsheet from "./pages/Cheatsheet/Cheatsheet";
+import Cheatsheet from './pages/Cheatsheet/Cheatsheet';
 
 function App() {
   return (
     <div>
-      <Cheatsheet/>
+      <Cheatsheet />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

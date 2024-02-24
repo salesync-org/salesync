@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import PrimaryButton from '../../../components/ui/Button/PrimaryButton';
-import Modal, { ModalFooter } from '../../../components/ui/modal/Modal';
+import Modal, { ModalFooter } from '../../../components/ui/Modal/Modal';
 import TextInput from '../../../components/ui/TextInput/TextInput';
 import DropDown from '../../../components/ui/DropDown/DropDown';
 import Item from '../../../components/ui/Item/Item';

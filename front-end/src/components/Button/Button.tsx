@@ -1,37 +1,30 @@
-import React from 'react';
+import React from "react";
+import buttonVariants, { ButtonProps } from "./ButtonProps";
 
-type ButtonProps = {
-    onClick: () => void;
-    className?: string;
-    disabled?: boolean;
-    children: React.ReactNode;
-    header?: string;
-    showHeader?: boolean;
-    type?: 'button' | 'submit' | 'reset';
-};
 const Button: React.FC<ButtonProps> = ({
     onClick,
     className,
     disabled,
     children,
+    intent,
     header,
     showHeader = true,
-    type = 'button',
+    type = "button",
+    ...restProps
 }) => {
     return (
         <div>
             {showHeader && header && <p className="my-1">{header}</p>}
             <button
-                className={`bg-button-background dark:bg-button-background-dark text-text-light dark:text-text-dark border-2 border-button-stroke dark:border-button-stroke-dark
-                disabled:opacity-80 enabled:scale-100
-                enabled:hover:bg-button-background-hover enabled:hover:scale-105 dark:enabled:hover:bg-button-background-hover-dark
-                enabled:active:scale-100 enabled:active:bg-button-background-active enabled:active:translate-y-[0.1rem] enabled:active:text-opacity-80 dark:enabled:active:bg-button-background-active-dark
-                py-2 px-4 rounded ${className}`}
+                className={buttonVariants({ intent, className})}
                 onClick={onClick}
                 disabled={disabled}
                 type={type}
+                {...restProps}
             >
-                <div className="flex justify-center items-center space-x-2">{children}</div>
+                <div className="flex justify-center items-center space-x-2">
+                    {children}
+                </div>
             </button>
         </div>
     );

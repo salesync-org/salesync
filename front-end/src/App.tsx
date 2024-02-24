@@ -1,9 +1,9 @@
-import Cheatsheet from 'pages/Cheatsheet/Cheatsheet';
+import LogIn from './pages/LogIn/LogIn';
 
 function App() {
   return (
     <div>
-      <Cheatsheet />
+      <LogIn />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import React, { ChangeEvent, InputHTMLAttributes, useState } from 'react';
-import Icon from '../Icon/Icon';
-import { cn } from '../../../utils/utils';
+import Icon from 'ui/Icon/Icon';
+import { cn } from 'utils/utils';
 
 interface TextInputProps {
   value: string;

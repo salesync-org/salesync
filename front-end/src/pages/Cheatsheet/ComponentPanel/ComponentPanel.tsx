@@ -1,11 +1,11 @@
-import PrimaryButton from '../../../components/ui/Button/PrimaryButton';
-import Button from '../../../components/ui/Button/Button';
-import Panel from '../../../components/ui/Panel/Panel';
-import Switch from '../../../components/ui/Switch/Switch';
-import Icon from '../../../components/ui/Icon/Icon';
-import TextInput from '../../../components/ui/TextInput/TextInput';
-import DropDown from '../../../components/ui/DropDown/DropDown';
-import Item from '../../../components/ui/Item/Item';
+import PrimaryButton from 'ui/Button/PrimaryButton';
+import Button from 'ui/Button/Button';
+import Panel from 'ui/Panel/Panel';
+import Switch from 'ui/Switch/Switch';
+import Icon from 'ui/Icon/Icon';
+import TextInput from 'ui/TextInput/TextInput';
+import DropDown from 'ui/DropDown/DropDown';
+import Item from 'ui/Item/Item';
 import ModalPanel from '../ModalPanel/ModalPanel';
 
 function ComponentPanel() {

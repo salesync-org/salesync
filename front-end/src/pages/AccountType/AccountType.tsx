@@ -2,11 +2,20 @@ import PrimaryButton from '@/components/ui/Button/PrimaryButton';
 import Icon from '@/components/ui/Icon/Icon';
 import ConfigTable from '@/components/ui/Table/ConfigTable';
 import TextInput from '@/components/ui/TextInput/TextInput';
-import { useState } from 'react';
+import useDebounce from '@/hooks/useDebounce';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const AccountType = () => {
   const [search, setSearch] = useState('');
+  const [data, setData] = useState(-1);
+  const debouncedSearch = useDebounce(search, 500);
+
+  useEffect(() => {
+    if (debouncedSearch) {
+      console.log('searching for:', debouncedSearch);
+    }
+  }, [debouncedSearch]);
 
   return (
     <div className='mx-auto flex w-full max-w-[676px] flex-col gap-6 rounded-md bg-panel-light px-6 py-4 dark:bg-panel-dark'>

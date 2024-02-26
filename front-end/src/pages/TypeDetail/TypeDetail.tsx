@@ -8,7 +8,7 @@ import useDebounce from '@/hooks/useDebounce';
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 
-const AccountType = () => {
+const TypeDetail = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [search, setSearch] = useState(() => {
     return searchParams.get('search') || '';
@@ -72,4 +72,4 @@ const AccountType = () => {
     </div>
   );
 };
-export default AccountType;
+export default TypeDetail;

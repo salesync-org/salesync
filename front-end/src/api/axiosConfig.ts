@@ -11,8 +11,8 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   function (config) {
-    if (localStorage.getItem('access-token')) {
-      config.headers['Authorization'] = `Bearer ${localStorage.getItem('access-token')}`;
+    if (localStorage.getItem('access_token')) {
+      config.headers['Authorization'] = `Bearer ${localStorage.getItem('access_token')}`;
     }
     return config;
   },
@@ -27,7 +27,7 @@ instance.interceptors.response.use(
   },
   function (error) {
     if (error.response?.status === 401) {
-      localStorage.removeItem('access-token');
+      localStorage.removeItem('access_token');
     }
     return Promise.reject(error);
   }

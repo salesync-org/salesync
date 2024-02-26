@@ -3,6 +3,7 @@ import buttonVariants, { ButtonProps } from 'ui/Button/ButtonProps';
 
 const Button: React.FC<ButtonProps> = ({
   onClick,
+  layoutClassName,
   className,
   disabled,
   children,
@@ -13,7 +14,7 @@ const Button: React.FC<ButtonProps> = ({
   ...restProps
 }) => {
   return (
-    <div>
+    <div className={layoutClassName}>
       {showHeader && header && <p className='my-1'>{header}</p>}
       <button
         className={buttonVariants({ intent, className })}

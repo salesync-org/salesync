@@ -4,7 +4,7 @@ import LogIn from './pages/LogIn/LogIn';
 
 const Cheatsheet = lazy(() => import('pages/Cheatsheet/Cheatsheet'));
 const ConfigLayout = lazy(() => import('./components/layout/ConfigLayout'));
-const TypeManager = lazy(() => import('./pages/TypeManager/TypeManager'));
+const AccountType = lazy(() => import('./pages/AccountType/AccountType'));
 
 function App() {
   return (

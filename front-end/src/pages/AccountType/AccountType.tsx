@@ -1,21 +1,47 @@
 import PrimaryButton from '@/components/ui/Button/PrimaryButton';
 import Icon from '@/components/ui/Icon/Icon';
-import ConfigTable from '@/components/ui/Table/ConfigTable';
+import Pagination from '@/components/ui/Pagination/Pagination';
+import LinkConfigTable from '@/components/ui/Table/ConfigTable';
 import TextInput from '@/components/ui/TextInput/TextInput';
+import { testData } from '@/constant/constant';
 import useDebounce from '@/hooks/useDebounce';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 
 const AccountType = () => {
-  const [search, setSearch] = useState('');
-  const [data, setData] = useState(-1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [search, setSearch] = useState(() => {
+    return searchParams.get('search') || '';
+  });
+  const [page, setPage] = useState(() => {
+    return searchParams.get('page') || '1';
+  });
+  const [data, setData] = useState<Link[]>(() => {
+    return testData as Link[];
+  });
   const debouncedSearch = useDebounce(search, 500);
 
   useEffect(() => {
-    if (debouncedSearch) {
-      console.log('searching for:', debouncedSearch);
+    const handleSearch = () => {
+      const searchResult = testData.filter((item) => {
+        return Object.values(item).join('').toLowerCase().includes(debouncedSearch.toLowerCase());
+      });
+
+      return searchResult;
+    };
+
+    if (debouncedSearch || debouncedSearch === '') {
+      searchParams.set('search', debouncedSearch);
+      setSearchParams(searchParams);
+      setData(handleSearch() as Link[]);
     }
-  }, [debouncedSearch]);
+  }, [debouncedSearch, searchParams, setSearchParams]);
+
+  const handleOnPageChange = (page: number) => {
+    searchParams.set('page', page.toString());
+    setSearchParams(searchParams);
+    setPage(page.toString());
+  };
 
   return (
     <div className='mx-auto flex w-full max-w-[676px] flex-col gap-6 rounded-md bg-panel-light px-6 py-4 dark:bg-panel-dark'>
@@ -26,7 +52,8 @@ const AccountType = () => {
         </Link>
       </div>
       <h1 className='text-2xl font-bold leading-7'>Account Type</h1>
-      <div className='flex flex-col gap-2 md:flex-row'>
+      <h2 className='text-lg font-semibold leading-5'>Links</h2>
+      <div className='flex gap-2'>
         <TextInput
           layoutClassName='flex-grow-1 w-full'
           className='w-full'
@@ -40,7 +67,8 @@ const AccountType = () => {
           <span>Add Links</span>
         </PrimaryButton>
       </div>
-      <ConfigTable />
+      <LinkConfigTable data={data} />
+      <Pagination totalPages={5} currentPage={+page} onPageChange={handleOnPageChange} />
     </div>
   );
 };

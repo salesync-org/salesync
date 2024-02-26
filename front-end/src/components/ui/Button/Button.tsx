@@ -8,6 +8,7 @@ const Button: React.FC<ButtonProps> = ({
   disabled,
   children,
   intent,
+  rounded,
   header,
   showHeader = true,
   type = 'button',
@@ -17,7 +18,7 @@ const Button: React.FC<ButtonProps> = ({
     <div className={layoutClassName}>
       {showHeader && header && <p className='my-1'>{header}</p>}
       <button
-        className={buttonVariants({ intent, className })}
+        className={buttonVariants({ intent, rounded, className })}
         onClick={onClick}
         disabled={disabled}
         type={type}

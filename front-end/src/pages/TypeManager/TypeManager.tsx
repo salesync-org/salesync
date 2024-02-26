@@ -22,7 +22,7 @@ const TypeManager = () => {
           <button className='self-start'>
             <div className='flex flex-row items-center'>
               <MdArrowBackIos className='text-blue-800' />
-              <div className='text-blue-800 underline underline-offset-2'>Go back</div>
+              <div className='text-link-text underline underline-offset-2'>Go back</div>
             </div>
           </button>
 

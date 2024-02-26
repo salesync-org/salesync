@@ -102,7 +102,7 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage, onPage
   };
 
   return (
-    <div className='flex items-center justify-center'>
+    <div className='flex items-center justify-center [&_*]:text-sm'>
       <Button rounded onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
         <Icon name='chevron_left' />
       </Button>

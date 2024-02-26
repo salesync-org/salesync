@@ -22,7 +22,7 @@ const AccountType = () => {
           layoutClassName='flex-grow-1 w-full'
           className='w-full'
           value={search}
-          onChange={setSearch}
+          onChange={(e) => setSearch(e.target.value)}
           prefixIcon='search'
           placeholder='Search for links'
         />

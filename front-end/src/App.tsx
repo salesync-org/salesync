@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 
 const Cheatsheet = lazy(() => import('pages/Cheatsheet/Cheatsheet'));
 const ConfigLayout = lazy(() => import('./components/layout/ConfigLayout'));
-const TypeManager = lazy(() => import('./pages/TypeManager/TypeManager'));
+const AccountType = lazy(() => import('./pages/AccountType/AccountType'));
 
 function App() {
   return (
@@ -12,9 +12,9 @@ function App() {
         <Routes>
           <Route path='/' element={<Cheatsheet />} />
           <Route path='/config' element={<ConfigLayout />}>
-            <Route path='type' element={<TypeManager />} />
-            <Route path='field' element={<TypeManager />} />
-            <Route path='link' element={<TypeManager />} />
+            <Route path='type' element={<AccountType />} />
+            <Route path='field' element={<AccountType />} />
+            <Route path='link' element={<AccountType />} />
           </Route>
         </Routes>
       </Suspense>

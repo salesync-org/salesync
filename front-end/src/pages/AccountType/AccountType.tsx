@@ -5,8 +5,9 @@ import TextInput from '@/components/ui/TextInput/TextInput';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const TypeManager = () => {
+const AccountType = () => {
   const [search, setSearch] = useState('');
+
   return (
     <div className='mx-auto flex w-full max-w-[676px] flex-col gap-6 rounded-md bg-panel-light px-6 py-4 dark:bg-panel-dark'>
       <div className='flex items-center text-link-text-light dark:text-link-text-dark'>
@@ -15,21 +16,23 @@ const TypeManager = () => {
           Go back
         </Link>
       </div>
-      <h1 className='text-2xl font-bold leading-7'>Type Manager</h1>
-      <div className='flex gap-2'>
+      <h1 className='text-2xl font-bold leading-7'>Account Type</h1>
+      <div className='flex flex-col gap-2 md:flex-row'>
         <TextInput
           layoutClassName='flex-grow-1 w-full'
           className='w-full'
           value={search}
+          onChange={setSearch}
           prefixIcon='search'
-          placeholder='Search for types'
+          placeholder='Search for links'
         />
-        <PrimaryButton className='' onClick={() => {}}>
-          Create
+        <PrimaryButton onClick={() => {}} layoutClassName='flex-shrink-0'>
+          <Icon name='add' />
+          <span>Add Links</span>
         </PrimaryButton>
       </div>
       <ConfigTable />
     </div>
   );
 };
-export default TypeManager;
+export default AccountType;

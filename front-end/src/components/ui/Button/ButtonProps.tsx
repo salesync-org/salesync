@@ -39,6 +39,7 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {
   onClick: () => void;
   className?: string;
+  layoutClassName?: string;
   disabled?: boolean;
   children: React.ReactNode;
   header?: string;

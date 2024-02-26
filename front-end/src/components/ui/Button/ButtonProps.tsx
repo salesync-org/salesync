@@ -25,10 +25,15 @@ const buttonVariants = cva(
           'enabled:hover:bg-primary-hover',
           'enabled:active:bg-primary-active'
         )
+      },
+      rounded: {
+        true: 'flex h-8 w-8 items-center justify-center rounded-full p-0 dark:p-0',
+        false: ''
       }
     },
     defaultVariants: {
-      intent: 'normal'
+      intent: 'normal',
+      rounded: false
     }
   }
 );

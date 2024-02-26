@@ -1,16 +1,24 @@
-import { Suspense } from 'react';
-import LogIn from './pages/LogIn/LogIn';
+import { Suspense, lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import Cheatsheet from './pages/Cheatsheet/Cheatsheet';
+import LogIn from './pages/LogIn/LogIn';
+
+const Cheatsheet = lazy(() => import('pages/Cheatsheet/Cheatsheet'));
+const ConfigLayout = lazy(() => import('./components/layout/ConfigLayout'));
+const TypeManager = lazy(() => import('./pages/TypeManager/TypeManager'));
 
 function App() {
   return (
-      <div>
-    <Suspense>
+    <div>
+      <Suspense fallback={<div>Loading...</div>}>
         <Routes>
-          <Route path='/' element={<LogIn />} />
-          <Route path='/cheatsheet' element={<Cheatsheet />} />
-          {/* <Route path='*' element={<NotFoundPage />} /> */}
+          
+          <Route path='/' element={<ConfigLayout />}>
+            <Route path='/' element={<LogIn />} />
+            <Route path='/cheatsheet' element={<Cheatsheet />} />
+            <Route path='type' element={<TypeManager />} />
+            <Route path='field' element={<TypeManager />} />
+            <Route path='link' element={<TypeManager />} />
+          </Route>
         </Routes>
       </Suspense>
     </div>

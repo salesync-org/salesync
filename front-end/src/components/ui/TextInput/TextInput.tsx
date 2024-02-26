@@ -1,4 +1,4 @@
-import React, { ChangeEvent, InputHTMLAttributes, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import Icon from 'ui/Icon/Icon';
 import { cn } from 'utils/utils';
 
@@ -11,6 +11,7 @@ interface TextInputProps {
   header?: string;
   showHeader?: boolean;
   prefixIcon?: string;
+  layoutClassName?: string;
   restProps?: React.HTMLAttributes<HTMLInputElement>;
 }
 const TextInput: React.FC<TextInputProps> = ({
@@ -22,6 +23,7 @@ const TextInput: React.FC<TextInputProps> = ({
   showHeader = true,
   prefixIcon,
   onChange,
+  layoutClassName,
   ...restProps
 }) => {
   const [inputValue, setInputValue] = useState(value);
@@ -34,7 +36,7 @@ const TextInput: React.FC<TextInputProps> = ({
   };
 
   return (
-    <div>
+    <div className={cn(layoutClassName)}>
       {showHeader && header && <p className='my-1'>{header}</p>}
       <div
         className={cn(

@@ -3,6 +3,7 @@ import LogIn from './pages/LogIn/LogIn';
 import { Route, Routes } from 'react-router-dom';
 import Cheatsheet from './pages/Cheatsheet/Cheatsheet';
 import TypeManager from './pages/TypeManager/TypeManager';
+import TypeManager from './pages/TypeManager/TypeManager';
 
 function App() {
   return (

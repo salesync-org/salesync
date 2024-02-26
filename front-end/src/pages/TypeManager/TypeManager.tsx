@@ -1,19 +1,60 @@
 import React, { useState } from 'react';
 import Panel from '@/components/ui/Panel/Panel';
 import TextInput from '@/components/ui/TextInput/TextInput';
-import { MdArrowBackIos, MdNavigateNext } from 'react-icons/md';
+
 import Button from '@/components/ui/Button/Button';
 import Icon from '@/components/ui/Icon/Icon';
 import PrimaryButton from '@/components/ui/Button/PrimaryButton';
 import Modal, { ModalFooter } from '@/components/ui/Modal/Modal';
 import DropDown from '@/components/ui/DropDown/DropDown';
 import Item from '@/components/ui/Item/Item';
+import '@/constants/api';
+import { SAMPLE_ACCESS_TOKEN } from '@/constants/api';
+import typeApi from '@/api/typeApi';
 
 const TypeManager = () => {
+  console.log('first');
   const [isTypeModelOpen, setIsTypeModelOpen] = useState(false);
+
+  // Save access token to localStorage (for testing purpose only)
+  localStorage.setItem('access_token', SAMPLE_ACCESS_TOKEN);
 
   document.documentElement.classList.remove('dark');
   // TODO: phân trang theo perpage=10 total page từ back-end
+
+  //create Type sample data
+
+  const exampleType: Type = {
+    id: '1',
+    name: 'Example Type',
+    description: 'This is an example type.',
+    fields: [
+      { id: '1', name: 'Field 1' },
+      { id: '2', name: 'Field 2' }
+    ],
+    links: [
+      { id: '1', name: 'Link 1' },
+      { id: '2', name: 'Link 2' }
+    ]
+  };
+
+  const handleCreateType = async () => {
+    try {
+      const res = await typeApi.createType({ type: exampleType });
+      if (res) {
+        console.log('Create Type successfully');
+        console.log(res);
+        return res.type;
+      }
+    } catch (error) {
+      console.error('Create Type failed', error);
+    }
+  };
+
+  const handleSubmit = () => {
+    setIsTypeModelOpen(false);
+    handleCreateType();
+  };
 
   return (
     <div className='mx-auto px-10'>
@@ -21,7 +62,7 @@ const TypeManager = () => {
         <div className='flex w-full flex-col'>
           <button className='self-start'>
             <div className='flex flex-row items-center'>
-              <MdArrowBackIos className='text-blue-800' />
+              <Icon name='navigate_before' className='text-link-text' />
               <div className='text-link-text underline underline-offset-2'>Go back</div>
             </div>
           </button>
@@ -62,7 +103,7 @@ const TypeManager = () => {
                 <td className='whitespace-nowrap px-6 py-4 text-center text-sm text-gray-500'>Data 3</td>
                 <td className='whitespace-nowrap px-6 py-4 text-center text-sm text-gray-500'>
                   <button>
-                    <MdNavigateNext />
+                    <Icon name='navigate_next' />
                   </button>
                 </td>
               </tr>
@@ -73,7 +114,7 @@ const TypeManager = () => {
                 <td className='whitespace-nowrap px-6 py-4 text-center text-sm text-gray-500'>Data 3</td>
                 <td className='whitespace-nowrap px-6 py-4 text-center text-sm text-gray-500'>
                   <button>
-                    <MdNavigateNext />
+                    <Icon name='navigate_next' />
                   </button>
                 </td>
               </tr>
@@ -99,7 +140,7 @@ const TypeManager = () => {
           </div>
           <ModalFooter className='mt-8'>
             <Button onClick={() => setIsTypeModelOpen(false)}>Cancel</Button>
-            <PrimaryButton onClick={() => setIsTypeModelOpen(false)}>Save</PrimaryButton>
+            <PrimaryButton onClick={() => handleSubmit()}>Save</PrimaryButton>
           </ModalFooter>
         </form>
       </Modal>

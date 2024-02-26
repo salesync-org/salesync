@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent } from 'react';
 import Icon from 'ui/Icon/Icon';
 import { cn } from 'utils/utils';
 
@@ -7,7 +7,7 @@ interface TextInputProps {
   className?: string;
   placeholder?: string;
   disabled?: boolean;
-  onChange?: (value: string) => void;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   header?: string;
   showHeader?: boolean;
   prefixIcon?: string;
@@ -26,15 +26,6 @@ const TextInput: React.FC<TextInputProps> = ({
   layoutClassName,
   ...restProps
 }) => {
-  const [inputValue, setInputValue] = useState(value);
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (onChange) {
-      onChange!(event.target.value);
-    } else {
-      setInputValue(event.target.value);
-    }
-  };
-
   return (
     <div className={cn(layoutClassName)}>
       {showHeader && header && <p className='my-1'>{header}</p>}
@@ -55,9 +46,9 @@ const TextInput: React.FC<TextInputProps> = ({
             prefixIcon ? 'pl-10' : 'pl-4',
             className
           )}
-          value={inputValue}
+          value={value}
           disabled={disabled}
-          onChange={handleChange}
+          onChange={onChange}
           {...restProps}
         />
         <div className='absolute flex h-fit items-center justify-center rounded px-4 py-2'>

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import Panel from '../../components/Panel/Panel';
-import TextInput from '../../components/TextInput/TextInput';
+import Panel from '@/components/ui/Panel/Panel';
+import TextInput from '@/components/ui/TextInput/TextInput';
 import { MdArrowBackIos, MdNavigateNext } from 'react-icons/md';
-import Button from '../../components/Button/Button';
-import Icon from '../../components/Icon/Icon';
-import PrimaryButton from '../../components/Button/PrimaryButton';
-import Modal, { ModalFooter } from '../../components/ui/modal/Modal';
-import DropDown from '../../components/DropDown/DropDown';
-import Item from '../../components/Item/Item';
+import Button from '@/components/ui/Button/Button';
+import Icon from '@/components/ui/Icon/Icon';
+import PrimaryButton from '@/components/ui/Button/PrimaryButton';
+import Modal, { ModalFooter } from '@/components/ui/Modal/Modal';
+import DropDown from '@/components/ui/DropDown/DropDown';
+import Item from '@/components/ui/Item/Item';
 
 const TypeManager = () => {
   const [isTypeModelOpen, setIsTypeModelOpen] = useState(false);

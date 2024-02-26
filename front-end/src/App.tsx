@@ -6,20 +6,15 @@ import TypeManager from './pages/TypeManager/TypeManager';
 
 function App() {
   return (
-      // <div>
-    <Suspense>
+    <div>
+      <Suspense>
         <Routes>
           <Route path='/' element={<LogIn />} />
-        //   <Route path='/cheatsheet' element={<Cheatsheet />} />
-          {/* <Route path='*' element={<NotFoundPage />} /> */}
+          <Route path='/cheatsheet' element={<Cheatsheet />} />
+          <Route path='/type-manager' element={<TypeManager />} />
         </Routes>
       </Suspense>
-    // </div>
-
-    <Routes>
-      <Route path='/' element={<Cheatsheet />} />
-      <Route path='/type-manager' element={<TypeManager />} />
-    </Routes>
+    </div>
   );
 }
 

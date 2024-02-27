@@ -33,8 +33,8 @@ const TypeManager = () => {
       { id: '2', name: 'Field 2' }
     ],
     links: [
-      { id: '1', name: 'Link 1' },
-      { id: '2', name: 'Link 2' }
+      { id: '1', label_name: 'Link 1', link_type: 'Link 1', to_type: 'Link 1' },
+      { id: '2', label_name: 'Link 2', link_type: 'Link 2', to_type: 'Link 2' }
     ]
   };
 

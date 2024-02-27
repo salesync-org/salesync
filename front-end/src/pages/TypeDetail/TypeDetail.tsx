@@ -1,12 +1,13 @@
 import PrimaryButton from '@/components/ui/Button/PrimaryButton';
 import Icon from '@/components/ui/Icon/Icon';
 import Pagination from '@/components/ui/Pagination/Pagination';
-import LinkConfigTable from '@/components/ui/Table/ConfigTable';
+import LinkConfigTable from '@/components/TypeDetail/LinkConfigTable';
 import TextInput from '@/components/ui/TextInput/TextInput';
 import { testData } from '@/constant/constant';
 import useDebounce from '@/hooks/useDebounce';
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import LinkModal from '@/components/TypeDetail/LinkModal';
 
 const TypeDetail = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -19,6 +20,7 @@ const TypeDetail = () => {
   const [data, setData] = useState<Link[]>(() => {
     return testData as Link[];
   });
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const debouncedSearch = useDebounce(search, 500);
 
   useEffect(() => {
@@ -62,13 +64,14 @@ const TypeDetail = () => {
           prefixIcon='search'
           placeholder='Search for links'
         />
-        <PrimaryButton onClick={() => {}} layoutClassName='flex-shrink-0'>
+        <PrimaryButton onClick={() => setIsModalOpen(true)} layoutClassName='flex-shrink-0'>
           <Icon name='add' />
           <span>Add Links</span>
         </PrimaryButton>
       </div>
       <LinkConfigTable data={data} />
       <Pagination totalPages={15} currentPage={+page} onPageChange={handleOnPageChange} />
+      <LinkModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
     </div>
   );
 };

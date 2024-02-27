@@ -31,6 +31,46 @@ export const testData = [
   }
 ];
 
+//Type data
+
+export const typeData = [
+  {
+    id: generateUUID(),
+    name: 'Account',
+    description: 'This is an example type.',
+    fields: [],
+    links: []
+  },
+  {
+    id: generateUUID(),
+    name: 'Contact',
+    description: 'This is an example type.',
+    fields: [],
+    links: []
+  },
+  {
+    id: generateUUID(),
+    name: 'Lead',
+    description: 'This is an example type.',
+    fields: [],
+    links: []
+  },
+  {
+    id: generateUUID(),
+    name: 'Opportunity',
+    description: 'This is an example type.',
+    fields: [],
+    links: []
+  },
+  {
+    id: generateUUID(),
+    name: 'Task',
+    description: 'This is an example type.',
+    fields: [],
+    links: []
+  }
+];
+
 function generateUUID(): string {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
     const r = (Math.random() * 16) | 0,
@@ -38,3 +78,4 @@ function generateUUID(): string {
     return v.toString(16);
   });
 }
+export default generateUUID;

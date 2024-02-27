@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Panel from '@/components/ui/Panel/Panel';
 import TextInput from '@/components/ui/TextInput/TextInput';
 
@@ -11,39 +11,56 @@ import Item from '@/components/ui/Item/Item';
 import '@/constants/api';
 import { SAMPLE_ACCESS_TOKEN } from '@/constants/api';
 import typeApi from '@/api/typeApi';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table/Table';
+import generateUUID from '@/constants/constant';
 
 const TypeManager = () => {
-  console.log('first');
   const [isTypeModelOpen, setIsTypeModelOpen] = useState(false);
+  const [typeName, setTypeName] = useState('');
+  const [types, setTypes] = useState<Type[]>();
 
   // Save access token to localStorage (for testing purpose only)
   localStorage.setItem('access_token', SAMPLE_ACCESS_TOKEN);
 
-  document.documentElement.classList.remove('dark');
-  // TODO: phân trang theo perpage=10 total page từ back-end
+  useEffect(() => {
+    // Fetch sample data
+    const fetchData = async () => {
+      try {
+        const res = await typeApi.getAllTypes();
+        if (res) {
+          console.log('Fetch Type successfully');
+          console.log(res);
+          setTypes(res.types);
+        }
+      } catch (error) {
+        console.error('Fetch Type failed', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // document.documentElement.classList.remove('dark');
+  // TODO: phân trang
 
   //create Type sample data
 
-  const exampleType: Type = {
-    id: '1',
-    name: 'Example Type',
-    description: 'This is an example type.',
-    fields: [
-      { id: '1', name: 'Field 1' },
-      { id: '2', name: 'Field 2' }
-    ],
-    links: [
-      { id: '1', label_name: 'Link 1', link_type: 'Link 1', to_type: 'Link 1' },
-      { id: '2', label_name: 'Link 2', link_type: 'Link 2', to_type: 'Link 2' }
-    ]
-  };
-
   const handleCreateType = async () => {
+    let exampleType: Type = {
+      id: generateUUID(),
+      name: typeName,
+      description: 'This is an example type.',
+      fields: [],
+      links: []
+    };
+
     try {
       const res = await typeApi.createType({ type: exampleType });
       if (res) {
         console.log('Create Type successfully');
         console.log(res);
+
+        setTypes([res.type, ...(types || [])]);
         return res.type;
       }
     } catch (error) {
@@ -52,8 +69,13 @@ const TypeManager = () => {
   };
 
   const handleSubmit = () => {
+    if (!typeName) {
+      return;
+    }
     setIsTypeModelOpen(false);
     handleCreateType();
+    console.log(typeName);
+    setTypeName('');
   };
 
   return (
@@ -67,7 +89,7 @@ const TypeManager = () => {
             </div>
           </button>
 
-          <h1 className='my-2 text-4xl font-bold'>Type Manager</h1>
+          <h1 className='my-10 text-4xl font-bold'>Type Manager</h1>
           <div className='flex flex-row justify-between'>
             <TextInput className='w-auto' value='' placeholder='Search for types' prefixIcon='search' />
             <PrimaryButton
@@ -82,44 +104,32 @@ const TypeManager = () => {
             </PrimaryButton>
           </div>
 
-          <table className='min-w-full divide-y divide-gray-200'>
-            <thead className='bg-gray-50'>
-              <tr>
-                <th scope='col' className='px-6 py-3 text-left text-xl font-bold   tracking-wider '>
-                  Type name
-                </th>
-                <th scope='col' className='px-6 py-3 text-center text-xl font-bold   tracking-wider '>
-                  No. Fields
-                </th>
-                <th scope='col' className='px-6 py-3 text-center text-xl font-bold   tracking-wider '>
-                  No. Links
-                </th>
-              </tr>
-            </thead>
-            <tbody className='divide-y divide-gray-200 bg-white'>
-              <tr className='hover:bg-slate-100'>
-                <td className='whitespace-nowrap px-6 py-4 text-left text-sm text-gray-500'>Data 1</td>
-                <td className='whitespace-nowrap px-6 py-4 text-center text-sm text-gray-500'>Data 2</td>
-                <td className='whitespace-nowrap px-6 py-4 text-center text-sm text-gray-500'>Data 3</td>
-                <td className='whitespace-nowrap px-6 py-4 text-center text-sm text-gray-500'>
-                  <button>
-                    <Icon name='navigate_next' />
-                  </button>
-                </td>
-              </tr>
-
-              <tr className='hover:bg-slate-100'>
-                <td className='whitespace-nowrap px-6 py-4 text-left text-sm text-gray-500'>Data 1</td>
-                <td className='whitespace-nowrap px-6 py-4 text-center text-sm text-gray-500'>Data 2</td>
-                <td className='whitespace-nowrap px-6 py-4 text-center text-sm text-gray-500'>Data 3</td>
-                <td className='whitespace-nowrap px-6 py-4 text-center text-sm text-gray-500'>
-                  <button>
-                    <Icon name='navigate_next' />
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Type Name</TableHead>
+                <TableHead>No. Fields</TableHead>
+                <TableHead>No. Links</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {types &&
+                types.map((type: Type) => {
+                  return (
+                    <TableRow key={type.id}>
+                      <TableCell className='font-medium'>{type.name}</TableCell>
+                      <TableCell>{type.fields.length}</TableCell>
+                      <TableCell>{type.links.length}</TableCell>
+                      <TableCell>
+                        <button>
+                          <Icon name='navigate_next'></Icon>
+                        </button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+            </TableBody>
+          </Table>
         </div>
       </Panel>
 
@@ -127,14 +137,20 @@ const TypeManager = () => {
         <form>
           <div className='grid grid-cols-5 place-content-center gap-3'>
             <div className='col-span-3 flex flex-col gap-2'>
-              <TextInput header='Type Name' className='w-full' value='' placeholder='Search for something' />
+              <TextInput
+                onChange={(e) => setTypeName(e.target.value)}
+                header='Type Name'
+                className='w-full'
+                value={typeName}
+                placeholder='Search for something'
+              />
             </div>
             <div className='col-span-2 flex flex-col gap-2'>
               <DropDown header='Template' value='Select a value'>
-                <Item title='Item 1' />
-                <Item title='Item 2' />
-                <Item title='Item 3' />
-                <Item title='Item 4' />
+                <Item title='Account' />
+                <Item title='Contact' />
+                <Item title='Lead' />
+                <Item title='Opportunity' />
               </DropDown>
             </div>
           </div>

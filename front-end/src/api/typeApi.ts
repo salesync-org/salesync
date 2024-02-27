@@ -2,8 +2,12 @@ import instance from './axiosConfig';
 
 class TypeApi {
   createType = async ({ type }: { type: Type }) => {
-    console.log('aaaa');
     const response = await instance.post('/type/create', type);
+    return response.data;
+  };
+
+  getAllTypes = async () => {
+    const response = await instance.get('/type/all');
     return response.data;
   };
 }

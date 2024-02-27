@@ -11,11 +11,10 @@ import Item from '@/components/ui/Item/Item';
 import '@/constants/api';
 import { SAMPLE_ACCESS_TOKEN } from '@/constants/api';
 import typeApi from '@/api/typeApi';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table/Table';
 import generateUUID from '@/constants/constant';
 import { useSearchParams } from 'react-router-dom';
 import Pagination from '@/components/ui/Pagination/Pagination';
-import { set } from 'react-hook-form';
+import TypeTable from '@/components/ui/Table/TypeTable';
 
 const TypeManager = () => {
   //Pop up modal to create new type
@@ -148,32 +147,8 @@ const TypeManager = () => {
             </PrimaryButton>
           </div>
 
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Type Name</TableHead>
-                <TableHead>No. Fields</TableHead>
-                <TableHead>No. Links</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {typeSearchResult &&
-                typeSearchResult.map((type: Type) => {
-                  return (
-                    <TableRow key={type.id}>
-                      <TableCell className='font-medium'>{type.name}</TableCell>
-                      <TableCell>{type.fields.length}</TableCell>
-                      <TableCell>{type.links.length}</TableCell>
-                      <TableCell>
-                        <button>
-                          <Icon name='navigate_next'></Icon>
-                        </button>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-            </TableBody>
-          </Table>
+          <TypeTable types={typeSearchResult}></TypeTable>
+
           <Pagination totalPages={15} currentPage={+page} onPageChange={handleOnPageChange} />
         </div>
       </Panel>

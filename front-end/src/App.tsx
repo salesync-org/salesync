@@ -10,7 +10,7 @@ const TypeManager = lazy(() => import('./pages/TypeManager/TypeManager'));
 function App() {
   return (
     <div>
-      <Suspense>
+      <Suspense fallback={<div>Loading...</div>}>
         <Routes>
           <Route path='/' element={<ConfigLayout />}>
             <Route path='/' element={<LogIn />} />

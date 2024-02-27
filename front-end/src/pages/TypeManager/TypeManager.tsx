@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Panel from '@/components/ui/Panel/Panel';
 import TextInput from '@/components/ui/TextInput/TextInput';
-
+import useDebounce from '@/hooks/useDebounce';
 import Button from '@/components/ui/Button/Button';
 import Icon from '@/components/ui/Icon/Icon';
 import PrimaryButton from '@/components/ui/Button/PrimaryButton';
@@ -13,11 +13,27 @@ import { SAMPLE_ACCESS_TOKEN } from '@/constants/api';
 import typeApi from '@/api/typeApi';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table/Table';
 import generateUUID from '@/constants/constant';
+import { useSearchParams } from 'react-router-dom';
+import Pagination from '@/components/ui/Pagination/Pagination';
+import { set } from 'react-hook-form';
 
 const TypeManager = () => {
+  //Pop up modal to create new type
   const [isTypeModelOpen, setIsTypeModelOpen] = useState(false);
+  //Type name in the input field
   const [typeName, setTypeName] = useState('');
-  const [types, setTypes] = useState<Type[]>();
+  //List of types
+  const [types, setTypes] = useState<Type[]>([]);
+  //List of types after search
+  const [typeSearchResult, setTypeSearchResult] = useState<Type[]>([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [search, setSearch] = useState(() => {
+    return searchParams.get('search') || '';
+  });
+  const debouncedSearch = useDebounce(search, 500);
+  const [page, setPage] = useState(() => {
+    return searchParams.get('page') || '1';
+  });
 
   // Save access token to localStorage (for testing purpose only)
   localStorage.setItem('access_token', SAMPLE_ACCESS_TOKEN);
@@ -31,6 +47,7 @@ const TypeManager = () => {
           console.log('Fetch Type successfully');
           console.log(res);
           setTypes(res.types);
+          setTypeSearchResult(res.types);
         }
       } catch (error) {
         console.error('Fetch Type failed', error);
@@ -40,11 +57,26 @@ const TypeManager = () => {
     fetchData();
   }, []);
 
-  // document.documentElement.classList.remove('dark');
-  // TODO: phân trang
+  //Search for types
+  useEffect(() => {
+    const handleSearch = () => {
+      const searchResult =
+        types &&
+        types.filter((item) => {
+          return Object.values(item).join('').toLowerCase().includes(debouncedSearch.toLowerCase());
+        });
 
-  //create Type sample data
+      return searchResult;
+    };
 
+    if (debouncedSearch || debouncedSearch === '') {
+      searchParams.set('search', debouncedSearch);
+      setSearchParams(searchParams);
+      setTypeSearchResult(handleSearch() as Type[]);
+    }
+  }, [debouncedSearch, searchParams, setSearchParams]);
+
+  //create Type sample data and add to types
   const handleCreateType = async () => {
     let exampleType: Type = {
       id: generateUUID(),
@@ -58,9 +90,8 @@ const TypeManager = () => {
       const res = await typeApi.createType({ type: exampleType });
       if (res) {
         console.log('Create Type successfully');
-        console.log(res);
-
         setTypes([res.type, ...(types || [])]);
+        setTypeSearchResult([res.type, ...(types || [])]);
         return res.type;
       }
     } catch (error) {
@@ -68,14 +99,21 @@ const TypeManager = () => {
     }
   };
 
+  //Handle submit when creating new type
   const handleSubmit = () => {
     if (!typeName) {
       return;
     }
     setIsTypeModelOpen(false);
     handleCreateType();
-    console.log(typeName);
     setTypeName('');
+  };
+
+  //Handle page change
+  const handleOnPageChange = (page: number) => {
+    searchParams.set('page', page.toString());
+    setSearchParams(searchParams);
+    setPage(page.toString());
   };
 
   return (
@@ -91,7 +129,13 @@ const TypeManager = () => {
 
           <h1 className='my-10 text-4xl font-bold'>Type Manager</h1>
           <div className='flex flex-row justify-between'>
-            <TextInput className='w-auto' value='' placeholder='Search for types' prefixIcon='search' />
+            <TextInput
+              onChange={(e) => setSearch(e.target.value)}
+              className='w-auto'
+              value={search}
+              placeholder='Search for types'
+              prefixIcon='search'
+            />
             <PrimaryButton
               className='mx-8'
               onClick={() => {
@@ -113,8 +157,8 @@ const TypeManager = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {types &&
-                types.map((type: Type) => {
+              {typeSearchResult &&
+                typeSearchResult.map((type: Type) => {
                   return (
                     <TableRow key={type.id}>
                       <TableCell className='font-medium'>{type.name}</TableCell>
@@ -130,6 +174,7 @@ const TypeManager = () => {
                 })}
             </TableBody>
           </Table>
+          <Pagination totalPages={15} currentPage={+page} onPageChange={handleOnPageChange} />
         </div>
       </Panel>
 

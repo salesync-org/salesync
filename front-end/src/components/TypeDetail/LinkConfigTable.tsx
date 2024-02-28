@@ -1,6 +1,8 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from 'components/ui/Table/Table';
 import Icon from '../ui/Icon/Icon';
 import Button from '../ui/Button/Button';
+import { memo } from 'react';
+import Skeleton from '../ui/Skeleton/Skeleton';
 
 interface ConfigTableProps {
   data: Link[];
@@ -18,15 +20,44 @@ const LinkConfigTable = ({ data }: ConfigTableProps) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.map((item) => (
-          <TableRow key={item.id}>
-            <TableCell className='font-medium'>{item.link_type}</TableCell>
-            <TableCell>{item.to_type}</TableCell>
-            <TableCell>{item.label_name}</TableCell>
-            <TableCell className='w-4'>
-              <Button onClick={() => {}} rounded className='border-0 bg-transparent dark:border-0 dark:bg-transparent'>
-                <Icon name='chevron_right' />
-              </Button>
+        {data &&
+          data.map((item) => (
+            <TableRow key={item.id}>
+              <TableCell className='font-medium'>{item.link_type}</TableCell>
+              <TableCell>{item.to_type}</TableCell>
+              <TableCell>{item.label_name}</TableCell>
+              <TableCell className='w-4'>
+                <Button
+                  onClick={() => {}}
+                  rounded
+                  className='border-0 bg-transparent dark:border-0 dark:bg-transparent'
+                >
+                  <Icon name='chevron_right' />
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+      </TableBody>
+    </Table>
+  );
+};
+
+export const LinkConfigTableLoading = () => {
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Link Type</TableHead>
+          <TableHead>To Type</TableHead>
+          <TableHead>Label Name</TableHead>
+          <TableHead></TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {[1, 2, 3, 4].map((item) => (
+          <TableRow key={item}>
+            <TableCell colSpan={4} className='text-center'>
+              <Skeleton width='100%' />
             </TableCell>
           </TableRow>
         ))}
@@ -35,4 +66,5 @@ const LinkConfigTable = ({ data }: ConfigTableProps) => {
   );
 };
 
-export default LinkConfigTable;
+const MemoizedLinkConfigTable = memo(LinkConfigTable);
+export default MemoizedLinkConfigTable;

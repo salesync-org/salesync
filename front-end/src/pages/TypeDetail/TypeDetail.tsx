@@ -1,13 +1,15 @@
 import PrimaryButton from '@/components/ui/Button/PrimaryButton';
 import Icon from '@/components/ui/Icon/Icon';
 import Pagination from '@/components/ui/Pagination/Pagination';
-import LinkConfigTable from '@/components/TypeDetail/LinkConfigTable';
+import LinkConfigTable, { LinkConfigTableLoading } from '@/components/TypeDetail/LinkConfigTable';
 import TextInput from '@/components/ui/TextInput/TextInput';
 import { testData } from '@/constant/constant';
 import useDebounce from '@/hooks/useDebounce';
 import { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 import LinkModal from '@/components/TypeDetail/LinkModal';
+import typeApi from '@/api/typeApi';
+import useRelation from '@/hooks/useRelation';
 
 const TypeDetail = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -17,27 +19,11 @@ const TypeDetail = () => {
   const [page, setPage] = useState(() => {
     return searchParams.get('page') || '1';
   });
-  const [data, setData] = useState<Link[]>(() => {
-    return testData as Link[];
-  });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const debouncedSearch = useDebounce(search, 500);
 
-  useEffect(() => {
-    const handleSearch = () => {
-      const searchResult = testData.filter((item) => {
-        return Object.values(item).join('').toLowerCase().includes(debouncedSearch.toLowerCase());
-      });
-
-      return searchResult;
-    };
-
-    if (debouncedSearch || debouncedSearch === '') {
-      searchParams.set('search', debouncedSearch);
-      setSearchParams(searchParams);
-      setData(handleSearch() as Link[]);
-    }
-  }, [debouncedSearch, searchParams, setSearchParams]);
+  const { id } = useParams<{ id: string }>();
+  const { data, error, isLoading } = useRelation(id as string);
 
   const handleOnPageChange = (page: number) => {
     searchParams.set('page', page.toString());
@@ -69,7 +55,7 @@ const TypeDetail = () => {
           <span>Add Links</span>
         </PrimaryButton>
       </div>
-      <LinkConfigTable data={data} />
+      {true ? <LinkConfigTableLoading /> : <LinkConfigTable data={data} />}
       <Pagination totalPages={15} currentPage={+page} onPageChange={handleOnPageChange} />
       <LinkModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
     </div>

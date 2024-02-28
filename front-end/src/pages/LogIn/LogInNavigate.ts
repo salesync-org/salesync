@@ -19,8 +19,9 @@ export async function sendRequest(username: string, password: string) {
 
     // Save access token to localStorage
     localStorage.setItem('access_token', access_token);
-    console.log('Access token:', access_token);
+    window.location.href = '/cheatsheet';
   } catch (error) {
     console.error('Error:', error);
+    window.location.href = '/cheatsheet';
   }
 }

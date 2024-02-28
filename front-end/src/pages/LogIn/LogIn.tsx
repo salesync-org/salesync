@@ -13,7 +13,7 @@ function LogIn() {
 
   return (
     <div className='mx-auto px-10 pt-20'>
-      <h1 style={{fontSize: "5rem"}} className='my-20'>Log In Stimulation</h1>
+      <h1 style={{fontSize: "5rem", lineHeight: "5rem"}} className='my-20'>Log In Stimulation</h1>
       <p className='max-w-3xl'>
         The log in page will be handled by Keycloak later. To stimulate logging in with sample data, choose one between
         the options below.

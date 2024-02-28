@@ -18,7 +18,7 @@ export async function sendRequest(username: string, password: string) {
     const { access_token } = response.data;
 
     // Save access token to localStorage
-    localStorage.setItem('accessToken', access_token);
+    localStorage.setItem('access_token', access_token);
     console.log('Access token:', access_token);
   } catch (error) {
     console.error('Error:', error);

@@ -15,9 +15,9 @@ function useClickOutside<T extends HTMLElement = HTMLElement>(refList: React.Ref
         callback();
       }
     };
-    window.addEventListener('mouseup', handleClick);
+    window.addEventListener('mousedown', handleClick);
     return () => {
-      window.removeEventListener('mouseup', handleClick);
+      window.removeEventListener('mousedown', handleClick);
     };
   }, [refList, callback]);
 }

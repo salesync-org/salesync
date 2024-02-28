@@ -1,19 +1,16 @@
 package com.salesync.typeservice.dtos;
 
+import java.util.UUID;
+
 public class TypeDTO {
-    String id;
+    UUID id;
     String name;
 
-    public TypeDTO(String id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -22,6 +19,15 @@ public class TypeDTO {
     }
 
     public void setName(String name) {
+        this.name = name;
+    }
+
+    public TypeDTO(UUID id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public TypeDTO(String name) {
         this.name = name;
     }
 }

@@ -4,8 +4,8 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '.
 interface Type {
   id: string;
   name: string;
-  fields: Field[];
-  links: Link[];
+  fields: Field[] | null;
+  links: Link[] | null;
 }
 
 const TypeTable = ({ types }: { types: Type[] }) => {
@@ -24,8 +24,8 @@ const TypeTable = ({ types }: { types: Type[] }) => {
             return (
               <TableRow key={type.id}>
                 <TableCell className='font-medium'>{type.name}</TableCell>
-                <TableCell>{type.fields.length}</TableCell>
-                <TableCell>{type.links.length}</TableCell>
+                <TableCell>{type.fields?.length ?? 0}</TableCell>
+                <TableCell>{type.fields?.length ?? 0}</TableCell>
                 <TableCell>
                   <button>
                     <Icon name='navigate_next'></Icon>

@@ -8,8 +8,8 @@ type Type = {
   id: string;
   name: string;
   description: string;
-  fields: Field[];
-  links: Link[];
+  fields: Field[]?;
+  links: Link[]?;
 };
 
 type Field = {

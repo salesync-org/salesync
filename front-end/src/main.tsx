@@ -26,3 +26,13 @@ enableMocking().then(() => {
     </React.StrictMode>
   );
 });
+
+// ReactDOM.createRoot(document.getElementById('entry')!).render(
+//   <React.StrictMode>
+//     <QueryClientProvider client={queryClient}>
+//       <BrowserRouter>
+//         <App />
+//       </BrowserRouter>
+//     </QueryClientProvider>
+//   </React.StrictMode>
+// );

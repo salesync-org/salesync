@@ -4,12 +4,12 @@ package com.salesync.typeservice.controllers;
 import com.salesync.typeservice.dtos.TypeDTO;
 import com.salesync.typeservice.services.type.ITypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-
 @RequestMapping("/type")
 public class TypeController {
 
@@ -21,14 +21,14 @@ public class TypeController {
     }
 
     @PostMapping("/create")
-    public TypeDTO createType(@RequestBody TypeDTO typeDTO){
+    public  TypeDTO createType(@RequestBody TypeDTO typeDTO){
         return typeService.createType(typeDTO);
     }
 
     @GetMapping("/get-all")
-    public List<TypeDTO> getAllType(){
+    public ResponseEntity<List<TypeDTO>>  getAllType(){
 
-        return typeService.getAllType();
+        return ResponseEntity.ok(typeService.getAllType());
     }
 
 

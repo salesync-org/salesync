@@ -16,7 +16,7 @@ const Button: React.FC<ButtonProps> = ({
   ...restProps
 }) => {
   return (
-    <div className={layoutClassName}>
+    <div className={cn(layoutClassName)}>
       {showHeader && header && <p className='my-1'>{header}</p>}
       <button
         className={cn(buttonVariants({ intent, rounded, className }), 'flex items-center justify-center space-x-2')}

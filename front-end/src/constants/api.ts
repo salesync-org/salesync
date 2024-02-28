@@ -3,3 +3,4 @@ export const SAMPLE_ACCESS_TOKEN = 'tamgiaclatacgiamtacladanhgiamlanhotdanhnhotl
 export const USER_SERVICE_URL = `${API_BASE_URL}/user`;
 export const TYPE_SERVICE_URL = `${API_BASE_URL}/type`;
 export const ROLE_SERVICE_URL = `${API_BASE_URL}/role`;
+export const ACCOUNT_ID = '1234567890';

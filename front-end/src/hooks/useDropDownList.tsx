@@ -1,19 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import useClickOutside from 'hooks/useClickOutside';
 
-export function useDropDown() {
-  const [isOpen, setIsOpen] = useState(false);
+export function useDropDownList({ref, open} : {ref: React.RefObject<HTMLDivElement>, open: boolean})  {
+  // const [isOpen, setIsOpen] = useState(open);
   const buttonContentRef = useRef<HTMLDivElement>(null);
   const [shoulDropUp, setDropDirection] = useState(false);
-  const [selectedOption, setSelectedOption] = useState('');
-  const buttonRef = useRef<HTMLDivElement>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
-    const dropdownElement = buttonContentRef.current;
+    const dropdownElement = ref.current?.parentElement;
 
     if (dropdownElement) {
       const windowHeight = window.innerHeight;
@@ -23,18 +16,11 @@ export function useDropDown() {
       // Adjust the condition based on your specific requirements
       setDropDirection(spaceBelow > 20 * parseFloat(getComputedStyle(document.documentElement).fontSize));
     }
-  }, [isOpen]);
+  }, [open]);
 
-  useClickOutside([menuRef], () => setIsOpen(false));
 
   return {
-    isOpen,
-    setIsOpen,
     shoulDropUp,
-    selectedOption,
-    setSelectedOption,
     buttonContentRef,
-    buttonRef,
-    menuRef
   };
 }

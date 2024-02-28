@@ -48,9 +48,9 @@ function ComponentPanel() {
         </div>
         <div>
           <h2 className='mb-4'>Input Button</h2>
-          <TextInput header='Normal' value='' placeholder='Search for something' />
-          <TextInput header='With Icon' value='' placeholder='Search for anything' prefixIcon='search' />
-          <TextInput header='Disabled' value='' disabled placeholder='Search for nothing' prefixIcon='home' />
+          <TextInput header='Normal' placeholder='Search for something' />
+          <TextInput header='With Icon' placeholder='Search for anything' prefixIcon='search' />
+          <TextInput header='Disabled' disabled placeholder='Search for nothing' prefixIcon='home' />
         </div>
         <div>
           <h2 className='mb-4'>Input Button</h2>

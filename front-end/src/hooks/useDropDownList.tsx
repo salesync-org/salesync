@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 export function useDropDownList({ref, open} : {ref: React.RefObject<HTMLDivElement>, open: boolean})  {
   // const [isOpen, setIsOpen] = useState(open);
   const buttonContentRef = useRef<HTMLDivElement>(null);
-  const [shoulDropUp, setDropDirection] = useState(false);
+  const [shouldDropUp, setDropDirection] = useState(false);
 
   useEffect(() => {
     const dropdownElement = ref.current?.parentElement;
@@ -20,7 +20,7 @@ export function useDropDownList({ref, open} : {ref: React.RefObject<HTMLDivEleme
 
 
   return {
-    shoulDropUp,
+    shouldDropUp,
     buttonContentRef,
   };
 }

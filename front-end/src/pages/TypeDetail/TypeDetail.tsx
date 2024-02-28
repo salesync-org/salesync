@@ -7,6 +7,7 @@ import { testData } from '@/constants/constant';
 import useDebounce from '@/hooks/useDebounce';
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import FieldTypeDetail from './FieldTypeDetail/FieldTypeDetail';
 
 const TypeDetail = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -52,6 +53,9 @@ const TypeDetail = () => {
         </Link>
       </div>
       <h1 className='text-2xl font-bold leading-7'>Account Type</h1>
+      
+      <FieldTypeDetail />
+
       <h2 className='text-lg font-semibold leading-5'>Links</h2>
       <div className='flex gap-2'>
         <TextInput

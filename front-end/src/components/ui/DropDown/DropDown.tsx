@@ -10,14 +10,23 @@ interface DropdownButtonProps {
   header?: string;
   showHeader?: boolean;
   disabled?: boolean;
+  onChange?: (value: string) => void;
 }
 
-const DropDown: React.FC<DropdownButtonProps> = ({ children, value, header, disabled, showHeader = true }) => {
+const DropDown: React.FC<DropdownButtonProps> = ({
+  children,
+  value,
+  header,
+  disabled,
+  onChange,
+  showHeader = true
+}) => {
   const { isOpen, setIsOpen, shoulDropUp, selectedOption, setSelectedOption, buttonContentRef, buttonRef, menuRef } =
     useDropDown();
 
   const handleOptionClick = (option: string) => {
     setSelectedOption(option);
+    onChange!(option);
     setIsOpen(false);
   };
 

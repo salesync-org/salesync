@@ -4,9 +4,9 @@ package com.salesync.typeservice.controllers;
 import com.salesync.typeservice.dtos.TypeDTO;
 import com.salesync.typeservice.services.type.ITypeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 
@@ -21,7 +21,17 @@ public class TypeController {
     }
 
     @PostMapping("/create")
-    public TypeDTO createType(){
-        return typeService.createType(new TypeDTO("A","Account"));
+    public TypeDTO createType(@RequestBody TypeDTO typeDTO){
+        return typeService.createType(typeDTO);
     }
+
+    @GetMapping("/get-all")
+    public List<TypeDTO> getAllType(){
+
+        return typeService.getAllType();
+    }
+
+
+
+
 }

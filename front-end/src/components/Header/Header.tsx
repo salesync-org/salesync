@@ -3,7 +3,7 @@ import TextInput from 'ui/TextInput/TextInput';
 import Button from 'ui/Button/Button';
 import Icon from 'ui/Icon/Icon';
 import { useEffect, useState, MouseEvent } from 'react';
-import getMyInfo from '@/api/getMyInfo';
+import auth from '@/api/auth';
 import DropDownList from 'ui/DropDown/DropDownList';
 import Item from 'ui/Item/Item';
 import Switch from 'ui/Switch/Switch';
@@ -15,22 +15,22 @@ const Header = () => {
   const [name, setName] = useState('Unknown');
   const [avatar_url, setAvatar] = useState('');
 
-  const updateInfo = async () => {
-    if (!localStorage.getItem('access_token')) return;
-    const getInfo = await getMyInfo();
-    const { name, avatar_url } = getInfo.data;
-    if (getInfo.status == 200) {
+  useEffect(() => {
+    const updateInfo = async () => {
+      if (!localStorage.getItem('access_token')) return;
+      const { name, avatar_url } = await auth.getMyInfo();
       setLogInState(true);
       setName(name);
       setAvatar(avatar_url);
     }
-  }
-
-  useEffect(() => {
     updateInfo();
   }, [localStorage]);
 
   function logOutHandle(_: MouseEvent<HTMLDivElement>): void {
+    const logOut = async () => {
+      await auth.logOut();
+    }
+    logOut();
     setLogInState(false);
     setName('Unknown');
     setAvatar('');

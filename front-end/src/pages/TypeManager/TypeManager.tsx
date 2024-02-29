@@ -81,9 +81,9 @@ const TypeManager = () => {
       const res = await typeApi.createType({ typeName: typeName, template: 'Account' });
       if (res) {
         console.log('Create Type successfully');
-        setTypes([res.type, ...(types || [])]);
-        setTypeSearchResult([res.type, ...(types || [])]);
-        return res.type;
+        setTypes([res, ...(types || [])]);
+        setTypeSearchResult([res, ...(types || [])]);
+        return res;
       }
     } catch (error) {
       console.error('Create Type failed', error);

@@ -21,8 +21,8 @@ public class TypeController {
     }
 
     @PostMapping("/create")
-    public  TypeDTO createType(@RequestBody TypeDTO typeDTO){
-        return typeService.createType(typeDTO);
+    public  ResponseEntity<TypeDTO>  createType(@RequestBody TypeDTO typeDTO){
+        return ResponseEntity.ok(typeService.createType(typeDTO));
     }
 
     @GetMapping("/get-all")

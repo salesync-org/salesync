@@ -1,3 +1,3 @@
-export { default as relations } from './relation';
+export { default as typeRelations } from './type-relation';
 export { default as types } from './type';
-export { default as inputs } from './input';
+export { default as relations } from './relations';

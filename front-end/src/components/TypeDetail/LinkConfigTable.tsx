@@ -5,7 +5,7 @@ import { memo } from 'react';
 import Skeleton from '../ui/Skeleton/Skeleton';
 
 interface ConfigTableProps {
-  data: Link[];
+  data: TypeRelation[];
 }
 
 const LinkConfigTable = ({ data }: ConfigTableProps) => {
@@ -14,6 +14,7 @@ const LinkConfigTable = ({ data }: ConfigTableProps) => {
       <TableHeader>
         <TableRow>
           <TableHead>Link Type</TableHead>
+          <TableHead>Label Name</TableHead>
           <TableHead>To Type</TableHead>
           <TableHead>Label Name</TableHead>
           <TableHead></TableHead>
@@ -23,9 +24,10 @@ const LinkConfigTable = ({ data }: ConfigTableProps) => {
         {data &&
           data.map((item) => (
             <TableRow key={item.id}>
-              <TableCell className='font-medium'>{item.link_type}</TableCell>
-              <TableCell>{item.to_type}</TableCell>
-              <TableCell>{item.label_name}</TableCell>
+              <TableCell className='font-medium'>{item.relationName}</TableCell>
+              <TableCell>{item.type1Label}</TableCell>
+              <TableCell>{item.type2Name}</TableCell>
+              <TableCell>{item.type2Label}</TableCell>
               <TableCell className='w-4'>
                 <Button
                   onClick={() => {}}

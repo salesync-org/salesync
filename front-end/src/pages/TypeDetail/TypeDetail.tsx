@@ -1,15 +1,13 @@
+import LinkConfigTable, { LinkConfigTableLoading } from '@/components/TypeDetail/LinkConfigTable';
+import LinkModal from '@/components/TypeDetail/LinkModal';
 import PrimaryButton from '@/components/ui/Button/PrimaryButton';
 import Icon from '@/components/ui/Icon/Icon';
 import Pagination from '@/components/ui/Pagination/Pagination';
-import LinkConfigTable, { LinkConfigTableLoading } from '@/components/TypeDetail/LinkConfigTable';
 import TextInput from '@/components/ui/TextInput/TextInput';
-import { testData } from '@/constant/constant';
 import useDebounce from '@/hooks/useDebounce';
-import { useEffect, useState } from 'react';
-import { Link, useParams, useSearchParams } from 'react-router-dom';
-import LinkModal from '@/components/TypeDetail/LinkModal';
-import typeApi from '@/api/typeApi';
 import useRelation from '@/hooks/useRelation';
+import { useState } from 'react';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 
 const TypeDetail = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -23,7 +21,11 @@ const TypeDetail = () => {
   const debouncedSearch = useDebounce(search, 500);
 
   const { id } = useParams<{ id: string }>();
-  const { data, error, isLoading } = useRelation(id as string);
+  const { data, isLoading } = useRelation(id as string);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+  };
 
   const handleOnPageChange = (page: number) => {
     searchParams.set('page', page.toString());
@@ -46,7 +48,7 @@ const TypeDetail = () => {
           layoutClassName='flex-grow-1 w-full'
           className='w-full'
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={handleInputChange}
           prefixIcon='search'
           placeholder='Search for links'
         />
@@ -55,7 +57,7 @@ const TypeDetail = () => {
           <span>Add Links</span>
         </PrimaryButton>
       </div>
-      {true ? <LinkConfigTableLoading /> : <LinkConfigTable data={data} />}
+      {isLoading ? <LinkConfigTableLoading /> : <LinkConfigTable data={data} />}
       <Pagination totalPages={15} currentPage={+page} onPageChange={handleOnPageChange} />
       <LinkModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
     </div>

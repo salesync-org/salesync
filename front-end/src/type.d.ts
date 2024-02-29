@@ -4,3 +4,11 @@ type Link = {
   to_type: string;
   label_name: string;
 };
+
+type User = {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  role: string;
+};

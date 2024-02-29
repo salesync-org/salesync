@@ -2,40 +2,35 @@ import salesyncIcon from 'assets/salesync_icon.png';
 import TextInput from 'ui/TextInput/TextInput';
 import Button from 'ui/Button/Button';
 import Icon from 'ui/Icon/Icon';
-import { useEffect, useState, MouseEvent } from 'react';
-import auth from '@/api/auth';
+import { useEffect, useState } from 'react';
 import DropDownList from 'ui/DropDown/DropDownList';
 import Item from 'ui/Item/Item';
 import Switch from 'ui/Switch/Switch';
 import themeSwitcher from '@/utils/themeSwitcher';
+import useAuth from '@/hooks/useAuth';
 
 const Header = () => {
-  const [isLoggedIn, setLogInState] = useState(false);
+  const {user, logout, fetchUser} = useAuth();
   const [isOpen, setMenuOpen] = useState(false);
   const [name, setName] = useState('Unknown');
   const [avatar_url, setAvatar] = useState('');
+
+  if (user === null) {
+    fetchUser();
+  }
   useEffect(() => {
     const updateInfo = async () => {
-      if (!localStorage.getItem('access_token')) return;
-      const { name, avatar_url } = await auth.getMyInfo();
-      setLogInState(true);
-      setName(name);
-      setAvatar(avatar_url);
+      if (user === null) {
+        setName('Unknown');
+        setAvatar('');
+      } else {
+        const { name, avatar_url } = user;
+        setName(name);
+        setAvatar(avatar_url);
+      }
     };
     updateInfo();
-  }, [localStorage]);
-
-  function logOutHandle(_: MouseEvent<HTMLDivElement>): void {
-    const logOut = async () => {
-      await auth.logOut();
-    };
-    logOut();
-    setLogInState(false);
-    setName('Unknown');
-    setAvatar('');
-    localStorage.removeItem('access_token');
-    window.location.href = '/';
-  }
+  }, [user]);
 
   return (
     <div className='fixed top-0 z-50 flex h-14 w-full flex-grow items-center justify-between bg-panel px-3 py-1 dark:bg-panel-dark'>
@@ -54,7 +49,7 @@ const Header = () => {
             <Switch checked={document.documentElement.classList.contains('dark')} onClick={themeSwitcher}></Switch>
             <Icon name='dark_mode' size='1rem' />
           </div>
-          {isLoggedIn ? (
+          {user ? (
             <div className='relative flex w-fit space-x-3 pl-2 align-middle'>
               <Button rounded='icon' className='h-10 w-10' intent='normal' onClick={() => {}}>
                 <Icon name='notifications' size='1rem' />
@@ -91,7 +86,7 @@ const Header = () => {
                     className='py-0'
                     icon={<Icon name='logout' size='2rem' />}
                     title='Log out'
-                    onClick={logOutHandle}
+                    onClick={()=> {logout()}}
                   />
                   <div className='h-2' />
                 </DropDownList>

@@ -13,8 +13,9 @@ export const handlers = [
           expires_in: 300,
           token_type: 'Bearer',
           user: {
-            email: 'admin',
-            password: 'admin'
+            name: 'Admin_User',
+            email: 'admin@salesync.org',
+            avatar_url: 'https://api.dicebear.com/7.x/initials/svg?seed=Quang'
           }
         },
         {

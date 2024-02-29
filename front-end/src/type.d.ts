@@ -11,4 +11,5 @@ type User = {
   email: string;
   password: string;
   role: string;
+  avatar_url: string;
 };

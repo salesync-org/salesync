@@ -16,7 +16,7 @@ class Auth {
     return response.data;
   }
 
-  async getMyInfo() {
+  async getUser() {
     const response = await instance.get(`${USER_SERVICE_URL}/me`);
     return response.data;
   }

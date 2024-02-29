@@ -2,7 +2,6 @@ import Button from '@/components/ui/Button/Button';
 import PrimaryButton from '@/components/ui/Button/PrimaryButton';
 import Icon from '@/components/ui/Icon/Icon';
 import { sendRequest } from './LogInNavigate';
-import TextInput from '@/components/ui/TextInput/TextInput';
 
 function LogIn() {
   return (

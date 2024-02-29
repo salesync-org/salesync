@@ -1,16 +1,11 @@
-import { USER_SERVICE_URL } from "@/constants/api";
-import instance from "./axiosConfig";
+import { USER_SERVICE_URL } from '@/constants/api';
+import instance from './axiosConfig';
 
 class Auth {
-
-  constructor() {
-    
-  }
-
-  async login(username: string, password: string) {
+  async login(email: string, password: string) {
     const response = await instance.post(`${USER_SERVICE_URL}/login`, {
-      username,
-      password,
+      email,
+      password
     });
 
     return response.data;

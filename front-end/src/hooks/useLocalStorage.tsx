@@ -24,7 +24,7 @@ export default function useLocalStorage<T>(key: string, defaultValue: T): [T, (v
     return () => {
       window.removeEventListener('storage', handler);
     };
-  }, []);
+  }, [defaultValue, key]);
 
   const setValueWrap = (value: T) => {
     try {

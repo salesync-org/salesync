@@ -4,9 +4,7 @@ import { USER_SERVICE_URL, SAMPLE_ACCESS_TOKEN } from '@/constants/api'
 
 export const handlers = [
   http.post(`${USER_SERVICE_URL}/login`, async ({ request }) => {
-    const info = await request.formData();
-    const username = info.get('username');
-    const password = info.get('password');
+    const {username, password} = await (<any>request).json();
     
     if (username === 'admin' && password === 'admin') {
       return HttpResponse.json({

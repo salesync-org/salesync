@@ -55,7 +55,6 @@ const TypeDetail = () => {
       <h2 className='text-lg font-semibold leading-5'>Links</h2>
       <div className='flex gap-2'>
         <TextInput
-          layoutClassName='flex-grow-1 w-full'
           className='w-full'
           value={search}
           onChange={(e) => setSearch(e.target.value)}

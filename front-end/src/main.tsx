@@ -4,6 +4,7 @@ import App from './App.tsx';
 import './index.css';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import AuthProvider from './context/AuthContext.tsx';
 
 const queryClient = new QueryClient();
 
@@ -19,9 +20,11 @@ enableMocking().then(() => {
   ReactDOM.createRoot(document.getElementById('entry')!).render(
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <AuthProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </AuthProvider>
       </QueryClientProvider>
     </React.StrictMode>
   );

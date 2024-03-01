@@ -11,7 +11,7 @@ export default {
         1.5: '1.5'
       },
       fontSize: {
-        icon: '.93rem'
+        icon: '1rem'
       },
       fontWeight: 'normal',
       borderRadius: {

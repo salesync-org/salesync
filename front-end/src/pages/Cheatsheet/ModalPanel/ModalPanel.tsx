@@ -16,7 +16,7 @@ function ModalPanel() {
         <form>
           <div className='grid grid-cols-5 place-content-center gap-3'>
             <div className='col-span-3 flex flex-col gap-2'>
-              <TextInput header='Type Name' className='w-full' value='' placeholder='Search for something' />
+              <TextInput header='Type Name' className='w-full' placeholder='Search for something' />
             </div>
             <div className='col-span-2 flex flex-col gap-2'>
               <DropDown header='Template' value='Select a value'>

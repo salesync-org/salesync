@@ -14,7 +14,7 @@ function App() {
         <Routes>
           <Route path='/' element={<ConfigLayout />}>
             <Route path='/' element={<LogIn />} />
-            <Route path='/cheatsheet' element={<Cheatsheet />} />
+            <Route path='cheatsheet' element={<Cheatsheet />} />
             <Route path='type' element={<TypeDetail />} />
             <Route path='field' element={<TypeDetail />} />
             <Route path='link' element={<TypeDetail />} />

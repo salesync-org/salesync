@@ -62,7 +62,7 @@ const List = ({ children, open = false, divide = true, className, align = null, 
       <div ref={menuRef}>
         <div
           className={cn(
-            'absolute z-[52] max-h-80 overflow-y-auto rounded border-2 px-2 transition-all duration-100 ease-in-out',
+            'absolute z-[52] overflow-y-auto rounded border-2 px-2 transition-all duration-100 ease-in-out',
             align === 'left' && 'left-0',
             align === 'right' && 'right-0',
             divide && 'divide divide-y-2 divide-button-stroke-light dark:divide-button-stroke-dark',

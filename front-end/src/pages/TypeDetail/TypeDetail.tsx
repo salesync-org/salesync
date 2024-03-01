@@ -3,7 +3,7 @@ import Icon from '@/components/ui/Icon/Icon';
 import Pagination from '@/components/ui/Pagination/Pagination';
 import LinkConfigTable from '@/components/ui/Table/ConfigTable';
 import TextInput from '@/components/ui/TextInput/TextInput';
-import { testData } from '@/constant/constant';
+import { testData } from '@/constants/constant';
 import useDebounce from '@/hooks/useDebounce';
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';

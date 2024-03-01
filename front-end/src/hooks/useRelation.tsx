@@ -1,15 +1,17 @@
 import typeApi from '@/api/typeApi';
 import { useQuery } from 'react-query';
 
-const useRelation = (typeId: string) => {
-  const key = ['type', typeId];
+const useRelation = (typeId: string, search = '', page = '1') => {
+  const key = ['type-relation', typeId, search, page];
   const { data, error, isLoading } = useQuery(
     key,
     async () => {
-      return typeApi.getAllRelations(typeId);
+      return typeApi.getAllRelations(typeId, search, page);
     },
     {
-      refetchOnWindowFocus: false
+      refetchOnWindowFocus: false,
+      staleTime: 1000 * 60 * 5,
+      keepPreviousData: true
     }
   );
 

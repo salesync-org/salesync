@@ -21,10 +21,15 @@ const TypeDetail = () => {
   const debouncedSearch = useDebounce(search, 500);
 
   const { id } = useParams<{ id: string }>();
-  const { data, isLoading } = useRelation(id as string);
+  const { data, isLoading } = useRelation(id as string, debouncedSearch, page);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
+
+    if (debouncedSearch !== null) {
+      searchParams.set('search', debouncedSearch);
+      setSearchParams(searchParams);
+    }
   };
 
   const handleOnPageChange = (page: number) => {
@@ -57,8 +62,8 @@ const TypeDetail = () => {
           <span>Add Links</span>
         </PrimaryButton>
       </div>
-      {isLoading ? <LinkConfigTableLoading /> : <LinkConfigTable data={data} />}
-      <Pagination totalPages={15} currentPage={+page} onPageChange={handleOnPageChange} />
+      {isLoading ? <LinkConfigTableLoading /> : <LinkConfigTable data={data?.result} />}
+      <Pagination totalPages={data?.totalPage} currentPage={+page} onPageChange={handleOnPageChange} />
       <LinkModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
     </div>
   );

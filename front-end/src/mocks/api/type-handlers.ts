@@ -7,9 +7,10 @@ export const handlers = [
     return HttpResponse.json(types);
   }),
 
-  http.get(`${TYPE_SERVICE_URL}/:typeId/link`, async ({ params }) => {
-    const search = params.search ?? '';
-    const page = params.page ?? '1';
+  http.get(`${TYPE_SERVICE_URL}/:typeId/link`, async ({ request, params }) => {
+    const url = new URL(request.url);
+    const search = url.searchParams.get('search') ?? '';
+    const page = url.searchParams.get('page') ?? 1;
     const perPage = 6;
 
     const typeId = params.typeId;
@@ -19,7 +20,11 @@ export const handlers = [
         typeRelation.type1Label.toLowerCase().includes(search.toString().toLowerCase())
     );
 
+    const totalPage = Math.ceil(filterTypeRelations.length / perPage);
+
     const pageTypeRelations = filterTypeRelations.slice((+page - 1) * perPage, +page * perPage);
+
+    console.log({ page, perPage, filterTypeRelations, pageTypeRelations });
 
     const result = pageTypeRelations.map((typeRelation) => {
       const type1 = types.find((type) => type.id === typeRelation.type1Id);
@@ -38,6 +43,6 @@ export const handlers = [
       };
     });
 
-    return HttpResponse.json(result);
+    return HttpResponse.json({ totalPage, result });
   })
 ];

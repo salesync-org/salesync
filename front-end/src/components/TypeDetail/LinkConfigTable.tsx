@@ -5,7 +5,7 @@ import { memo } from 'react';
 import Skeleton from '../ui/Skeleton/Skeleton';
 
 interface ConfigTableProps {
-  data: TypeRelation[];
+  data: TypeRelation[] | undefined;
 }
 
 const LinkConfigTable = ({ data }: ConfigTableProps) => {

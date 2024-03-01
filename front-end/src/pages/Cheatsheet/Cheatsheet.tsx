@@ -1,10 +1,7 @@
 import salesyncLogo from 'assets/salesync_logo.png';
 import salesyncLogoDark from 'assets/salesync_logo_dark.png';
-import Switch from 'ui/Switch/Switch';
 import ComponentPanel from './ComponentPanel/ComponentPanel';
 import TypographyPanel from './TypographyPanel/TypographyPanel';
-import themeSwitcher from 'utils/themeSwitcher';
-import Icon from 'ui/Icon/Icon';
 import PalettePanel from './PalettePanel/PalettePanel';
 import ReactRouterDomPanel from './ReactRouterDomPanel/ReactRouterDomPanel';
 

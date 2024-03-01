@@ -9,16 +9,18 @@ interface ItemProps extends React.HTMLAttributes<HTMLDivElement> {
   subTitle?: string;
   additionalInfo?: string;
   icon?: React.ReactNode;
+  selected?: boolean;
   restProps?: React.HTMLAttributes<HTMLDivElement>;
 }
 
-const Item: React.FC<ItemProps> = ({ href, className, title, subTitle, additionalInfo, icon, ...restProps }) => {
+const Item: React.FC<ItemProps> = ({ href, className, title, subTitle, selected = false, additionalInfo, icon, ...restProps }) => {
   return (
     <div title={title}>
       <a className={cn(`flex rounded-sm py-2`, className)} href={href} tabIndex={0} title={title}>
         <div
           className={cn(
             'flex flex-grow items-center rounded-sm px-2 py-2 align-middle cursor-pointer',
+            selected && 'bg-secondary-light dark:bg-secondary-dark',
             'hover:bg-secondary-light dark:hover:bg-secondary-dark',
             'hover:text-link-text-light  dark:hover:text-link-text-dark'
           )}

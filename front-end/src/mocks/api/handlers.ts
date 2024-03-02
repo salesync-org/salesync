@@ -3,6 +3,7 @@ import { http, HttpResponse } from 'msw';
 import { setupWorker } from 'msw/browser';
 import { USER_SERVICE_URL, SAMPLE_ACCESS_TOKEN, TYPE_SERVICE_URL } from '@/constants/api';
 import { typeData } from '@/constants/constant';
+import { handlers as typeHandlers } from './type-handlers';
 
 export const handlers = [
   ...typeHandlers,

@@ -45,8 +45,8 @@ const TypeManager = () => {
         if (res) {
           console.log('Fetch Type successfully');
           console.log(res);
-          setTypes(res.types);
-          setTypeSearchResult(res.types);
+          setTypes(res);
+          setTypeSearchResult(res);
         }
       } catch (error) {
         console.error('Fetch Type failed', error);
@@ -77,21 +77,13 @@ const TypeManager = () => {
 
   //create Type sample data and add to types
   const handleCreateType = async () => {
-    let exampleType: Type = {
-      id: generateUUID(),
-      name: typeName,
-      description: 'This is an example type.',
-      fields: [],
-      links: []
-    };
-
     try {
-      const res = await typeApi.createType({ type: exampleType });
+      const res = await typeApi.createType({ typeName: typeName, template: 'Account' });
       if (res) {
         console.log('Create Type successfully');
-        setTypes([res.type, ...(types || [])]);
-        setTypeSearchResult([res.type, ...(types || [])]);
-        return res.type;
+        setTypes([res, ...(types || [])]);
+        setTypeSearchResult([res, ...(types || [])]);
+        return res;
       }
     } catch (error) {
       console.error('Create Type failed', error);

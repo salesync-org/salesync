@@ -5,6 +5,7 @@ import com.salesync.typeservice.dtos.TypeDTO;
 import com.salesync.typeservice.entities.Type;
 import com.salesync.typeservice.mapper.ITypeMapper;
 import com.salesync.typeservice.repositories.ITypeRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,14 +14,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class TypeServiceIpl implements ITypeService{
-    ITypeRepository typeRepository;
-    private final ITypeMapper typeMapper;
-    @Autowired
-    public TypeServiceIpl(ITypeRepository typeRepository, ITypeMapper typeMapper) {
-        this.typeRepository = typeRepository;
-        this.typeMapper=typeMapper;
-    }
+    private final ITypeRepository typeRepository;
+    private final ITypeMapper typeMapper = ITypeMapper.INSTANCE;
 
     @Override
     public TypeDTO createType(TypeDTO typeDTO) {

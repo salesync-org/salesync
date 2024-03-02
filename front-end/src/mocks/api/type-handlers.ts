@@ -16,15 +16,14 @@ export const handlers = [
     const typeId = params.typeId;
     const filterTypeRelations = typeRelations.filter(
       (typeRelation) =>
-        typeRelation.type1Id === typeId &&
-        typeRelation.type1Label.toLowerCase().includes(search.toString().toLowerCase())
+        (typeRelation.type1Id === typeId &&
+          typeRelation.type1Label.toLowerCase().includes(search.toString().toLowerCase())) ||
+        typeRelation.type2Label.toLowerCase().includes(search.toString().toLowerCase())
     );
 
     const totalPage = Math.ceil(filterTypeRelations.length / perPage);
 
     const pageTypeRelations = filterTypeRelations.slice((+page - 1) * perPage, +page * perPage);
-
-    console.log({ page, perPage, filterTypeRelations, pageTypeRelations });
 
     const result = pageTypeRelations.map((typeRelation) => {
       const type1 = types.find((type) => type.id === typeRelation.type1Id);
@@ -44,5 +43,20 @@ export const handlers = [
     });
 
     return HttpResponse.json({ totalPage, result });
+  }),
+
+  http.post(`${TYPE_SERVICE_URL}/:typeId/link`, async ({ request, params }) => {
+    const typeId = params.typeId;
+    const body = await request.json();
+    // const newTypeRelation = {
+    //   id: `${typeRelations.length + 1}`,
+    //   type1Id: typeId,
+    //   type1Label: body.type1Label,
+    //   relationId: body.relationId,
+    //   type2Id: body.type2Id,
+    //   type2Label: body.type2Label
+    // };
+    // typeRelations.push(newTypeRelation);
+    // return HttpResponse.json(newTypeRelation);
   })
 ];

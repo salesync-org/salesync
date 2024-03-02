@@ -27,7 +27,7 @@ const TypeDetail = () => {
     setSearch(e.target.value);
 
     if (debouncedSearch !== null) {
-      searchParams.set('search', debouncedSearch);
+      searchParams.set('search', e.target.value);
       setSearchParams(searchParams);
     }
   };

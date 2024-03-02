@@ -14,7 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Table(name = "type_relation", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"source_id", "destination_id"})
+        @UniqueConstraint(columnNames = {"source_id", "destination_id", "relation_id"})
 }
 )
 @AttributeOverride(name="id",column = @Column(name="type_relation_id"))

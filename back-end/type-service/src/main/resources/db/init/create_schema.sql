@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS public.type_relation
     type_relation_id uuid NOT NULL,
     destination_label character varying(255) COLLATE pg_catalog."default",
     source_type_label character varying(255) COLLATE pg_catalog."default",
+    CONSTRAINT uc_type_relation UNIQUE (source_id, destination_id, relation_id),
     CONSTRAINT type_relation_pkey PRIMARY KEY (type_relation_id),
     CONSTRAINT fk73i0p2asql61pveeqq3upa6d4 FOREIGN KEY (relation_id)
         REFERENCES public.relation (relation_id) MATCH SIMPLE

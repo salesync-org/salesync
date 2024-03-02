@@ -82,12 +82,6 @@ public class TypeServiceImpl implements ITypeService {
                 .relation(inverseRelation)
                 .build();
 
-
-        if (!typeRelationRepository.findBySourceTypeIdAndDestinationTypeId(sourceType.getId(), destinationType.getId()).isEmpty()) {
-            throw new RuntimeException("Link already exists");
-        }
-
-
         TypeRelationDTO savedSource = typeRelationMapper.typeRelationToTypeRelationDTO(typeRelationRepository.save(typeRelation));
         TypeRelationDTO savedDestination = typeRelationMapper.typeRelationToTypeRelationDTO(typeRelationRepository.save(inverseTypeRelation));
 
@@ -101,10 +95,8 @@ public class TypeServiceImpl implements ITypeService {
     public TypeRelationResponseDTO updateTypeRelation(TypeRelationDTO typeRelationDTO) {
         TypeRelation typeRelation = typeRelationRepository.findById(typeRelationDTO.getId()).get();
         TypeRelation inverseTypeRelation = typeRelationRepository
-                .findBySourceTypeIdAndDestinationTypeId(typeRelation.getDestinationType().getId(),
-                        typeRelation.getSourceType().getId())
-                .stream()
-                .filter((element) -> typeRelation.getRelation().getInverseRelation().getId().equals(element.getRelation().getId())).findFirst().get();
+                .findBySourceTypeIdAndDestinationTypeIdAndRelationId(typeRelation.getDestinationType().getId(),
+                        typeRelation.getSourceType().getId(), typeRelation.getRelation().getInverseRelation().getId()).get();
 
 
         typeRelation.setDestinationLabel(typeRelationDTO.getDestinationTypeLabel());

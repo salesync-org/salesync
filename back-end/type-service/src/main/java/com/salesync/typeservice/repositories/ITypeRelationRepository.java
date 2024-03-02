@@ -11,5 +11,5 @@ import java.util.UUID;
 
 public interface ITypeRelationRepository extends JpaRepository<TypeRelation, UUID>{
 
-    List<TypeRelation> findBySourceTypeIdAndDestinationTypeId(UUID sourceId, UUID destinationId);
+    Optional<TypeRelation> findBySourceTypeIdAndDestinationTypeIdAndRelationId(UUID sourceId, UUID destinationId, UUID relationId);
 }

@@ -16,6 +16,7 @@ function App() {
             <Route path='/' element={<LogIn />} />
             <Route path='cheatsheet' element={<Cheatsheet />} />
             <Route path='type' element={<TypeDetail />} />
+            <Route path='type/link/:id' element={<TypeDetail />} />
             <Route path='field' element={<TypeDetail />} />
             <Route path='link' element={<TypeDetail />} />
             <Route path='/type-manager' element={<TypeManager />} />

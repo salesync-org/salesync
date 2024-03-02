@@ -1,8 +1,13 @@
-type Link = {
+type TypeRelation = {
   id: string;
-  link_type: string;
-  to_type: string;
-  label_name: string;
+  type1Id: string;
+  type1Name: string;
+  type1Label: string;
+  relationId: string;
+  relationName: string;
+  type2Id: string;
+  type2Name: string;
+  type2Label: string;
 };
 type Type = {
   id: string;

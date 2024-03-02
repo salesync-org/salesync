@@ -9,18 +9,12 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.Optional;
 
-@Mapper(componentModel = "spring")
+@Mapper
 public interface ITypeMapper {
     ITypeMapper INSTANCE = Mappers.getMapper(ITypeMapper.class);
 
-
-    @Mapping(source = "id",target = "id")
-    @Mapping(source = "name",target = "name")
     TypeDTO typeToTypeDTO(Type type);
 
-
-    @Mapping(source = "id",target = "id")
-    @Mapping(source = "name",target = "name")
     Type typeDTOToType(TypeDTO typeDTO);
 
 }

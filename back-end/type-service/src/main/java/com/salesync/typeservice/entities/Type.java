@@ -1,6 +1,9 @@
 package com.salesync.typeservice.entities;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -13,5 +16,13 @@ public class Type extends BaseEntity  {
 
 
     private String name;
+
+    @OneToMany(mappedBy = "sourceType", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<TypeRelation> sourceTypeRelations;
+
+    @OneToMany(mappedBy = "destinationType", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<TypeRelation> destinationTypeRelations;
 
 }

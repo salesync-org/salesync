@@ -19,9 +19,15 @@ ALTER TABLE IF EXISTS public.type
 
 CREATE TABLE IF NOT EXISTS public.relation
 (
+    inverse_relation_id uuid,
     relation_id uuid NOT NULL,
     name character varying(255) COLLATE pg_catalog."default",
-    CONSTRAINT relation_pkey PRIMARY KEY (relation_id)
+    CONSTRAINT relation_pkey PRIMARY KEY (relation_id),
+    CONSTRAINT relation_inverse_relation_id_key UNIQUE (inverse_relation_id),
+    CONSTRAINT fk6utedqchh5xi1bnw58sac34jx FOREIGN KEY (inverse_relation_id)
+        REFERENCES public.relation (relation_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
 )
 
     TABLESPACE pg_default;
@@ -76,3 +82,10 @@ INSERT INTO public.type (type_id, name) VALUES
                                             ('64461f95-2f8b-4f3c-b2a1-182d6143d588', 'Contract'),
                                             ('c90c1e39-2688-40ff-9394-f78307b8de79', 'Milestone'),
                                             ('f457698a-6f25-4920-91e2-9bd4d3e4fe4e', 'Feedback');
+INSERT INTO public.relation (relation_id, name,inverse_relation_id) VALUES
+                                              ('7114228c-1694-4d7e-80c7-6a7f199dfa4c', 'One-to-Many','391ac754-57e0-472e-9835-aa91e1314fe1'),
+                                              ('391ac754-57e0-472e-9835-aa91e1314fe1', 'Many-to-One','7114228c-1694-4d7e-80c7-6a7f199dfa4c'),
+                                              ('31f840eb-d6d4-4ee6-a3f5-16f0d42cb9ec', 'Many-to-Many','31f840eb-d6d4-4ee6-a3f5-16f0d42cb9ec'),
+                                              ('2bc59082-2523-46e5-a7f8-68cb8205f0df', 'One-to-One Right','091d5af4-7a3e-4101-af47-64a89bf59583'),
+                                              ('091d5af4-7a3e-4101-af47-64a89bf59583', 'One-to-One Left','2bc59082-2523-46e5-a7f8-68cb8205f0df'),
+                                              ('4b5d85c2-1bde-44ae-9311-efa4966e04d8', 'Children-to-Parent',null);

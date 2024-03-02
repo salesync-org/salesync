@@ -10,30 +10,9 @@ CREATE TABLE IF NOT EXISTS public.type
     type_id uuid NOT NULL,
     name character varying(255) COLLATE pg_catalog."default",
     CONSTRAINT type_pkey PRIMARY KEY (type_id)
-);
+)
 
-    INSERT INTO public.type (name)
-    VALUES
-('Lead'),
-('Account'),
-('Contact'),
-('Opportunity'),
-('Task'),
-('Event'),
-('Deal'),
-('Invoice'),
-('Quote'),
-('Product'),
-('Service'),
-('Campaign'),
-('Note'),
-('Document'),
-('Case'),
-('Contract'),
-('Milestone'),
-('Feedback');
-
-    TABLESPACE pg_default;
+TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.type
     OWNER to postgres;
@@ -77,3 +56,23 @@ CREATE TABLE IF NOT EXISTS public.type_relation
 
 ALTER TABLE IF EXISTS public.type_relation
     OWNER to postgres;
+
+INSERT INTO public.type (type_id, name) VALUES
+                                            ('f4828793-28c2-465b-b783-0c697e41dafb', 'Lead'),
+                                            ('27d0c628-94c2-4650-828f-3c26e61bb692', 'Account'),
+                                            ('32a9bf21-19fb-451f-9fcf-3de9b2d6eb88', 'Contact'),
+                                            ('9515a156-82c1-49aa-bc6c-824c02f20da5', 'Opportunity'),
+                                            ('05332fd7-4119-4fc9-b1bf-35e60a294df2', 'Task'),
+                                            ('56e11f43-a31a-43ab-b86c-2ac73b0990d8', 'Event'),
+                                            ('e7571c42-dc94-4fd2-b94b-6618500b170f', 'Deal'),
+                                            ('d6df98e8-866c-49ea-93db-f469e0665fc7', 'Invoice'),
+                                            ('0dd6aa7c-732d-4897-832f-ab26c9a7509e', 'Quote'),
+                                            ('9f484d26-ee10-454f-a1a8-3632bee8958b', 'Product'),
+                                            ('1a3af3bd-3c95-471e-bf6d-efcb3f6da1e6', 'Service'),
+                                            ('251c8995-6e4a-47e2-a84e-04e4cb42514a', 'Campaign'),
+                                            ('a49425ba-c570-427e-8279-f15cf26e3bc3', 'Note'),
+                                            ('a82c9e8a-2359-41a4-b8bd-13d652999c23', 'Document'),
+                                            ('201ff179-f718-431c-924b-a5e0b7665046', 'Case'),
+                                            ('64461f95-2f8b-4f3c-b2a1-182d6143d588', 'Contract'),
+                                            ('c90c1e39-2688-40ff-9394-f78307b8de79', 'Milestone'),
+                                            ('f457698a-6f25-4920-91e2-9bd4d3e4fe4e', 'Feedback');

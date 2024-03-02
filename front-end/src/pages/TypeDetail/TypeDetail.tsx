@@ -1,12 +1,14 @@
+import LinkConfigTable, { LinkConfigTableLoading } from '@/components/TypeDetail/LinkConfigTable';
+import LinkModal from '@/components/TypeDetail/LinkModal';
 import PrimaryButton from '@/components/ui/Button/PrimaryButton';
 import Icon from '@/components/ui/Icon/Icon';
 import Pagination from '@/components/ui/Pagination/Pagination';
-import LinkConfigTable from '@/components/ui/Table/ConfigTable';
 import TextInput from '@/components/ui/TextInput/TextInput';
 import { testData } from '@/constants/constant';
 import useDebounce from '@/hooks/useDebounce';
-import { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import useRelation from '@/hooks/useRelation';
+import { useState } from 'react';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 
 const TypeDetail = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -16,26 +18,20 @@ const TypeDetail = () => {
   const [page, setPage] = useState(() => {
     return searchParams.get('page') || '1';
   });
-  const [data, setData] = useState<Link[]>(() => {
-    return testData as Link[];
-  });
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const debouncedSearch = useDebounce(search, 500);
 
-  useEffect(() => {
-    const handleSearch = () => {
-      const searchResult = testData.filter((item) => {
-        return Object.values(item).join('').toLowerCase().includes(debouncedSearch.toLowerCase());
-      });
+  const { id } = useParams<{ id: string }>();
+  const { data, isLoading } = useRelation(id as string, debouncedSearch, page);
 
-      return searchResult;
-    };
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
 
-    if (debouncedSearch || debouncedSearch === '') {
-      searchParams.set('search', debouncedSearch);
+    if (debouncedSearch !== null) {
+      searchParams.set('search', e.target.value);
       setSearchParams(searchParams);
-      setData(handleSearch() as Link[]);
     }
-  }, [debouncedSearch, searchParams, setSearchParams]);
+  };
 
   const handleOnPageChange = (page: number) => {
     searchParams.set('page', page.toString());
@@ -55,20 +51,20 @@ const TypeDetail = () => {
       <h2 className='text-lg font-semibold leading-5'>Links</h2>
       <div className='flex gap-2'>
         <TextInput
-          layoutClassName='flex-grow-1 w-full'
           className='w-full'
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={handleInputChange}
           prefixIcon='search'
           placeholder='Search for links'
         />
-        <PrimaryButton onClick={() => {}} layoutClassName='flex-shrink-0'>
+        <PrimaryButton onClick={() => setIsModalOpen(true)} layoutClassName='flex-shrink-0'>
           <Icon name='add' />
           <span>Add Links</span>
         </PrimaryButton>
       </div>
-      <LinkConfigTable data={data} />
-      <Pagination totalPages={15} currentPage={+page} onPageChange={handleOnPageChange} />
+      {isLoading ? <LinkConfigTableLoading /> : <LinkConfigTable data={data?.result} />}
+      <Pagination totalPages={data?.totalPage} currentPage={+page} onPageChange={handleOnPageChange} />
+      <LinkModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
     </div>
   );
 };

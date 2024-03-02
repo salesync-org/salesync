@@ -31,13 +31,17 @@ const LinkModal = ({ isOpen, setIsOpen }: LinkModalProp) => {
             <Item title='Contact' />
             <Item title='Opportunity' />
           </DropDown>
-          <TextInput className='w-full' header='This Label' value='' placeholder='Label name for this Type' />
-          <TextInput
-            className='w-full'
-            header='Destination Label'
-            value=''
-            placeholder='Label name for Destination Type'
-          />
+          <div>
+            <TextInput className='w-full' header='This Label' value='' placeholder='Label name for this Type' />
+          </div>
+          <div>
+            <TextInput
+              className='w-full'
+              header='Destination Label'
+              value=''
+              placeholder='Label name for Destination Type'
+            />
+          </div>
         </div>
         <ModalFooter className='mt-8'>
           <Button onClick={() => setIsOpen(false)}>Cancel</Button>

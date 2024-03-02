@@ -3,6 +3,7 @@ package com.salesync.typeservice.controllers;
 
 import com.salesync.typeservice.dtos.TypeDTO;
 import com.salesync.typeservice.dtos.TypeRelationDTO;
+import com.salesync.typeservice.dtos.TypeRelationResponseDTO;
 import com.salesync.typeservice.services.type.ITypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,29 +23,31 @@ public class TypeController {
     }
 
     @PostMapping("/create")
-    public  ResponseEntity<TypeDTO>  createType(@RequestBody TypeDTO typeDTO){
+    public ResponseEntity<TypeDTO> createType(@RequestBody TypeDTO typeDTO) {
         return ResponseEntity.ok(typeService.createType(typeDTO));
     }
 
     @GetMapping("/get-all")
-    public ResponseEntity<List<TypeDTO>>  getAllType(){
+    public ResponseEntity<List<TypeDTO>> getAllType() {
 
         return ResponseEntity.ok(typeService.getAllType());
     }
 
     @GetMapping("/{id}/link")
-    public ResponseEntity<TypeDTO> getTypeById(@PathVariable String id){
+    public ResponseEntity<TypeDTO> getTypeById(@PathVariable String id) {
         return ResponseEntity.ok(typeService.getTypeById(id));
     }
 
 
     @PostMapping("/link")
-    public ResponseEntity<List<TypeRelationDTO>> createLink( @RequestBody TypeRelationDTO typeRelationDTO){
+    public ResponseEntity<TypeRelationResponseDTO> createLink(@RequestBody TypeRelationDTO typeRelationDTO) {
         return ResponseEntity.ok(typeService.createLink(typeRelationDTO));
     }
 
-
-
+    @PutMapping("/update")
+    public ResponseEntity<TypeRelationResponseDTO> updateTypeRelation(@RequestBody TypeRelationDTO typeRelationDTO) {
+        return ResponseEntity.ok(typeService.updateTypeRelation(typeRelationDTO));
+    }
 
 
 }

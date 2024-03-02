@@ -3,6 +3,7 @@ package com.salesync.typeservice.services.type;
 
 import com.salesync.typeservice.dtos.TypeDTO;
 import com.salesync.typeservice.dtos.TypeRelationDTO;
+import com.salesync.typeservice.dtos.TypeRelationResponseDTO;
 import com.salesync.typeservice.entities.Relation;
 import com.salesync.typeservice.entities.Type;
 import com.salesync.typeservice.entities.TypeRelation;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 @Transactional(rollbackFor = Throwable.class)
 @Service
 @RequiredArgsConstructor
-public class TypeServiceImpl implements ITypeService{
+public class TypeServiceImpl implements ITypeService {
     private final ITypeRepository typeRepository;
 
     private final ITypeRelationMapper typeRelationMapper = ITypeRelationMapper.INSTANCE;
@@ -37,8 +38,8 @@ public class TypeServiceImpl implements ITypeService{
 
     @Override
     public TypeDTO createType(TypeDTO typeDTO) {
-        Type savedType=typeRepository.save(typeMapper.typeDTOToType(typeDTO));
-        return  typeMapper.typeToTypeDTO(savedType);
+        Type savedType = typeRepository.save(typeMapper.typeDTOToType(typeDTO));
+        return typeMapper.typeToTypeDTO(savedType);
 
     }
 
@@ -55,7 +56,7 @@ public class TypeServiceImpl implements ITypeService{
     }
 
     @Override
-    public List<TypeRelationDTO> createLink(TypeRelationDTO typeRelationDTO) {
+    public TypeRelationResponseDTO createLink(TypeRelationDTO typeRelationDTO) {
 
         Type sourceType = typeRepository.findById(typeRelationDTO.getSourceType().getId()).get();
         Type destinationType = typeRepository.findById(typeRelationDTO.getDestinationType().getId()).get();
@@ -82,9 +83,42 @@ public class TypeServiceImpl implements ITypeService{
                 .build();
 
 
+        if (!typeRelationRepository.findBySourceTypeIdAndDestinationTypeId(sourceType.getId(), destinationType.getId()).isEmpty()) {
+            throw new RuntimeException("Link already exists");
+        }
+
+
         TypeRelationDTO savedSource = typeRelationMapper.typeRelationToTypeRelationDTO(typeRelationRepository.save(typeRelation));
         TypeRelationDTO savedDestination = typeRelationMapper.typeRelationToTypeRelationDTO(typeRelationRepository.save(inverseTypeRelation));
 
-        return List.of(savedSource, savedDestination);
+        return TypeRelationResponseDTO.builder()
+                .sourceTypeRelation(savedSource)
+                .destinationTypeRelation(savedDestination)
+                .build();
+    }
+
+    @Override
+    public TypeRelationResponseDTO updateTypeRelation(TypeRelationDTO typeRelationDTO) {
+        TypeRelation typeRelation = typeRelationRepository.findById(typeRelationDTO.getId()).get();
+        TypeRelation inverseTypeRelation = typeRelationRepository
+                .findBySourceTypeIdAndDestinationTypeId(typeRelation.getDestinationType().getId(),
+                        typeRelation.getSourceType().getId())
+                .stream()
+                .filter((element) -> typeRelation.getRelation().getInverseRelation().getId().equals(element.getRelation().getId())).findFirst().get();
+
+
+        typeRelation.setDestinationLabel(typeRelationDTO.getDestinationTypeLabel());
+        typeRelation.setSourceTypeLabel(typeRelationDTO.getSourceTypeLabel());
+
+        inverseTypeRelation.setDestinationLabel(typeRelationDTO.getSourceTypeLabel());
+        inverseTypeRelation.setSourceTypeLabel(typeRelationDTO.getDestinationTypeLabel());
+
+        TypeRelationDTO savedTypeRelation = typeRelationMapper.typeRelationToTypeRelationDTO(typeRelationRepository.save(typeRelation));
+        TypeRelationDTO savedInverseTypeRelation = typeRelationMapper.typeRelationToTypeRelationDTO(typeRelationRepository.save(inverseTypeRelation));
+        return TypeRelationResponseDTO.builder()
+                .sourceTypeRelation(savedTypeRelation)
+                .destinationTypeRelation(savedInverseTypeRelation)
+                .build();
+
     }
 }

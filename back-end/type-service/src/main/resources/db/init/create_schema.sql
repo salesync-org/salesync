@@ -10,7 +10,28 @@ CREATE TABLE IF NOT EXISTS public.type
     type_id uuid NOT NULL,
     name character varying(255) COLLATE pg_catalog."default",
     CONSTRAINT type_pkey PRIMARY KEY (type_id)
-)
+);
+
+    INSERT INTO public.type (name)
+    VALUES
+('Lead'),
+('Account'),
+('Contact'),
+('Opportunity'),
+('Task'),
+('Event'),
+('Deal'),
+('Invoice'),
+('Quote'),
+('Product'),
+('Service'),
+('Campaign'),
+('Note'),
+('Document'),
+('Case'),
+('Contract'),
+('Milestone'),
+('Feedback');
 
     TABLESPACE pg_default;
 

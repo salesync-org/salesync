@@ -6,7 +6,7 @@ services:
       - 'POSTGRES_PASSWORD=type_service'
       - 'POSTGRES_USER=type_service'
     volumes:
-      - ./src/main/resources/db/init/create_schema.sql:/docker-entrypoint-initdb.d/create_schema.sql
+      - ./src/main/resources/db/init:/docker-entrypoint-initdb.d
       - postgres_data:/var/lib/postgresql/data  # Persistent data volume
     ports:
       - '54320:5432'

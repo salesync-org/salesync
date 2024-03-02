@@ -7,7 +7,7 @@ import { handlers as typeHandlers } from './type-handlers';
 
 export const handlers = [
   ...typeHandlers,
-  http.post(`${USER_SERVICE_URL}/login`, async ({ request }) => {
+  http.post(`${USER_SERVICE_URL}/login`, async ({ request }) => {    
     const { email, password } = await (<any>request).json();
 
     if (email === 'admin' && password === 'admin') {

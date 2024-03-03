@@ -6,6 +6,7 @@ import Item from '../ui/Item/Item';
 import Modal, { ModalFooter } from '../ui/Modal/Modal';
 import TextInput from '../ui/TextInput/TextInput';
 import useRelation from '@/hooks/type-service/useRelation';
+import { useState } from 'react';
 
 interface LinkModalProp {
   isOpen: boolean;
@@ -13,6 +14,7 @@ interface LinkModalProp {
 }
 
 const LinkModal = ({ isOpen, setIsOpen }: LinkModalProp) => {
+  const [selectedType, SelectedType] = useState('');
   const { types = [], isLoading: isTypesLoading } = useType();
   const { relations = [], isLoading: isRelationsLoading } = useRelation();
 

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Transactional(rollbackFor = Throwable.class)
@@ -51,8 +52,10 @@ public class TypeServiceImpl implements ITypeService {
     }
 
     @Override
-    public TypeDTO getTypeById(String id) {
-        return null;
+    public List<TypeRelationDTO> getAllTypeLinks(UUID id) {
+        return typeRelationRepository.findAllBySourceTypeId(id).stream().map(
+                typeRelationMapper::typeRelationToTypeRelationDTO
+        ).collect(Collectors.toList());
     }
 
     @Override

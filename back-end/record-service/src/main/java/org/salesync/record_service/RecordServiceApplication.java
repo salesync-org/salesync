@@ -1,4 +1,4 @@
-package org.salesync.recordservice;
+package org.salesync.record_service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

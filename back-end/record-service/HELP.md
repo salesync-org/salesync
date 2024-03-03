@@ -1,7 +1,7 @@
 # Read Me First
 The following was discovered as part of building this project:
 
-* The original package name 'org.salesync.record-service' is invalid and this project uses 'org.salesync.recordservice' instead.
+* The original package name 'org.salesync.record-service' is invalid and this project uses 'org.salesync.record_service' instead.
 
 # Getting Started
 

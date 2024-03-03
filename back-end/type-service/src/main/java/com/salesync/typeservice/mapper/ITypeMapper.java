@@ -2,6 +2,7 @@ package com.salesync.typeservice.mapper;
 
 
 import com.salesync.typeservice.dtos.TypeDTO;
+import com.salesync.typeservice.dtos.TypeRelationDTO;
 import com.salesync.typeservice.entities.Type;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -16,5 +17,4 @@ public interface ITypeMapper {
     TypeDTO typeToTypeDTO(Type type);
 
     Type typeDTOToType(TypeDTO typeDTO);
-
 }

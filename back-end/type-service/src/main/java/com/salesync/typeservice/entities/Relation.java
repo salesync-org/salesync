@@ -22,4 +22,8 @@ public class Relation extends BaseEntity  {
     @OneToMany(mappedBy = "relation", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<TypeRelation> typeRelations;
+
+    @OneToOne
+    @JoinColumn(name = "inverse_relation_id")
+    private Relation inverseRelation;
 }

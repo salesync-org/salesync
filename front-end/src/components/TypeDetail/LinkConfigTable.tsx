@@ -27,7 +27,7 @@ const LinkConfigTable = ({ data = [] }: ConfigTableProps) => {
               <TableCell className='font-medium'>{item.relation.name}</TableCell>
               <TableCell>{item.source_type_label}</TableCell>
               <TableCell>{item.destination_type.name}</TableCell>
-              <TableCell>{item.destination_type_label}</TableCell>
+              <TableCell>{item.destination_label}</TableCell>
               <TableCell className='w-4'>
                 <Button
                   onClick={() => {}}

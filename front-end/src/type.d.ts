@@ -4,7 +4,7 @@ type TypeRelation = {
   source_type_label: string;
   relation: Relation;
   destination_type: Type;
-  destination_type_label: string;
+  destination_label: string;
 };
 type Type = {
   id: string;

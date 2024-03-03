@@ -54,7 +54,14 @@ public class TypeServiceImpl implements ITypeService {
     @Override
     public List<TypeRelationDTO> getAllTypeLinks(UUID id) {
         return typeRelationRepository.findAllBySourceTypeId(id).stream().map(
-                typeRelationMapper::typeRelationToTypeRelationDTO
+                typeRelation -> TypeRelationDTO.builder()
+                        .id(typeRelation.getId())
+                        .sourceType(typeMapper.typeToTypeDTO(typeRelation.getSourceType()))
+                        .destinationType(typeMapper.typeToTypeDTO(typeRelation.getDestinationType()))
+                        .relation(relationMapper.relationToRelationDTO(typeRelation.getRelation()))
+                        .sourceTypeLabel(typeRelation.getSourceTypeLabel())
+                        .destinationTypeLabel(typeRelation.getDestinationLabel())
+                        .build()
         ).collect(Collectors.toList());
     }
 

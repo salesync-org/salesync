@@ -30,6 +30,7 @@ public class TypeRelation extends BaseEntity  {
     @JoinColumn(name = "destination_id")
     private Type destinationType;
 
+    @Column(name = "destination_label")
     private String destinationLabel;
 
     @ManyToOne

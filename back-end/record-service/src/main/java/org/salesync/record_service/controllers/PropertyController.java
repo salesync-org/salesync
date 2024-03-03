@@ -25,10 +25,10 @@ public class PropertyController {
         );
     }
 
-    @GetMapping("/create/{typeid}")
-    public ResponseEntity<PropertyDTO> createProperty(@PathVariable String typeid) {
+    @GetMapping("/create")
+    public ResponseEntity<PropertyDTO> createProperty(@RequestBody PropertyDTO propertyDTO) {
         return ResponseEntity.ok(
-                propertyService.createProperty(typeid)
+                propertyService.createProperty(propertyDTO)
         );
     }
 }

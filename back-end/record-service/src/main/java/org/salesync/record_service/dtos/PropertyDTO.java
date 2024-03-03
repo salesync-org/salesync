@@ -12,6 +12,7 @@ import java.util.UUID;
 @Getter
 public class PropertyDTO {
     UUID id;
+    UUID typeId;
     String name;
     String label;
     String defaultValue;

@@ -7,5 +7,5 @@ import java.util.List;
 public interface IPropertyService {
     public List loadAllInputTypes();
 
-    PropertyDTO createProperty(String typeId);
+    PropertyDTO createProperty(PropertyDTO propertyDTO);
 }

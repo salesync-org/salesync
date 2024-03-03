@@ -6,6 +6,7 @@ import org.salesync.record_service.repositories.type_repository.IPropertyReposit
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -13,17 +14,17 @@ public class PropertyServiceImpl implements IPropertyService {
     private final IPropertyRepository propertyRepository;
 
     @Override
-    public List loadAllInputTypes() {
-        return propertyRepository.findAll();
+    public List loadAllInputTypes(UUID typeId) {
+        return propertyRepository.findAllByTypeId((typeId));
     }
 
     @Override
     public PropertyDTO createProperty(PropertyDTO propertyDTO) {
         PropertyDTO property = propertyRepository.findByTypeId(propertyDTO.getTypeId());
         return PropertyDTO.builder().
-                name(propertyDTO.getName()).
-                label(propertyDTO.getLabel()).
-                defaultValue(propertyDTO.getDefaultValue()).
+                name(property.getName()).
+                label(property.getLabel()).
+                defaultValue(property.getDefaultValue()).
                 build();
     }
 }

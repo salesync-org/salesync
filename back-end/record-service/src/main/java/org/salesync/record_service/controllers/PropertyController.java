@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 //import java.util.ArrayList;
 //import java.util.List;
@@ -18,10 +19,10 @@ public class PropertyController {
 
     private final IPropertyService propertyService;
 
-    @GetMapping("/all")
-    public ResponseEntity<List> loadAllInputTypes() {
+    @GetMapping("/{typeId}")
+    public ResponseEntity<List> loadAllInputTypes(@PathVariable String typeId) {
         return ResponseEntity.ok(
-                propertyService.loadAllInputTypes()
+                propertyService.loadAllInputTypes(UUID.fromString(typeId))
         );
     }
 

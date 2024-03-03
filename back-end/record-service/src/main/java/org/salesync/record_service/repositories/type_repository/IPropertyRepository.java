@@ -10,4 +10,5 @@ import java.util.UUID;
 public interface IPropertyRepository extends JpaRepository<Property, UUID> {
     public List findAll();
     public PropertyDTO findByTypeId(UUID typeId);
+    public List findAllByTypeId(UUID typeId);
 }

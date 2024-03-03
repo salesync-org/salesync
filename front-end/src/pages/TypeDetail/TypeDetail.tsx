@@ -6,7 +6,7 @@ import Pagination from '@/components/ui/Pagination/Pagination';
 import TextInput from '@/components/ui/TextInput/TextInput';
 import { testData } from '@/constants/constant';
 import useDebounce from '@/hooks/useDebounce';
-import useRelation from '@/hooks/useRelation';
+import useTypeRelation from '@/hooks/type-service/useTypeRelation';
 import { useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 
@@ -22,7 +22,7 @@ const TypeDetail = () => {
   const debouncedSearch = useDebounce(search, 500);
 
   const { id } = useParams<{ id: string }>();
-  const { data, isLoading } = useRelation(id as string, debouncedSearch, page);
+  const { data, isLoading } = useTypeRelation(id as string, debouncedSearch, page);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);

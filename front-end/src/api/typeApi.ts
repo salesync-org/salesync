@@ -1,6 +1,8 @@
 import { TYPE_SERVICE_URL } from '@/constants/api';
 import axios from './axiosConfig';
 
+axios.defaults.baseURL = `${import.meta.env.VITE_TYPE_SERVICE_HOST}/api/v1/type`;
+
 class TypeApi {
   async getAllRelations(typeId: string, search = '', page = '1', perPage = '6') {
     const response = await axios.get(
@@ -15,7 +17,7 @@ class TypeApi {
   };
 
   getAllTypes = async () => {
-    const response = await axios.get('http://localhost:8080/apis/v1/type/get-all');
+    const response = await axios.get('/get-all');
     return response.data;
   };
 }

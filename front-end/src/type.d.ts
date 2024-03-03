@@ -12,9 +12,14 @@ type TypeRelation = {
 type Type = {
   id: string;
   name: string;
-  description: string;
-  fields: Field[]?;
-  links: Link[]?;
+  description?: string;
+  fields?: Field[];
+  links?: Link[];
+};
+
+type Relation = {
+  id: string;
+  name: string;
 };
 
 type Field = {

@@ -1,7 +1,7 @@
 import typeApi from '@/api/typeApi';
 import { useQuery } from 'react-query';
 
-const useRelation = (typeId: string, search = '', page = '1') => {
+const useTypeRelation = (typeId: string, search = '', page = '1') => {
   const key = ['type-relation', typeId, search, page];
   const { data, error, isLoading } = useQuery(
     key,
@@ -17,4 +17,4 @@ const useRelation = (typeId: string, search = '', page = '1') => {
 
   return { data, error, isLoading, key };
 };
-export default useRelation;
+export default useTypeRelation;

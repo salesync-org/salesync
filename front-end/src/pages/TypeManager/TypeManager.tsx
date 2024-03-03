@@ -10,7 +10,7 @@ import DropDown from '@/components/ui/DropDown/DropDown';
 import Item from '@/components/ui/Item/Item';
 import '@/constants/api';
 import { SAMPLE_ACCESS_TOKEN } from '@/constants/api';
-import typeApi from '@/api/typeApi';
+import typeApi from '@/api/type';
 import generateUUID from '@/constants/constant';
 import { useSearchParams } from 'react-router-dom';
 import Pagination from '@/components/ui/Pagination/Pagination';

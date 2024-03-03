@@ -8,7 +8,7 @@ interface ConfigTableProps {
   data: TypeRelation[] | undefined;
 }
 
-const LinkConfigTable = ({ data }: ConfigTableProps) => {
+const LinkConfigTable = ({ data = [] }: ConfigTableProps) => {
   return (
     <Table>
       <TableHeader>
@@ -24,10 +24,10 @@ const LinkConfigTable = ({ data }: ConfigTableProps) => {
         {data &&
           data.map((item) => (
             <TableRow key={item.id}>
-              <TableCell className='font-medium'>{item.relationName}</TableCell>
-              <TableCell>{item.type1Label}</TableCell>
-              <TableCell>{item.type2Name}</TableCell>
-              <TableCell>{item.type2Label}</TableCell>
+              <TableCell className='font-medium'>{item.relation.name}</TableCell>
+              <TableCell>{item.source_type_label}</TableCell>
+              <TableCell>{item.destination_type.name}</TableCell>
+              <TableCell>{item.destination_type_label}</TableCell>
               <TableCell className='w-4'>
                 <Button
                   onClick={() => {}}

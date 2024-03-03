@@ -4,9 +4,8 @@ import PrimaryButton from '@/components/ui/Button/PrimaryButton';
 import Icon from '@/components/ui/Icon/Icon';
 import Pagination from '@/components/ui/Pagination/Pagination';
 import TextInput from '@/components/ui/TextInput/TextInput';
-import { testData } from '@/constants/constant';
+import useLink from '@/hooks/type-service/useLinks';
 import useDebounce from '@/hooks/useDebounce';
-import useTypeRelation from '@/hooks/type-service/useTypeRelation';
 import { useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 
@@ -21,8 +20,8 @@ const TypeDetail = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const debouncedSearch = useDebounce(search, 500);
 
-  const { id } = useParams<{ id: string }>();
-  const { data, isLoading } = useTypeRelation(id as string, debouncedSearch, page);
+  const { id } = useParams<{ id: string }>() as { id: string };
+  const { data, isLoading } = useLink(id);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -62,8 +61,8 @@ const TypeDetail = () => {
           <span>Add Links</span>
         </PrimaryButton>
       </div>
-      {isLoading ? <LinkConfigTableLoading /> : <LinkConfigTable data={data?.result} />}
-      <Pagination totalPages={data?.totalPage} currentPage={+page} onPageChange={handleOnPageChange} />
+      {isLoading ? <LinkConfigTableLoading /> : <LinkConfigTable data={data} />}
+      <Pagination totalPages={1} currentPage={1} onPageChange={handleOnPageChange} />
       <LinkModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
     </div>
   );

@@ -7,9 +7,11 @@ import lombok.*;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "type")
-@AttributeOverride(name="id",column = @Column(name="type_id"))
+@Table(name = "property")
+@AttributeOverride(name="id",column = @Column(name="property_id"))
 public class Property extends BaseEntity  {
     private String name;
+    private String label;
+    private String defaultValue;
 
 }

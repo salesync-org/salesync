@@ -1,3 +1,4 @@
+import { cn } from '@/utils/utils';
 import React from 'react';
 import buttonVariants, { ButtonProps } from 'ui/Button/ButtonProps';
 
@@ -15,16 +16,16 @@ const Button: React.FC<ButtonProps> = ({
   ...restProps
 }) => {
   return (
-    <div className={layoutClassName}>
+    <div className={cn(layoutClassName)}>
       {showHeader && header && <p className='my-1'>{header}</p>}
       <button
-        className={buttonVariants({ intent, rounded, className })}
+        className={cn(buttonVariants({ intent, rounded, className }), 'flex items-center justify-center space-x-2')}
         onClick={onClick}
         disabled={disabled}
         type={type}
         {...restProps}
       >
-        <div className='flex items-center justify-center space-x-2'>{children}</div>
+        {children}
       </button>
     </div>
   );

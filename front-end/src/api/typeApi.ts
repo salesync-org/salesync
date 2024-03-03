@@ -1,15 +1,24 @@
-import instance from './axiosConfig';
+import { TYPE_SERVICE_URL } from '@/constants/api';
+import axios from './axiosConfig';
 
 class TypeApi {
-  createType = async ({ type }: { type: Type }) => {
-    const response = await instance.post('/type/create', type);
+  async getAllRelations(typeId: string, search = '', page = '1', perPage = '6') {
+    const response = await axios.get(
+      `${TYPE_SERVICE_URL}/${typeId}/link?search=${search}&page=${page}&perPage=${perPage}`
+    );
+  }
+  createType = async ({ typeName, template }: { typeName: String; template: String }) => {
+    const response = await axios.post('http://localhost:8080/apis/v1/type/create', {
+      name: typeName
+    });
     return response.data;
   };
 
   getAllTypes = async () => {
-    const response = await instance.get('/type/all');
+    const response = await axios.get('http://localhost:8080/apis/v1/type/get-all');
     return response.data;
   };
 }
+
 const typeApi = new TypeApi();
 export default typeApi;

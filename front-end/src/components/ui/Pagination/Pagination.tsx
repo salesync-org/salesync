@@ -8,7 +8,7 @@ interface PaginationProps {
   onPageChange: (page: number) => void;
 }
 
-const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage, onPageChange }) => {
+const Pagination: React.FC<PaginationProps> = ({ totalPages = 0, currentPage = 0, onPageChange }) => {
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
       onPageChange(page);
@@ -21,7 +21,12 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage, onPage
     if (totalPages <= 7) {
       for (let i = 1; i <= totalPages; i++) {
         pageButtons.push(
-          <Button key={i} onClick={() => handlePageChange(i)} intent={currentPage === i ? 'primary' : 'normal'} rounded>
+          <Button
+            key={i}
+            onClick={() => handlePageChange(i)}
+            intent={currentPage === i ? 'primary' : 'normal'}
+            rounded='icon'
+          >
             {i}
           </Button>
         );
@@ -32,7 +37,12 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage, onPage
     if (currentPage <= 4) {
       for (let i = 1; i <= 5; i++) {
         pageButtons.push(
-          <Button key={i} onClick={() => handlePageChange(i)} intent={currentPage === i ? 'primary' : 'normal'} rounded>
+          <Button
+            key={i}
+            onClick={() => handlePageChange(i)}
+            intent={currentPage === i ? 'primary' : 'normal'}
+            rounded='icon'
+          >
             {i}
           </Button>
         );
@@ -54,7 +64,12 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage, onPage
 
     if (currentPage >= totalPages - 3) {
       pageButtons.push(
-        <Button key={1} onClick={() => handlePageChange(1)} intent={currentPage === 1 ? 'primary' : 'normal'} rounded>
+        <Button
+          key={1}
+          onClick={() => handlePageChange(1)}
+          intent={currentPage === 1 ? 'primary' : 'normal'}
+          rounded='icon'
+        >
           1
         </Button>
       );
@@ -62,7 +77,12 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage, onPage
 
       for (let i = totalPages - 4; i <= totalPages; i++) {
         pageButtons.push(
-          <Button key={i} onClick={() => handlePageChange(i)} intent={currentPage === i ? 'primary' : 'normal'} rounded>
+          <Button
+            key={i}
+            onClick={() => handlePageChange(i)}
+            intent={currentPage === i ? 'primary' : 'normal'}
+            rounded='icon'
+          >
             {i}
           </Button>
         );
@@ -71,7 +91,12 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage, onPage
       return pageButtons;
     } else {
       pageButtons.push(
-        <Button key={1} onClick={() => handlePageChange(1)} intent={currentPage === 1 ? 'primary' : 'normal'} rounded>
+        <Button
+          key={1}
+          onClick={() => handlePageChange(1)}
+          intent={currentPage === 1 ? 'primary' : 'normal'}
+          rounded='icon'
+        >
           1
         </Button>
       );
@@ -79,7 +104,12 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage, onPage
 
       for (let i = currentPage - 1; i <= currentPage + 1; i++) {
         pageButtons.push(
-          <Button key={i} onClick={() => handlePageChange(i)} intent={currentPage === i ? 'primary' : 'normal'} rounded>
+          <Button
+            key={i}
+            onClick={() => handlePageChange(i)}
+            intent={currentPage === i ? 'primary' : 'normal'}
+            rounded='icon'
+          >
             {i}
           </Button>
         );
@@ -91,7 +121,7 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage, onPage
           key={totalPages}
           onClick={() => handlePageChange(totalPages)}
           intent={currentPage === totalPages ? 'primary' : 'normal'}
-          rounded
+          rounded='icon'
         >
           {totalPages}
         </Button>
@@ -103,11 +133,12 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage, onPage
 
   return (
     <div className='flex items-center justify-center [&_*]:text-sm'>
-      <Button rounded onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+      <Button rounded='icon' onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
         <Icon name='chevron_left' />
       </Button>
       {renderPageButtons()}
       <Button
+        rounded='icon'
         className='flex h-8 w-8 items-center justify-center rounded-full p-0 dark:p-0'
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === totalPages}

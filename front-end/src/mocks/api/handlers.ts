@@ -3,19 +3,24 @@ import { http, HttpResponse } from 'msw';
 import { setupWorker } from 'msw/browser';
 import { USER_SERVICE_URL, SAMPLE_ACCESS_TOKEN, TYPE_SERVICE_URL } from '@/constants/api';
 import { typeData } from '@/constants/constant';
+import { handlers as typeHandlers } from './type-handlers';
 
 export const handlers = [
-  http.post(`${USER_SERVICE_URL}/login`, async ({ request }) => {
-    const info = await request.formData();
-    const username = info.get('username');
-    const password = info.get('password');
+  ...typeHandlers,
+  http.post(`${USER_SERVICE_URL}/login`, async ({ request }) => {    
+    const { email, password } = await (<any>request).json();
 
-    if (username === 'admin' && password === 'admin') {
+    if (email === 'admin' && password === 'admin') {
       return HttpResponse.json(
         {
           access_token: SAMPLE_ACCESS_TOKEN,
           expires_in: 300,
-          token_type: 'Bearer'
+          token_type: 'Bearer',
+          user: {
+            name: 'Admin_User',
+            email: 'admin@salesync.org',
+            avatar_url: 'https://api.dicebear.com/7.x/initials/svg?seed=Quang'
+          }
         },
         {
           status: 200

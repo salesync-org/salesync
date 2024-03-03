@@ -9,7 +9,6 @@ interface DropdownButtonProps {
   header?: string;
   showHeader?: boolean;
   disabled?: boolean;
-  onChange?: (value: string) => void;
 }
 
 const DropDown: React.FC<DropdownButtonProps> = ({ children, value, header, disabled, showHeader = true }) => {
@@ -19,9 +18,8 @@ const DropDown: React.FC<DropdownButtonProps> = ({ children, value, header, disa
   const buttonRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
-
-
-  function handleOptionClick(option: HTMLElement): void {console.log(option.title);
+  function handleOptionClick(option: HTMLElement): void {
+    console.log(option.title);
     setSelectedOption(option.title!);
   }
 
@@ -29,9 +27,7 @@ const DropDown: React.FC<DropdownButtonProps> = ({ children, value, header, disa
     <div ref={buttonRef} className='dropdown relative'>
       <Button header={header} showHeader={showHeader} disabled={disabled} onClick={() => setIsOpen(!isOpen)}>
         <Icon name='expand_more' />
-        <p className='truncate'>
-          {selectedOption || value}
-        </p>
+        <p className='truncate'>{selectedOption || value}</p>
       </Button>
       <DropDownList onItemClick={handleOptionClick} open={isOpen}>
         {children}

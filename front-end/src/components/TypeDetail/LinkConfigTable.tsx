@@ -6,9 +6,11 @@ import Skeleton from '../ui/Skeleton/Skeleton';
 
 interface ConfigTableProps {
   data: TypeRelation[] | undefined;
+  setCurrentLink: (value: TypeRelation | null) => void;
+  setModalOpen: (value: boolean) => void;
 }
 
-const LinkConfigTable = ({ data = [] }: ConfigTableProps) => {
+const LinkConfigTable = ({ data = [], setCurrentLink, setModalOpen }: ConfigTableProps) => {
   return (
     <Table>
       <TableHeader>
@@ -30,7 +32,10 @@ const LinkConfigTable = ({ data = [] }: ConfigTableProps) => {
               <TableCell>{item.destination_label}</TableCell>
               <TableCell className='w-4'>
                 <Button
-                  onClick={() => {}}
+                  onClick={() => {
+                    setCurrentLink(item);
+                    setModalOpen(true);
+                  }}
                   rounded
                   className='border-0 bg-transparent dark:border-0 dark:bg-transparent'
                 >

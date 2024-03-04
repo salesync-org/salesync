@@ -31,6 +31,16 @@ class LinkApi {
 
     return response.data;
   }
+
+  async updateLink(linkId: string, sourceLabel: string, destinationLabel: string) {
+    const response = await axios.put(`/update`, {
+      id: linkId,
+      source_type_label: sourceLabel,
+      destination_label: destinationLabel
+    });
+
+    return response.data;
+  }
 }
 
 const linkApi = new LinkApi();

@@ -102,10 +102,11 @@ public class TypeServiceImpl implements ITypeService {
 
     @Override
     public TypeRelationResponseDTO updateTypeRelation(TypeRelationDTO typeRelationDTO) {
-        TypeRelation typeRelation = typeRelationRepository.findById(typeRelationDTO.getId()).get();
+        System.out.println(typeRelationDTO.getDestinationTypeLabel());
+        TypeRelation typeRelation = typeRelationRepository.findById(typeRelationDTO.getId()).orElseThrow( () -> new RuntimeException("Type relation not found"));
         TypeRelation inverseTypeRelation = typeRelationRepository
                 .findBySourceTypeIdAndDestinationTypeIdAndRelationId(typeRelation.getDestinationType().getId(),
-                        typeRelation.getSourceType().getId(), typeRelation.getRelation().getInverseRelation().getId()).get();
+                        typeRelation.getSourceType().getId(), typeRelation.getRelation().getInverseRelation().getId()).orElseThrow( () -> new RuntimeException("Inverse type relation not found"));
 
 
         typeRelation.setDestinationLabel(typeRelationDTO.getDestinationTypeLabel());

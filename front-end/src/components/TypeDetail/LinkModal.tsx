@@ -25,11 +25,13 @@ type LinkModalSchemaType = z.infer<typeof LinkModalSchema>;
 interface LinkModalProp {
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
+  currentLink?: TypeRelation | null;
 }
 
 const INIT_SELECTED = 'Select a value';
 
-const LinkModal = ({ isOpen, setIsOpen }: LinkModalProp) => {
+const LinkModal = ({ isOpen, setIsOpen, currentLink }: LinkModalProp) => {
+  console.log({ currentLink });
   const [selectedRelation, setSelectedRelation] = useState(INIT_SELECTED);
   const [selectedType, setSelectedType] = useState(INIT_SELECTED);
   const [loading, setLoading] = useState(false);
@@ -41,13 +43,21 @@ const LinkModal = ({ isOpen, setIsOpen }: LinkModalProp) => {
     register,
     handleSubmit,
     setValue,
+    reset,
     formState: { errors }
   } = useForm<LinkModalSchemaType>({
     defaultValues: {
-      sourceLabel: '',
-      destinationLabel: ''
+      sourceLabel: currentLink?.source_type_label || '',
+      destinationLabel: currentLink?.destination_label || ''
     }
   });
+
+  useEffect(() => {
+    reset({
+      sourceLabel: currentLink?.source_type_label || '',
+      destinationLabel: currentLink?.destination_label || ''
+    });
+  }, [currentLink, reset]);
 
   useEffect(() => {
     if (selectedType && types.length > 0) {
@@ -63,10 +73,9 @@ const LinkModal = ({ isOpen, setIsOpen }: LinkModalProp) => {
 
   const queryClient = useQueryClient();
 
-  const onSubmit = async (data: LinkModalSchemaType) => {
+  const createLink = async (data: LinkModalSchemaType) => {
     try {
       setLoading(true);
-      console.log({ errors });
       if (selectedRelation === INIT_SELECTED || selectedType === INIT_SELECTED) {
         return;
       }
@@ -78,6 +87,7 @@ const LinkModal = ({ isOpen, setIsOpen }: LinkModalProp) => {
         //   return [res.source_type_relation, ...(oldData || [])];
         // });
         queryClient.invalidateQueries(['links', id]);
+
         setIsOpen(false);
       }
     } catch (error) {
@@ -85,6 +95,28 @@ const LinkModal = ({ isOpen, setIsOpen }: LinkModalProp) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const updateLink = async (data: LinkModalSchemaType) => {
+    try {
+      setLoading(true);
+
+      const res = await linkApi.updateLink(currentLink?.id || '', data.sourceLabel, data.destinationLabel);
+
+      if (res?.source_type_relation) {
+        queryClient.invalidateQueries(['links', id]);
+
+        setIsOpen(false);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onSubmit = async (data: LinkModalSchemaType) => {
+    currentLink ? await updateLink(data) : await createLink(data);
   };
 
   return (
@@ -96,6 +128,8 @@ const LinkModal = ({ isOpen, setIsOpen }: LinkModalProp) => {
               header='Link Type'
               value={isRelationsLoading ? 'Loading...' : selectedRelation}
               onValueChange={setSelectedRelation}
+              defaultValue={currentLink?.relation.name || INIT_SELECTED}
+              disabled={Boolean(currentLink)}
             >
               {relations.map((relation) => {
                 return <Item key={relation.id} title={relation.name} value={relation.id} />;
@@ -106,6 +140,8 @@ const LinkModal = ({ isOpen, setIsOpen }: LinkModalProp) => {
             header='Link to'
             value={isTypesLoading ? 'Loading...' : selectedType}
             onValueChange={setSelectedType}
+            defaultValue={currentLink?.destination_type.name || INIT_SELECTED}
+            disabled={Boolean(currentLink)}
           >
             {types.map((type) => (
               <Item key={type.id} title={type.name} value={type.id} />

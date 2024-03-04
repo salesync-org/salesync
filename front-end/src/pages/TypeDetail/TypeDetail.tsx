@@ -11,6 +11,7 @@ import { Link, useParams, useSearchParams } from 'react-router-dom';
 
 const TypeDetail = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [currentLink, setCurrentLink] = useState<TypeRelation | null>(null);
   const [search, setSearch] = useState(() => {
     return searchParams.get('search') || '';
   });
@@ -56,14 +57,24 @@ const TypeDetail = () => {
           prefixIcon='search'
           placeholder='Search for links'
         />
-        <PrimaryButton onClick={() => setIsModalOpen(true)} layoutClassName='flex-shrink-0'>
+        <PrimaryButton
+          onClick={() => {
+            setIsModalOpen(true);
+            setCurrentLink(null);
+          }}
+          layoutClassName='flex-shrink-0'
+        >
           <Icon name='add' />
           <span>Add Links</span>
         </PrimaryButton>
       </div>
-      {isLoading ? <LinkConfigTableLoading /> : <LinkConfigTable data={data} />}
+      {isLoading ? (
+        <LinkConfigTableLoading />
+      ) : (
+        <LinkConfigTable data={data} setCurrentLink={setCurrentLink} setModalOpen={setIsModalOpen} />
+      )}
       <Pagination totalPages={1} currentPage={1} onPageChange={handleOnPageChange} />
-      <LinkModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
+      <LinkModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} currentLink={currentLink} />
     </div>
   );
 };

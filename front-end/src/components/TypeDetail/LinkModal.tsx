@@ -6,7 +6,7 @@ import Item from '../ui/Item/Item';
 import Modal, { ModalFooter } from '../ui/Modal/Modal';
 import TextInput from '../ui/TextInput/TextInput';
 import useRelation from '@/hooks/type-service/useRelation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { cn } from '@/utils/utils';
@@ -40,6 +40,7 @@ const LinkModal = ({ isOpen, setIsOpen }: LinkModalProp) => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors }
   } = useForm<LinkModalSchemaType>({
     defaultValues: {
@@ -47,6 +48,18 @@ const LinkModal = ({ isOpen, setIsOpen }: LinkModalProp) => {
       destinationLabel: ''
     }
   });
+
+  useEffect(() => {
+    if (selectedType && types.length > 0) {
+      const sourceType = types.find((type) => type.id === id);
+      const desType = types.find((type) => type.id === selectedType);
+      if (sourceType && desType) {
+        setValue('sourceLabel', sourceType.name);
+        setValue('destinationLabel', desType.name);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, isOpen, selectedType, types]);
 
   const queryClient = useQueryClient();
 
@@ -61,7 +74,6 @@ const LinkModal = ({ isOpen, setIsOpen }: LinkModalProp) => {
       const res = await linkApi.createLink(id, data.sourceLabel, selectedType, data.destinationLabel, selectedRelation);
 
       if (res?.source_type_relation) {
-        console.log(res.source_type_relation);
         // queryClient.setQueryData(['links', id], (oldData: TypeRelation[] | undefined) => {
         //   return [res.source_type_relation, ...(oldData || [])];
         // });

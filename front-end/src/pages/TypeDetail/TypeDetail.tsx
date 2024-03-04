@@ -46,7 +46,7 @@ const TypeDetail = () => {
           Go back
         </Link>
       </div>
-      <h1 className='text-2xl font-bold leading-7'>Account Type</h1>
+      <h1 className='text-2xl font-bold leading-7'>{data ? data[0].source_type.name : '?'} Type</h1>
       <h2 className='text-lg font-semibold leading-5'>Links</h2>
       <div className='flex gap-2'>
         <TextInput

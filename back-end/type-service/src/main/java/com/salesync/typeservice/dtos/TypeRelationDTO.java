@@ -24,6 +24,6 @@ public class TypeRelationDTO {
     RelationDTO relation;
     @JsonProperty("destination_type")
     TypeDTO destinationType;
-    @JsonProperty("destination_type_label")
+    @JsonProperty("destination_label")
     String destinationTypeLabel;
 }

@@ -26,15 +26,15 @@ const buttonVariants = cva(
           'enabled:hover:bg-primary-hover',
           'enabled:active:bg-primary-active'
         ),
-        link: cn (
+        link: cn(
           'text-link enabled:hover:text-link-text dark:enabled:hover:text-link-text-dark',
-          'bg-transparent enabled:hover:bg-secondary dark:enabled:hover:bg-secondary-dark',
-        ),
+          'bg-transparent enabled:hover:bg-secondary dark:enabled:hover:bg-secondary-dark'
+        )
       },
       rounded: {
         normal: 'flex items-center justify-center rounded-full p-0 dark:p-0',
         false: '',
-        icon: 'flex w-fit aspect-square items-center justify-center rounded-full border-transparent',
+        icon: 'flex w-fit aspect-square items-center justify-center rounded-full border-transparent'
       }
     },
     defaultVariants: {
@@ -48,7 +48,7 @@ export default buttonVariants;
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
-  onClick: () => void;
+  onClick?: () => void;
   className?: string;
   layoutClassName?: string;
   disabled?: boolean;

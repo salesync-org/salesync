@@ -1,14 +1,16 @@
+import { useNavigate } from 'react-router-dom';
 import Icon from '../Icon/Icon';
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from './Table';
 
-interface Type {
-  id: string;
-  name: string;
-  fields: Field[] | null;
-  links: Link[] | null;
-}
+// interface Type {
+//   id: string;
+//   name: string;
+//   fields: Field[] | null;
+//   links: Link[] | null;
+// }
 
 const TypeTable = ({ types }: { types: Type[] }) => {
+  const navigate = useNavigate();
   return (
     <Table>
       <TableHeader>
@@ -27,7 +29,7 @@ const TypeTable = ({ types }: { types: Type[] }) => {
                 <TableCell>{type.fields?.length ?? 0}</TableCell>
                 <TableCell>{type.fields?.length ?? 0}</TableCell>
                 <TableCell>
-                  <button>
+                  <button onClick={() => {navigate(`/type/link/${type.id}`)}}>
                     <Icon name='navigate_next'></Icon>
                   </button>
                 </TableCell>

@@ -4,14 +4,14 @@ import PrimaryButton from '@/components/ui/Button/PrimaryButton';
 import Icon from '@/components/ui/Icon/Icon';
 import Pagination from '@/components/ui/Pagination/Pagination';
 import TextInput from '@/components/ui/TextInput/TextInput';
-import { testData } from '@/constants/constant';
+import useLink from '@/hooks/type-service/useLinks';
 import useDebounce from '@/hooks/useDebounce';
-import useRelation from '@/hooks/useRelation';
 import { useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 
 const TypeDetail = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [currentLink, setCurrentLink] = useState<TypeRelation | null>(null);
   const [search, setSearch] = useState(() => {
     return searchParams.get('search') || '';
   });
@@ -21,8 +21,8 @@ const TypeDetail = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const debouncedSearch = useDebounce(search, 500);
 
-  const { id } = useParams<{ id: string }>();
-  const { data, isLoading } = useRelation(id as string, debouncedSearch, page);
+  const { id } = useParams<{ id: string }>() as { id: string };
+  const { data, isLoading } = useLink(id);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -47,7 +47,9 @@ const TypeDetail = () => {
           Go back
         </Link>
       </div>
-      <h1 className='text-2xl font-bold leading-7'>Account Type</h1>
+      <h1 className='text-2xl font-bold leading-7'>
+        {data?.[0]?.source_type?.name ? data[0].source_type.name : '...'} Type
+      </h1>
       <h2 className='text-lg font-semibold leading-5'>Links</h2>
       <div className='flex gap-2'>
         <TextInput
@@ -57,14 +59,24 @@ const TypeDetail = () => {
           prefixIcon='search'
           placeholder='Search for links'
         />
-        <PrimaryButton onClick={() => setIsModalOpen(true)} layoutClassName='flex-shrink-0'>
+        <PrimaryButton
+          onClick={() => {
+            setIsModalOpen(true);
+            setCurrentLink(null);
+          }}
+          layoutClassName='flex-shrink-0'
+        >
           <Icon name='add' />
           <span>Add Links</span>
         </PrimaryButton>
       </div>
-      {isLoading ? <LinkConfigTableLoading /> : <LinkConfigTable data={data?.result} />}
-      <Pagination totalPages={data?.totalPage} currentPage={+page} onPageChange={handleOnPageChange} />
-      <LinkModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
+      {isLoading ? (
+        <LinkConfigTableLoading />
+      ) : (
+        <LinkConfigTable data={data} setCurrentLink={setCurrentLink} setModalOpen={setIsModalOpen} />
+      )}
+      <Pagination totalPages={1} currentPage={1} onPageChange={handleOnPageChange} />
+      <LinkModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} currentLink={currentLink} />
     </div>
   );
 };

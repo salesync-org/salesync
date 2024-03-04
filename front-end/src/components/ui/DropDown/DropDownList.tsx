@@ -4,16 +4,24 @@ import { cn } from 'utils/utils';
 import useClickOutside from '@/hooks/useClickOutside';
 
 interface ListProps {
-  children: React.ReactNode,
-  className?: string,
-  open?: boolean,
-  align?: 'left' | 'right' | null,
-  divide?: boolean,
-  onItemClick?: (option: HTMLElement) => void,
-  restProps?: React.HTMLAttributes<HTMLDivElement>
-};
+  children: React.ReactNode;
+  className?: string;
+  open?: boolean;
+  align?: 'left' | 'right' | null;
+  divide?: boolean;
+  onItemClick?: (option: HTMLElement) => void;
+  restProps?: React.HTMLAttributes<HTMLDivElement>;
+}
 
-const List = ({ children, open = false, divide = true, className, align = null, onItemClick, ...restProps }: ListProps) => {
+const List = ({
+  children,
+  open = false,
+  divide = true,
+  className,
+  align = null,
+  onItemClick,
+  ...restProps
+}: ListProps) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(!open);
   const { shouldDropUp } = useDropDownList({ ref: menuRef, open });
@@ -29,7 +37,7 @@ const List = ({ children, open = false, divide = true, className, align = null, 
       let target = event.target as HTMLElement;
       while (target && target !== event.currentTarget) {
         if (target.parentNode === event.currentTarget) {
-          onItemClick??(target);
+          onItemClick!(target);
           break;
         }
         target = target.parentNode as HTMLElement;
@@ -49,10 +57,10 @@ const List = ({ children, open = false, divide = true, className, align = null, 
       }
       target = target.parentNode as HTMLElement;
     }
-  }
+  };
 
   const handleOptionClick = (option: HTMLElement) => {
-    onItemClick??(option);
+    onItemClick!(option);
     setIsOpen(false);
   };
 
@@ -62,14 +70,19 @@ const List = ({ children, open = false, divide = true, className, align = null, 
       <div ref={menuRef}>
         <div
           className={cn(
-            'absolute z-[52] overflow-y-auto rounded border-2 px-2 transition-all duration-100 ease-in-out',
+            'absolute z-[52] max-h-[400px] overflow-y-auto overflow-x-hidden rounded border-2 px-2 transition-all duration-100 ease-in-out',
             align === 'left' && 'left-0',
             align === 'right' && 'right-0',
             divide && 'divide divide-y-2 divide-button-stroke-light dark:divide-button-stroke-dark',
             'bg-button-background-light dark:bg-button-background-dark',
             'border-button-stroke-light dark:border-button-stroke-dark',
             shouldDropUp ? 'top-[4.8rem] origin-top' : 'bottom-12 origin-bottom',
-            align && cn(shouldDropUp ? cn(align == 'left' ? 'rounded-tl-none' : 'rounded-tr-none') : cn(align == 'left' ? 'rounded-bl-none' : 'rounded-br-none')),
+            align &&
+              cn(
+                shouldDropUp
+                  ? cn(align == 'left' ? 'rounded-tl-none' : 'rounded-tr-none')
+                  : cn(align == 'left' ? 'rounded-bl-none' : 'rounded-br-none')
+              ),
             isOpen ? 'scale-100' : 'scale-0 *:hidden',
             className
           )}
@@ -82,6 +95,6 @@ const List = ({ children, open = false, divide = true, className, align = null, 
       </div>
     </>
   );
-}
+};
 
 export default List;

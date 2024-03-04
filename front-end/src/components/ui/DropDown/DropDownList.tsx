@@ -60,7 +60,7 @@ const List = ({
   };
 
   const handleOptionClick = (option: HTMLElement) => {
-    onItemClick!(option);
+    onItemClick && onItemClick(option);
     setIsOpen(false);
   };
 

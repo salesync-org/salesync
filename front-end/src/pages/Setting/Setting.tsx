@@ -20,7 +20,7 @@ const administrations = [
     icon: 'contact_page',
     title: 'Type Manager',
     description: 'Configure fields, relations of all record types',
-    href: '#'
+    href: '/type-manager'
   },
   { icon: 'account_circle', title: 'User', description: 'Manage and control all user accounts', href: '#' },
   { icon: 'vpn_key', title: 'Role', description: 'Configure roles and permissions', href: '#' }

@@ -37,7 +37,7 @@ const List = ({
       let target = event.target as HTMLElement;
       while (target && target !== event.currentTarget) {
         if (target.parentNode === event.currentTarget) {
-          onItemClick ?? target;
+          onItemClick!(target);
           break;
         }
         target = target.parentNode as HTMLElement;
@@ -60,7 +60,7 @@ const List = ({
   };
 
   const handleOptionClick = (option: HTMLElement) => {
-    onItemClick!(option);
+    onItemClick && onItemClick(option);
     setIsOpen(false);
   };
 
@@ -70,7 +70,7 @@ const List = ({
       <div ref={menuRef}>
         <div
           className={cn(
-            'absolute z-[52] overflow-y-auto rounded border-2 px-2 transition-all duration-100 ease-in-out',
+            'absolute z-[52] max-h-[400px] overflow-y-auto overflow-x-hidden rounded border-2 px-2 transition-all duration-100 ease-in-out',
             align === 'left' && 'left-0',
             align === 'right' && 'right-0',
             divide && 'divide divide-y-2 divide-button-stroke-light dark:divide-button-stroke-dark',

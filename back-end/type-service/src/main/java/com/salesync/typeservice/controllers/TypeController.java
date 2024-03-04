@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/type")
@@ -34,8 +35,8 @@ public class TypeController {
     }
 
     @GetMapping("/{id}/link")
-    public ResponseEntity<TypeDTO> getTypeById(@PathVariable String id) {
-        return ResponseEntity.ok(typeService.getTypeById(id));
+    public ResponseEntity<List<TypeRelationDTO>> getAllTypeLink(@PathVariable String id) {
+        return ResponseEntity.ok(typeService.getAllTypeLinks(UUID.fromString(id)));
     }
 
 

@@ -4,13 +4,14 @@ import PrimaryButton from '@/components/ui/Button/PrimaryButton';
 import Icon from '@/components/ui/Icon/Icon';
 import Pagination from '@/components/ui/Pagination/Pagination';
 import TextInput from '@/components/ui/TextInput/TextInput';
+import useLink from '@/hooks/type-service/useLinks';
 import useDebounce from '@/hooks/useDebounce';
-import useRelation from '@/hooks/useRelation';
 import { useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 
 const TypeDetailField = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  // const [currentLink, setCurrentLink] = useState<TypeRelation | null>(null);
   const [search, setSearch] = useState(() => {
     return searchParams.get('search') || '';
   });
@@ -20,8 +21,11 @@ const TypeDetailField = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const debouncedSearch = useDebounce(search, 500);
 
-  const { id } = useParams<{ id: string }>();
-  const { data, isLoading } = useRelation(id as string, debouncedSearch, page);
+  const { id } = useParams<{ id: string }>() as { id: string };
+
+  // change useLink to useField to get data
+  const { data, isLoading } = useLink(id);
+
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);

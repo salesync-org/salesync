@@ -5,22 +5,36 @@ import DropDownList from 'ui/DropDown/DropDownList';
 
 interface DropdownButtonProps {
   value: string;
+  defaultValue?: string;
+  onValueChange?: (value: string) => void;
   children: React.ReactNode;
   header?: string;
   showHeader?: boolean;
   disabled?: boolean;
 }
 
-const DropDown: React.FC<DropdownButtonProps> = ({ children, value, header, disabled, showHeader = true }) => {
+const DropDown: React.FC<DropdownButtonProps> = ({
+  children,
+  value,
+  onValueChange = () => {},
+  defaultValue = 'Select a value',
+  header,
+  disabled,
+  showHeader = true
+}) => {
   // const { isOpen, setIsOpen, shoulDropUp, selectedOption, setSelectedOption, buttonContentRef, buttonRef, menuRef } =
   //   useDropDown();
-  const [selectedOption, setSelectedOption] = useState('');
+  const [selectedOption, setSelectedOption] = useState(defaultValue);
   const buttonRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
   function handleOptionClick(option: HTMLElement): void {
-    console.log(option.title);
     setSelectedOption(option.title!);
+    const inputNode = option.querySelector('input');
+
+    if (inputNode) {
+      onValueChange(inputNode.value);
+    }
   }
 
   return (

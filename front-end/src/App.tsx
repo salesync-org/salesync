@@ -1,7 +1,8 @@
 import { Suspense, lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import LogIn from './pages/LogIn/LogIn';
 
+const LogIn = lazy(() => import('pages/LogIn/LogIn'));
+const Setting = lazy(() => import('pages/Setting/Setting'));
 const Cheatsheet = lazy(() => import('pages/Cheatsheet/Cheatsheet'));
 const ConfigLayout = lazy(() => import('./components/layout/ConfigLayout'));
 const TypeDetail = lazy(() => import('./pages/TypeDetail/TypeDetail'));
@@ -14,6 +15,7 @@ function App() {
         <Routes>
           <Route path='/' element={<ConfigLayout />}>
             <Route path='/' element={<LogIn />} />
+            <Route path='setting' element={<Setting />} />
             <Route path='cheatsheet' element={<Cheatsheet />} />
             <Route path='type' element={<TypeDetail />} />
             <Route path='type/link/:id' element={<TypeDetail />} />

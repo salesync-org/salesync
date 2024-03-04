@@ -7,48 +7,126 @@ import Modal, { ModalFooter } from '../ui/Modal/Modal';
 import TextInput from '../ui/TextInput/TextInput';
 import useRelation from '@/hooks/type-service/useRelation';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { cn } from '@/utils/utils';
+import ErrorText from '../ui/ErrorText/ErrorText';
+import { useParams } from 'react-router-dom';
+import linkApi from '@/api/link';
+import { useQueryClient } from 'react-query';
+
+const LinkModalSchema = z.object({
+  sourceLabel: z.string().min(1, "Can't be empty"),
+  destinationLabel: z.string().min(1, "Can't be empty")
+});
+
+type LinkModalSchemaType = z.infer<typeof LinkModalSchema>;
 
 interface LinkModalProp {
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
 }
 
+const INIT_SELECTED = 'Select a value';
+
 const LinkModal = ({ isOpen, setIsOpen }: LinkModalProp) => {
-  const [selectedType, SelectedType] = useState('');
+  const [selectedRelation, setSelectedRelation] = useState(INIT_SELECTED);
+  const [selectedType, setSelectedType] = useState(INIT_SELECTED);
+  const [loading, setLoading] = useState(false);
   const { types = [], isLoading: isTypesLoading } = useType();
   const { relations = [], isLoading: isRelationsLoading } = useRelation();
 
+  const { id } = useParams<{ id: string }>() as { id: string };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<LinkModalSchemaType>({
+    defaultValues: {
+      sourceLabel: '',
+      destinationLabel: ''
+    }
+  });
+
+  const queryClient = useQueryClient();
+
+  const onSubmit = async (data: LinkModalSchemaType) => {
+    try {
+      setLoading(true);
+      console.log({ errors });
+      if (selectedRelation === INIT_SELECTED || selectedType === INIT_SELECTED) {
+        return;
+      }
+
+      const res = await linkApi.createLink(id, data.sourceLabel, selectedType, data.destinationLabel, selectedRelation);
+
+      if (res?.source_type_relation) {
+        console.log(res.source_type_relation);
+        // queryClient.setQueryData(['links', id], (oldData: TypeRelation[] | undefined) => {
+        //   return [res.source_type_relation, ...(oldData || [])];
+        // });
+        queryClient.invalidateQueries(['links', id]);
+        setIsOpen(false);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Modal isOpen={isOpen} onOpenChange={setIsOpen} title='Create new Type'>
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className='grid grid-cols-2 place-content-center gap-3'>
           <div className='w-full'>
-            <DropDown header='Link Type' value={isRelationsLoading ? 'Loading...' : 'Select a value'}>
-              {relations.map((relation) => (
-                <Item key={relation.id} title={relation.name} />
-              ))}
+            <DropDown
+              header='Link Type'
+              value={isRelationsLoading ? 'Loading...' : selectedRelation}
+              onValueChange={setSelectedRelation}
+            >
+              {relations.map((relation) => {
+                return <Item key={relation.id} title={relation.name} value={relation.id} />;
+              })}
             </DropDown>
           </div>
-          <DropDown header='Link to' value={isTypesLoading ? 'Loading...' : 'Select a value'}>
+          <DropDown
+            header='Link to'
+            value={isTypesLoading ? 'Loading...' : selectedType}
+            onValueChange={setSelectedType}
+          >
             {types.map((type) => (
-              <Item key={type.id} title={type.name} />
+              <Item key={type.id} title={type.name} value={type.id} />
             ))}
           </DropDown>
           <div>
-            <TextInput className='w-full' header='This Label' value='' placeholder='Label name for this Type' />
+            <TextInput
+              className={cn('w-full', errors.sourceLabel && 'border-red-500')}
+              header='This Label'
+              placeholder='Label name for this Type'
+              name='sourceLabel'
+              register={register}
+            />
+            {errors.sourceLabel && <ErrorText text={errors.sourceLabel.message} />}
           </div>
           <div>
             <TextInput
-              className='w-full'
+              className={cn('w-full', errors.sourceLabel && 'border-red-500')}
               header='Destination Label'
-              value=''
               placeholder='Label name for Destination Type'
+              name='destinationLabel'
+              register={register}
             />
+            {errors.destinationLabel && <ErrorText text={errors.destinationLabel.message} />}
           </div>
         </div>
         <ModalFooter className='mt-8'>
-          <Button onClick={() => setIsOpen(false)}>Cancel</Button>
-          <PrimaryButton onClick={() => setIsOpen(false)}>Save</PrimaryButton>
+          <Button onClick={() => setIsOpen(false)} disabled={loading}>
+            Cancel
+          </Button>
+          <PrimaryButton type='submit' disabled={loading}>
+            Save
+          </PrimaryButton>
         </ModalFooter>
       </form>
     </Modal>

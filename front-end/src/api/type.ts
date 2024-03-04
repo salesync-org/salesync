@@ -1,11 +1,10 @@
-import { TYPE_SERVICE_URL } from '@/constants/api';
 import axios from './axiosConfig';
 
 axios.defaults.baseURL = `${import.meta.env.VITE_TYPE_SERVICE_HOST}/api/v1/type`;
 
 class TypeApi {
-  createType = async ({ typeName, template }: { typeName: String; template: String }) => {
-    const response = await axios.post('http://localhost:8080/apis/v1/type/create', {
+  createType = async ({ typeName, template }: { typeName: string; template: string }) => {
+    const response = await axios.post('/create', {
       name: typeName
     });
     return response.data;

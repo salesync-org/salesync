@@ -8,6 +8,29 @@ class LinkApi {
 
     return response.data;
   }
+  async createLink(
+    sourceId: string,
+    sourceLabel: string,
+    destinationId: string,
+    destinationLabel: string,
+    relationId: string
+  ) {
+    const response = await axios.post(`/link`, {
+      source_type: {
+        id: sourceId
+      },
+      source_type_label: sourceLabel,
+      destination_type: {
+        id: destinationId
+      },
+      destination_label: destinationLabel,
+      relation: {
+        id: relationId
+      }
+    });
+
+    return response.data;
+  }
 }
 
 const linkApi = new LinkApi();

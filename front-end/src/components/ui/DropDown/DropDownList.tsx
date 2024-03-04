@@ -37,7 +37,7 @@ const List = ({
       let target = event.target as HTMLElement;
       while (target && target !== event.currentTarget) {
         if (target.parentNode === event.currentTarget) {
-          onItemClick ?? target;
+          onItemClick!(target);
           break;
         }
         target = target.parentNode as HTMLElement;
@@ -60,7 +60,7 @@ const List = ({
   };
 
   const handleOptionClick = (option: HTMLElement) => {
-    onItemClick ?? option;
+    onItemClick!(option);
     setIsOpen(false);
   };
 

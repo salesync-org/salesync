@@ -11,7 +11,6 @@ import Item from '@/components/ui/Item/Item';
 import '@/constants/api';
 import { SAMPLE_ACCESS_TOKEN } from '@/constants/api';
 import typeApi from '@/api/type';
-import generateUUID from '@/constants/constant';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import Pagination from '@/components/ui/Pagination/Pagination';
 import TypeTable from '@/components/ui/Table/TypeTable';
@@ -112,15 +111,20 @@ const TypeManager = () => {
     <div className='mx-auto px-10'>
       <Panel>
         <div className='flex w-full flex-col'>
-          <button className='self-start' onClick={() => {navigate(-1)}}>
+          <button
+            className='self-start'
+            onClick={() => {
+              navigate('/setting');
+            }}
+          >
             <div className='flex flex-row items-center'>
               <Icon name='navigate_before' className='text-link-text dark:text-link-text-dark' />
-              <div className='text-link-text dark:text-link-text-dark underline underline-offset-2'>Go back</div>
+              <div className='text-link-text underline underline-offset-2 dark:text-link-text-dark'>Go back</div>
             </div>
           </button>
 
           <h1 className='my-10 text-4xl font-bold'>Type Manager</h1>
-          <div className='flex flex-row justify-between mb-10'>
+          <div className='mb-10 flex flex-row justify-between'>
             <TextInput
               onChange={(e) => setSearch(e.target.value)}
               className='w-full'
@@ -142,9 +146,9 @@ const TypeManager = () => {
 
           <TypeTable types={typeSearchResult}></TypeTable>
 
-        <div className='hidden'>
-          <Pagination totalPages={15} currentPage={+page} onPageChange={handleOnPageChange} />
-        </div>
+          <div className='hidden'>
+            <Pagination totalPages={15} currentPage={+page} onPageChange={handleOnPageChange} />
+          </div>
         </div>
       </Panel>
 

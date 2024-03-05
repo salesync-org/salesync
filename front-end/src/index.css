@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    @apply antialiased;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.dark {
+    color-scheme: dark;
+}
+
+@layer base {
+    h1 {
+        font-size: 1.85em;
+        font-weight: 800;
+        line-height: 1.85rem;
+    }
+    h2 {
+        font-size: 1.4em;
+        font-weight: 700;
+        line-height: 1.5rem;
+    }
+    h3 {
+        font-weight: 600;
+        line-height: 1.5rem;
+    }
+    h4 {
+        font-weight: 500;
+        line-height: 1.5rem;
+    }
+    h5 {
+        font-size: 0.85rem;
+        font-weight: 600;
+        line-height: 1.5rem;
+    }
+    div, p, span, label {
+        font-size: 1rem;
+        line-height: 1.5rem;
+    }
+}

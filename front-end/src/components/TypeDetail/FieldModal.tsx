@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useEffect, useState } from 'react';
 import fieldApi from '@/api/fieldApi';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { useQueryClient } from 'react-query';
 
 interface FieldModalProp {
@@ -37,6 +37,7 @@ const FieldModal = ({ isOpen, setIsOpen }: FieldModalProp) => {
   });
 
   const { id } = useParams<{ id: string }>() as { id: string };
+  const [searchParams]   = useSearchParams();
 
   const queryClient = useQueryClient();
 
@@ -58,7 +59,7 @@ const FieldModal = ({ isOpen, setIsOpen }: FieldModalProp) => {
     }
   };
   return (
-    <Modal isOpen={isOpen} onOpenChange={setIsOpen} title='Add Field For Account'>
+    <Modal isOpen={isOpen} onOpenChange={setIsOpen} title={`Add Field For ${searchParams.get('name')}`}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className='grid grid-cols-5 place-content-center gap-3'>
           <div className='col-span-3 flex flex-col'>

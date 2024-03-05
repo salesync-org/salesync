@@ -1,5 +1,6 @@
 import useAuth from '@/hooks/useAuth';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from 'ui/Button/Button';
 import DropDownList from 'ui/DropDown/DropDownList';
 import Icon from 'ui/Icon/Icon';
@@ -10,7 +11,8 @@ const UserInfo = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [name, setName] = useState('Unknown');
   const [avatar_url, setAvatar] = useState('');
-
+  const navigate = useNavigate();
+  
   if (user === null) {
     fetchUser();
   }
@@ -55,7 +57,7 @@ const UserInfo = () => {
               <div className='mb-2 border-b-2 border-button-stroke'>
                 <Item title={name} icon={<img className='w-full rounded-full' src={avatar_url} alt='avatar'></img>} />
               </div>
-              <Item className='py-0' icon={<Icon name='settings' size='2rem' />} title='Settings & Administration' />
+              <Item className='py-0' icon={<Icon name='settings' size='2rem' />} title='Settings & Administration' onClick={()=>{navigate('/setting')}} />
               <Item
                 className='py-0'
                 icon={<Icon name='logout' size='2rem' />}

@@ -6,18 +6,15 @@ import Skeleton from '../ui/Skeleton/Skeleton';
 
 interface ConfigTableProps {
   data: TypeRelation[] | undefined;
-  setCurrentLink: (value: TypeRelation | null) => void;
-  setModalOpen: (value: boolean) => void;
 }
 
-const LinkConfigTable = ({ data = [], setCurrentLink, setModalOpen }: ConfigTableProps) => {
+const FieldConfigTable = ({ data }: ConfigTableProps) => {
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Link Type</TableHead>
-          <TableHead>Label Name</TableHead>
-          <TableHead>To Type</TableHead>
+          <TableHead>Field Name</TableHead>
+          <TableHead>Input Type</TableHead>
           <TableHead>Label Name</TableHead>
           <TableHead></TableHead>
         </TableRow>
@@ -26,16 +23,13 @@ const LinkConfigTable = ({ data = [], setCurrentLink, setModalOpen }: ConfigTabl
         {data &&
           data.map((item) => (
             <TableRow key={item.id}>
-              <TableCell className='font-medium'>{item.relation.name}</TableCell>
-              <TableCell>{item.source_type_label}</TableCell>
-              <TableCell>{item.destination_type.name}</TableCell>
-              <TableCell>{item.destination_label}</TableCell>
+              <TableCell className='font-medium'>{item.relationName}</TableCell>
+              <TableCell>{item.type1Label}</TableCell>
+              <TableCell>{item.type2Name}</TableCell>
+              <TableCell>{item.type2Label}</TableCell>
               <TableCell className='w-4'>
                 <Button
-                  onClick={() => {
-                    setCurrentLink(item);
-                    setModalOpen(true);
-                  }}
+                  onClick={() => {}}
                   rounded
                   className='border-0 bg-transparent dark:border-0 dark:bg-transparent'
                 >
@@ -49,13 +43,13 @@ const LinkConfigTable = ({ data = [], setCurrentLink, setModalOpen }: ConfigTabl
   );
 };
 
-export const LinkConfigTableLoading = () => {
+export const FieldConfigTableLoading = () => {
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Link Type</TableHead>
-          <TableHead>To Type</TableHead>
+          <TableHead>Field Name</TableHead>
+          <TableHead>Input Type</TableHead>
           <TableHead>Label Name</TableHead>
           <TableHead></TableHead>
         </TableRow>
@@ -73,5 +67,5 @@ export const LinkConfigTableLoading = () => {
   );
 };
 
-const MemoizedLinkConfigTable = memo(LinkConfigTable);
-export default MemoizedLinkConfigTable;
+const MemoizedFieldConfigTable = memo(FieldConfigTable);
+export default MemoizedFieldConfigTable;

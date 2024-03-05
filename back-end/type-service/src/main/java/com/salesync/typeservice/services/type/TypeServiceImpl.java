@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Transactional(rollbackFor = Throwable.class)
@@ -51,16 +52,24 @@ public class TypeServiceImpl implements ITypeService {
     }
 
     @Override
-    public TypeDTO getTypeById(String id) {
-        return null;
+    public List<TypeRelationDTO> getAllTypeLinks(UUID id) {
+        return typeRelationRepository.findAllBySourceTypeId(id).stream().map(
+                typeRelation -> TypeRelationDTO.builder()
+                        .id(typeRelation.getId())
+                        .sourceType(typeMapper.typeToTypeDTO(typeRelation.getSourceType()))
+                        .destinationType(typeMapper.typeToTypeDTO(typeRelation.getDestinationType()))
+                        .relation(relationMapper.relationToRelationDTO(typeRelation.getRelation()))
+                        .sourceTypeLabel(typeRelation.getSourceTypeLabel())
+                        .destinationTypeLabel(typeRelation.getDestinationLabel())
+                        .build()
+        ).collect(Collectors.toList());
     }
 
     @Override
     public TypeRelationResponseDTO createLink(TypeRelationDTO typeRelationDTO) {
-
-        Type sourceType = typeRepository.findById(typeRelationDTO.getSourceType().getId()).get();
-        Type destinationType = typeRepository.findById(typeRelationDTO.getDestinationType().getId()).get();
-        Relation relation = relationRepository.findById(typeRelationDTO.getRelation().getId()).get();
+        Type sourceType = typeRepository.findById(typeRelationDTO.getSourceType().getId()).orElseThrow( () -> new RuntimeException("Source type not found"));
+        Type destinationType = typeRepository.findById(typeRelationDTO.getDestinationType().getId()).orElseThrow( () -> new RuntimeException("Destination type not found"));
+        Relation relation = relationRepository.findById(typeRelationDTO.getRelation().getId()).orElseThrow( () -> new RuntimeException("Relation not found"));
         Relation inverseRelation = relation.getInverseRelation();
         String sourceLabel = typeRelationDTO.getSourceTypeLabel();
         String destinationLabel = typeRelationDTO.getDestinationTypeLabel();
@@ -93,10 +102,11 @@ public class TypeServiceImpl implements ITypeService {
 
     @Override
     public TypeRelationResponseDTO updateTypeRelation(TypeRelationDTO typeRelationDTO) {
-        TypeRelation typeRelation = typeRelationRepository.findById(typeRelationDTO.getId()).get();
+        System.out.println(typeRelationDTO.getDestinationTypeLabel());
+        TypeRelation typeRelation = typeRelationRepository.findById(typeRelationDTO.getId()).orElseThrow( () -> new RuntimeException("Type relation not found"));
         TypeRelation inverseTypeRelation = typeRelationRepository
                 .findBySourceTypeIdAndDestinationTypeIdAndRelationId(typeRelation.getDestinationType().getId(),
-                        typeRelation.getSourceType().getId(), typeRelation.getRelation().getInverseRelation().getId()).get();
+                        typeRelation.getSourceType().getId(), typeRelation.getRelation().getInverseRelation().getId()).orElseThrow( () -> new RuntimeException("Inverse type relation not found"));
 
 
         typeRelation.setDestinationLabel(typeRelationDTO.getDestinationTypeLabel());

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { cn } from 'utils/utils';
 
 type ButtonProps = {
-  onClick: () => void;
+  onClick: (value: boolean) => void;
   className?: string;
   checked: boolean;
   disabled?: boolean;
@@ -16,8 +16,9 @@ const Switch: React.FC<ButtonProps> = ({ onClick, className, disabled, label, ch
 
   const handleOnClick = () => {
     if (disabled) return;
-    setIsChecked(!isChecked);
-    onClick();
+    const temp = !isChecked
+    setIsChecked(temp);
+    onClick(temp);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {

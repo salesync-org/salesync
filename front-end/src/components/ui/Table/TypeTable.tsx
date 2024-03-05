@@ -29,7 +29,7 @@ const TypeTable = ({ types }: { types: Type[] }) => {
                 <TableCell>{type.fields?.length ?? 0}</TableCell>
                 <TableCell>{type.fields?.length ?? 0}</TableCell>
                 <TableCell>
-                  <button onClick={() => {navigate(`/type/link/${type.id}`)}}>
+                  <button onClick={() => {navigate(`/type/link/${type.id}?name=${type.name}`)}}>
                     <Icon name='navigate_next'></Icon>
                   </button>
                 </TableCell>

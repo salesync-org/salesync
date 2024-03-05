@@ -1,11 +1,12 @@
 import Icon from '@/components/ui/Icon/Icon';
 import useLink from '@/hooks/type-service/useLinks';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 import TypeDetailLink from './TypeDetailLink/TypeDetailLink';
 import TypeDetailField from './TypeDetailField/TypeDetailField';
 
 const TypeDetail = () => {
   const { id } = useParams<{ id: string }>() as { id: string };
+  const [searchParams]   = useSearchParams();
   const { data, isLoading } = useLink(id);
 
   return (
@@ -17,7 +18,7 @@ const TypeDetail = () => {
         </Link>
       </div>
       <h1 className='text-2xl font-bold leading-7'>
-        {data?.[0]?.source_type?.name ? data[0].source_type.name : '...'} Type
+        {searchParams.get('name')?? '...'} Type
       </h1>
       <TypeDetailField />
       <TypeDetailLink />

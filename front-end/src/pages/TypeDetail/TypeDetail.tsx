@@ -12,7 +12,7 @@ const TypeDetail = () => {
     <div className='mx-auto flex w-full max-w-[676px] flex-col gap-6 rounded-md bg-panel-light px-6 py-5 dark:bg-panel-dark'>
       <div className='flex items-center text-link-text-light dark:text-link-text-dark'>
         <Icon name='chevron_left' />
-        <Link to='#' className='text-sm leading-4 underline'>
+        <Link to='/type-manager' className='text-sm leading-4 underline'>
           Go back
         </Link>
       </div>

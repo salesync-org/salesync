@@ -30,6 +30,9 @@ public class PropertyServiceImpl implements IPropertyService {
 
     @Override
     public PropertyDTO createProperty(PropertyDTO propertyDTO) {
+        System.out.println(propertyDTO.getTypeId());
+        System.out.println(propertyDTO.getName());
+        System.out.println(propertyDTO.getLabel());
         Property property = propertyRepository.save(propertyMapper.propertyDTOToProperty(propertyDTO));
         return PropertyDTO.builder().
                 id(property.getId()).

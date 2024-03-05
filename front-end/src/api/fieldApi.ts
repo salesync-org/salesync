@@ -1,12 +1,20 @@
 import axios from './axiosConfig';
 
-const URL = `${import.meta.env.VITE_RECORD_SERVICE_HOST}/api/v1/field`;
+const URL = `${import.meta.env.VITE_RECORD_SERVICE_HOST}/api/v1`;
 
 class FieldApi {
-  createField = async (fieldName: string, labelName: string) => {
-    const response = await axios.post(`${URL}/create-field`, {
-      fieldName: fieldName,
-      labelName: labelName
+  async getAllFields(typeId: string) {
+    const response = await axios.get(`${URL}/property/${typeId}`);
+
+    return response.data;
+  }
+
+  createField = async (typeId: string, name: string, label: string, defaultValue: string) => {
+    const response = await axios.post(`${URL}/property/create`, {
+      typeId,
+      name,
+      label,
+      defaultValue
     });
 
     return response.data;

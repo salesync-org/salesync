@@ -6,27 +6,72 @@ import Modal, { ModalFooter } from '../ui/Modal/Modal';
 import TextInput from '../ui/TextInput/TextInput';
 import Switch from '../ui/Switch/Switch';
 import Icon from '../ui/Icon/Icon';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
+import { useEffect, useState } from 'react';
+import fieldApi from '@/api/fieldApi';
+import { useParams } from 'react-router-dom';
+import { useQueryClient } from 'react-query';
 
 interface FieldModalProp {
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
 }
 
+const filedSchema = z.object({
+  fieldName: z.string(),
+  labelName: z.string(),
+  defaultValue: z.string()
+});
+
+type FieldData = z.infer<typeof filedSchema>;
+
 const FieldModal = ({ isOpen, setIsOpen }: FieldModalProp) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const { handleSubmit, register, reset } = useForm<FieldData>({
+    defaultValues: {
+      fieldName: '',
+      labelName: '',
+      defaultValue: ''
+    }
+  });
+
+  const { id } = useParams<{ id: string }>() as { id: string };
+
+  const queryClient = useQueryClient();
+
+  const onSubmit = async (data: FieldData) => {
+    try {
+      setIsLoading(true);
+
+      const res = await fieldApi.createField(id, data.fieldName, data.labelName, data.defaultValue);
+
+      if (res) {
+        setIsOpen(false);
+        queryClient.invalidateQueries(['property', id]);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+      reset();
+    }
+  };
   return (
     <Modal isOpen={isOpen} onOpenChange={setIsOpen} title='Add Field For Account'>
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className='grid grid-cols-5 place-content-center gap-3'>
           <div className='col-span-3 flex flex-col'>
             <TextInput
               header='Field Name'
-              value=''
               // onChange={(e) => setFieldName(e.target.value)}
               placeholder='Input Field Name'
+              name='fieldName'
+              register={register}
             />
           </div>
           <div className='col-span-2 flex flex-col'>
-            <DropDown header='Input Type' value='Select type'>
+            <DropDown header='Input Type' value='Text' defaultValue='Text'>
               <Item title='Text' />
               <Item title='Number' />
               <Item title='Date' />
@@ -37,9 +82,10 @@ const FieldModal = ({ isOpen, setIsOpen }: FieldModalProp) => {
             <TextInput
               header='Label Name'
               className='w-full'
-              value=''
               placeholder='Input Label Name'
               // onChange={(e) => setLabelName(e.target.value)}
+              name='labelName'
+              register={register}
             />
           </div>
           <div className='col-span-2 flex flex-col justify-center gap-2'>
@@ -52,9 +98,10 @@ const FieldModal = ({ isOpen, setIsOpen }: FieldModalProp) => {
         <TextInput
           header='Default Value'
           className='w-full'
-          value=''
           placeholder='Input Value'
           // onChange={(e) => setDefaultValue(e.target.value)}
+          name='defaultValue'
+          register={register}
         />
 
         <div className='mt-8 flex items-center justify-between'>
@@ -65,7 +112,7 @@ const FieldModal = ({ isOpen, setIsOpen }: FieldModalProp) => {
           </div>
           <ModalFooter className='mt-0'>
             <Button onClick={() => setIsOpen(false)}>Cancel</Button>
-            <PrimaryButton onClick={() => setIsOpen(false)}>Save</PrimaryButton>
+            <PrimaryButton type='submit'>Save</PrimaryButton>
           </ModalFooter>
         </div>
       </form>

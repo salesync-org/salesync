@@ -5,10 +5,10 @@ import { memo } from 'react';
 import Skeleton from '../ui/Skeleton/Skeleton';
 
 interface ConfigTableProps {
-  data: TypeRelation[] | undefined;
+  data: Field[] | undefined;
 }
 
-const FieldConfigTable = ({ data }: ConfigTableProps) => {
+const FieldConfigTable = ({ data = [] }: ConfigTableProps) => {
   return (
     <Table>
       <TableHeader>
@@ -23,10 +23,9 @@ const FieldConfigTable = ({ data }: ConfigTableProps) => {
         {data &&
           data.map((item) => (
             <TableRow key={item.id}>
-              <TableCell className='font-medium'>{item.relationName}</TableCell>
-              <TableCell>{item.type1Label}</TableCell>
-              <TableCell>{item.type2Name}</TableCell>
-              <TableCell>{item.type2Label}</TableCell>
+              <TableCell className='font-medium'>{item.name}</TableCell>
+              <TableCell>{'Text'}</TableCell>
+              <TableCell>{item.label || ''}</TableCell>
               <TableCell className='w-4'>
                 <Button
                   onClick={() => {}}

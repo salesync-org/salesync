@@ -4,7 +4,7 @@ import PrimaryButton from '@/components/ui/Button/PrimaryButton';
 import Icon from '@/components/ui/Icon/Icon';
 import Pagination from '@/components/ui/Pagination/Pagination';
 import TextInput from '@/components/ui/TextInput/TextInput';
-import useLink from '@/hooks/type-service/useLinks';
+import useField from '@/hooks/record-service/useFields';
 import useDebounce from '@/hooks/useDebounce';
 import { useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
@@ -24,8 +24,7 @@ const TypeDetailField = () => {
   const { id } = useParams<{ id: string }>() as { id: string };
 
   // change useLink to useField to get data
-  const { data, isLoading } = useLink(id);
-
+  const { data, isLoading } = useField(id);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -58,8 +57,8 @@ const TypeDetailField = () => {
           <span>Add Fields</span>
         </PrimaryButton>
       </div>
-      {isLoading ? <FieldConfigTableLoading /> : <FieldConfigTable data={data?.result} />}
-      <Pagination totalPages={data?.totalPage} currentPage={+page} onPageChange={handleOnPageChange} />
+      {isLoading ? <FieldConfigTableLoading /> : <FieldConfigTable data={data} />}
+      <Pagination totalPages={1} currentPage={1} onPageChange={handleOnPageChange} />
       <FieldModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
     </>
   );

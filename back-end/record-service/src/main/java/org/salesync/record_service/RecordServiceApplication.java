@@ -12,11 +12,11 @@ public class RecordServiceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(RecordServiceApplication.class, args);
 	}
-
-	@Bean
-	ApplicationRunner applicationRunner(Environment environment) {
-		return args -> {
-			System.out.println("message from application.properties " + environment.getProperty("message-from-application-properties"));
-		};
-	}
+//
+//	@Bean
+//	ApplicationRunner applicationRunner(Environment environment) {
+//		return args -> {
+//			System.out.println("message from application.properties " + environment.getProperty("message-from-application-properties"));
+//		};
+//	}
 }

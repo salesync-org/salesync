@@ -22,6 +22,8 @@ type Relation = {
 type Field = {
   id: string;
   name: string;
+  label?: string;
+  defaultValue?: string;
 };
 
 type User = {

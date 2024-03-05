@@ -20,7 +20,7 @@ public class PropertyController {
     private final IPropertyService propertyService;
 
     @GetMapping("/{typeId}")
-    public ResponseEntity<List> loadAllInputTypes(@PathVariable String typeId) {
+    public ResponseEntity<List<PropertyDTO>> loadAllInputTypes(@PathVariable String typeId) {
         return ResponseEntity.ok(
                 propertyService.loadAllInputTypes(UUID.fromString(typeId))
         );

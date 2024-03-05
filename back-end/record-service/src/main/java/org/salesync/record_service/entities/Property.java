@@ -15,6 +15,4 @@ public class Property extends BaseEntity  {
     private String name;
     private UUID typeId;
     private String label;
-    private String defaultValue;
-
 }

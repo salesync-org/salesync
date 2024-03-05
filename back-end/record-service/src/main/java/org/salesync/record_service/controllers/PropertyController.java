@@ -13,7 +13,7 @@ import java.util.UUID;
 //import java.util.Map;
 
 @RestController
-@RequestMapping("/properties")
+@RequestMapping("/property")
 @RequiredArgsConstructor
 public class PropertyController {
 
@@ -26,7 +26,7 @@ public class PropertyController {
         );
     }
 
-    @GetMapping("/create")
+    @PostMapping("/create")
     public ResponseEntity<PropertyDTO> createProperty(@RequestBody PropertyDTO propertyDTO) {
         return ResponseEntity.ok(
                 propertyService.createProperty(propertyDTO)

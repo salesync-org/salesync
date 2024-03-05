@@ -32,9 +32,10 @@ public class PropertyServiceImpl implements IPropertyService {
     public PropertyDTO createProperty(PropertyDTO propertyDTO) {
         Property property = propertyRepository.save(propertyMapper.propertyDTOToProperty(propertyDTO));
         return PropertyDTO.builder().
+                id(property.getId()).
                 name(property.getName()).
+                typeId(property.getTypeId()).
                 label(property.getLabel()).
-                defaultValue(property.getDefaultValue()).
                 build();
     }
 }

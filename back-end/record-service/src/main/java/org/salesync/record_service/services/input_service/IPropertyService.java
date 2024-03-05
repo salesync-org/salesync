@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IPropertyService {
-    public List loadAllInputTypes(UUID typeId);
+    public List<PropertyDTO> loadAllInputTypes(UUID typeId);
 
     PropertyDTO createProperty(PropertyDTO propertyDTO);
 }

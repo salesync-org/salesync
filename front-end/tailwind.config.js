@@ -38,7 +38,11 @@ export default {
           dark: '#ffffff'
         },
         primary: {
-          DEFAULT: '#304f8d'
+          DEFAULT: '#304f8d',
+          color: '#0176d3',
+          sidebar: '#014486',
+          border: '#0070d2',
+          'border-secondary': '#4194f9'
         },
         'primary-hover': {
           DEFAULT: '#355492'
@@ -54,7 +58,8 @@ export default {
         secondary: {
           light: '#cee7ff',
           DEFAULT: '#cee7ff',
-          dark: '#304F8D'
+          dark: '#304F8D',
+          color: 'f3f3f3'
         },
         'link-text': {
           light: '#304f8d',

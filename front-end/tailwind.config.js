@@ -16,9 +16,9 @@ export default {
       fontWeight: 'normal',
       borderRadius: {
         none: '0',
-        sm: '.5rem',
-        DEFAULT: '.8rem',
-        lg: '1.2rem',
+        sm: '.3rem',
+        DEFAULT: '.5rem',
+        lg: '.6rem',
         full: '9999px'
       },
       colors: {
@@ -38,22 +38,22 @@ export default {
           dark: '#ffffff'
         },
         primary: {
-          DEFAULT: '#304f8d',
+          DEFAULT: '#037EC9',
           color: '#0176d3',
           sidebar: '#014486',
           border: '#0070d2',
           'border-secondary': '#4194f9'
         },
         'primary-hover': {
-          DEFAULT: '#355492'
+          DEFAULT: '##67A1ED'
         },
         'primary-active': {
-          DEFAULT: '#2B4A88'
+          DEFAULT: '#0375BA'
         },
         'primary-stroke': {
-          light: '#576c94',
-          DEFAULT: '#576c94',
-          dark: '#1e3664'
+          light: '#037BC4',
+          DEFAULT: '#037BC4',
+          dark: '#037BC4'
         },
         secondary: {
           light: '#cee7ff',

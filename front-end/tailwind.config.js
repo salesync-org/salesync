@@ -5,7 +5,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'Avenir', 'Helvetica', 'Arial', 'sans-serif']
+        sans: ['system-ui', 'Avenir', 'Helvetica', 'Arial', 'sans-serif']
       },
       lineHeight: {
         1.5: '1.5'

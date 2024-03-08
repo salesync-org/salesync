@@ -38,7 +38,8 @@ export default {
           dark: '#ffffff'
         },
         primary: {
-          DEFAULT: '#304f8d'
+          DEFAULT: '#304f8d',
+          color: '#0176d3'
         },
         'primary-hover': {
           DEFAULT: '#355492'
@@ -97,7 +98,8 @@ export default {
       },
       animation: {
         modal: 'modal 0.1s ease-in-out',
-        pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+        pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'to-top': 'to-top 0.2s ease-in-out'
       },
       keyframes: {
         modal: {
@@ -107,6 +109,10 @@ export default {
         pulse: {
           '0%, 100%': { opacity: '1' },
           '50%': { opacity: '0.5' }
+        },
+        'to-top': {
+          '0%': { transform: 'translateY(100%)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' }
         }
       }
     }

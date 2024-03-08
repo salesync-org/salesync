@@ -28,7 +28,7 @@ const Item: React.FC<ItemProps> = ({
   return (
     <div title={title}>
       <input type='text' hidden value={value} />
-      <a className={cn(`flex rounded-sm py-2`, className)} href={href} tabIndex={0} title={title}>
+      <a className={cn(`flex rounded-sm`, className)} href={href} tabIndex={0} title={title}>
         <div
           className={cn(
             'flex flex-grow cursor-pointer items-center rounded-sm px-2 py-2 align-middle',

@@ -5,7 +5,7 @@ const buttonVariants = cva(
   cn(
     'border-2 py-2 px-4 rounded h-10 flex items-center justify-center',
     'enabled:active:translate-y-[0.1rem] enabled:active:text-opacity-80',
-    'enabled:scale-100 enabled:hover:scale-105 enabled:active:scale-100',
+    'enabled:scale-100 enabled:hover:scale-105 enabled:active:scale-100 focus:outline-primary',
     'disabled:opacity-80',
     'transition-all ease-in-out duration-[50ms]'
   ),

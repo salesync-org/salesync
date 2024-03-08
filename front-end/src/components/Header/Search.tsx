@@ -1,8 +1,6 @@
 import { cn } from '@/utils/utils';
-import TextInput from '../ui/TextInput/TextInput';
+import {TextInput, Button, Icon} from '@/components/ui';
 import { useState } from 'react';
-import Button from 'ui/Button/Button';
-import Icon from 'ui/Icon/Icon';
 
 const Search = ({ className }: { className?: string }) => {
   const [isSearchOpen, setSearchOpen] = useState(false);

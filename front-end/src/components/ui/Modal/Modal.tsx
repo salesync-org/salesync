@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import { cn } from '../../../utils/utils';
-import FocusTrap from '../FocusTrap/FocusTrap';
+import { cn } from 'utils/utils';
+import FocusTrap from 'ui/FocusTrap/FocusTrap';
 
 interface Props {
   children: React.ReactNode;

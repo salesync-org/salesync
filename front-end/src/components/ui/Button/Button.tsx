@@ -19,7 +19,7 @@ const Button: React.FC<ButtonProps> = ({
     <div className={cn(layoutClassName)}>
       {showHeader && header && <p className='my-1'>{header}</p>}
       <button
-        className={cn(buttonVariants({ intent, rounded, className }), 'flex items-center justify-center space-x-2')}
+        className={cn(buttonVariants({ intent, rounded, className }), 'flex items-center justify-center space-x-2 ')}
         onClick={onClick}
         disabled={disabled}
         type={type}

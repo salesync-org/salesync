@@ -16,7 +16,7 @@ interface ListProps {
 const List = ({
   children,
   open = false,
-  divide = true,
+  divide = false,
   className,
   align = null,
   onItemClick,
@@ -70,10 +70,10 @@ const List = ({
       <div ref={menuRef}>
         <div
           className={cn(
-            'absolute z-[52] max-h-[400px] overflow-y-auto overflow-x-hidden rounded border-2 px-2 transition-all duration-100 ease-in-out',
+            'absolute z-[50] backdrop-blur-2xl max-h-[400px] overflow-y-auto overflow-x-hidden rounded border-2 px-2 transition-all duration-100 ease-in-out',
             align === 'left' && 'left-0',
             align === 'right' && 'right-0',
-            divide && 'divide divide-y-2 divide-button-stroke-light dark:divide-button-stroke-dark',
+            divide ? 'divide divide-y-2 *:py-2 divide-button-stroke-light dark:divide-button-stroke-dark' : 'py-2',
             'bg-button-background-light dark:bg-button-background-dark',
             'border-button-stroke-light dark:border-button-stroke-dark',
             shouldDropUp ? 'top-[4.8rem] origin-top' : 'bottom-12 origin-bottom',

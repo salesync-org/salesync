@@ -1,11 +1,4 @@
-import PrimaryButton from 'ui/Button/PrimaryButton';
-import Button from 'ui/Button/Button';
-import Panel from 'ui/Panel/Panel';
-import Switch from 'ui/Switch/Switch';
-import Icon from 'ui/Icon/Icon';
-import TextInput from 'ui/TextInput/TextInput';
-import DropDown from 'ui/DropDown/DropDown';
-import Item from 'ui/Item/Item';
+import {PrimaryButton, Button, Panel, Switch, Icon, TextInput, DropDown, Item} from '@/components/ui';
 import ModalPanel from '../ModalPanel/ModalPanel';
 
 function ComponentPanel() {
@@ -60,7 +53,7 @@ function ComponentPanel() {
             <Item title='Item 3' />
             <Item title='Item 4' />
           </DropDown>
-          <DropDown header='With Complex Items' value='Select a value'>
+          <DropDown header='With Complex Items' value='Select a value' divide={true}>
             <Item icon={<Icon name='person' size='1rem' />} title='Complex' subTitle='With Subtitle' href='#' />
             <Item title='Detailed' subTitle='And Subtitle' additionalInfo='With Additional Info' />
             <Item title='Simple' subTitle='With Subtitle' />

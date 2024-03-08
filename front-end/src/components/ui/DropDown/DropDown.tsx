@@ -1,7 +1,5 @@
 import React, { useRef, useState } from 'react';
-import Button from 'ui/Button/Button';
-import Icon from 'ui/Icon/Icon';
-import DropDownList from 'ui/DropDown/DropDownList';
+import {Button, Icon, DropDownList} from '@/components/ui';
 
 interface DropdownButtonProps {
   value: string;
@@ -11,6 +9,7 @@ interface DropdownButtonProps {
   header?: string;
   showHeader?: boolean;
   disabled?: boolean;
+  divide?: boolean;
 }
 
 const DropDown: React.FC<DropdownButtonProps> = ({
@@ -20,6 +19,7 @@ const DropDown: React.FC<DropdownButtonProps> = ({
   defaultValue = 'Select a value',
   header,
   disabled,
+  divide = false,
   showHeader = true
 }) => {
   // const { isOpen, setIsOpen, shoulDropUp, selectedOption, setSelectedOption, buttonContentRef, buttonRef, menuRef } =
@@ -43,7 +43,7 @@ const DropDown: React.FC<DropdownButtonProps> = ({
         <Icon name='expand_more' />
         <p className='truncate'>{selectedOption || value}</p>
       </Button>
-      <DropDownList onItemClick={handleOptionClick} open={isOpen}>
+      <DropDownList onItemClick={handleOptionClick} open={isOpen} divide={divide}>
         {children}
       </DropDownList>
     </div>

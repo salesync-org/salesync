@@ -1,17 +1,16 @@
 import Icon from '@/components/ui/Icon/Icon';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import RecordTabs from '../Records/RecordTabs';
 
 const initTabs = [
-  { title: 'Leads', href: 'leads' },
-  { title: 'Contacts', href: 'contacts' },
-  { title: 'Accounts', href: 'accounts' },
-  { title: 'Opportunities', href: 'opportunities' },
-  { title: 'Products', href: 'products' },
-  { title: 'Price Books', href: 'price-books' },
-  { title: 'Calendar', href: 'calendar' },
-  { title: 'Analytics', href: 'analytics' }
+  { title: 'Leads', href: 'sales/leads' },
+  { title: 'Contacts', href: 'sales/contacts' },
+  { title: 'Accounts', href: 'sales/accounts' },
+  { title: 'Opportunities', href: 'sales/opportunities' },
+  { title: 'Products', href: 'sales/products' },
+  { title: 'Price Books', href: 'sales/price-books' },
+  { title: 'Calendar', href: 'sales/calendar' },
+  { title: 'Analytics', href: 'sales/analytics' }
 ];
 
 const Sales = () => {

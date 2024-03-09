@@ -17,7 +17,9 @@ function App() {
     <div>
       <Suspense fallback={<div>Loading...</div>}>
         <Routes>
+          <Route path='cheatsheet' element={<Cheatsheet />} />
           <Route path='/' element={<ConfigLayout />}>
+            <Route path='/home' element={<HomeLayout />} />
             <Route path='cheatsheet' element={<Cheatsheet />} />
             {/* <Route path='/' element={<LogIn />} />
             <Route path='setting' element={<Setting />} />

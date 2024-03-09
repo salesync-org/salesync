@@ -1,6 +1,4 @@
 import TypeCard from '@/components/ObjectCard/TypeCard';
-import AsideNav from '@/components/RecordLayout/AsideNav';
-
 const HomeLayout = () => {
   //lead
   let Lead: Type = {
@@ -57,21 +55,14 @@ const HomeLayout = () => {
       { id: '3', name: 'Priority', label: 'Priority', values: ['High', 'b'] }
     ]
   };
-  // console.log(Case.fields?.[0].values[0])
 
   return (
-    <div className='flex min-h-dvh w-full'>
-      <AsideNav />
-      <main className='flex w-full flex-col'>
-        <section className='h-12 w-full bg-primary-color'></section>
-        <header className='h-12 w-full bg-white'></header>
-        <div className='grid  flex-grow  grid-cols-1 bg-main-background bg-cover bg-no-repeat md:grid-cols-2'>
-          <TypeCard type={Lead} />
-          <TypeCard type={Opportunity} />
-          <TypeCard type={Contact} />
-          <TypeCard type={Case} />
-        </div>
-      </main>
+    <div className='grid  flex-grow  grid-cols-1 md:grid-cols-2'>
+      <TypeCard type={Lead} />
+      <TypeCard type={Opportunity} />
+      <TypeCard type={Contact} />
+      <TypeCard type={Case} />
+      <TypeCard type={Case} />
     </div>
   );
 };

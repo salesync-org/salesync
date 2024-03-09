@@ -7,6 +7,8 @@ type TypeRelation = {
   destination_label: string;
 };
 type Type = {
+  icon_url: string;
+  background_color: string;
   id: string;
   name: string;
   description?: string;
@@ -24,6 +26,7 @@ type Field = {
   name: string;
   label?: string;
   defaultValue?: string;
+  values?: string[];
 };
 
 type User = {

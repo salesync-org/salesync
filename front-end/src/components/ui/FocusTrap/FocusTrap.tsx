@@ -33,6 +33,14 @@ const FocusTrap: React.FC<FocusTrapProps> = ({ children }) => {
 
     document.addEventListener('keydown', handleKeyDown);
 
+    // Focus on the first element when the focus trap is activated
+    const focusableElements = trapElement?.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    if (focusableElements && focusableElements.length > 0) {
+      focusableElements[0].focus();
+    }
+
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };

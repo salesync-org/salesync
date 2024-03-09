@@ -23,12 +23,12 @@
 @layer base {
     h1 {
         font-size: 1.85em;
-        font-weight: 800;
+        font-weight: 650;
         line-height: 1.85rem;
     }
     h2 {
         font-size: 1.4em;
-        font-weight: 700;
+        font-weight: 620;
         line-height: 1.5rem;
     }
     h3 {
@@ -36,12 +36,12 @@
         line-height: 1.5rem;
     }
     h4 {
-        font-weight: 500;
+        font-weight: 550;
         line-height: 1.5rem;
     }
     h5 {
         font-size: 0.85rem;
-        font-weight: 600;
+        font-weight: 500;
         line-height: 1.5rem;
     }
     div, p, span, label {

@@ -2,11 +2,13 @@ import { Sale, columns } from './columns';
 import { DataTable } from './data-table';
 
 const RecordTable = () => {
-  let data: Sale[] = [
+  const data: Sale[] = [
     {
       id: '1',
-      index: -1,
-      name: 'John Doe',
+      person: {
+        id: '1',
+        name: 'John Doe'
+      },
       title: 'CEO',
       company: 'ACME',
       phone: '555-555-5555',
@@ -16,8 +18,10 @@ const RecordTable = () => {
     },
     {
       id: '2',
-      index: -1,
-      name: 'Jane Doe',
+      person: {
+        id: '2',
+        name: 'John Doe'
+      },
       title: 'CFO',
       company: 'ACME',
       phone: '555-555-5555',
@@ -26,8 +30,6 @@ const RecordTable = () => {
       ownerAlias: 'JD'
     }
   ];
-
-  data = data.map((d, i) => ({ ...d, index: i + 1 }));
 
   return <DataTable columns={columns} data={data} />;
 };

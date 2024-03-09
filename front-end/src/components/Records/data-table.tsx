@@ -40,9 +40,13 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id} className='h-8' data-state={row.getIsSelected() && 'selected'}>
+              <TableRow
+                key={row.id}
+                className='group h-8 cursor-pointer transition-all hover:bg-[#f3f3f3]'
+                data-state={row.getIsSelected() && 'selected'}
+              >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell className='h-8 truncate py-0' key={cell.id}>
+                  <TableCell className='h-8 truncate py-0 transition-all hover:bg-white' key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

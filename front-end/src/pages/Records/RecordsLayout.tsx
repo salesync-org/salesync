@@ -5,10 +5,12 @@ const RecordsLayout = () => {
   return (
     <div className='flex min-h-dvh w-full'>
       <AsideNav />
-      <main className='w-full'>
-        <section className='bg-primary-color h-12 w-full'></section>
+      <main className='flex w-full flex-col'>
+        <section className='h-12 w-full bg-primary-color'></section>
         <header className='h-12 w-full bg-white'></header>
-        <Outlet />
+        <div className='flex-grow'>
+          <Outlet />
+        </div>
       </main>
     </div>
   );

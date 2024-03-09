@@ -70,19 +70,19 @@ const RecordTabs = ({ tabs, setTabs, name }: RecordTabsProps) => {
                 onDragEnd={handleDragEnd}
                 className={({ isActive }) =>
                   cn(
-                    'flex cursor-pointer items-center gap-1 truncate border-t-[3px] border-transparent bg-clip-border px-3 py-2 transition-all duration-100 ease-in-out hover:bg-[#0070d2]/10',
-                    isActive && 'bg-[#0070d2]/10',
-                    'hover:bg-[#0070d2]/10',
+                    'flex cursor-pointer items-center gap-1 truncate border-t-[3px] border-transparent bg-clip-border px-3 py-2 transition-all duration-100 ease-in-out',
+                    isActive && 'bg-secondary/40',
+                    'hover:bg-secondary/30',
                     `${name}-tab`
                   )
                 }
               >
                 {tab.href.includes(location.pathname.split('/').pop() ?? '') && (
                   <span
-                    className={cn('absolute left-[-1px] right-[-1px] top-0 h-[3px] animate-to-top bg-[#0070d2]')}
+                    className={cn('absolute left-[-1px] right-[-1px] top-0 h-[3px] animate-to-top bg-primary')}
                   ></span>
                 )}
-                {tab.title}
+                <p>{tab.title}</p>
                 <Icon name='expand_more' />
               </NavLink>
             </li>

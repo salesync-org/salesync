@@ -16,9 +16,9 @@ export default {
       fontWeight: 'normal',
       borderRadius: {
         none: '0',
-        sm: '.3rem',
-        DEFAULT: '.5rem',
-        lg: '.6rem',
+        sm: '.2rem',
+        DEFAULT: '.3rem',
+        lg: '.5rem',
         full: '9999px'
       },
       colors: {
@@ -63,8 +63,8 @@ export default {
           color: 'f3f3f3'
         },
         'link-text': {
-          light: '#304f8d',
-          DEFAULT: '#304f8d',
+          light: '#014486',
+          DEFAULT: '#014486',
           dark: '#cefaff'
         },
         'button-background': {

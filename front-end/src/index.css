@@ -44,7 +44,7 @@
         font-weight: 500;
         line-height: 1.5rem;
     }
-    div, p, span, label {
+    div, p, span, label, td, th {
         font-size: 1rem;
         line-height: 1.5rem;
     }

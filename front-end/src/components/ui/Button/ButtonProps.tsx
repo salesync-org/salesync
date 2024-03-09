@@ -4,8 +4,8 @@ import { cn } from 'utils/utils';
 const buttonVariants = cva(
   cn(
     'border-[1px] py-2 px-4 rounded h-10 flex items-center justify-center',
-    'enabled:active:translate-y-[0.1rem] enabled:active:text-opacity-80',
-    'enabled:scale-100 enabled:hover:scale-105 enabled:active:scale-100 focus:outline-primary',
+    'enabled:active:text-opacity-80',
+    'enabled:scale-100 enabled:active:scale-100 focus:outline-primary',
     'disabled:opacity-80',
     'transition-all ease-in-out duration-[50ms]'
   ),
@@ -35,11 +35,16 @@ const buttonVariants = cva(
         normal: 'flex items-center justify-center rounded-full p-0 dark:p-0',
         false: '',
         icon: 'flex w-fit aspect-square items-center justify-center rounded-full border-transparent'
+      },
+      zoom: {
+        true: 'enabled:hover:scale-[102%] enabled:active:translate-y-[0.1rem]',
+        false: ''
       }
     },
     defaultVariants: {
       intent: 'normal',
-      rounded: false
+      rounded: false,
+      zoom: true,
     }
   }
 );

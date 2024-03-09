@@ -7,7 +7,7 @@ const ThemeToggle = () => {
   const [theme, setTheme, isSystemTheme] = useTheme();
   const [isThemeMenuOpen, setThemeMenuOpen] = useState(false);
   return (
-    <>
+    <div>
       <Button
         rounded='icon'
         className='h-10 w-10'
@@ -47,7 +47,7 @@ const ThemeToggle = () => {
           }}
         />
       </DropDownList>
-    </>
+    </div>
   );
 };
 

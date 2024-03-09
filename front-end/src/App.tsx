@@ -7,6 +7,8 @@ const Cheatsheet = lazy(() => import('pages/Cheatsheet/Cheatsheet'));
 const ConfigLayout = lazy(() => import('./components/Layout/ConfigLayout'));
 // const TypeDetail = lazy(() => import('./pages/TypeDetail/TypeDetail'));
 // const TypeManager = lazy(() => import('./pages/TypeManager/TypeManager'));
+const RecordsLayout = lazy(() => import('./pages/Records/RecordsLayout'));
+const Sales = lazy(() => import('./pages/Sales/Sales'));
 
 function App() {
   return (
@@ -22,6 +24,14 @@ function App() {
             <Route path='field' element={<TypeDetail />} />
             <Route path='link' element={<TypeDetail />} />
             <Route path='/type-manager' element={<TypeManager />} /> */}
+          </Route>
+          <Route path='/records' element={<RecordsLayout />}>
+            <Route path='sales' element={<Sales />} />
+            <Route path='*' element={<Sales />} />
+          </Route>
+          <Route path='/records' element={<RecordsLayout />}>
+            <Route path='sales' element={<Sales />} />
+            <Route path='*' element={<Sales />} />
           </Route>
         </Routes>
       </Suspense>

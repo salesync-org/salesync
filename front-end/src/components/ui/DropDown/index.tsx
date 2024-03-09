@@ -1,3 +1,4 @@
 import DropDown from './DropDown';
 import  DropDownList from './DropDownList';
-export {DropDown, DropDownList};
+import  DropDownItem from './DropDownItem';
+export {DropDown, DropDownList, DropDownItem};

@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import { cn } from 'utils/utils';
 import FocusTrap from 'ui/FocusTrap/FocusTrap';
+import useClickOutside from '@/hooks/useClickOutside';
 
 interface Props {
   children: React.ReactNode;
@@ -16,14 +17,17 @@ export const ModalFooter = ({ children, className }: { children: React.ReactNode
 };
 
 const Modal = ({ children, title, isOpen, onOpenChange, isStatic = true }: Props) => {
-  const handleCloseWhenClickOutside = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (isStatic) return;
+  // const handleCloseWhenClickOutside = (e: React.MouseEvent<HTMLDivElement>) => {
+  //   if (isStatic) return;
 
-    if (e.target === e.currentTarget) {
-      onOpenChange(false);
-    }
-  };
-
+  //   if (e.target === e.currentTarget) {
+  //     onOpenChange(false);
+  //   }
+  // };
+  const ref = useRef<HTMLDivElement>(null);
+  useClickOutside([ref], () => {
+    !isStatic && onOpenChange(false);
+  });
   useEffect(() => {
     const keyPressHandler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -45,9 +49,9 @@ const Modal = ({ children, title, isOpen, onOpenChange, isStatic = true }: Props
       {isOpen && (
         <div
           className='fixed left-0 right-0 top-0 z-50 flex h-[calc(100%-1rem)] max-h-full w-full items-center justify-center overflow-y-auto overflow-x-hidden bg-black bg-opacity-50 transition-all dark:bg-gray-900 dark:bg-opacity-50 md:inset-0'
-          onClick={handleCloseWhenClickOutside}
+          // onClick={handleCloseWhenClickOutside}
         >
-          <div className='animate-modal relative max-h-full w-full max-w-2xl origin-[0_50%]' id='modal'>
+          <div ref={ref} className='animate-modal relative max-h-full w-full max-w-2xl origin-[0_50%]' id='modal'>
             {/* <!-- Modal content --> */}
             <div className='relative rounded-lg bg-panel px-3 py-4 shadow dark:bg-panel-dark'>
               {/* <!-- Modal header --> */}

@@ -1,4 +1,4 @@
-import {PrimaryButton, Button, Panel, Switch, Icon, TextInput, DropDown, Item} from '@/components/ui';
+import {PrimaryButton, Button, Panel, Switch, Icon, TextInput, DropDown, Item, DropDownItem} from '@/components/ui';
 import ModalPanel from '../ModalPanel/ModalPanel';
 
 function ComponentPanel() {
@@ -48,20 +48,29 @@ function ComponentPanel() {
         <div>
           <h2 className='mb-4'>Input Button</h2>
           <DropDown header='Normal' value='Select a value'>
-            <Item title='Item 1' />
-            <Item title='Item 2' />
-            <Item title='Item 3' />
-            <Item title='Item 4' />
+            <DropDownItem title='Item 1' value='Item 1'></DropDownItem>
+            <DropDownItem title='Item 2' value='Item 2'></DropDownItem>
+            <DropDownItem title='Item 3' value='Item 3'></DropDownItem>
+            <DropDownItem title='Item 4' value='Item 4'></DropDownItem>
           </DropDown>
           <DropDown header='With Complex Items' value='Select a value' divide={true}>
-            <Item icon={<Icon name='person' size='1rem' />} title='Complex' subTitle='With Subtitle' href='#' />
-            <Item title='Detailed' subTitle='And Subtitle' additionalInfo='With Additional Info' />
-            <Item title='Simple' subTitle='With Subtitle' />
+            <DropDownItem title='Complex' value='Item 1'>
+              <Item icon={<Icon name='person' size='1rem' />} title='Complex' subTitle='With Subtitle' href='#' />
+            </DropDownItem>
+            <DropDownItem title='Detailed' value='Item 2'>
+              <Item title='Detailed' subTitle='And Subtitle' additionalInfo='With Additional Info' />
+            </DropDownItem>
+            <DropDownItem title='Simple' value='Item 3'>
+              <Item title='Simple' subTitle='With Subtitle' />
+            </DropDownItem>
           </DropDown>
         </div>
         <div>
             <h2 className='mb-4'>Modal</h2>
             <ModalPanel />
+        </div>
+        <div>
+            <h2 className='mb-4'>Popup</h2>
         </div>
       </div>
       <h5>Comming more.</h5>

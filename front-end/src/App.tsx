@@ -9,6 +9,7 @@ const Cheatsheet = lazy(() => import('pages/Cheatsheet/Cheatsheet'));
 // const TypeManager = lazy(() => import('./pages/TypeManager/TypeManager'));
 const RecordsLayout = lazy(() => import('./pages/Records/RecordsLayout'));
 const Sales = lazy(() => import('./pages/Sales/Sales'));
+const LogIn = lazy(() => import('./pages/LogIn/LogIn'));
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
             <Route path='sales' element={<Sales />} />
             <Route path='*' element={<Sales />} />
           </Route>
+          <Route path='/login' element={<LogIn />}></Route>
         </Routes>
       </Suspense>
     </div>

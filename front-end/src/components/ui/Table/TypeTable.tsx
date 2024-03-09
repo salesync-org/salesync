@@ -2,13 +2,6 @@ import { useNavigate } from 'react-router-dom';
 import Icon from '../Icon/Icon';
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from './Table';
 
-// interface Type {
-//   id: string;
-//   name: string;
-//   fields: Field[] | null;
-//   links: Link[] | null;
-// }
-
 const TypeTable = ({ types }: { types: Type[] }) => {
   const navigate = useNavigate();
   return (
@@ -24,15 +17,10 @@ const TypeTable = ({ types }: { types: Type[] }) => {
         {types &&
           types.map((type: Type) => {
             return (
-              <TableRow key={type.id}>
+              <TableRow className='border border-sky-500' key={type.id}>
                 <TableCell className='font-medium'>{type.name}</TableCell>
                 <TableCell>{type.fields?.length ?? 0}</TableCell>
                 <TableCell>{type.fields?.length ?? 0}</TableCell>
-                <TableCell>
-                  <button onClick={() => {navigate(`/type/link/${type.id}?name=${type.name}`)}}>
-                    <Icon name='navigate_next'></Icon>
-                  </button>
-                </TableCell>
               </TableRow>
             );
           })}

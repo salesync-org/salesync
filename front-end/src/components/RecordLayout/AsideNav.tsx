@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import Icon from '../ui/Icon/Icon';
 
 const asideItems = [
-  { icon: 'home', href: '/records/home', title: 'Home' },
+  { icon: 'home', href: '/home', title: 'Home' },
   { icon: 'monitoring', href: '/records/sales', title: 'Sales', active: true },
   { icon: 'ecg_heart', href: '/records/services', title: 'Services' },
   { icon: 'mail', href: '/records/outreach', title: 'Outreach' },

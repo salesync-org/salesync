@@ -34,13 +34,13 @@ const Sales = () => {
 
   return (
     <div className='flex h-full flex-col'>
-      <section className='flex items-center overflow-x-auto bg-white px-6'>
+      <section className='flex items-center bg-white px-6'>
         <h1 className='pr-6 text-lg font-normal leading-6'>Sales</h1>
         <RecordTabs tabs={tabs} setTabs={setTabs} name='salesTabs' />
         <Icon name='edit' className='ml-auto' />
       </section>
-      <section className='flex-grow p-4'>
-        <Panel className='m-0 h-full p-0'>
+      <section className='h-full flex-grow p-4'>
+        <Panel className='m-0 h-full overflow-hidden p-0'>
           <section className='px flex items-center justify-between p-4'>
             <div className='flex items-center gap-2'>
               <div className='w-fit cursor-pointer overflow-hidden rounded-sm bg-primary-color'>

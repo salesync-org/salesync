@@ -47,7 +47,7 @@ const RecordTabs = ({ tabs, setTabs, name }: RecordTabsProps) => {
     localStorage.setItem(name, JSON.stringify(tabs));
   };
   return (
-    <nav>
+    <nav className='h-full'>
       <ul className={`${name}-tabs flex`}>
         {tabs.map((tab, index) => {
           return (

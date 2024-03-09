@@ -40,7 +40,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                   <TableHead
                     key={header.id}
                     className={cn(
-                      'h-8 truncate border-r-2 font-bold last:border-x-0 hover:bg-white',
+                      'h-8 truncate border-r-2 font-bold last:border-x-0 hover:bg-button-background-hover',
                       index < 1 && 'text-center'
                     )}
                   >

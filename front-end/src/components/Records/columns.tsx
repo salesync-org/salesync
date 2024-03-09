@@ -24,8 +24,11 @@ export const columns: ColumnDef<Sale>[] = [
   },
   {
     accessorKey: 'person',
-    header: () => (
-      <div className='flex items-center justify-between'>
+    header: ({ column }) => (
+      <div
+        className='flex items-center justify-between'
+        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+      >
         <span className='text-[13px]'>Name</span>
         <Icon name='expand_more' />
       </div>
@@ -41,8 +44,11 @@ export const columns: ColumnDef<Sale>[] = [
   },
   {
     accessorKey: 'title',
-    header: () => (
-      <div className='flex items-center justify-between'>
+    header: ({ column }) => (
+      <div
+        className='flex items-center justify-between'
+        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+      >
         <span className='text-[13px]'>Title</span>
         <Icon name='expand_more' />
       </div>
@@ -50,8 +56,11 @@ export const columns: ColumnDef<Sale>[] = [
   },
   {
     accessorKey: 'company',
-    header: () => (
-      <div className='flex items-center justify-between'>
+    header: ({ column }) => (
+      <div
+        className='flex items-center justify-between'
+        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+      >
         <span className='text-[13px]'>Company</span>
         <Icon name='expand_more' />
       </div>
@@ -59,8 +68,11 @@ export const columns: ColumnDef<Sale>[] = [
   },
   {
     accessorKey: 'phone',
-    header: () => (
-      <div className='flex items-center justify-between'>
+    header: ({ column }) => (
+      <div
+        className='flex items-center justify-between'
+        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+      >
         <span className='text-[13px]'>Phone</span>
         <Icon name='expand_more' />
       </div>
@@ -68,8 +80,11 @@ export const columns: ColumnDef<Sale>[] = [
   },
   {
     accessorKey: 'email',
-    header: () => (
-      <div className='flex items-center justify-between'>
+    header: ({ column }) => (
+      <div
+        className='flex items-center justify-between'
+        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+      >
         <span className='text-[13px]'>Email</span>
         <Icon name='expand_more' />
       </div>
@@ -77,8 +92,11 @@ export const columns: ColumnDef<Sale>[] = [
   },
   {
     accessorKey: 'leadStatus',
-    header: () => (
-      <div className='flex items-center justify-between'>
+    header: ({ column }) => (
+      <div
+        className='flex items-center justify-between'
+        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+      >
         <span className='text-[13px]'>Lead Status</span>
         <Icon name='expand_more' />
       </div>
@@ -86,8 +104,11 @@ export const columns: ColumnDef<Sale>[] = [
   },
   {
     accessorKey: 'ownerAlias',
-    header: () => (
-      <div className='flex items-center justify-between'>
+    header: ({ column }) => (
+      <div
+        className='flex items-center justify-between'
+        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+      >
         <span className='text-[13px]'>Owner Alias</span>
         <Icon name='expand_more' />
       </div>

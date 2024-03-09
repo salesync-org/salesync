@@ -42,7 +42,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
-                className='group h-8 cursor-pointer transition-all hover:bg-[#f3f3f3]'
+                className='group h-8 transition-all hover:bg-[#f3f3f3]'
                 data-state={row.getIsSelected() && 'selected'}
               >
                 {row.getVisibleCells().map((cell) => (

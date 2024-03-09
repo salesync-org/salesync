@@ -18,7 +18,7 @@ export type Sale = {
 
 export const columns: ColumnDef<Sale>[] = [
   {
-    accessorKey: 'index',
+    id: 'index',
     header: '',
     cell: ({ row }) => <span className='block w-full text-center text-[13px]'>{row.index + 1}</span>
   },
@@ -90,6 +90,15 @@ export const columns: ColumnDef<Sale>[] = [
       <div className='flex items-center justify-between'>
         <span className='text-[13px]'>Owner Alias</span>
         <Icon name='expand_more' />
+      </div>
+    )
+  },
+  {
+    id: 'actions',
+    header: '',
+    cell: () => (
+      <div className='flex h-5 w-5 cursor-pointer items-center justify-center rounded-[4px] border'>
+        <Icon name='arrow_drop_down' size='32px' />
       </div>
     )
   }

@@ -1,11 +1,5 @@
 import { cn } from '@/utils/utils';
 import React from 'react';
-import { Interface } from 'readline';
-
-//add tailwind props
-interface PanelProps {
-  className?: string;
-}
 
 const Panel = ({ children, className }: { children: React.ReactNode; className?: string }) => {
   return (

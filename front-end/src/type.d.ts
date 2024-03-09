@@ -38,5 +38,3 @@ type User = {
   role: string;
   avatar_url: string;
 };
-
-type Theme = 'light' | 'dark';

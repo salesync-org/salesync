@@ -9,8 +9,9 @@ type Props = {
 
 // name: the name of the icon according to Google Material 3 Icon names
 const Icon: React.FC<Props> = ({ name, className, size }) => {
-  const sizeClass = size ? `text-[${size}]` : 'text-icon';
-  return <span className={cn('material-symbols-rounded', sizeClass, className)}>{name}</span>;
+  return (
+    <span className={cn('material-symbols-rounded', size ? `text-[${size}]` : 'text-icon', 'focus:outline-primary', className)}>{name}</span>
+  );
 };
 
 export default Icon;

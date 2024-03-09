@@ -14,7 +14,7 @@ const TypeCard = ({ type }: { type: Type }) => {
     <Panel className='flex min-h-[400px] flex-col items-center justify-between'>
       <div className='w-full'>
         <div className='flex w-full flex-row items-center gap-1 '>
-          <img className={cn('h-8 w-8 rounded-sm ', colorName)} src={type.icon_url} alt='type' />
+          <img className={cn('h-8 w-8 rounded-sm ', colorName)} src={type.icon_url ?? ''} alt='type' />
           <TextInput prefixIcon='search' className='w-full' placeholder={`My ${type.name}`}></TextInput>
           <PrimaryButton onClick={function (): void {}}>New</PrimaryButton>
           <DropDown value='' header=''>

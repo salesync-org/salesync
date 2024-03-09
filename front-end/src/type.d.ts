@@ -7,8 +7,8 @@ type TypeRelation = {
   destination_label: string;
 };
 type Type = {
-  icon_url: string;
-  background_color: string;
+  icon_url: string?;
+  background_color: string?;
   id: string;
   name: string;
   description?: string;

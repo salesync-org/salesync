@@ -5,7 +5,7 @@ const ConfigLayout = () => {
   return (
     <>
       <Header />
-      <div className='container mx-auto mt-20 w-full h-fit'>
+      <div className='mx-auto w-full mt-14'>
         <Outlet />
       </div>
       {/* <Footer /> */}

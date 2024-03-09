@@ -47,6 +47,7 @@ const UserInfo = () => {
             </Button>
             <DropDownList
               open={isMenuOpen}
+              onClose={() => {setMenuOpen(false);}}
               align='right'
               className='right-[.25rem] top-[3rem] mt-0 w-80'
               divide={false}

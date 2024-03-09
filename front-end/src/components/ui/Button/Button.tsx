@@ -3,7 +3,6 @@ import React from 'react';
 import buttonVariants, { ButtonProps } from 'ui/Button/ButtonProps';
 
 const Button: React.FC<ButtonProps> = ({
-  onClick,
   layoutClassName,
   className,
   disabled,
@@ -13,6 +12,7 @@ const Button: React.FC<ButtonProps> = ({
   header,
   showHeader = true,
   type = 'button',
+  onClick,
   ...restProps
 }) => {
   return (

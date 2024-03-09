@@ -29,9 +29,9 @@ const DropDown: React.FC<DropdownButtonProps> = ({
   const [isOpen, setIsOpen] = useState(false);
 
   function handleOptionClick(option: HTMLElement): void {
+    console.log('onItemClick: ', option);
     setSelectedOption(option.title!);
-    const inputNode = option.querySelector('input');
-
+    const inputNode = option as HTMLInputElement;
     if (inputNode) {
       onValueChange(inputNode.value);
     }
@@ -39,11 +39,11 @@ const DropDown: React.FC<DropdownButtonProps> = ({
 
   return (
     <div ref={buttonRef} className='dropdown relative'>
-      <Button header={header} showHeader={showHeader} disabled={disabled} onClick={() => setIsOpen(!isOpen)}>
+      <Button header={header} showHeader={showHeader} disabled={disabled} onClick={() => {setIsOpen(!isOpen)}}>
         <Icon name='expand_more' />
         <p className='truncate'>{selectedOption || value}</p>
       </Button>
-      <DropDownList onItemClick={handleOptionClick} open={isOpen} divide={divide}>
+      <DropDownList onItemClick={handleOptionClick} onClose={() => {setIsOpen(false);}} open={isOpen} divide={divide}>
         {children}
       </DropDownList>
     </div>

@@ -60,7 +60,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                 data-state={row.getIsSelected() && 'selected'}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell className='h-8 truncate py-0 transition-all hover:bg-white' key={cell.id}>
+                  <TableCell className='h-8 truncate py-0 leading-5 transition-all hover:bg-white' key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

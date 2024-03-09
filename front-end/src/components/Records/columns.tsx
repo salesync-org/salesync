@@ -1,6 +1,7 @@
 import { ColumnDef } from '@tanstack/react-table';
 import Icon from '../ui/Icon/Icon';
 import { Link } from 'react-router-dom';
+import { Checkbox } from 'ui/checkbox';
 
 export type Sale = {
   id: string;
@@ -20,7 +21,28 @@ export const columns: ColumnDef<Sale>[] = [
   {
     id: 'index',
     header: '',
-    cell: ({ row }) => <span className='block w-full text-center text-[13px]'>{row.index + 1}</span>
+    cell: ({ row }) => <span className='block w-full text-center text-xs'>{row.index + 1}</span>
+  },
+  {
+    id: 'select',
+    header: ({ table }) => (
+      <Checkbox
+        className='grid place-content-center rounded-[2px]'
+        checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label='Select all'
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        className='grid place-content-center rounded-[2px]'
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label='Select row'
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false
   },
   {
     accessorKey: 'person',

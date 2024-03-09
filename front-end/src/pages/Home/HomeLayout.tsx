@@ -68,7 +68,6 @@ const HomeLayout = () => {
         <div className='grid  flex-grow  grid-cols-1 bg-main-background bg-cover bg-no-repeat md:grid-cols-2'>
           <TypeCard type={Lead} />
           <TypeCard type={Opportunity} />
-
           <TypeCard type={Contact} />
           <TypeCard type={Case} />
         </div>

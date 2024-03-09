@@ -6,6 +6,7 @@ type TypeRelation = {
   destination_type: Type;
   destination_label: string;
 };
+
 type Type = {
   icon_url: string?;
   background_color: string?;

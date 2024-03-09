@@ -25,7 +25,8 @@ export default {
         background: {
           light: '#f0f4f7',
           DEFAULT: '#f0f4f7',
-          dark: '#282B2D'
+          dark: '#282B2D',
+          color: '#f3f3f3'
         },
         panel: {
           light: '#ffffff',

@@ -1,7 +1,10 @@
+import { cn } from '@/utils/utils';
 import React from 'react';
 
-const Panel = ({ children }: { children: React.ReactNode }) => {
-  return <div className='m-4 rounded-lg px-10 py-12 backdrop-blur-2xl border-[1px] z-[0] border-input-stroke dark:border-input-stroke-dark bg-panel/80 dark:bg-panel-dark/80'>{children}</div>;
+const Panel = ({ children, className }: { children: React.ReactNode; className?: string }) => {
+  return (
+    <div className={cn('m-4 rounded-lg bg-panel-light px-10 py-12 dark:bg-panel-dark', className)}>{children}</div>
+  );
 };
 
 export default Panel;

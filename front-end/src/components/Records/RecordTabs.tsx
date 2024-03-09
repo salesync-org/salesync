@@ -47,7 +47,7 @@ const RecordTabs = ({ tabs, setTabs, name }: RecordTabsProps) => {
     localStorage.setItem(name, JSON.stringify(tabs));
   };
   return (
-    <nav>
+    <nav className='h-full'>
       <ul className={`${name}-tabs flex`}>
         {tabs.map((tab, index) => {
           return (
@@ -79,7 +79,7 @@ const RecordTabs = ({ tabs, setTabs, name }: RecordTabsProps) => {
               >
                 {tab.href.includes(location.pathname.split('/').pop() ?? '') && (
                   <span
-                    className={cn('animate-to-top absolute left-[-1px] right-[-1px] top-0 h-[3px] bg-[#0070d2]')}
+                    className={cn('absolute left-[-1px] right-[-1px] top-0 h-[3px] animate-to-top bg-[#0070d2]')}
                   ></span>
                 )}
                 {tab.title}

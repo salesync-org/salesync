@@ -5,14 +5,16 @@ import { Button } from '@/components/ui';
 import { Icon } from '@/components/ui';
 import { ErrorText } from '@/components/ui';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const ForgotPassword = () => {
   const [username, setUserName] = useState('');
   const [error, setError] = useState(false);
   const errorText = `We can't find a username that matches what you entered. Verify that your username is an email address (for example, username@company.com).`;
+  const navigate = useNavigate();
 
   const onCancel = () => {
-    window.location.href = 'http://localhost:5173/login';
+    navigate('/login');
   };
 
   const onSubmit = () => {
@@ -43,7 +45,7 @@ const ForgotPassword = () => {
               </div>
               <div className='my-1 flex items-center'>
                 <Icon name='fiber_manual_record' />
-                <a href='http://localhost:5173/login' className='text-sm text-blue-500'>
+                <a href='/login' className='text-sm text-blue-500'>
                   Sandbox Login
                 </a>
               </div>

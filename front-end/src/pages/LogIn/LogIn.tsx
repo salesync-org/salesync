@@ -38,7 +38,7 @@ const LogIn = () => {
                   <span className='ml-1 text-sm'>Remember me</span>
                 </div>
                 <div className='mt-4 flex'>
-                  <a href='http://localhost:5173/forgot-password' className='text-sm text-blue-500'>
+                  <a href='/forgot-password' className='text-sm text-blue-500'>
                     Forgot Your Password?
                   </a>
                 </div>

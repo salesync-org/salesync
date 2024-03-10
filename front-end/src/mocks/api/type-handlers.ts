@@ -60,7 +60,7 @@ export const handlers = [
     // return HttpResponse.json(newTypeRelation);
   }),
 
-  http.get(`${TYPE_SERVICE_URL}/:typeId/properties`, async ({ request, params }) => {
+  http.get(`${TYPE_SERVICE_URL}/:typeId/properties`, async ({ params }) => {
     const typeId = params.typeId;
     if (typeId === '1') {
       return HttpResponse.json(

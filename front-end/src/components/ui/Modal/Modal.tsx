@@ -48,12 +48,12 @@ const Modal = ({ children, title, isOpen, onOpenChange, isStatic = true }: Props
     <>
       {isOpen && (
         <div
-          className='fixed left-0 right-0 top-0 z-50 flex h-[calc(100%-1rem)] max-h-full w-full items-center justify-center overflow-y-auto overflow-x-hidden bg-black bg-opacity-50 transition-all dark:bg-gray-900 dark:bg-opacity-50 md:inset-0'
+          className='fixed left-0 right-0 top-0 z-50 flex h-[calc(100%-1rem)] max-h-full w-full items-center justify-center overflow-x-hidden overflow-y-hidden bg-black bg-opacity-50 transition-all dark:bg-gray-900 dark:bg-opacity-50 md:inset-0'
           // onClick={handleCloseWhenClickOutside}
         >
-          <div ref={ref} className='relative max-h-full w-[1000px]  origin-[0_50%] animate-modal' id='modal'>
+          <div ref={ref} className='relative  max-h-full w-[1000px] origin-[0_50%] animate-modal' id='modal'>
             {/* <!-- Modal content --> */}
-            <div className='relative rounded-lg bg-panel px-3 py-4 shadow dark:bg-panel-dark'>
+            <div className='relative h-[600px] overflow-auto rounded-lg bg-panel px-3 py-4 shadow dark:bg-panel-dark'>
               {/* <!-- Modal header --> */}
               <FocusTrap>
                 <div className='flex  items-center p-4 md:p-5'>

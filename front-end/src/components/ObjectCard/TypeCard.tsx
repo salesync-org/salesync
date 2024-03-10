@@ -9,7 +9,6 @@ import { Modal, ModalFooter } from '../ui/Modal';
 import { useState } from 'react';
 import { DropDown, DropDownItem, TextInput } from '@/components/ui';
 import propertyApi from '@/api/propertyApi';
-import { Divide } from 'lucide-react';
 const TypeCard = ({ type }: { type: Type }) => {
   const colorName = type.background_color;
 

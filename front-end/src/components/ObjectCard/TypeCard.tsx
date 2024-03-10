@@ -59,9 +59,14 @@ const TypeCard = ({ type }: { type: Type }) => {
         </div>
       </Panel>
 
-      <Modal isOpen={isOpen} onOpenChange={setIsOpen} title={properties ? `New ${properties.name}` : 'New'}>
-        <form>
-          <div className='flex w-full flex-col  place-content-center gap-3'>
+      <Modal
+        isOpen={isOpen}
+        onOpenChange={setIsOpen}
+        className='h-[600px]'
+        title={properties ? `New ${properties.name}` : 'New'}
+      >
+        <form className='-z-1 absolute bottom-2 left-2 right-2 top-20  overflow-x-hidden'>
+          <div className='flex w-full flex-col place-content-center gap-2   p-6'>
             {properties ? (
               properties.properties?.map((property) => {
                 if (property.type === 'text')

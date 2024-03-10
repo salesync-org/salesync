@@ -10,13 +10,14 @@ interface Props {
   onOpenChange: (isOpen: boolean) => void;
   isStatic?: boolean;
   title: string;
+  className?: string;
 }
 
 export const ModalFooter = ({ children, className }: { children: React.ReactNode; className?: string }) => {
   return <div className={cn('flex items-center justify-end space-x-4', className)}>{children}</div>;
 };
 
-const Modal = ({ children, title, isOpen, onOpenChange, isStatic = true }: Props) => {
+const Modal = ({ children, title, isOpen, onOpenChange, className, isStatic = true }: Props) => {
   // const handleCloseWhenClickOutside = (e: React.MouseEvent<HTMLDivElement>) => {
   //   if (isStatic) return;
 
@@ -53,14 +54,14 @@ const Modal = ({ children, title, isOpen, onOpenChange, isStatic = true }: Props
         >
           <div ref={ref} className='relative  max-h-full w-[1000px] origin-[0_50%] animate-modal' id='modal'>
             {/* <!-- Modal content --> */}
-            <div className='relative h-[600px] overflow-auto rounded-lg bg-panel px-3 py-4 shadow dark:bg-panel-dark'>
+            <div className={cn('relative rounded-lg bg-panel px-3 py-4 shadow dark:bg-panel-dark', className)}>
               {/* <!-- Modal header --> */}
               <FocusTrap>
                 <div className='flex  items-center p-4 md:p-5'>
-                  <h3 className='w-full text-center text-2xl font-bold'>{title}</h3>
+                  <h3 className='absolute right-0 z-10 w-full text-center text-2xl font-bold'>{title}</h3>
                   <button
                     type='button'
-                    className='ms-auto inline-flex h-8 w-8 items-center justify-center rounded-sm bg-transparent text-sm transition-all hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white'
+                    className='absolute right-2 z-30 ms-auto inline-flex h-8 w-8 items-center justify-center rounded-sm bg-transparent text-sm transition-all hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white'
                     data-modal-hide='default-modal'
                     onClick={() => onOpenChange(false)}
                   >

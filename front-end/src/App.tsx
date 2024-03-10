@@ -10,6 +10,7 @@ const Cheatsheet = lazy(() => import('pages/Cheatsheet/Cheatsheet'));
 const RecordsLayout = lazy(() => import('./pages/Records/RecordsLayout'));
 const Sales = lazy(() => import('./pages/Sales/Sales'));
 const LogIn = lazy(() => import('./pages/LogIn/LogIn'));
+const ForgotPassword = lazy(() => import('./pages/LogIn/ForgotPassword'));
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
             <Route path='*' element={<Sales />} />
           </Route>
           <Route path='/login' element={<LogIn />}></Route>
+          <Route path='/forgot-password' element={<ForgotPassword />}></Route>
         </Routes>
       </Suspense>
     </div>

@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS public.property
     property_name character varying(255) COLLATE pg_catalog."default",
     label character varying(255) COLLATE pg_catalog."default",
 --     default_value character varying(255) COLLATE pg_catalog."default",
-    CONSTRAINT pk_property PRIMARY KEY (property_id)
+    CONSTRAINT pk_property PRIMARY KEY (property_id),
     CONSTRAINT fk_property_type FOREIGN KEY (type_id)
         REFERENCES public.type (type_id) MATCH SIMPLE
         ON UPDATE NO ACTION

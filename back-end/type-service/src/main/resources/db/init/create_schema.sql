@@ -64,24 +64,78 @@ CREATE TABLE IF NOT EXISTS public.type_relation
 ALTER TABLE IF EXISTS public.type_relation
     OWNER to postgres;
 
-
 CREATE TABLE IF NOT EXISTS public.property
 (
     property_id uuid NOT NULL DEFAULT gen_random_uuid(),
-    type_id uuid NOT NULL,
     property_name character varying(255) COLLATE pg_catalog."default",
-    label character varying(255) COLLATE pg_catalog."default",
---     default_value character varying(255) COLLATE pg_catalog."default",
-    CONSTRAINT pk_property PRIMARY KEY (property_id),
-    CONSTRAINT fk_property_type FOREIGN KEY (type_id)
-        REFERENCES public.type (type_id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-    )
+    CONSTRAINT pk_property PRIMARY KEY (property_id)
+)
 
     TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.property
+    OWNER to postgres;
+
+CREATE TABLE IF NOT EXISTS public.type_property
+(
+    type_property_id uuid NOT NULL DEFAULT gen_random_uuid(),
+    property_id uuid NOT NULL,
+    type_id uuid NOT NULL,
+    type_property_name character varying(255) COLLATE pg_catalog."default",
+    label character varying(255) COLLATE pg_catalog."default",
+    default_value character varying(255) COLLATE pg_catalog."default",
+    CONSTRAINT pk_type_property PRIMARY KEY (type_property_id),
+    CONSTRAINT fk_property_type FOREIGN KEY (type_id),
+    CONSTRAINT fk_type_property FOREIGN KEY (property_id),
+    REFERENCES public.type (type_id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION,
+    REFERENCES public.property (property_id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+)
+
+    TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.type_property
+    OWNER to postgres;
+
+CREATE TABLE IF NOT EXISTS public.field
+(
+    field_id uuid NOT NULL DEFAULT gen_random_uuid(),
+    field_name character varying(50) COLLATE pg_catalog."default",
+    input_type character varying(50) COLLATE pg_catalog."default",
+    multi_value BIT,
+    CONSTRAINT pk_field PRIMARY KEY (field_id)
+)
+
+    TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.field
+    OWNER to postgres;
+
+CREATE TABLE IF NOT EXISTS public.property_field
+(
+    property_field_id uuid NOT NULL DEFAULT gen_random_uuid(),
+    property_id uuid NOT NULL,
+    field_id uuid NOT NULL,
+    label character varying(255) COLLATE pg_catalog."default",
+    mandatory BIT,
+    is_key BIT,
+    CONSTRAINT pk_property_field PRIMARY KEY (property_field_id),
+    CONSTRAINT fk_field_property FOREIGN KEY (property_id),
+    CONSTRAINT fk_property_field FOREIGN KEY (field_id),
+    REFERENCES public.field (field_id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION,
+    REFERENCES public.property (property_id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    )
+
+    TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.property_field
     OWNER to postgres;
 
 INSERT INTO public.type (type_id, property_name) VALUES

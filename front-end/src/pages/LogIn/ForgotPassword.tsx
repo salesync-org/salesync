@@ -22,12 +22,12 @@ const ForgotPassword = () => {
   return (
     <>
       <div className='h-screen w-full bg-zinc-100'>
-        <div id='wrapper' className='mt-5 grid w-full grid-cols-1'>
-          <div className='flex h-36 w-full items-center justify-center'>
+        <div className='grid w-full grid-cols-1'>
+          <div className='mt-5 flex h-36 w-full items-center justify-center'>
             <img src={salesyncIcon} className='h-full w-full object-contain' alt='header icon' />
           </div>
-          <h1 className='my-2 text-center font-semibold'>Forgot Your Password</h1>
-          <div className='flex w-full justify-center'>
+          <h1 className='my-2 text-center font-normal'>Forgot Your Password</h1>
+          <div className='mt-2 flex w-full justify-center'>
             <form className='h-auto w-96 rounded-sm bg-white p-5'>
               <div className='mb-3'>
                 <span className='text-sm'>Having trouble logging in?</span>
@@ -70,7 +70,7 @@ const ForgotPassword = () => {
             </form>
           </div>
         </div>
-        <div className='absolute bottom-0 left-0 w-full text-center text-sm'>
+        <div className='absolute bottom-0 left-0 mb-2 w-full text-center text-sm'>
           © 2024 SaleSync, Inc. All rights reserved.
         </div>
       </div>

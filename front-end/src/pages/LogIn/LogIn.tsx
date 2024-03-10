@@ -21,11 +21,11 @@ const LogIn = () => {
     <>
       <div className='grid h-screen w-full grid-cols-2 bg-zinc-100'>
         <div id='left' className='h-full w-full'>
-          <div id='wrapper' className='mt-5 grid w-full grid-cols-1'>
-            <div className='flex h-36 w-full items-center justify-center'>
+          <div id='wrapper' className='grid w-full grid-cols-1'>
+            <div className='mt-5 flex h-36 w-full items-center justify-center'>
               <img src={salesyncIcon} className='h-full w-full object-contain' alt='header icon' />
             </div>
-            <div className='flex w-full justify-center mb-3'>
+            <div className='mb-3 flex w-full justify-center'>
               <form className='h-auto w-96 rounded-sm bg-white p-5'>
                 {error && <ErrorText text={errorText} className='text-sm' />}
                 <TextInput placeholder='' header='Username' onChange={(e) => setUserName(e.target.value)} />
@@ -45,7 +45,7 @@ const LogIn = () => {
               </form>
             </div>
           </div>
-          <div className='absolute bottom-0 left-0 w-1/2 text-center text-sm'>
+          <div className='absolute bottom-0 left-0 mb-2 w-1/2 text-center text-sm'>
             © 2024 SaleSync, Inc. All rights reserved.
           </div>
         </div>

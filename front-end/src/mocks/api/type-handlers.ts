@@ -58,5 +58,73 @@ export const handlers = [
     // };
     // typeRelations.push(newTypeRelation);
     // return HttpResponse.json(newTypeRelation);
+  }),
+
+  http.get(`${TYPE_SERVICE_URL}/:typeId/properties`, async ({ request, params }) => {
+    const typeId = params.typeId;
+    if (typeId === '1') {
+      return HttpResponse.json(
+        {
+          id: '1',
+          name: 'Lead',
+          description: 'Lead type',
+          properties: [
+            {
+              id: '1',
+              label: 'Salutation',
+              name: 'Salutation',
+              type: 'dropdown',
+              options: ['Mr.', 'Ms.', 'Mrs.', 'Dr.']
+            },
+            {
+              id: '2',
+              label: 'Last Name',
+              name: 'LastName',
+              type: 'text'
+            },
+            {
+              id: '3',
+              label: 'First Name',
+              name: 'FirstName',
+              type: 'text'
+            },
+            {
+              id: '4',
+              label: 'Company',
+              name: 'Company',
+              type: 'text'
+            },
+            {
+              id: '5',
+              label: 'Title',
+              name: 'Title',
+              type: 'text'
+            },
+            {
+              id: '6',
+              label: 'Websize',
+              name: 'Websize',
+              type: 'text'
+            },
+            {
+              id: '7',
+              label: 'Description',
+              name: 'Description',
+              type: 'text'
+            },
+            {
+              id: '8',
+              label: 'Status',
+              name: 'Status',
+              type: 'dropdown',
+              options: ['New', 'Open - Not Contacted', 'close']
+            }
+          ]
+        },
+        {
+          status: 200
+        }
+      );
+    }
   })
 ];

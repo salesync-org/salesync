@@ -17,6 +17,21 @@ type Type = {
   links?: Link[];
 };
 
+type TypeProperty = {
+  id: string;
+  label: string;
+  name: string;
+  type: string;
+  properties?: property[];
+};
+
+type property = {
+  id: string;
+  name: string;
+  type: string;
+  options?: string[];
+};
+
 type Relation = {
   id: string;
   name: string;

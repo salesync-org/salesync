@@ -7,7 +7,7 @@ CREATE ROLE postgres WITH LOGIN SUPERUSER PASSWORD 'strong_password';
 
 CREATE TABLE IF NOT EXISTS public.record
 (
-    record_id uuid NOT NULL,
+    record_id uuid NOT NULL DEFAULT gen_random_uuid(),
     type_id uuid NOT NULL,
     user_id uuid NOT NULL,
     stage character varying(50) COLLATE pg_catalog."default",
@@ -22,7 +22,7 @@ ALTER TABLE IF EXISTS public.record
 
 CREATE TABLE IF NOT EXISTS public.record_property
 (
-    record_property_id uuid NOT NULL,
+    record_property_id uuid NOT NULL DEFAULT gen_random_uuid(),
     record_id uuid NOT NULL,
     property_id uuid NOT NULL,
     represent_value character varying(255) COLLATE pg_catalog."default",
@@ -36,7 +36,7 @@ ALTER TABLE IF EXISTS public.record_property
 
 CREATE TABLE IF NOT EXISTS public.relationship_of_records
 (
-    record_relation_id uuid NOT NULL,
+    record_relation_id uuid NOT NULL DEFAULT gen_random_uuid(),
     source_record_id uuid NOT NULL,
     destination_record_id uuid NOT NULL,
     relation_id uuid NOT NULL,

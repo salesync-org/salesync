@@ -9,6 +9,7 @@ import { Modal, ModalFooter } from '../ui/Modal';
 import { useState } from 'react';
 import { DropDown, DropDownItem, TextInput } from '@/components/ui';
 import propertyApi from '@/api/propertyApi';
+import TypeModal from '@/pages/Home/TypeModal';
 const TypeCard = ({ type }: { type: Type }) => {
   const colorName = type.background_color;
 
@@ -58,39 +59,7 @@ const TypeCard = ({ type }: { type: Type }) => {
           </div>
         </div>
       </Panel>
-
-      <Modal
-        isOpen={isOpen}
-        onOpenChange={setIsOpen}
-        className='h-[600px]'
-        title={properties ? `New ${properties.name}` : 'New'}
-      >
-        <form className='-z-1 absolute bottom-2 left-2 right-2 top-20  overflow-x-hidden'>
-          <div className='flex w-full flex-col place-content-center gap-2   p-6'>
-            {properties ? (
-              properties.properties?.map((property) => {
-                if (property.type === 'text')
-                  return <TextInput header={property.name} key={property.id} placeholder={property.name}></TextInput>;
-                else if (property.type === 'dropdown')
-                  return (
-                    <DropDown key={property.id} value='' header={property.name}>
-                      {property.options?.map((value) => {
-                        return <DropDownItem key={value} title={value} value={value}></DropDownItem>;
-                      })}
-                    </DropDown>
-                  );
-                else return <div></div>;
-              })
-            ) : (
-              <div>loading</div>
-            )}
-          </div>
-          <ModalFooter className='mt-8'>
-            <Button onClick={() => setIsOpen(false)}>Cancel</Button>
-            <PrimaryButton onClick={() => setIsOpen(false)}>Save</PrimaryButton>
-          </ModalFooter>
-        </form>
-      </Modal>
+      <TypeModal isOpen={isOpen} properties={properties} setIsOpen={setIsOpen}></TypeModal>
     </>
   );
 };

@@ -9,8 +9,7 @@ const Cheatsheet = lazy(() => import('pages/Cheatsheet/Cheatsheet'));
 // const TypeManager = lazy(() => import('./pages/TypeManager/TypeManager'));
 const RecordsLayout = lazy(() => import('./pages/Records/RecordsLayout'));
 const Sales = lazy(() => import('./pages/Sales/Sales'));
-const HomeLayout = lazy(() => import('./pages/Home/HomeLayout'));
-const HomeBody = lazy(() => import('./pages/Home/HomeBody'));
+const HomeLayout = lazy(() => import('./pages/Home/Home'));
 
 function App() {
   return (

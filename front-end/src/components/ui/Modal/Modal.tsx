@@ -58,6 +58,7 @@ const Modal = ({ children, title, isOpen, onOpenChange, className, isStatic = tr
               {/* <!-- Modal header --> */}
               <FocusTrap>
                 <div className='flex  items-center p-4 md:p-5'>
+                  {/* //header */}
                   <h3 className='absolute right-0 z-10 w-full text-center text-2xl font-bold'>{title}</h3>
                   <button
                     type='button'

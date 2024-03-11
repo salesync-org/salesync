@@ -1,4 +1,4 @@
-package org.salesync.record_service.utils.mappers;
+package org.salesync.record_service.mappers;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

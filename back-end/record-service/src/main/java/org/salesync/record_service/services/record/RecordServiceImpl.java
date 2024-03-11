@@ -2,8 +2,8 @@ package org.salesync.record_service.services.record;
 
 import lombok.RequiredArgsConstructor;
 import org.salesync.record_service.dtos.RecordDto;
+import org.salesync.record_service.mappers.RecordMapper;
 import org.salesync.record_service.repositories.RecordRepository;
-import org.salesync.record_service.utils.mappers.RecordMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

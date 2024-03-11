@@ -9,6 +9,7 @@ const Button: React.FC<ButtonProps> = ({
   children,
   intent,
   rounded,
+  zoom,
   header,
   showHeader = true,
   type = 'button',
@@ -16,10 +17,11 @@ const Button: React.FC<ButtonProps> = ({
   ...restProps
 }) => {
   return (
-    <div className={cn(layoutClassName)}>
+    <>
       {showHeader && header && <p className='my-1'>{header}</p>}
       <button
-        className={cn(buttonVariants({ intent, rounded, className }), 'flex items-center justify-center space-x-2 ')}
+        className={cn(buttonVariants({ intent, rounded, zoom }),  'flex items-center justify-center space-x-1', 
+        !rounded && 'first:rounded-tl last:rounded-tr first:rounded-bl last:rounded-br last:border-r-[1px]', className)}
         onClick={onClick}
         disabled={disabled}
         type={type}
@@ -27,7 +29,7 @@ const Button: React.FC<ButtonProps> = ({
       >
         {children}
       </button>
-    </div>
+    </>
   );
 };
 

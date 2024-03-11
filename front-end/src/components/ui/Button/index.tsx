@@ -1,4 +1,5 @@
 import Button from './Button';
 import ButtonProps from './ButtonProps';
 import PrimaryButton from './PrimaryButton';
-export {Button, ButtonProps, PrimaryButton};
+import ButtonGroup from './ButtonGroup';
+export {Button, ButtonProps, PrimaryButton, ButtonGroup};

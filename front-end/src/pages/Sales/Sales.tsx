@@ -1,7 +1,7 @@
 import Icon from '@/components/ui/Icon/Icon';
 import { useState } from 'react';
 import RecordTabs from '../../components/Records/RecordTabs';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import RecordTable from '@/components/Records/RecordTable';
 import icon from 'assets/type-icon/lead_icon.png';
 import Panel from '@/components/ui/Panel/Panel';
@@ -10,14 +10,14 @@ import TextInput from '@/components/ui/TextInput/TextInput';
 import { ButtonGroup, DropDown } from '@/components/ui';
 
 const initTabs = [
-  { title: 'Leads', href: 'sales/leads' },
-  { title: 'Contacts', href: 'sales/contacts' },
-  { title: 'Accounts', href: 'sales/accounts' },
-  { title: 'Opportunities', href: 'sales/opportunities' },
-  { title: 'Products', href: 'sales/products' },
-  { title: 'Price Books', href: 'sales/price-books' },
-  { title: 'Calendar', href: 'sales/calendar' },
-  { title: 'Analytics', href: 'sales/analytics' }
+  { title: 'Leads', href: '/sales/leads' },
+  { title: 'Contacts', href: '/sales/contacts' },
+  { title: 'Accounts', href: '/sales/accounts' },
+  { title: 'Opportunities', href: '/sales/opportunities' },
+  { title: 'Products', href: '/sales/products' },
+  { title: 'Price Books', href: '/sales/price-books' },
+  { title: 'Calendar', href: '/sales/calendar' },
+  { title: 'Analytics', href: '/sales/analytics' }
 ];
 
 const Sales = () => {
@@ -27,10 +27,9 @@ const Sales = () => {
   });
 
   const location = useLocation();
-  const navigate = useNavigate();
 
   if (location.pathname.endsWith('sales') && tabs.length > 0) {
-    navigate(`/records/${tabs[0].href}`);
+    return <Navigate to={`/${tabs[0].href}`} />;
   }
 
   return (

@@ -12,10 +12,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RecordDto {
-
     private String id;
     private String typeId;
     private String userId;
-    private String stage;
-
+    private String currentStageId;
 }

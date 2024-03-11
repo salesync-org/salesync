@@ -10,8 +10,8 @@ CREATE TABLE IF NOT EXISTS public.record
     record_id uuid NOT NULL DEFAULT gen_random_uuid(),
     type_id uuid NOT NULL,
     user_id uuid NOT NULL,
-    stage character varying(50) COLLATE pg_catalog."default",
-    record_name character varying(255) COLLATE pg_catalog."default",
+    current_stage_id uuid,
+    name character varying(255) COLLATE pg_catalog."default",
     CONSTRAINT pk_record PRIMARY KEY (record_id)
 )
 

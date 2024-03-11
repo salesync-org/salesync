@@ -18,11 +18,10 @@ import java.util.UUID;
 @Table(name = "record")
 @AttributeOverride(name="id",column = @Column(name="record_id"))
 public class Record extends BaseEntity {
-    @Column(name = "record_name")
     private String name;
     private UUID typeId;
     private UUID userId;
-    private String stage;
+    private UUID currentStageId;
     @OneToMany(mappedBy = "record", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<RecordProperty> recordProperties;

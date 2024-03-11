@@ -3,17 +3,17 @@ import { NavLink } from 'react-router-dom';
 import Icon from '../ui/Icon/Icon';
 
 const asideItems = [
-  { icon: 'home', href: '/records/home', title: 'Home' },
-  { icon: 'monitoring', href: '/records/sales', title: 'Sales', active: true },
-  { icon: 'ecg_heart', href: '/records/services', title: 'Services' },
-  { icon: 'mail', href: '/records/outreach', title: 'Outreach' },
-  { icon: 'shopping_cart', href: '/records/commerce', title: 'Commerce' },
-  { icon: 'domain', href: '/records/your-account', title: 'Your account' }
+  { icon: 'home', href: '/home', title: 'Home' },
+  { icon: 'monitoring', href: '/sales', title: 'Sales', active: true },
+  { icon: 'ecg_heart', href: '/services', title: 'Services' },
+  { icon: 'mail', href: '/outreach', title: 'Outreach' },
+  { icon: 'shopping_cart', href: '/commerce', title: 'Commerce' },
+  { icon: 'domain', href: '/your-account', title: 'Your account' }
 ];
 
 const AsideNav = () => {
   return (
-    <aside className='grid min-h-dvh w-[76px] justify-center bg-[#014486] text-white'>
+    <aside className='fixed grid min-h-dvh w-[76px] justify-center bg-[#014486] text-white'>
       <nav className='p-1'>
         <ul className='flex flex-col gap-1'>
           {asideItems.map((item) => (

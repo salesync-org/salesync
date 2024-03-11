@@ -7,15 +7,17 @@ import ConfigLayout from './components/Layout/ConfigLayout';
 const Cheatsheet = lazy(() => import('pages/Cheatsheet/Cheatsheet'));
 // const TypeDetail = lazy(() => import('./pages/TypeDetail/TypeDetail'));
 // const TypeManager = lazy(() => import('./pages/TypeManager/TypeManager'));
-const RecordsLayout = lazy(() => import('./pages/Records/RecordsLayout'));
 const Sales = lazy(() => import('./pages/Sales/Sales'));
+const HomeLayout = lazy(() => import('./pages/Home/Home'));
 
 function App() {
   return (
     <div>
       <Suspense fallback={<div>Loading...</div>}>
         <Routes>
+          <Route path='cheatsheet' element={<Cheatsheet />} />
           <Route path='/' element={<ConfigLayout />}>
+            <Route path='/home' element={<HomeLayout />} />
             <Route path='cheatsheet' element={<Cheatsheet />} />
             {/* <Route path='/' element={<LogIn />} />
             <Route path='setting' element={<Setting />} />

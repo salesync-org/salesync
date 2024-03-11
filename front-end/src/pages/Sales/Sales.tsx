@@ -7,6 +7,7 @@ import icon from 'assets/type-icon/lead_icon.png';
 import Panel from '@/components/ui/Panel/Panel';
 import Button from '@/components/ui/Button/Button';
 import TextInput from '@/components/ui/TextInput/TextInput';
+import { ButtonGroup, DropDown } from '@/components/ui';
 
 const initTabs = [
   { title: 'Leads', href: 'sales/leads' },
@@ -35,64 +36,84 @@ const Sales = () => {
   return (
     <div className='flex h-full flex-col'>
       <section className='flex items-center bg-white px-6'>
-        <h1 className='pr-6 text-lg font-normal leading-6'>Sales</h1>
+        <h2 className='pr-6 leading-6'>Sales</h2>
         <RecordTabs tabs={tabs} setTabs={setTabs} name='salesTabs' />
         <Icon name='edit' className='ml-auto' />
       </section>
       <section className='h-full flex-grow p-4'>
-        <Panel className='m-0 h-full overflow-hidden p-0'>
-          <section className='px flex items-center justify-between p-4'>
+        <Panel className='m-0 h-full overflow-hidden p-4'>
+          <section className='px flex items-center justify-between pt-4'>
             <div className='flex items-center gap-2'>
               <div className='w-fit cursor-pointer overflow-hidden rounded-sm bg-primary-color'>
-                <img className='h-8 w-8' src={icon} alt='icon' />
+                <img className='h-10 w-10' src={icon} alt='icon' />
               </div>
               <div>
-                <h2 className='text-[13px] font-normal leading-[13px]'>Leads</h2>
-                <span className='flex cursor-pointer border-b border-transparent text-lg font-bold leading-[22.5px] text-[#080707] hover:border-black'>
-                  <span>All Open Leads</span>
+                <h5 className='leading-[10px]'> Leads</h5>
+                <div className='flex cursor-pointer items-center space-x-2 border-b border-transparent text-[#080707] hover:border-black'>
+                  <h1 className='text-[1.3rem]'>All Open Leads</h1>
                   <Icon name='arrow_drop_down' size='32px' />
-                </span>
+                </div>
               </div>
             </div>
-            <div className='flex'>
-              <Button intent='normal'>New</Button>
-              <Button intent='normal'>Import</Button>
-              <Button intent='normal'>Send List Email</Button>
-              <Button intent='normal'>Change Owner</Button>
-              <Button intent='normal'>Add to Cadence</Button>
-            </div>
+            <ButtonGroup>
+              <Button intent='normal' zoom={false}>
+                New
+              </Button>
+              <Button intent='normal' zoom={false}>
+                Import
+              </Button>
+              <Button intent='normal' zoom={false}>
+                Send List Email
+              </Button>
+              <Button intent='normal' zoom={false}>
+                Change Owner
+              </Button>
+              <Button intent='normal' zoom={false}>
+                Add to Cadence
+              </Button>
+            </ButtonGroup>
           </section>
-          <section className='my-2 flex items-center justify-between p-4'>
-            <ul className='flex gap-1 text-xs leading-[18px]'>
+          <section className='my-2 flex items-center justify-between'>
+            <ul className='flex gap-1 leading-[18px]'>
               <li>• Sorted by Name</li>
               <li>• Filtered by All leads - Lead Status</li>
               <li>• Updated 8 minutes ago</li>
             </ul>
-            <div className='flex items-center'>
-              <TextInput placeholder='Search this list...' prefixIcon='search' className='h-8' />
-              <div className='hidden md:flex'>
-                <Button className='h-8 w-8'>
-                  <Icon name='settings' />
-                </Button>
-                <Button className='h-8 w-8'>
-                  <Icon name='table' />
-                </Button>
-                <Button className='h-8 w-8'>
+            <div className='flex items-center space-x-1'>
+              <TextInput placeholder='Search this list...' prefixIcon='search' />
+              <div className='hidden space-x-1 md:flex'>
+                <DropDown
+                  value=''
+                  defaultValue=''
+                  className='space-x-0 px-3'
+                  prefixIcon={<Icon name='settings' />}
+                  suffixIcon={<Icon name='expand_more' />}
+                  children={undefined}
+                ></DropDown>
+                <DropDown
+                  value=''
+                  defaultValue=''
+                  className='space-x-0 px-3'
+                  prefixIcon={<Icon name='table' />}
+                  suffixIcon={<Icon name='expand_more' />}
+                  children={undefined}
+                ></DropDown>
+                <Button className='aspect-square'>
                   <Icon name='replay' />
                 </Button>
-                <Button className='h-8 w-8'>
+                <Button className='aspect-square'>
                   <Icon name='edit' />
                 </Button>
-                <Button className='h-8 w-8'>
+                <Button className='aspect-square'>
                   <Icon name='pie_chart' />
                 </Button>
-                <Button className='h-8 w-8'>
+                <Button className='aspect-square'>
                   <Icon name='filter_alt' />
                 </Button>
               </div>
             </div>
           </section>
-          <div>
+          <div className='mt-4'>
             <RecordTable />
           </div>
         </Panel>

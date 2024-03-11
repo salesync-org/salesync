@@ -1,4 +1,4 @@
-export {Button, ButtonProps, PrimaryButton} from './Button';
+export {Button, ButtonProps, PrimaryButton, ButtonGroup} from './Button';
 export {DropDown, DropDownList, DropDownItem} from './DropDown';
 export {ErrorText} from './ErrorText';
 export {FocusTrap} from './FocusTrap';

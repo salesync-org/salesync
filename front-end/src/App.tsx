@@ -31,14 +31,6 @@ function App() {
             <Route path='sales' element={<Sales />} />
             <Route path='*' element={<Sales />} />
           </Route>
-          <Route path='/records' element={<RecordsLayout />}></Route>
-          <Route path='/records' element={<RecordsLayout />}>
-            <Route path='sales' element={<Sales />} />
-            <Route path='*' element={<Sales />} />
-          </Route>
-          <Route path='/home' element={<HomeLayout />}>
-            {/* <Route path='*' element={<HomeBody />} /> */}
-          </Route>
         </Routes>
       </Suspense>
     </div>

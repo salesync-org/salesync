@@ -31,7 +31,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 
   return (
     <div className='border'>
-      <Table className='text-[13px]'>
+      <Table className=''>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id} className='bg-background-color cursor-pointer transition-all'>

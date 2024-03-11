@@ -21,7 +21,7 @@ export const columns: ColumnDef<Sale>[] = [
   {
     id: 'index',
     header: '',
-    cell: ({ row }) => <span className='block w-full text-center text-xs'>{row.index + 1}</span>
+    cell: ({ row }) => <span className='block w-full text-center'>{row.index + 1}</span>
   },
   {
     id: 'select',
@@ -29,7 +29,7 @@ export const columns: ColumnDef<Sale>[] = [
       <Checkbox
         className='grid place-content-center rounded-[2px]'
         checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        onCheckedChange={(value: any) => table.toggleAllPageRowsSelected(!!value)}
         aria-label='Select all'
       />
     ),
@@ -37,7 +37,7 @@ export const columns: ColumnDef<Sale>[] = [
       <Checkbox
         className='grid place-content-center rounded-[2px]'
         checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        onCheckedChange={(value: any) => row.toggleSelected(!!value)}
         aria-label='Select row'
       />
     ),
@@ -51,14 +51,14 @@ export const columns: ColumnDef<Sale>[] = [
         className='flex items-center justify-between'
         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
       >
-        <span className='text-[13px]'>Name</span>
+        <span className=''>Name</span>
         <Icon name='expand_more' />
       </div>
     ),
     cell: ({ row }) => {
       const person = row.getValue('person') as Sale['person'];
       return (
-        <Link to={`/records/${person.id}`} className='block w-full text-blue-500 hover:underline'>
+        <Link to={`/records/${person.id}`} className='block items-center align-middle w-full text-blue-500 hover:underline'>
           {person.name}
         </Link>
       );
@@ -71,7 +71,7 @@ export const columns: ColumnDef<Sale>[] = [
         className='flex items-center justify-between'
         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
       >
-        <span className='text-[13px]'>Title</span>
+        <span className=''>Title</span>
         <Icon name='expand_more' />
       </div>
     )
@@ -83,7 +83,7 @@ export const columns: ColumnDef<Sale>[] = [
         className='flex items-center justify-between'
         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
       >
-        <span className='text-[13px]'>Company</span>
+        <span className=''>Company</span>
         <Icon name='expand_more' />
       </div>
     )
@@ -95,7 +95,7 @@ export const columns: ColumnDef<Sale>[] = [
         className='flex items-center justify-between'
         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
       >
-        <span className='text-[13px]'>Phone</span>
+        <span className=''>Phone</span>
         <Icon name='expand_more' />
       </div>
     )
@@ -107,7 +107,7 @@ export const columns: ColumnDef<Sale>[] = [
         className='flex items-center justify-between'
         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
       >
-        <span className='text-[13px]'>Email</span>
+        <span className=''>Email</span>
         <Icon name='expand_more' />
       </div>
     )
@@ -119,7 +119,7 @@ export const columns: ColumnDef<Sale>[] = [
         className='flex items-center justify-between'
         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
       >
-        <span className='text-[13px]'>Lead Status</span>
+        <span className=''>Lead Status</span>
         <Icon name='expand_more' />
       </div>
     )
@@ -131,7 +131,7 @@ export const columns: ColumnDef<Sale>[] = [
         className='flex items-center justify-between'
         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
       >
-        <span className='text-[13px]'>Owner Alias</span>
+        <span className=''>Owner Alias</span>
         <Icon name='expand_more' />
       </div>
     )
@@ -140,7 +140,7 @@ export const columns: ColumnDef<Sale>[] = [
     id: 'actions',
     header: '',
     cell: () => (
-      <div className='flex h-5 w-5 cursor-pointer items-center justify-center rounded-[4px] border'>
+      <div className='flex aspect-square w-8 cursor-pointer items-center justify-center rounded-[4px] border'>
         <Icon name='arrow_drop_down' size='32px' />
       </div>
     )

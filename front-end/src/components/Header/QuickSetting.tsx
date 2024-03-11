@@ -1,12 +1,14 @@
+import { cn } from '@/utils/utils';
 import { useState } from 'react';
 import { Button, Icon } from '../ui';
-import { Link } from 'react-router-dom';
 
 const QuickSetting = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div>
       <Button
+        title='Quick Settings'
         rounded='icon'
         className='h-10 w-10'
         intent='normal'
@@ -16,10 +18,17 @@ const QuickSetting = () => {
       >
         <Icon name='settings' size='1rem' />
       </Button>
-      <nav className='fixed bottom-0 right-0 top-[104px] flex w-[400px] flex-col gap-6 rounded-sm bg-white shadow-2xl'>
+      <nav
+        className={cn(
+          'fixed bottom-0 right-0 top-[104px] flex w-[400px] flex-col gap-6 rounded-sm bg-white shadow-2xl transition-all duration-200',
+          isOpen ? 'translate-x-0' : 'translate-x-[100%]'
+        )}
+      >
         <div className='flex items-center justify-between border-b px-6 py-3'>
           <h2 className='text-base font-normal leading-5'>Quick Settings</h2>
-          <Icon name='close' size='1rem' className='cursor-pointer hover:text-primary-color' />
+          <span title='Close' onClick={() => setIsOpen(false)}>
+            <Icon name='close' size='1rem' className='m-auto block cursor-pointer hover:text-primary-color' />
+          </span>
         </div>
         <div className='flex flex-col gap-4 px-6'>
           <Button

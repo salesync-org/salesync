@@ -1,7 +1,7 @@
 import Icon from '@/components/ui/Icon/Icon';
 import { useState } from 'react';
 import RecordTabs from '../../components/Records/RecordTabs';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import RecordTable from '@/components/Records/RecordTable';
 import icon from 'assets/type-icon/lead_icon.png';
 import Panel from '@/components/ui/Panel/Panel';

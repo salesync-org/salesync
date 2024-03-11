@@ -15,12 +15,14 @@ public class KeyCloakUtils {
     }
 
     public Keycloak getKeycloakInstance() {
-        return Keycloak.getInstance(
+        Keycloak instance = Keycloak.getInstance(
                 env.getProperty("keycloak.auth-server-url"),
                 env.getProperty("keycloak.realm"),
                 env.getProperty("keycloak-config.username"),
                 env.getProperty("keycloak-config.password"),
                 env.getProperty("keycloak.resource"),
                 env.getProperty("keycloak-config.client-secret"));
+        System.out.println("Keycloak instance created with token: " + instance != null ? instance.toString() : "null");
+        return instance;
     }
 }

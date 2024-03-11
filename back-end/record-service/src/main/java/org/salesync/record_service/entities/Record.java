@@ -1,5 +1,6 @@
 package org.salesync.record_service.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,5 +24,12 @@ public class Record extends BaseEntity {
     private UUID userId;
     private String stage;
     @OneToMany(mappedBy = "record", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<RecordProperty> recordProperties;
+    @OneToMany(mappedBy = "sourceRecord", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<RelationshipOfRecords> sourceRelationships;
+    @OneToMany(mappedBy = "destinationRecord", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<RelationshipOfRecords> destinationRelationships;
 }

@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { DropDown, DropDownItem, TextInput } from '@/components/ui';
 import propertyApi from '@/api/propertyApi';
 import TypeModal from '@/pages/Home/TypeModal';
+
 const TypeCard = ({ type }: { type: Type }) => {
   const colorName = type.background_color;
   const [isOpen, setIsOpen] = useState(false);
@@ -56,7 +57,7 @@ const TypeCard = ({ type }: { type: Type }) => {
           </div>
         </div>
       </Panel>
-      <TypeModal isOpen={isOpen} properties={properties} setIsOpen={setIsOpen}></TypeModal>
+      <TypeModal properties={properties} isOpen={isOpen} setIsOpen={setIsOpen}></TypeModal>
     </>
   );
 };

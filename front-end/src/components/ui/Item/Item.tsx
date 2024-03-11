@@ -18,7 +18,6 @@ const Item: React.FC<ItemProps> = ({
   href,
   className,
   title,
-  value = title,
   subTitle,
   selected = false,
   additionalInfo,
@@ -27,8 +26,7 @@ const Item: React.FC<ItemProps> = ({
 }) => {
   return (
     <div title={title}>
-      <input type='text' hidden value={value} />
-      <a className={cn(`flex rounded-sm py-2`, className)} href={href} tabIndex={0} title={title}>
+      <a className={cn(`flex rounded-sm`, className)} href={href} tabIndex={0} title={title}>
         <div
           className={cn(
             'flex flex-grow cursor-pointer items-center rounded-sm px-2 py-2 align-middle',
@@ -52,7 +50,7 @@ const Item: React.FC<ItemProps> = ({
             <div>
               <h5 className='select-none text-ellipsis text-nowrap'>{additionalInfo}</h5>
               {(subTitle || additionalInfo) && <p className='select-none'>{title}</p>}
-              {!subTitle && !additionalInfo && <h4 className='select-none'>{title}</h4>}
+              {!subTitle && !additionalInfo && <p className='select-none'>{title}</p>}
               <h5 className='select-none'>{subTitle}</h5>
             </div>
           </div>

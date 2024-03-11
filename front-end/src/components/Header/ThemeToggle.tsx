@@ -1,15 +1,13 @@
 import useTheme from '@/hooks/useTheme';
 import { useState } from 'react';
-import Button from 'ui/Button/Button';
-import DropDownList from 'ui/DropDown/DropDownList';
-import Icon from 'ui/Icon/Icon';
-import Item from 'ui/Item/Item';
+import {Button, Icon, Item, DropDownList} from '@/components/ui';
+import { ThemeEnum } from '@/constants/enum';
 
 const ThemeToggle = () => {
   const [theme, setTheme, isSystemTheme] = useTheme();
   const [isThemeMenuOpen, setThemeMenuOpen] = useState(false);
   return (
-    <>
+    <div>
       <Button
         rounded='icon'
         className='h-10 w-10'
@@ -18,25 +16,25 @@ const ThemeToggle = () => {
           setThemeMenuOpen(!isThemeMenuOpen);
         }}
       >
-        {theme == 'light' ? <Icon name='light_mode' size='1rem' /> : <Icon name='dark_mode' size='1rem' />}
+        {theme == ThemeEnum.LIGHT ? <Icon name='light_mode' size='1rem' /> : <Icon name='dark_mode' size='1rem' />}
       </Button>
-      <DropDownList open={isThemeMenuOpen} className='right-[.25rem] top-[3rem] mt-0 w-80 py-2' divide={false}>
+      <DropDownList open={isThemeMenuOpen}onClose={()=>{setThemeMenuOpen(false);}} className='right-[.25rem] top-[3rem] mt-0 w-80 py-2' divide={false}>
         <Item
           className='py-1'
           icon={<Icon name='light_mode' size='2rem' />}
           title='Light'
-          selected={theme === 'light' && !isSystemTheme}
+          selected={theme === ThemeEnum.LIGHT && !isSystemTheme}
           onClick={() => {
-            setTheme('light');
+            setTheme(ThemeEnum.LIGHT);
           }}
         />
         <Item
           className='py-1'
           icon={<Icon name='dark_mode' size='2rem' />}
           title='Dark'
-          selected={theme === 'dark' && !isSystemTheme}
+          selected={theme === ThemeEnum.DARK && !isSystemTheme}
           onClick={() => {
-            setTheme('dark');
+            setTheme(ThemeEnum.DARK);
           }}
         />
         <Item
@@ -49,7 +47,7 @@ const ThemeToggle = () => {
           }}
         />
       </DropDownList>
-    </>
+    </div>
   );
 };
 

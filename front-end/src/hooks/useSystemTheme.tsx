@@ -1,25 +1,31 @@
+import { SYSTEM_DARK_CONDITION } from '@/constants/constant';
+import { SystemThemeEnum } from '@/constants/enum';
+import { systemThemeToThemeEnum } from '@/utils/mapper';
 import { useEffect, useState } from 'react';
 
-const useSystemTheme = () => {
-  const getSystemTheme = (): Theme => {
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      return 'dark';
-    }
-    return 'light';
-  };
 
-  const [systemTheme, setSystemTheme] = useState<Theme>(() => getSystemTheme());
+
+const getSystemTheme = (): SystemThemeEnum => {
+  if (window.matchMedia && window.matchMedia(SYSTEM_DARK_CONDITION).matches) {
+    return SystemThemeEnum.DARK;
+  }
+  return SystemThemeEnum.LIGHT;
+};
+
+const useSystemTheme = () => {
+
+  const [systemTheme, setSystemTheme] = useState<SystemThemeEnum>(() => getSystemTheme());
   
   useEffect(() => {
-    const mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
+    const mediaQueryList = window.matchMedia(SYSTEM_DARK_CONDITION);
     const listener = (event: MediaQueryListEvent) => {
-      setSystemTheme(event.matches ? 'dark' : 'light');
+      setSystemTheme(event.matches ? SystemThemeEnum.DARK : SystemThemeEnum.LIGHT );
     };
     mediaQueryList.addEventListener('change', listener);
     return () => mediaQueryList.removeEventListener('change', listener);
   }, []);
 
-  return systemTheme;
+  return  systemThemeToThemeEnum(systemTheme);
 };
 
 export default useSystemTheme;

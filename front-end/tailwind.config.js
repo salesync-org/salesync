@@ -5,7 +5,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'Avenir', 'Helvetica', 'Arial', 'sans-serif']
+        sans: ['system-ui', 'Avenir', 'Helvetica', 'Arial', 'sans-serif']
       },
       lineHeight: {
         1.5: '1.5'
@@ -16,16 +16,17 @@ export default {
       fontWeight: 'normal',
       borderRadius: {
         none: '0',
-        sm: '.5rem',
-        DEFAULT: '.8rem',
-        lg: '1.2rem',
+        sm: '.2rem',
+        DEFAULT: '.3rem',
+        lg: '.5rem',
         full: '9999px'
       },
       colors: {
         background: {
           light: '#f0f4f7',
           DEFAULT: '#f0f4f7',
-          dark: '#282B2D'
+          dark: '#282B2D',
+          color: '#f3f3f3'
         },
         panel: {
           light: '#ffffff',
@@ -38,27 +39,32 @@ export default {
           dark: '#ffffff'
         },
         primary: {
-          DEFAULT: '#304f8d'
+          DEFAULT: '#037EC9',
+          color: '#0176d3',
+          sidebar: '#014486',
+          border: '#0070d2',
+          'border-secondary': '#4194f9'
         },
         'primary-hover': {
-          DEFAULT: '#355492'
+          DEFAULT: '##67A1ED'
         },
         'primary-active': {
-          DEFAULT: '#2B4A88'
+          DEFAULT: '#0375BA'
         },
         'primary-stroke': {
-          light: '#576c94',
-          DEFAULT: '#576c94',
-          dark: '#1e3664'
+          light: '#037BC4',
+          DEFAULT: '#037BC4',
+          dark: '#037BC4'
         },
         secondary: {
           light: '#cee7ff',
           DEFAULT: '#cee7ff',
-          dark: '#304F8D'
+          dark: '#304F8D',
+          color: 'f3f3f3'
         },
         'link-text': {
-          light: '#304f8d',
-          DEFAULT: '#304f8d',
+          light: '#014486',
+          DEFAULT: '#014486',
           dark: '#cefaff'
         },
         'button-background': {
@@ -97,7 +103,9 @@ export default {
       },
       animation: {
         modal: 'modal 0.1s ease-in-out',
-        pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+        pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'to-top': 'to-top 0.2s ease-in-out',
+        appearing: 'appearing 0.3s ease-in-out'
       },
       keyframes: {
         modal: {
@@ -107,6 +115,14 @@ export default {
         pulse: {
           '0%, 100%': { opacity: '1' },
           '50%': { opacity: '0.5' }
+        },
+        'to-top': {
+          '0%': { transform: 'translateY(100%)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' }
+        },
+        appearing: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' }
         }
       }
     }

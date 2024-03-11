@@ -1,18 +1,15 @@
 import { cn } from '@/utils/utils';
-import PrimaryButton from '../ui/Button/PrimaryButton';
 import TextButton from '../ui/Button/TextButton';
 import Icon from '../ui/Icon/Icon';
 import Panel from '../ui/Panel/Panel';
 import TypeTable from '../ui/Table/TypeTable';
 import { Button } from '../ui/Button';
-import { Modal, ModalFooter } from '../ui/Modal';
 import { useState } from 'react';
 import { DropDown, DropDownItem, TextInput } from '@/components/ui';
 import propertyApi from '@/api/propertyApi';
 import TypeModal from '@/pages/Home/TypeModal';
 const TypeCard = ({ type }: { type: Type }) => {
   const colorName = type.background_color;
-
   const [isOpen, setIsOpen] = useState(false);
   const [properties, setProperties] = useState<TypeProperty>();
 

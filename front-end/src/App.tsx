@@ -9,6 +9,7 @@ const Cheatsheet = lazy(() => import('pages/Cheatsheet/Cheatsheet'));
 // const TypeManager = lazy(() => import('./pages/TypeManager/TypeManager'));
 const Sales = lazy(() => import('./pages/Sales/Sales'));
 const HomeLayout = lazy(() => import('./pages/Home/Home'));
+const LeadDetail = lazy(() => import('./pages/LeadDetail/LeadDetail'));
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             <Route path='link' element={<TypeDetail />} />
             <Route path='/type-manager' element={<TypeManager />} /> */}
             <Route path='sales' element={<Sales />} />
+            <Route path='lead/:leadId' element={<LeadDetail />} />
             <Route path='*' element={<Sales />} />
           </Route>
         </Routes>

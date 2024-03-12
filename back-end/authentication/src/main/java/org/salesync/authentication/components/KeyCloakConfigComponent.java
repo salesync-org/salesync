@@ -1,4 +1,4 @@
-package org.salesync.authentication.utils;
+package org.salesync.authentication.components;
 
 import org.keycloak.admin.client.Keycloak;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,23 +6,30 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component
-public class KeyCloakUtils {
+public class KeyCloakConfigComponent {
     private final Environment env;
 
     @Autowired
-    public KeyCloakUtils(Environment env) {
+    public KeyCloakConfigComponent(Environment env) {
         this.env = env;
     }
 
     public Keycloak getKeycloakInstance() {
-        Keycloak instance = Keycloak.getInstance(
+        return Keycloak.getInstance(
                 env.getProperty("keycloak.auth-server-url"),
                 env.getProperty("keycloak.realm"),
                 env.getProperty("keycloak-config.username"),
                 env.getProperty("keycloak-config.password"),
                 env.getProperty("keycloak.resource"),
                 env.getProperty("keycloak-config.client-secret"));
-        System.out.println("Keycloak instance created with token: " + instance != null ? instance.toString() : "null");
-        return instance;
+    }
+
+    public Keycloak getKeycloakInstance(String username, String password, String realm, String clientId) {
+        return Keycloak.getInstance(
+                env.getProperty("keycloak.auth-server-url"),
+                env.getProperty(realm),
+                username,
+                password,
+                env.getProperty("clientId"));
     }
 }

@@ -7,8 +7,8 @@ import ConfigLayout from './components/Layout/ConfigLayout';
 const Cheatsheet = lazy(() => import('pages/Cheatsheet/Cheatsheet'));
 // const TypeDetail = lazy(() => import('./pages/TypeDetail/TypeDetail'));
 // const TypeManager = lazy(() => import('./pages/TypeManager/TypeManager'));
-const RecordsLayout = lazy(() => import('./pages/Records/RecordsLayout'));
 const Sales = lazy(() => import('./pages/Sales/Sales'));
+const SignUp = lazy(() => import('./pages/SignUp/SignUp'));
 
 function App() {
   return (
@@ -27,6 +27,7 @@ function App() {
             <Route path='sales' element={<Sales />} />
             <Route path='*' element={<Sales />} />
           </Route>
+          <Route path='/sign-up' element={<SignUp />} />
         </Routes>
       </Suspense>
     </div>

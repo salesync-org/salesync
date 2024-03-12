@@ -6,8 +6,7 @@ import ConfigLayout from './components/Layout/ConfigLayout';
 // const Setting = lazy(() => import('pages/Setting/Setting'));
 const Cheatsheet = lazy(() => import('pages/Cheatsheet/Cheatsheet'));
 // const TypeDetail = lazy(() => import('./pages/TypeDetail/TypeDetail'));
-// const TypeManager = lazy(() => import('./pages/TypeManager/TypeManager'));
-const RecordsLayout = lazy(() => import('./pages/Records/RecordsLayout'));
+// const TypeManager = lazy(() => import('./pages/TypeManager/TypeManager'))
 const Sales = lazy(() => import('./pages/Sales/Sales'));
 const LogIn = lazy(() => import('./pages/LogIn/LogIn'));
 const ForgotPassword = lazy(() => import('./pages/LogIn/ForgotPassword'));

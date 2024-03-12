@@ -1,5 +1,6 @@
 package com.salesync.typeservice.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,4 +21,7 @@ public class Property extends BaseEntity {
     private String name;
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TypeProperty> typeProperties;
+    @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<PropertyField> propertyFields;
 }

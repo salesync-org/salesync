@@ -1,9 +1,17 @@
-spring.application.name=type-service
+spring:
+  application:
+    name: type-service
+  datasource:
+    url: jdbc:postgresql://localhost:54320/salesync_type_service
+    username: type_service
+    password: type_service
+  jpa:
+    hibernate:
+      ddl-auto: none
+server:
+  port: 5000
+  servlet:
+    context-path: /api/v1
 
-spring.datasource.url=jdbc:postgresql://localhost:54320/salesync_type_service
-spring.datasource.username=type_service
-spring.datasource.password=type_service
-#spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
-spring.jpa.hibernate.ddl-auto=none
-server.servlet.context-path=/api/v1
-server.port=5000
+
+

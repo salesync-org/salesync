@@ -29,4 +29,8 @@ public class Type extends BaseEntity  {
     @JsonIgnore
     private List<TypeProperty> typeProperties;
 
+    @OneToMany(mappedBy = "type", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Stage> stages;
+
 }

@@ -1,13 +1,13 @@
 package com.salesync.typeservice.entities;
 
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -20,4 +20,7 @@ public class Field extends BaseEntity {
     private String name;
     private String inputType;
     private Boolean isMultipleValue;
+    @OneToMany(mappedBy = "field", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<PropertyField> propertyFields;
 }

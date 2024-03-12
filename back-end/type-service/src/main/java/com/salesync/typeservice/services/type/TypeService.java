@@ -5,14 +5,15 @@ import com.salesync.typeservice.dtos.TypeRelationDTO;
 import com.salesync.typeservice.dtos.TypeRelationResponseDTO;
 
 import java.util.List;
-import java.util.UUID;
 
-public interface ITypeService {
+public interface TypeService {
     TypeDTO createType(TypeDTO typeDTO);
+
+    TypeDTO getType(String typeId);
 
     List<TypeDTO> getAllType();
 
-    List<TypeRelationDTO> getAllTypeLinks(UUID id);
+    List<TypeRelationDTO> getAllTypeLinks(String id);
 
     TypeRelationResponseDTO createLink(TypeRelationDTO typeRelationDTO);
 

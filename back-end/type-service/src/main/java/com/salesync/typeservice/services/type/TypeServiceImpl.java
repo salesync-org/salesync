@@ -1,11 +1,13 @@
 package com.salesync.typeservice.services.type;
 
+import com.salesync.typeservice.constants.Message;
 import com.salesync.typeservice.dtos.TypeDTO;
 import com.salesync.typeservice.dtos.TypeRelationDTO;
 import com.salesync.typeservice.dtos.TypeRelationResponseDTO;
 import com.salesync.typeservice.entities.Relation;
 import com.salesync.typeservice.entities.Type;
 import com.salesync.typeservice.entities.TypeRelation;
+import com.salesync.typeservice.exceptions.ObjectNotFoundException;
 import com.salesync.typeservice.mapper.IRelationMapper;
 import com.salesync.typeservice.mapper.ITypeMapper;
 import com.salesync.typeservice.mapper.ITypeRelationMapper;
@@ -13,6 +15,7 @@ import com.salesync.typeservice.repositories.IRelationRepository;
 import com.salesync.typeservice.repositories.ITypeRelationRepository;
 import com.salesync.typeservice.repositories.ITypeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +26,7 @@ import java.util.stream.Collectors;
 @Transactional(rollbackFor = Throwable.class)
 @Service
 @RequiredArgsConstructor
-public class TypeServiceImpl implements ITypeService {
+public class TypeServiceImpl implements TypeService {
     private final ITypeRepository typeRepository;
 
     private final ITypeRelationMapper typeRelationMapper = ITypeRelationMapper.INSTANCE;
@@ -44,6 +47,17 @@ public class TypeServiceImpl implements ITypeService {
     }
 
     @Override
+    public TypeDTO getType(String typeId) {
+        Type type = typeRepository.findById(UUID.fromString(typeId))
+                .orElseThrow(() -> new ObjectNotFoundException(
+                        Type.class.getSimpleName(),
+                        typeId
+                       )
+                );
+        return typeMapper.typeToTypeDTO(type);
+    }
+
+    @Override
     public List<TypeDTO> getAllType() {
         return typeRepository.findAll()
                 .stream()
@@ -52,14 +66,14 @@ public class TypeServiceImpl implements ITypeService {
     }
 
     @Override
-    public List<TypeRelationDTO> getAllTypeLinks(UUID id) {
-        return typeRelationRepository.findAllBySourceTypeId(id).stream().map(typeRelation -> TypeRelationDTO.builder().id(typeRelation.getId()).sourceType(typeMapper.typeToTypeDTO(typeRelation.getSourceType())).destinationType(typeMapper.typeToTypeDTO(typeRelation.getDestinationType())).relation(relationMapper.relationToRelationDTO(typeRelation.getRelation())).sourceTypeLabel(typeRelation.getSourceTypeLabel()).destinationTypeLabel(typeRelation.getDestinationLabel()).build()).collect(Collectors.toList());
+    public List<TypeRelationDTO> getAllTypeLinks(String id) {
+        return typeRelationRepository.findAllBySourceTypeId(UUID.fromString(id)).stream().map(typeRelation -> TypeRelationDTO.builder().id(typeRelation.getId()).sourceType(typeMapper.typeToTypeDTO(typeRelation.getSourceType())).destinationType(typeMapper.typeToTypeDTO(typeRelation.getDestinationType())).relation(relationMapper.relationToRelationDTO(typeRelation.getRelation())).sourceTypeLabel(typeRelation.getSourceTypeLabel()).destinationTypeLabel(typeRelation.getDestinationLabel()).build()).collect(Collectors.toList());
     }
 
     @Override
     public TypeRelationResponseDTO createLink(TypeRelationDTO typeRelationDTO) {
-        Type sourceType = typeRepository.findById(typeRelationDTO.getSourceType().getId()).orElseThrow(() -> new RuntimeException("Source type not found"));
-        Type destinationType = typeRepository.findById(typeRelationDTO.getDestinationType().getId()).orElseThrow(() -> new RuntimeException("Destination type not found"));
+        Type sourceType = typeRepository.findById(UUID.fromString(typeRelationDTO.getSourceType().getId())).orElseThrow(() -> new RuntimeException("Source type not found"));
+        Type destinationType = typeRepository.findById(UUID.fromString(typeRelationDTO.getDestinationType().getId())).orElseThrow(() -> new RuntimeException("Destination type not found"));
         Relation relation = relationRepository.findById(typeRelationDTO.getRelation().getId()).orElseThrow(() -> new RuntimeException("Relation not found"));
         Relation inverseRelation = relation.getInverseRelation();
         String sourceLabel = typeRelationDTO.getSourceTypeLabel();

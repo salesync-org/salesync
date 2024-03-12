@@ -1,18 +1,17 @@
 package com.salesync.typeservice.dtos;
 
+import com.salesync.typeservice.annotations.validation.IsRequired;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.util.UUID;
-
 
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Builder
 @Getter
 public class TypeDTO {
-    UUID id;
+    String id;
+    @IsRequired
     String name;
 }

@@ -1,6 +1,7 @@
 package org.salesync.authentication.controllers;
 
 import jakarta.ws.rs.core.Response;
+import lombok.AllArgsConstructor;
 import org.keycloak.representations.AccessTokenResponse;
 import org.salesync.authentication.dtos.CompanyRegisterDTO;
 import org.salesync.authentication.services.companyregister.IRegisterService;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/auth")
+@AllArgsConstructor
 public class AuthenticationController {
     IRegisterService registerService;
 

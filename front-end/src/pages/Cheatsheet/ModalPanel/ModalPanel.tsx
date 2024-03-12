@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import {PrimaryButton, Modal, ModalFooter, TextInput, DropDown, Item, Button} from '@/components/ui';
+import { PrimaryButton, Modal, ModalFooter, TextInput, DropDown, Item, Button } from '@/components/ui';
 
 function ModalPanel() {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,10 +9,11 @@ function ModalPanel() {
 
       <Modal isOpen={isOpen} onOpenChange={setIsOpen} title='Create new Type'>
         <form>
-          <div className='grid grid-cols-5 place-content-center gap-3 w-full'>
-            <div className='col-span-3 flex flex-col'>
+          <div className='grid w-full grid-cols-5 place-content-center gap-3'>
+            <div className='col-span-3 flex flex-row'>
               <TextInput header='Type Name' className='w-full' placeholder='Search for something' />
             </div>
+
             <div className='col-span-2 flex flex-col gap-2'>
               <DropDown header='Template' value='Select a value'>
                 <Item title='Item 1' />

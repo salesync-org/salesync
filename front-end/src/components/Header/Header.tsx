@@ -1,7 +1,6 @@
 import salesyncIcon from 'assets/salesync_icon.png';
-import ThemeToggle from './ThemeToggle';
-import UserInfo from './UserInfo';
-import Search from './Search';
+
+import { ThemeToggle, UserInfo, Search, QuickSetting } from './index';
 
 const Header = () => {
   return (
@@ -12,7 +11,10 @@ const Header = () => {
       <Search className='align-middle' />
       <div>
         <div className='justify-right relative flex w-fit align-middle'>
-          <ThemeToggle />
+          <div className='flex gap-2'>
+            <ThemeToggle />
+            <QuickSetting />
+          </div>
           <UserInfo />
         </div>
       </div>

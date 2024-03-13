@@ -30,6 +30,6 @@ public class KeyCloakConfigComponent {
                 env.getProperty(realm),
                 username,
                 password,
-                env.getProperty("clientId"));
+                clientId);
     }
 }

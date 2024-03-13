@@ -5,17 +5,20 @@ import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.representations.AccessTokenResponse;
+import org.keycloak.representations.idm.ClientRepresentation;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RealmRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.salesync.authentication.components.KeyCloakConfigComponent;
 import org.salesync.authentication.dtos.CompanyRegisterDTO;
+import org.salesync.authentication.dtos.LogInDTO;
 import org.salesync.authentication.dtos.NewUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +45,8 @@ public class RegisterServiceImpl implements IRegisterService {
             keycloak.realms().create(realm);
             System.out.println("Created Realm with name: " + realmName);
             adminRegisterResponse = registerUser(companyRegisterDTO.getAdminInfo(), realmName);
+            keycloak.realm(realmName).clients().create(createClient("app-admin", "app-admin", realmName));
+            keycloak.realm(realmName).clients().create(createClient("app-user", "app-user", realmName));
             System.out.println("We have registered the admin user" + adminRegisterResponse.toString());
 
         } catch (Exception e) {
@@ -67,6 +72,7 @@ public class RegisterServiceImpl implements IRegisterService {
             user.setFirstName(newUserDTO.getFirstName());
             user.setLastName(newUserDTO.getLastName());
             user.singleAttribute("jobTitle", newUserDTO.getJobTitle());
+            user.setEnabled(true);
 
             response = keycloak.realm(realmName).users().create(user);
             UserRepresentation newUser = keycloak.realm(realmName).users().search(newUserDTO.getEmail()).get(0);
@@ -89,4 +95,45 @@ public class RegisterServiceImpl implements IRegisterService {
         }
         return response;
     }
+
+    @Override
+    public Response login(LogInDTO logInDTO) {
+//        Keycloak keycloak = null;
+//        Response response = null;
+//        try {
+//            keycloak = keycloakConfigComponent.getKeycloakInstance(logInDTO.getUsername(), logInDTO.getPassword(), logInDTO.getRealm());
+//            UserRepresentation newUser = keycloak.realm(realmName).users().search(newUserDTO.getEmail()).get(0);
+//            UserResource userResource = keycloak.realm(realmName).users().get(newUser.getId());
+//            // The below line of code is not yet performable due to the lack of an email server
+////            keycloak.realm(realmName).users().get(newUser.getId()).executeActionsEmail(Arrays.asList("UPDATE_PASSWORD"));
+//            CredentialRepresentation credential = new CredentialRepresentation();
+//            credential.setType(CredentialRepresentation.PASSWORD);
+//            credential.setValue("admin"); // Bad practice, I know
+//            credential.setTemporary(true);
+//            userResource.resetPassword(credential);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (keycloak != null) {
+//                System.out.println("Closing Keycloak");
+//                keycloak.close();
+//            }
+//        }
+//        return response;
+        return null;
+    }
+
+    private ClientRepresentation createClient(String clientSecret, String clientName, String realmName) {
+        ClientRepresentation clientRepresentation = new ClientRepresentation();
+        clientRepresentation.setClientId(clientName); // Optional: Customize clientId
+        clientRepresentation.setPublicClient(false); // Confidential client for backend service
+        // Add specific client scopes if needed
+        CredentialRepresentation credential = new CredentialRepresentation();
+        credential.setType(CredentialRepresentation.SECRET);
+        credential.setValue(clientSecret);
+        clientRepresentation.setSecret(credential.getValue());
+        return clientRepresentation;
+    }
+
 }

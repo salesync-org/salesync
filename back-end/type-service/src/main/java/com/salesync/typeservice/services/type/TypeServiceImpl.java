@@ -1,6 +1,5 @@
 package com.salesync.typeservice.services.type;
 
-import com.salesync.typeservice.constants.Message;
 import com.salesync.typeservice.dtos.TypeDTO;
 import com.salesync.typeservice.dtos.TypeRelationDTO;
 import com.salesync.typeservice.dtos.TypeRelationResponseDTO;
@@ -11,11 +10,10 @@ import com.salesync.typeservice.exceptions.ObjectNotFoundException;
 import com.salesync.typeservice.mapper.IRelationMapper;
 import com.salesync.typeservice.mapper.ITypeMapper;
 import com.salesync.typeservice.mapper.ITypeRelationMapper;
-import com.salesync.typeservice.repositories.IRelationRepository;
-import com.salesync.typeservice.repositories.ITypeRelationRepository;
-import com.salesync.typeservice.repositories.ITypeRepository;
+import com.salesync.typeservice.repositories.RelationRepository;
+import com.salesync.typeservice.repositories.TypeRelationRepository;
+import com.salesync.typeservice.repositories.TypeRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,13 +25,13 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class TypeServiceImpl implements TypeService {
-    private final ITypeRepository typeRepository;
+    private final TypeRepository typeRepository;
 
     private final ITypeRelationMapper typeRelationMapper = ITypeRelationMapper.INSTANCE;
 
-    private final ITypeRelationRepository typeRelationRepository;
+    private final TypeRelationRepository typeRelationRepository;
 
-    private final IRelationRepository relationRepository;
+    private final RelationRepository relationRepository;
 
     private final IRelationMapper relationMapper = IRelationMapper.INSTANCE;
 
@@ -50,9 +48,9 @@ public class TypeServiceImpl implements TypeService {
     public TypeDTO getType(String typeId) {
         Type type = typeRepository.findById(UUID.fromString(typeId))
                 .orElseThrow(() -> new ObjectNotFoundException(
-                        Type.class.getSimpleName(),
-                        typeId
-                       )
+                                Type.class.getSimpleName(),
+                                typeId
+                        )
                 );
         return typeMapper.typeToTypeDTO(type);
     }
@@ -67,7 +65,19 @@ public class TypeServiceImpl implements TypeService {
 
     @Override
     public List<TypeRelationDTO> getAllTypeLinks(String id) {
-        return typeRelationRepository.findAllBySourceTypeId(UUID.fromString(id)).stream().map(typeRelation -> TypeRelationDTO.builder().id(typeRelation.getId()).sourceType(typeMapper.typeToTypeDTO(typeRelation.getSourceType())).destinationType(typeMapper.typeToTypeDTO(typeRelation.getDestinationType())).relation(relationMapper.relationToRelationDTO(typeRelation.getRelation())).sourceTypeLabel(typeRelation.getSourceTypeLabel()).destinationTypeLabel(typeRelation.getDestinationLabel()).build()).collect(Collectors.toList());
+        return typeRelationRepository
+                .findAllBySourceTypeId(UUID.fromString(id))
+                .stream()
+                .map(typeRelation -> TypeRelationDTO.builder()
+                        .id(typeRelation.getId())
+                        .sourceType(typeMapper.typeToTypeDTO(typeRelation.getSourceType()))
+                        .destinationType(typeMapper.typeToTypeDTO(typeRelation.getDestinationType()))
+                        .relation(relationMapper.relationToRelationDTO(typeRelation.getRelation()))
+                        .sourceTypeLabel(typeRelation.getSourceTypeLabel())
+                        .destinationTypeLabel(typeRelation.getDestinationLabel())
+                        .build())
+                .collect(Collectors.toList()
+                );
     }
 
     @Override

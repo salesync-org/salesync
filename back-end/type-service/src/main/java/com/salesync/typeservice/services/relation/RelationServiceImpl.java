@@ -3,7 +3,7 @@ package com.salesync.typeservice.services.relation;
 
 import com.salesync.typeservice.dtos.RelationDTO;
 import com.salesync.typeservice.mapper.IRelationMapper;
-import com.salesync.typeservice.repositories.IRelationRepository;
+import com.salesync.typeservice.repositories.RelationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class RelationServiceImpl implements IRelationService{
-    private final IRelationRepository relationRepository;
+    private final RelationRepository relationRepository;
     private final IRelationMapper relationMapper = IRelationMapper.INSTANCE;
 
     @Override

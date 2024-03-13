@@ -1,10 +1,9 @@
 package com.salesync.typeservice.repositories;
 
-import com.salesync.typeservice.entities.Type;
+import com.salesync.typeservice.entities.Property;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-
-public interface ITypeRepository extends JpaRepository<Type, UUID> {
+public interface PropertyRepository extends JpaRepository<Property, UUID> {
 }

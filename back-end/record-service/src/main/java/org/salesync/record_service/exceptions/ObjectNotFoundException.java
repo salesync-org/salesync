@@ -1,14 +1,12 @@
-package com.salesync.typeservice.exceptions;
+package org.salesync.record_service.exceptions;
 
-import com.salesync.typeservice.constants.Message;
 import lombok.Getter;
 import lombok.Setter;
+import org.salesync.record_service.constants.Message;
 
-import java.text.MessageFormat;
-
-@Getter
 @Setter
-public class ObjectNotFoundException extends TypeServiceException {
+@Getter
+public class ObjectNotFoundException extends RecordServiceException{
     private String key;
     private String value;
 
@@ -23,7 +21,7 @@ public class ObjectNotFoundException extends TypeServiceException {
     }
 
     public ObjectNotFoundException(String key, String value) {
-        super(MessageFormat.format("{0} with {1} {2}", key, value, Message.NOT_FOUND));
+        super(String.format("%s with %s %s", key, value, Message.NOT_FOUND));
         this.key = key;
         this.value = value;
     }

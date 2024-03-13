@@ -27,7 +27,7 @@ public class TypeController {
     }
 
     @GetMapping(Route.Type.TYPE_ID)
-    public ResponseEntity<TypeDTO> getType(@PathVariable String typeId) {
+    public ResponseEntity<TypeDTO> getType(@PathVariable UUID typeId) {
         return ResponseEntity.ok(typeService.getType(typeId));
     }
 
@@ -44,18 +44,18 @@ public class TypeController {
     }
 
     @GetMapping(Route.Type.GET_RELATION)
-    public ResponseEntity<List<TypeRelationDTO>> getAllTypeLink(@PathVariable String typeId) {
-        return ResponseEntity.ok(typeService.getAllTypeLinks(typeId));
+    public ResponseEntity<List<TypeRelationDTO>> getAllRelationsByType(@PathVariable UUID typeId) {
+        return ResponseEntity.ok(typeService.getAllRelationsByType(typeId));
     }
 
     @PostMapping(Route.Type.CREATE_RELATION)
     public ResponseEntity<TypeRelationResponseDTO> createLink(@RequestBody TypeRelationDTO typeRelationDTO) {
-        return ResponseEntity.ok(typeService.createLink(typeRelationDTO));
+        return ResponseEntity.ok(typeService.makeRelation(typeRelationDTO));
     }
 
     @PutMapping
     public ResponseEntity<TypeRelationResponseDTO> updateTypeRelation(@RequestBody TypeRelationDTO typeRelationDTO) {
-        return ResponseEntity.ok(typeService.updateTypeRelation(typeRelationDTO));
+        return ResponseEntity.ok(typeService.updateLabelOfTypeRelation(typeRelationDTO));
     }
 
 

@@ -1,16 +1,14 @@
 package com.salesync.typeservice.mapper;
 
 import com.salesync.typeservice.dtos.RelationDTO;
-import com.salesync.typeservice.dtos.TypeDTO;
 import com.salesync.typeservice.entities.Relation;
-import com.salesync.typeservice.entities.Type;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface IRelationMapper {
+public interface RelationMapper {
 
-    IRelationMapper INSTANCE = Mappers.getMapper(IRelationMapper.class);
+    RelationMapper INSTANCE = Mappers.getMapper(RelationMapper.class);
 
     RelationDTO relationToRelationDTO(Relation relation);
 

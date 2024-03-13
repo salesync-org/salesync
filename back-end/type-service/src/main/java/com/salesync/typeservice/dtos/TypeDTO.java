@@ -8,13 +8,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.UUID;
+
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Builder
 @Getter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class TypeDTO {
-    String id;
+    UUID id;
     @IsRequired
     String name;
 }

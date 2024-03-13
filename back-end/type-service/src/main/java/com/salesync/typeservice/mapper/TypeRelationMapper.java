@@ -6,9 +6,9 @@ import com.salesync.typeservice.entities.TypeRelation;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(uses = {ITypeMapper.class, IRelationMapper.class})
-public interface ITypeRelationMapper {
-    ITypeRelationMapper INSTANCE = Mappers.getMapper(ITypeRelationMapper.class);
+@Mapper(uses = {TypeMapper.class, RelationMapper.class})
+public interface TypeRelationMapper {
+    TypeRelationMapper INSTANCE = Mappers.getMapper(TypeRelationMapper.class);
 
     TypeRelationDTO typeRelationToTypeRelationDTO(TypeRelation typeRelation);
 

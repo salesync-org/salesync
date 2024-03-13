@@ -16,7 +16,7 @@ public class RecordServiceApplication {
 //	@Bean
 //	ApplicationRunner applicationRunner(Environment environment) {
 //		return args -> {
-//			System.out.println("message from application.properties " + environment.getProperty("message-from-application-properties"));
+//			System.out.println("message from application.yml " + environment.getProperty("message-from-application-properties"));
 //		};
 //	}
 }

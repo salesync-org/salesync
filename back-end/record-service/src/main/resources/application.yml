@@ -1,0 +1,25 @@
+# Server settings
+server:
+  port: 8292
+  servlet:
+    context-path: /api/v1
+  
+  # Spring application settings
+spring:
+  application:
+    name: record-service
+  datasource:
+    url: jdbc:postgresql://localhost:54321/salesync_record_service
+    username: record_service
+    password: record_service
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    fetch-registry: true
+    register-with-eureka: true

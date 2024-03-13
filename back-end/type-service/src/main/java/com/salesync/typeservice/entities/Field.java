@@ -17,7 +17,6 @@ import java.util.List;
 @Table(name = "field")
 @AttributeOverride(name="id",column = @Column(name="field_id"))
 public class Field extends BaseEntity {
-    private String name;
     private String inputType;
     private Boolean isMultipleValue;
     @OneToMany(mappedBy = "field", cascade = CascadeType.ALL, orphanRemoval = true)

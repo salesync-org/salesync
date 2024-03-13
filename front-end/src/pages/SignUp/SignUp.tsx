@@ -31,6 +31,7 @@ const SignUp = () => {
   const [errorPhone, setErrorPhone] = useState(false);
   const [errorEmail, setErrorEmail] = useState(false);
   const [errorCheck1, setErrorCheck1] = useState(false);
+  // check1: acceptAgreement, check2: receiveMarketingCommunications
 
   useEffect(() => {
     const getListCountry = async () => {
@@ -93,7 +94,7 @@ const SignUp = () => {
   };
 
   const onSubmit = () => {
-    if (!errorPhone && !errorEmail) {
+    if (!errorPhone && !errorEmail && !errorCheck1) {
       console.log('firstName', firstName);
       console.log('lastName', lastName);
       console.log('title', title);
@@ -102,8 +103,8 @@ const SignUp = () => {
       console.log('country', country);
       console.log('phone', phone);
       console.log('email', email);
-      console.log('check1', check1);
-      console.log('check2', check2);
+      console.log('acceptAgreement', check1);
+      console.log('receiveMarketingCommunications', check2);
     }
   };
 
@@ -185,7 +186,7 @@ const SignUp = () => {
                   header='Employees'
                   value={employees}
                   onValueChange={setEmployees}
-                  className='w-full border-slate-500 bg-white text-left hover:bg-white'
+                  className='w-full justify-start border-slate-500 bg-white hover:bg-white'
                 >
                   <DropDownItem title='1 - 20 employees' value='1 - 20 employees'></DropDownItem>
                   <DropDownItem title='21 - 200 employees' value='21 - 200 employees'></DropDownItem>
@@ -204,7 +205,7 @@ const SignUp = () => {
                   header='Country/Region'
                   value={country}
                   onValueChange={setCountry}
-                  className='w-full border-slate-500 bg-white text-left hover:bg-white'
+                  className='w-full justify-start border-slate-500 bg-white hover:bg-white'
                 >
                   {listCountry.map((item) => (
                     <DropDownItem title={item} value={item}></DropDownItem>
@@ -228,7 +229,7 @@ const SignUp = () => {
             {step === 3 && (
               <>
                 <div className='mb-5'>
-                  <h2 className='font-normal'>Answer 2 more questions and we’ll get you into your free trial.</h2>
+                  <h2 className='font-normal'>Answer 2 more questions and we'll get you into your free trial.</h2>
                 </div>
 
                 <TextInput
@@ -255,7 +256,12 @@ const SignUp = () => {
                     </a>
                   </div>
                 </div>
-                {errorCheck1 && <ErrorText className='bg-red-500 text-white' text='Please read and agree to the Main Services Agreement' />}
+                {errorCheck1 && (
+                  <ErrorText
+                    className='bg-red-500 text-white'
+                    text='Please read and agree to the Main Services Agreement'
+                  />
+                )}
                 <div className='mt-2 flex'>
                   <Checkbox className='mt-1' checked={check2} onClick={() => setCheck2(!check2)}></Checkbox>
                   <div className='ml-2'>

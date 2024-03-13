@@ -77,7 +77,7 @@ const RecordTabs = ({ tabs, setTabs, name }: RecordTabsProps) => {
                   )
                 }
               >
-                {tab.href.includes(location.pathname.split('/').pop() ?? '') && (
+                {tab.href.split('/').pop() === (location.pathname.split('/').pop() ?? '') && (
                   <span
                     className={cn('absolute left-[-1px] right-[-1px] top-0 h-[3px] animate-to-top bg-primary')}
                   ></span>

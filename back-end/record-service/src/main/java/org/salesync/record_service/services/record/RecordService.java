@@ -12,4 +12,6 @@ public interface RecordService {
     List<RecordDto> getAllRecords();
 
     RecordDto createRecordByType(RequestRecordDto requestRecordDto);
+
+    RecordDto getRecordById(String recordId);
 }

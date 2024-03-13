@@ -9,13 +9,18 @@ const Cheatsheet = lazy(() => import('pages/Cheatsheet/Cheatsheet'));
 // const TypeManager = lazy(() => import('./pages/TypeManager/TypeManager'));
 const Sales = lazy(() => import('./pages/Sales/Sales'));
 const SignUp = lazy(() => import('./pages/SignUp/SignUp'));
+const HomeLayout = lazy(() => import('./pages/Home/Home'));
+const LogIn = lazy(() => import('pages/LogIn/LogIn'));
+const ForgotPassword = lazy(() => import('pages/LogIn/ForgotPassword'));
 
 function App() {
   return (
     <div>
       <Suspense fallback={<div>Loading...</div>}>
         <Routes>
+          <Route path='cheatsheet' element={<Cheatsheet />} />
           <Route path='/' element={<ConfigLayout />}>
+            <Route path='/home' element={<HomeLayout />} />
             <Route path='cheatsheet' element={<Cheatsheet />} />
             {/* <Route path='/' element={<LogIn />} />
             <Route path='setting' element={<Setting />} />
@@ -28,6 +33,8 @@ function App() {
             <Route path='*' element={<Sales />} />
           </Route>
           <Route path='/sign-up' element={<SignUp />} />
+          <Route path='/login' element={<LogIn />}></Route>
+          <Route path='/forgot-password' element={<ForgotPassword />}></Route>
         </Routes>
       </Suspense>
     </div>

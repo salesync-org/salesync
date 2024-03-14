@@ -2,7 +2,9 @@ package org.salesync.authentication.services.companyregister;
 
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
+import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.representations.AccessTokenResponse;
 import org.keycloak.representations.idm.ClientRepresentation;
@@ -32,7 +34,7 @@ public class RegisterServiceImpl implements IRegisterService {
     }
 
     @Override
-    public Response registerCompany(CompanyRegisterDTO companyRegisterDTO) {
+    public AccessTokenResponse registerCompany(CompanyRegisterDTO companyRegisterDTO) {
         System.out.println("Starting registerCompany");
         Keycloak keycloak = null;
         Response adminRegisterResponse = null;
@@ -44,10 +46,11 @@ public class RegisterServiceImpl implements IRegisterService {
             realm.setEnabled(true);
             keycloak.realms().create(realm);
             System.out.println("Created Realm with name: " + realmName);
-            adminRegisterResponse = registerUser(companyRegisterDTO.getAdminInfo(), realmName);
             keycloak.realm(realmName).clients().create(createClient("app-admin", "app-admin", realmName));
             keycloak.realm(realmName).clients().create(createClient("app-user", "app-user", realmName));
-            System.out.println("We have registered the admin user" + adminRegisterResponse.toString());
+            adminRegisterResponse = registerUser(companyRegisterDTO.getAdminInfo(), realmName, "app-admin");
+            System.out.println("Status Register" + adminRegisterResponse.getStatus());
+            return login(new LogInDTO(realmName, companyRegisterDTO.getAdminInfo().getEmail(), "admin"), "app-admin", "app-admin");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -57,14 +60,15 @@ public class RegisterServiceImpl implements IRegisterService {
                 keycloak.close();
             }
         }
-        return adminRegisterResponse;
+        return null;
     }
 
     @Override
-    public Response registerUser(NewUserDTO newUserDTO, String realmName) {
+    public Response registerUser(NewUserDTO newUserDTO, String realmName, String clientId) {
         Keycloak keycloak = null;
         Response response = null;
         try {
+//            keycloak = keycloakConfigComponent.getKeycloakInstance(env.getProperty("keycloak-config.username"), env.getProperty("keycloak-config.password"), realmName, clientId);
             keycloak = keycloakConfigComponent.getKeycloakInstance();
             UserRepresentation user = new UserRepresentation();
             user.setEmail(newUserDTO.getEmail());
@@ -97,29 +101,36 @@ public class RegisterServiceImpl implements IRegisterService {
     }
 
     @Override
-    public Response login(LogInDTO logInDTO) {
-//        Keycloak keycloak = null;
-//        Response response = null;
-//        try {
-//            keycloak = keycloakConfigComponent.getKeycloakInstance(logInDTO.getUsername(), logInDTO.getPassword(), logInDTO.getRealm());
-//            UserRepresentation newUser = keycloak.realm(realmName).users().search(newUserDTO.getEmail()).get(0);
-//            UserResource userResource = keycloak.realm(realmName).users().get(newUser.getId());
-//            // The below line of code is not yet performable due to the lack of an email server
-////            keycloak.realm(realmName).users().get(newUser.getId()).executeActionsEmail(Arrays.asList("UPDATE_PASSWORD"));
-//            CredentialRepresentation credential = new CredentialRepresentation();
-//            credential.setType(CredentialRepresentation.PASSWORD);
-//            credential.setValue("admin"); // Bad practice, I know
-//            credential.setTemporary(true);
-//            userResource.resetPassword(credential);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            if (keycloak != null) {
-//                System.out.println("Closing Keycloak");
-//                keycloak.close();
-//            }
-//        }
+    public AccessTokenResponse login(LogInDTO logInDTO, String clientId, String clientSecret) {
+        Keycloak keycloak = null;
+        Response response = null;
+        try {
+            keycloak = KeycloakBuilder.builder()
+                    .serverUrl(env.getProperty("keycloak.auth-server-url"))
+                    .realm(logInDTO.getRealm())
+                    .grantType(OAuth2Constants.PASSWORD)
+                    .clientId(clientId)
+                    .clientSecret(clientSecret)
+                    .username(logInDTO.getUsername())
+                    .password(logInDTO.getPassword())
+                    .build();
+
+            System.out.println("Logging in Sever URL: " + env.getProperty("keycloak.auth-server-url"));
+            System.out.println("Logging in Realm: " + logInDTO.getRealm());
+            System.out.println("Username: " + logInDTO.getUsername());
+            System.out.println("Password: " + logInDTO.getPassword());
+            System.out.println("Client ID: " + clientId);
+            System.out.println("Logging in Client Secret: " + clientSecret);
+            return keycloak.tokenManager().getAccessToken();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (keycloak != null) {
+                System.out.println("Closing Keycloak");
+                keycloak.close();
+            }
+        }
 //        return response;
         return null;
     }

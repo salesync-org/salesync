@@ -25,7 +25,8 @@ CREATE TABLE IF NOT EXISTS public.record_property
     record_property_id uuid NOT NULL DEFAULT gen_random_uuid(),
     record_id uuid NOT NULL,
     property_id uuid NOT NULL,
-    represent_value character varying(255) COLLATE pg_catalog."default",
+    property_label character varying(255) COLLATE pg_catalog."default",
+    value character varying(255) COLLATE pg_catalog."default",
     CONSTRAINT pk_record_property PRIMARY KEY (record_property_id)
     )
 

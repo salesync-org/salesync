@@ -18,6 +18,8 @@ import java.util.UUID;
 public class RecordProperty extends BaseEntity{
 
     private UUID propertyId;
+    private String value;
+    private String label;
     @ManyToOne
     @JoinColumn(name = "record_id")
     private Record record;

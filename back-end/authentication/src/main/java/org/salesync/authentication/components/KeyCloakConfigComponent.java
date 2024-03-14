@@ -27,7 +27,7 @@ public class KeyCloakConfigComponent {
     public Keycloak getKeycloakInstance(String username, String password, String realm, String clientId) {
         return Keycloak.getInstance(
                 env.getProperty("keycloak.auth-server-url"),
-                env.getProperty(realm),
+                realm,
                 username,
                 password,
                 clientId);

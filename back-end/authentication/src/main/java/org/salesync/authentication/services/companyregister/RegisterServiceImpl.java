@@ -5,12 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
+import org.keycloak.admin.client.resource.ClientResource;
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.representations.AccessTokenResponse;
-import org.keycloak.representations.idm.ClientRepresentation;
-import org.keycloak.representations.idm.CredentialRepresentation;
-import org.keycloak.representations.idm.RealmRepresentation;
-import org.keycloak.representations.idm.UserRepresentation;
+import org.keycloak.representations.idm.*;
 import org.salesync.authentication.components.KeyCloakConfigComponent;
 import org.salesync.authentication.dtos.CompanyRegisterDTO;
 import org.salesync.authentication.dtos.LogInDTO;
@@ -19,8 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -48,6 +48,8 @@ public class RegisterServiceImpl implements IRegisterService {
             System.out.println("Created Realm with name: " + realmName);
             keycloak.realm(realmName).clients().create(createClient("app-admin", "app-admin", realmName));
             keycloak.realm(realmName).clients().create(createClient("app-user", "app-user", realmName));
+            createRoles(keycloak.realm(realmName).clients().get("app-admin"), realmName, "view-users");
+            createRoles(keycloak.realm(realmName).clients().get("app-admin"), realmName, "manage-users");
             adminRegisterResponse = registerUser(companyRegisterDTO.getAdminInfo(), realmName, "app-admin");
             System.out.println("Status Register" + adminRegisterResponse.getStatus());
             return login(new LogInDTO(realmName, companyRegisterDTO.getAdminInfo().getEmail(), "admin"), "app-admin", "app-admin");
@@ -68,8 +70,8 @@ public class RegisterServiceImpl implements IRegisterService {
         Keycloak keycloak = null;
         Response response = null;
         try {
-//            keycloak = keycloakConfigComponent.getKeycloakInstance(env.getProperty("keycloak-config.username"), env.getProperty("keycloak-config.password"), realmName, clientId);
-            keycloak = keycloakConfigComponent.getKeycloakInstance();
+            keycloak = keycloakConfigComponent.getKeycloakInstance(env.getProperty("keycloak-config.username"), env.getProperty("keycloak-config.password"), realmName, clientId);
+//            keycloak = keycloakConfigComponent.getKeycloakInstance();
             UserRepresentation user = new UserRepresentation();
             user.setEmail(newUserDTO.getEmail());
             user.setUsername(newUserDTO.getEmail());
@@ -86,7 +88,7 @@ public class RegisterServiceImpl implements IRegisterService {
             CredentialRepresentation credential = new CredentialRepresentation();
             credential.setType(CredentialRepresentation.PASSWORD);
             credential.setValue("admin"); // Bad practice, I know
-            credential.setTemporary(true);
+//            credential.setTemporary(true);
             userResource.resetPassword(credential);
 
         } catch (Exception e) {
@@ -137,14 +139,24 @@ public class RegisterServiceImpl implements IRegisterService {
 
     private ClientRepresentation createClient(String clientSecret, String clientName, String realmName) {
         ClientRepresentation clientRepresentation = new ClientRepresentation();
-        clientRepresentation.setClientId(clientName); // Optional: Customize clientId
-        clientRepresentation.setPublicClient(false); // Confidential client for backend service
-        // Add specific client scopes if needed
+        clientRepresentation.setClientId(clientName);
+        clientRepresentation.setPublicClient(false);
+        clientRepresentation.setAuthorizationServicesEnabled(false);
+
+        // Add specific client scopes (if needed)
+
         CredentialRepresentation credential = new CredentialRepresentation();
         credential.setType(CredentialRepresentation.SECRET);
         credential.setValue(clientSecret);
         clientRepresentation.setSecret(credential.getValue());
         return clientRepresentation;
+    }
+
+    private void createRoles(ClientResource clientResource, String realmName, String roleName) {
+        Keycloak keycloak = keycloakConfigComponent.getKeycloakInstance(); // Assuming you have this to get a Keycloak instance
+        clientResource.roles().create(keycloak.realm(realmName).clients()
+                .get("realm-management")
+                .roles().get(roleName).toRepresentation());
     }
 
 }

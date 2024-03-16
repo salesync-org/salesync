@@ -1,5 +1,5 @@
 import Icon from '@/components/ui/Icon/Icon';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import RecordTabs from '../../components/Records/RecordTabs';
 import { Navigate, useLocation } from 'react-router-dom';
 import RecordTable from '@/components/Records/RecordTable';
@@ -8,6 +8,7 @@ import Panel from '@/components/ui/Panel/Panel';
 import Button from '@/components/ui/Button/Button';
 import TextInput from '@/components/ui/TextInput/TextInput';
 import { ButtonGroup, DropDown } from '@/components/ui';
+import useType from '@/hooks/type-service/useType';
 
 const initTabs = [
   { title: 'Leads', href: '/sales/leads' },
@@ -21,22 +22,29 @@ const initTabs = [
 ];
 
 const Sales = () => {
-  const [tabs, setTabs] = useState(() => {
-    const savedTabs = localStorage.getItem('salesTabs');
-    return savedTabs ? JSON.parse(savedTabs) : initTabs;
-  });
+  // const [tabs, setTabs] = useState(() => {
+  //   const savedTabs = localStorage.getItem('salesTabs');
+  //   return savedTabs ? JSON.parse(savedTabs) : initTabs;
+  // });
 
+  const { types = [], error, isLoading } = useType();
   const location = useLocation();
 
-  if (location.pathname.endsWith('sales') && tabs.length > 0) {
-    return <Navigate to={`${tabs[0].href}`} />;
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  console.log(types);
+
+  if (location.pathname.endsWith('sales') && types.length > 0) {
+    return <Navigate to={`/${types[0].id}}`} />;
   }
 
   return (
     <div className='flex h-full flex-col'>
       <section className='flex items-center bg-white px-6'>
         <h2 className='pr-6 leading-6'>Sales</h2>
-        <RecordTabs tabs={tabs} setTabs={setTabs} name='salesTabs' />
+        <RecordTabs tabs={types} name='salesTabs' />
         <Icon name='edit' className='ml-auto' />
       </section>
       <section className='h-full flex-grow p-4'>

@@ -32,7 +32,7 @@ function App() {
               <Route path='field' element={<TypeDetail />} />
               <Route path='link' element={<TypeDetail />} />
               <Route path='/type-manager' element={<TypeManager />} /> */}
-              <Route path='sales' element={<Sales />} />
+              <Route path='/sales/:typeId' element={<Sales />} />
               <Route path='*' element={<Sales />} />
             </Route>
           </Route>

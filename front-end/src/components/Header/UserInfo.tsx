@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import defaultAvatar from '@/assets/default_avatar.png';
 import {Button, DropDownList, Icon, Item} from '@/components/ui';
+import { isImageShowableHead } from '@/utils/image_checking';
+import { set } from 'zod';
 
 const UserInfo = () => {
   const { user, logout, fetchUser } = useAuth();
@@ -22,7 +24,12 @@ const UserInfo = () => {
       } else {
         const { name, avatar_url } = user;
         setName(name);
-        setAvatar(avatar_url);
+        const availabilty = await isImageShowableHead(avatar_url);
+        if (availabilty) {
+          setAvatar(avatar_url);
+        } else {
+          setAvatar(defaultAvatar);
+        }
       }
     };
     updateInfo();

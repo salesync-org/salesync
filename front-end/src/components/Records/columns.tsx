@@ -1,7 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table';
-import Icon from '../ui/Icon/Icon';
+import {Icon, Checkbox} from '@/components/ui';
 import { Link } from 'react-router-dom';
-import { Checkbox } from 'ui/checkbox';
 
 export type Sale = {
   id: string;

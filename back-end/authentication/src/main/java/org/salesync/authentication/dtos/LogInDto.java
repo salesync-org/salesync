@@ -10,9 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class LogInDTO {
-    @JsonProperty("realm")
-    String realm;
+public class LogInDto {
     @JsonProperty("username")
     String username;
     @JsonProperty("password")

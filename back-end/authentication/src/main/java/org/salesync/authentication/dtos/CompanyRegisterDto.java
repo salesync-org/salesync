@@ -10,9 +10,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class CompanyRegisterDTO {
+public class CompanyRegisterDto {
     @JsonProperty("admin_info")
-    private NewUserDTO adminInfo;
+    private NewUserDto adminInfo;
     @JsonProperty("employees")
     private int noEmployees;
 

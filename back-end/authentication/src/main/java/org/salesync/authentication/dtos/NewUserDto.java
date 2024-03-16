@@ -10,18 +10,18 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class NewUserDTO {
+public class NewUserDto {
     @JsonProperty("first_name")
-    private String firstName;
+    private String firstName = "";
 
     @JsonProperty("last_name")
-    private String lastName;
+    private String lastName = "User";
 
     @JsonProperty("job_title")
-    private String jobTitle;
+    private String jobTitle = "";
 
     @JsonProperty("phone")
-    private String phone;
+    private String phone = "";
 
     @JsonProperty("email")
     private String email;

@@ -29,7 +29,7 @@ const Sales = () => {
   const location = useLocation();
 
   if (location.pathname.endsWith('sales') && tabs.length > 0) {
-    return <Navigate to={`/${tabs[0].href}`} />;
+    return <Navigate to={`${tabs[0].href}`} />;
   }
 
   return (
@@ -74,9 +74,9 @@ const Sales = () => {
           </section>
           <section className='my-2 flex items-center justify-between'>
             <ul className='flex gap-1 leading-[18px]'>
-              <li>• Sorted by Name</li>
-              <li>• Filtered by All leads - Lead Status</li>
-              <li>• Updated 8 minutes ago</li>
+              <li className='truncate'>• Sorted by Name</li>
+              <li className='truncate'>• Filtered by All leads - Lead Status</li>
+              <li className='truncate'>• Updated 8 minutes ago</li>
             </ul>
             <div className='flex items-center space-x-1'>
               <TextInput placeholder='Search this list...' prefixIcon='search' />

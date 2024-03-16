@@ -1,6 +1,7 @@
 import { Suspense, lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import ConfigLayout from './components/Layout/ConfigLayout';
+import PrivateRoute from './pages/PrivateRoute/PrivateRoute';
 
 // const LogIn = lazy(() => import('pages/LogIn/LogIn'));
 // const Setting = lazy(() => import('pages/Setting/Setting'));
@@ -20,19 +21,20 @@ function App() {
       <Suspense fallback={<div>Loading...</div>}>
         <Routes>
           <Route path='cheatsheet' element={<Cheatsheet />} />
-          <Route path='/' element={<ConfigLayout />}>
-            <Route path='/home' element={<HomeLayout />} />
-            <Route path='cheatsheet' element={<Cheatsheet />} />
-            {/* <Route path='/' element={<LogIn />} />
-            <Route path='setting' element={<Setting />} />
-            <Route path='type' element={<TypeDetail />} />
-            <Route path='type/link/:id' element={<TypeDetail />} />
-            <Route path='field' element={<TypeDetail />} />
-            <Route path='link' element={<TypeDetail />} />
-            <Route path='/type-manager' element={<TypeManager />} /> */}
-            <Route path='sales' element={<Sales />} />
-            <Route path='lead/:leadId' element={<LeadDetail />} />
-            <Route path='*' element={<Sales />} />
+          <Route element={<PrivateRoute />}>
+            <Route path='/' element={<ConfigLayout />}>
+              <Route path='/home' element={<HomeLayout />} />
+              <Route path='cheatsheet' element={<Cheatsheet />} />
+              {/* <Route path='/' element={<LogIn />} />
+              <Route path='setting' element={<Setting />} />
+              <Route path='type' element={<TypeDetail />} />
+              <Route path='type/link/:id' element={<TypeDetail />} />
+              <Route path='field' element={<TypeDetail />} />
+              <Route path='link' element={<TypeDetail />} />
+              <Route path='/type-manager' element={<TypeManager />} /> */}
+              <Route path='sales' element={<Sales />} />
+              <Route path='*' element={<Sales />} />
+            </Route>
           </Route>
           <Route path='/sign-up' element={<SignUp />} />
           <Route path='/login' element={<LogIn />}></Route>

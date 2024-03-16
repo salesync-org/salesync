@@ -22,10 +22,10 @@ type TypeProperty = {
   label: string;
   name: string;
   type: string;
-  properties?: property[];
+  properties?: Property[];
 };
 
-type property = {
+type Property = {
   id: string;
   name: string;
   type: string;

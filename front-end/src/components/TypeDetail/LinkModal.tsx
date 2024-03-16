@@ -31,7 +31,6 @@ interface LinkModalProp {
 const INIT_SELECTED = 'Select a value';
 
 const LinkModal = ({ isOpen, setIsOpen, currentLink }: LinkModalProp) => {
-  console.log({ currentLink });
   const [selectedRelation, setSelectedRelation] = useState(INIT_SELECTED);
   const [selectedType, setSelectedType] = useState(INIT_SELECTED);
   const [loading, setLoading] = useState(false);

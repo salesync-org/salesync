@@ -16,13 +16,11 @@ const Popup: React.FC<PopupProps> = ({ isOpen = false, onClose, onClick, childre
     setIsPopupOpen(false);
   });
   useEffect(() => {
-    console.log('isOpen', isOpen);
     setIsPopupOpen(isOpen);
   }, [isOpen]);
 
   useEffect(() => {
     if (!isPopupOpen) {
-      console.log('onClose');
       onClose?.();
     }
   }, [isPopupOpen]);

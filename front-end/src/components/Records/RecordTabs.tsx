@@ -1,6 +1,7 @@
 import Icon from '@/components/ui/Icon/Icon';
 import { cn } from '@/utils/utils';
-import { NavLink, useLocation } from 'react-router-dom';
+import { useQueryClient } from 'react-query';
+import { NavLink, useLocation, useParams } from 'react-router-dom';
 
 interface RecordTabsProps {
   tabs: Type[];
@@ -9,7 +10,8 @@ interface RecordTabsProps {
 }
 
 const RecordTabs = ({ tabs = [], name }: RecordTabsProps) => {
-  const location = useLocation();
+  const id = useParams().typeId as string;
+  const queryClient = useQueryClient();
 
   const handleDragStart = (e: React.DragEvent<HTMLAnchorElement>) => {
     e.currentTarget.classList.add('opacity-0');
@@ -32,7 +34,7 @@ const RecordTabs = ({ tabs = [], name }: RecordTabsProps) => {
       const to = Number(sibling.getAttribute('value'));
       const newTabs = [...tabs];
       newTabs.splice(to, 0, newTabs.splice(from, 1)[0]);
-      // setTabs(newTabs);
+      queryClient.setQueryData('types', newTabs);
     }
   };
 
@@ -61,7 +63,7 @@ const RecordTabs = ({ tabs = [], name }: RecordTabsProps) => {
               }}
             >
               <NavLink
-                to={`/${tab.id}`}
+                to={`/sales/${tab.id}`}
                 data-index={index}
                 draggable
                 onDragStart={handleDragStart}
@@ -77,7 +79,7 @@ const RecordTabs = ({ tabs = [], name }: RecordTabsProps) => {
                   )
                 }
               >
-                {false && (
+                {tab.id === id && (
                   <span
                     className={cn('absolute left-[-1px] right-[-1px] top-0 h-[3px] animate-to-top bg-primary')}
                   ></span>

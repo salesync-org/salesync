@@ -1,17 +1,15 @@
-import Icon from '@/components/ui/Icon/Icon';
-import { useEffect, useState } from 'react';
-import RecordTabs from '../../components/Records/RecordTabs';
-import { Navigate, useLocation } from 'react-router-dom';
 import RecordTable from '@/components/Records/RecordTable';
-import icon from 'assets/type-icon/lead_icon.png';
-import Panel from '@/components/ui/Panel/Panel';
-import Button from '@/components/ui/Button/Button';
-import TextInput from '@/components/ui/TextInput/TextInput';
 import { ButtonGroup, DropDown } from '@/components/ui';
+import Button from '@/components/ui/Button/Button';
+import Icon from '@/components/ui/Icon/Icon';
+import Panel from '@/components/ui/Panel/Panel';
+import TextInput from '@/components/ui/TextInput/TextInput';
 import useType from '@/hooks/type-service/useType';
-import { useToast } from '@/components/ui/use-toast';
-import { ToastAction } from '@radix-ui/react-toast';
+import icon from 'assets/type-icon/lead_icon.png';
+import { Navigate, useLocation } from 'react-router-dom';
+import RecordTabs from '../../components/Records/RecordTabs';
 import ErrorToaster from '../Error/ErrorToaster';
+import { useGlobalModalContext } from '@/context/GlobalModalContext';
 
 const initTabs = [
   { title: 'Leads', href: '/sales/leads' },
@@ -32,7 +30,8 @@ const Sales = () => {
 
   const { types = [], error, isLoading } = useType();
   const location = useLocation();
-  const { toast } = useToast();
+
+  const { showModal } = useGlobalModalContext();
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -43,7 +42,7 @@ const Sales = () => {
   }
 
   if (location.pathname.endsWith('sales') && types.length > 0) {
-    return <Navigate to={`/${types[0].id}}`} />;
+    return <Navigate to={`/sales/${types[0].id}`} />;
   }
 
   return (
@@ -69,7 +68,13 @@ const Sales = () => {
               </div>
             </div>
             <ButtonGroup>
-              <Button intent='normal' zoom={false}>
+              <Button
+                intent='normal'
+                zoom={false}
+                onClick={() => {
+                  showModal('CREATE_RECORD_MODAL');
+                }}
+              >
                 New
               </Button>
               <Button intent='normal' zoom={false}>

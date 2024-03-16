@@ -28,15 +28,15 @@ export const handlers = [
         }
       );
     }
-    return HttpResponse.json(
-      {
-        message: 'Invalid email or password',
-        type: 'password'
-      },
-      {
-        status: 401
-      }
-    );
+    // return HttpResponse.json(
+    //   {
+    //     message: 'Invalid email or password',
+    //     type: 'password'
+    //   },
+    //   {
+    //     status: 401
+    //   }
+    // );
   }),
 
   http.get(`${USER_SERVICE_URL}/me`, ({ request }) => {

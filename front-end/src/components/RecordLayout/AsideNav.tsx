@@ -22,7 +22,7 @@ const asideItems: AsideItem[] = [
 
 const AsideNav = () => {
   const [currentAsideItems, setCurrentAsideItems] = useState<AsideItem[]>(() => {
-    return JSON.parse(localStorage.getItem('asideItems') || '') || asideItems;
+    return localStorage.getItem('asideItems') !== null ? JSON.parse(localStorage.getItem('asideItems')!) : asideItems;
   });
 
   return (

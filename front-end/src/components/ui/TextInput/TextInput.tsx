@@ -15,6 +15,7 @@ interface TextInputProps {
   showHeader?: boolean;
   prefixIcon?: string;
   restProps?: React.HTMLAttributes<HTMLInputElement>;
+  isPassword?: boolean;
 }
 const TextInput: React.FC<TextInputProps> = ({
   value,
@@ -24,6 +25,7 @@ const TextInput: React.FC<TextInputProps> = ({
   header,
   showHeader = true,
   prefixIcon,
+  isPassword = false,
   onChange,
   name = '',
   register = () => ({}),
@@ -45,7 +47,7 @@ const TextInput: React.FC<TextInputProps> = ({
         )}
       >
         <input
-          type='text'
+          type={isPassword ? 'password' : 'text'}
           placeholder={placeholder}
           className={cn(
             'h-full w-full rounded bg-transparent py-2 pr-2 placeholder:text-opacity-50 focus:outline-primary',

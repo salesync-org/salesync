@@ -39,7 +39,7 @@ const LogIn = () => {
   const onSubmit = async (data: LoginSchemaType) => {
     try {
       await login({ email: data.username, password: data.password });
-      navigate('/');
+      navigate('/home');
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -62,9 +62,9 @@ const LogIn = () => {
             <div className='mb-3 flex w-full justify-center'>
               <form onSubmit={handleSubmit(onSubmit)} className='h-auto w-96 rounded-sm bg-white p-5'>
                 {/* {error && <ErrorText text={errorText} className='text-sm' />} */}
-                <TextInput placeholder='' header='Username' register={register} name='username' />
+                <TextInput placeholder='Enter email' header='Email' register={register} name='username' />
                 {errors.username && <ErrorText text={errors.username.message} className='text-sm' />}
-                <TextInput placeholder='' header='Password' register={register} name='password' />
+                <TextInput placeholder='Enter password' isPassword={true} header='Password' register={register} name='password' />
                 {errors.password && <ErrorText text={errors.password.message} className='text-sm' />}
 
                 <PrimaryButton className='mt-4 w-full' type='submit'>

@@ -9,6 +9,9 @@ import Button from '@/components/ui/Button/Button';
 import TextInput from '@/components/ui/TextInput/TextInput';
 import { ButtonGroup, DropDown } from '@/components/ui';
 import useType from '@/hooks/type-service/useType';
+import { useToast } from '@/components/ui/use-toast';
+import { ToastAction } from '@radix-ui/react-toast';
+import ErrorToaster from '../Error/ErrorToaster';
 
 const initTabs = [
   { title: 'Leads', href: '/sales/leads' },
@@ -29,12 +32,15 @@ const Sales = () => {
 
   const { types = [], error, isLoading } = useType();
   const location = useLocation();
+  const { toast } = useToast();
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  console.log(types);
+  if (error) {
+    return <ErrorToaster errorTitle='adasd' errorMessage='fetch fail' />;
+  }
 
   if (location.pathname.endsWith('sales') && types.length > 0) {
     return <Navigate to={`/${types[0].id}}`} />;

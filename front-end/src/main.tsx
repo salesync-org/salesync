@@ -5,6 +5,7 @@ import './index.css';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import AuthProvider from './context/AuthContext.tsx';
+import { ErrorBoundary } from './pages/ErrorBoundary/ErrorBoundary.tsx';
 
 const queryClient = new QueryClient();
 

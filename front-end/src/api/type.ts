@@ -1,6 +1,6 @@
 import axios from './axiosConfig';
 
-const URL = 'http://localhost:5000/api/v1/types';
+const URL = 'http://localhost:5000/api/v1/types1';
 
 class TypeApi {
   async getAllTypes() {

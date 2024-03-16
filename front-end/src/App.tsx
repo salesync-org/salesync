@@ -2,6 +2,7 @@ import { Suspense, lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import ConfigLayout from './components/Layout/ConfigLayout';
 import PrivateRoute from './pages/PrivateRoute/PrivateRoute';
+import { Toaster } from './components/ui/toaster';
 
 // const LogIn = lazy(() => import('pages/LogIn/LogIn'));
 // const Setting = lazy(() => import('pages/Setting/Setting'));
@@ -41,6 +42,7 @@ function App() {
           <Route path='/forgot-password' element={<ForgotPassword />}></Route>
         </Routes>
       </Suspense>
+      <Toaster />
     </div>
   );
 }

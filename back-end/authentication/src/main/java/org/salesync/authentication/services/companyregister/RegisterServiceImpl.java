@@ -16,6 +16,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +40,6 @@ public class RegisterServiceImpl implements IRegisterService {
             createRoles(keycloak.realm(realmName), "standard-user");
             createRoles(keycloak.realm(realmName), "admin-user");
             adminRegisterResponse = registerUser(companyRegisterDTO.getAdminInfo(), realmName, "account");
-            addRoleToUser(keycloak.realm(realmName), "admin-user", keycloak.realm(realmName).users().search(companyRegisterDTO.getAdminInfo().getEmail()).get(0).getId());
             System.out.println("Status Register" + adminRegisterResponse.getStatus());
             return login(realmName, new LogInDto(companyRegisterDTO.getAdminInfo().getEmail(), "admin"), "app-admin", "app-admin");
 
@@ -76,6 +76,7 @@ public class RegisterServiceImpl implements IRegisterService {
             credential.setValue("admin"); // Bad practice, I know
 //            credential.setTemporary(true);
             userResource.resetPassword(credential);
+            addRoleToUser(keycloak.realm(realmName), newUserDTO.getRole(), newUser.getId());
 
         } catch (Exception e) {
             e.printStackTrace();

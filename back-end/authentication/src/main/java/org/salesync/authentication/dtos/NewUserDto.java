@@ -25,4 +25,7 @@ public class NewUserDto {
 
     @JsonProperty("email")
     private String email;
+
+    @JsonProperty("role")
+    private String role = "standard-user";
 }

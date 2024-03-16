@@ -51,7 +51,7 @@ const DropDown: React.FC<DropdownButtonProps> = ({
         <p className='truncate w-fit'>{selectedOption || value}</p>
         {suffixIcon}
       </Button>
-      <DropDownList onItemClick={handleOptionClick} onClose={() => {setIsOpen(false);}} open={isOpen} divide={divide}>
+      <DropDownList onItemClick={handleOptionClick} className={cn(className)} onClose={() => {setIsOpen(false);}} open={isOpen} divide={divide}>
         {children}
       </DropDownList>
     </div>

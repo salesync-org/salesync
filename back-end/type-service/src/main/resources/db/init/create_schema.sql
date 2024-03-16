@@ -157,6 +157,28 @@ CREATE TABLE IF NOT EXISTS public.stage
 ALTER TABLE IF EXISTS public.stage
     OWNER to postgres;
 
+CREATE TABLE IF NOT EXISTS public.property_field_type
+(
+    property_field_type_id uuid NOT NULL DEFAULT gen_random_uuid(),
+    property_field_id uuid NOT NULL,
+    type_id uuid NOT NULL,
+    value character varying(255) COLLATE pg_catalog."default",
+    CONSTRAINT pk_property_field_type PRIMARY KEY (property_field_type_id),
+    CONSTRAINT fk_property_field_type FOREIGN KEY (property_field_id)
+        REFERENCES public.property_field (property_field_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_property_field_type_type FOREIGN KEY (type_id)
+        REFERENCES public.type (type_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+    )
+
+    TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.property_field_type
+    OWNER to postgres;
+
 INSERT INTO public.type (type_id, name) VALUES
                                             ('f4828793-28c2-465b-b783-0c697e41dafb', 'Lead'),
                                             ('27d0c628-94c2-4650-828f-3c26e61bb692', 'Account'),

@@ -19,6 +19,7 @@ public class RecordProperty extends BaseEntity{
 
     private UUID propertyId;
     private String value;
+    @Column(name = "property_label")
     private String label;
     @ManyToOne
     @JoinColumn(name = "record_id")

@@ -1,11 +1,13 @@
 package org.salesync.record_service.services.record;
 
 import lombok.RequiredArgsConstructor;
+import org.salesync.record_service.dtos.ListRecordsRequestDto;
+import org.salesync.record_service.dtos.ListRecordsResponseDto;
 import org.salesync.record_service.dtos.RecordDto;
 import org.salesync.record_service.dtos.RequestRecordDto;
 import org.salesync.record_service.entities.Record;
 import org.salesync.record_service.mappers.RecordMapper;
-import org.salesync.record_service.repositories.RecordRepository;
+import org.salesync.record_service.repositories.record.RecordRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,17 +22,23 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public List<RecordDto> getRecordsByType(String typeId) {
-        return recordRepository.findByTypeId(UUID.fromString(typeId))
-                                .stream()
-                                .map(recordMapper::recordToRecordDto)
-                                .toList();
+        List<Record> record = recordRepository.findByTypeId(UUID.fromString(typeId));
+        return record
+                .stream()
+                .map(recordMapper::recordToRecordDto)
+                .toList();
     }
 
     @Override
     public List<RecordDto> getAllRecords() {
         return recordRepository.findAll()
-                                .stream().map(recordMapper::recordToRecordDto)
-                                .toList();
+                .stream().map(recordMapper::recordToRecordDto)
+                .toList();
+    }
+
+    @Override
+    public ListRecordsResponseDto getAllRecordsWithCondition(ListRecordsRequestDto listRecordsRequestDto) {
+        return recordRepository.getListRecord(listRecordsRequestDto);
     }
 
     @Override

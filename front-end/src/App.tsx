@@ -12,6 +12,7 @@ const SignUp = lazy(() => import('./pages/SignUp/SignUp'));
 const HomeLayout = lazy(() => import('./pages/Home/Home'));
 const LogIn = lazy(() => import('pages/LogIn/LogIn'));
 const ForgotPassword = lazy(() => import('pages/LogIn/ForgotPassword'));
+const LeadDetail = lazy(() => import('./pages/LeadDetail/LeadDetail'));
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
             <Route path='link' element={<TypeDetail />} />
             <Route path='/type-manager' element={<TypeManager />} /> */}
             <Route path='sales' element={<Sales />} />
+            <Route path='lead/:leadId' element={<LeadDetail />} />
             <Route path='*' element={<Sales />} />
           </Route>
           <Route path='/sign-up' element={<SignUp />} />

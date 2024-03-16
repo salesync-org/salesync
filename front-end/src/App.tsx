@@ -9,9 +9,11 @@ const Cheatsheet = lazy(() => import('pages/Cheatsheet/Cheatsheet'));
 // const TypeDetail = lazy(() => import('./pages/TypeDetail/TypeDetail'));
 // const TypeManager = lazy(() => import('./pages/TypeManager/TypeManager'));
 const Sales = lazy(() => import('./pages/Sales/Sales'));
+const SignUp = lazy(() => import('./pages/SignUp/SignUp'));
 const HomeLayout = lazy(() => import('./pages/Home/Home'));
 const LogIn = lazy(() => import('pages/LogIn/LogIn'));
 const ForgotPassword = lazy(() => import('pages/LogIn/ForgotPassword'));
+const LeadDetail = lazy(() => import('./pages/LeadDetail/LeadDetail'));
 
 function App() {
   return (
@@ -34,6 +36,7 @@ function App() {
               <Route path='*' element={<Sales />} />
             </Route>
           </Route>
+          <Route path='/sign-up' element={<SignUp />} />
           <Route path='/login' element={<LogIn />}></Route>
           <Route path='/forgot-password' element={<ForgotPassword />}></Route>
         </Routes>

@@ -4,24 +4,12 @@ import Icon from '../ui/Icon/Icon';
 import Panel from '../ui/Panel/Panel';
 import TypeTable from '../ui/Table/TypeTable';
 import { Button } from '../ui/Button';
-import { useState } from 'react';
 import { DropDown, DropDownItem, TextInput } from '@/components/ui';
-import propertyApi from '@/api/propertyApi';
-import RecordModal from '@/pages/Home/RecordModal';
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 
 const TypeCard = ({ type }: { type: Type }) => {
   const colorName = type.background_color;
-  const [properties, setProperties] = useState<TypeProperty>();
-
   const { showModal } = useGlobalModalContext();
-
-  const getProperty = async (typeId: string) => {
-    const property = await propertyApi.getAllProperties(typeId);
-
-    setProperties(property);
-    return property;
-  };
 
   return (
     <>
@@ -32,9 +20,8 @@ const TypeCard = ({ type }: { type: Type }) => {
             <TextInput prefixIcon='search' className='w-full' placeholder={`My ${type.name}`}></TextInput>
             <Button
               onClick={async () => {
-                const getProperties = await getProperty(type.id);
                 showModal(MODAL_TYPES.CREATE_RECORD_MODAL, {
-                  properties: getProperties
+                  typeId: type.id
                 });
               }}
             >

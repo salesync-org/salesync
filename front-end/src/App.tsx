@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import ConfigLayout from './components/Layout/ConfigLayout';
 import PrivateRoute from './pages/PrivateRoute/PrivateRoute';
 import { Toaster } from './components/ui/toaster';
+import LoadingSpinner from './components/ui/Loading/LoadingSpinner';
 
 // const LogIn = lazy(() => import('pages/LogIn/LogIn'));
 // const Setting = lazy(() => import('pages/Setting/Setting'));
@@ -19,20 +20,13 @@ const LeadDetail = lazy(() => import('./pages/LeadDetail/LeadDetail'));
 function App() {
   return (
     <div>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<LoadingSpinner />}>
         <Routes>
           <Route path='cheatsheet' element={<Cheatsheet />} />
           <Route element={<PrivateRoute />}>
             <Route path='/' element={<ConfigLayout />}>
               <Route path='/home' element={<HomeLayout />} />
               <Route path='cheatsheet' element={<Cheatsheet />} />
-              {/* <Route path='/' element={<LogIn />} />
-              <Route path='setting' element={<Setting />} />
-              <Route path='type' element={<TypeDetail />} />
-              <Route path='type/link/:id' element={<TypeDetail />} />
-              <Route path='field' element={<TypeDetail />} />
-              <Route path='link' element={<TypeDetail />} />
-              <Route path='/type-manager' element={<TypeManager />} /> */}
               <Route path='/sales/:typeId' element={<Sales />} />
               <Route path='*' element={<Sales />} />
             </Route>

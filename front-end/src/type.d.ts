@@ -19,14 +19,16 @@ type Type = {
 
 type TypeProperty = {
   id: string;
-  label: string;
+  label?: string;
   name: string;
-  type: string;
+  type?: string;
+  description?: string;
   properties?: Property[];
 };
 
 type Property = {
   id: string;
+  label?: string;
   name: string;
   type: string;
   options?: string[];

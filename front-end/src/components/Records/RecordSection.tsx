@@ -7,6 +7,7 @@ import TextInput from '@/components/ui/TextInput/TextInput';
 import { tableButtons } from '@/constants/layout';
 import { useGlobalModalContext } from '@/context/GlobalModalContext';
 import icon from 'assets/type-icon/lead_icon.png';
+import { useParams } from 'react-router-dom';
 
 interface RecordSectionProps {
   type: Type | undefined;
@@ -14,8 +15,9 @@ interface RecordSectionProps {
 
 const RecordSection = ({ type }: RecordSectionProps) => {
   const { showModal } = useGlobalModalContext();
+  const { typeId } = useParams();
 
-  if (!type) {
+  if (!type || !typeId) {
     return null;
   }
 
@@ -45,7 +47,7 @@ const RecordSection = ({ type }: RecordSectionProps) => {
                   intent='normal'
                   zoom={false}
                   onClick={() => {
-                    showModal(button.modalName);
+                    showModal(button.modalName, { typeId });
                   }}
                 >
                   {button.name}

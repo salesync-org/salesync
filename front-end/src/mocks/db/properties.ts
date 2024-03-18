@@ -1,4 +1,4 @@
-export const properties = [
+export const properties: TypeProperty[] = [
   {
     id: 'f4828793-28c2-465b-b783-0c697e41dafb',
     name: 'Lead',

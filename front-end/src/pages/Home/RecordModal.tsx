@@ -1,31 +1,39 @@
 import { Modal, TextInput, DropDown, DropDownItem, Panel, ModalFooter, Button, PrimaryButton } from '@/components/ui';
+import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
 import { useGlobalModalContext } from '@/context/GlobalModalContext';
+import useProperties from '@/hooks/type-service/useProperties';
+import ErrorToaster from '../Error/ErrorToaster';
 
 const RecordModal = () => {
   const { hideModal, store } = useGlobalModalContext();
-  const { modalProps, modalType } = store;
+  const { modalType, modalProps } = store;
+  const { typeId } = modalProps;
 
-  const {
-    properties = {
-      id: '',
-      label: '',
-      name: '',
-      type: '',
-      properties: []
-    }
-  } = modalProps;
+  const { typeProperty, isLoading } = useProperties(typeId);
+
+  if (!typeId) {
+    return null;
+  }
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (!typeProperty) {
+    return <ErrorToaster errorTitle='Error' errorMessage='Failed to fetch properties' />;
+  }
 
   return (
     <Modal
       isOpen={Boolean(modalType)}
       onClose={hideModal}
       className='h-[600px]'
-      title={properties ? `New ${properties.name}` : 'New'}
+      title={typeProperty ? `New ${typeProperty.name}` : 'New'}
     >
       <form className='-z-1 absolute bottom-2 left-2 right-2 top-20 overflow-x-hidden  pb-32  '>
         <div className='flex w-full flex-col place-content-center gap-2   p-6'>
-          {properties ? (
-            properties.properties?.map((property: Property) => {
+          {typeProperty ? (
+            typeProperty.properties?.map((property: Property) => {
               if (property.type === 'text')
                 return <TextInput header={property.name} key={property.id} placeholder={property.name}></TextInput>;
               else if (property.type === 'dropdown')

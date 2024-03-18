@@ -1,7 +1,7 @@
 import TypeCard from '@/components/ObjectCard/TypeCard';
 const HomeLayout = () => {
   //lead
-  let Lead: Type = {
+  const Lead: Type = {
     icon_url: 'https://momentum-enterprise-925.my.salesforce.com/img/icon/t4v35/standard/lead_120.png',
     //tailwind color
     background_color: 'bg-red-500',
@@ -16,7 +16,7 @@ const HomeLayout = () => {
   };
 
   //Opportunity type
-  let Opportunity: Type = {
+  const Opportunity: Type = {
     icon_url: 'https://momentum-enterprise-925.my.salesforce.com/img/icon/t4v35/standard/opportunity_120.png',
     background_color: 'bg-green-500',
     id: '2',
@@ -29,7 +29,7 @@ const HomeLayout = () => {
     ]
   };
   //contact
-  let Contact: Type = {
+  const Contact: Type = {
     icon_url: 'https://momentum-enterprise-925.my.salesforce.com/img/icon/t4v35/standard/contact_120.png',
     background_color: 'bg-blue-500',
     id: '3',
@@ -43,7 +43,7 @@ const HomeLayout = () => {
   };
 
   //case
-  let Case: Type = {
+  const Case: Type = {
     icon_url: 'https://momentum-enterprise-925.my.salesforce.com/img/icon/t4v35/standard/case_120.png',
     background_color: 'bg-yellow-500',
     id: '4',

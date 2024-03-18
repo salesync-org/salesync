@@ -10,6 +10,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import RecordTabs from '../../components/Records/RecordTabs';
 import ErrorToaster from '../Error/ErrorToaster';
 import { useGlobalModalContext } from '@/context/GlobalModalContext';
+import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
 
 const initTabs = [
   { title: 'Leads', href: '/sales/leads' },
@@ -23,18 +24,13 @@ const initTabs = [
 ];
 
 const Sales = () => {
-  // const [tabs, setTabs] = useState(() => {
-  //   const savedTabs = localStorage.getItem('salesTabs');
-  //   return savedTabs ? JSON.parse(savedTabs) : initTabs;
-  // });
-
   const { types = [], error, isLoading } = useType();
   const location = useLocation();
 
   const { showModal } = useGlobalModalContext();
 
+  return <LoadingSpinner />;
   if (isLoading) {
-    return <div>Loading...</div>;
   }
 
   if (error) {

@@ -26,7 +26,7 @@ const AsideNav = () => {
   });
 
   return (
-    <aside className='fixed grid min-h-dvh w-[76px] justify-center bg-[#014486] text-white'>
+    <aside className='fixed z-50 grid min-h-dvh w-[76px] justify-center bg-[#014486] text-white'>
       <nav className='p-1'>
         <ul className='flex flex-col gap-1'>
           {currentAsideItems.map((item, index) => (

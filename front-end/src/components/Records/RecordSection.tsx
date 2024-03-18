@@ -4,7 +4,7 @@ import Button from '@/components/ui/Button/Button';
 import Icon from '@/components/ui/Icon/Icon';
 import Panel from '@/components/ui/Panel/Panel';
 import TextInput from '@/components/ui/TextInput/TextInput';
-import { tableButtons } from '@/constants/layout';
+import { tableButtons } from '@/constants/layout/table-buttons';
 import { useGlobalModalContext } from '@/context/GlobalModalContext';
 import icon from 'assets/type-icon/lead_icon.png';
 import { useParams } from 'react-router-dom';
@@ -98,8 +98,8 @@ const RecordSection = ({ type }: RecordSectionProps) => {
           </div>
         </div>
       </section>
-      <div className='mt-4'>
-        <RecordTable />
+      <div className='-mx-4 mt-4'>
+        <RecordTable typeId={typeId} />
       </div>
     </Panel>
   );

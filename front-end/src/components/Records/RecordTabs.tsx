@@ -1,7 +1,7 @@
 import Icon from '@/components/ui/Icon/Icon';
 import { cn } from '@/utils/utils';
 import { useQueryClient } from 'react-query';
-import { NavLink, useLocation, useParams } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 
 interface RecordTabsProps {
   tabs: Type[];

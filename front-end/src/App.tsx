@@ -28,6 +28,7 @@ function App() {
               <Route path='/home' element={<HomeLayout />} />
               <Route path='cheatsheet' element={<Cheatsheet />} />
               <Route path='/sales/:typeId' element={<Sales />} />
+              <Route path='/leads/:recordId' element={<LeadDetail />} />
               <Route path='*' element={<Sales />} />
             </Route>
           </Route>

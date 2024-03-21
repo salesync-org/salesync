@@ -91,7 +91,7 @@ const LogIn = () => {
         >
           <section>
             <h1 className='my-5 text-4xl font-bold leading-10 text-[#032d60]'>
-              Start your free trial. No credit card required, no software to install.
+              Start your free trial. No credit card required.
             </h1>
             <span className='my-4'>With your trial, you get: </span>
             <div className='my-2 flex items-center'>

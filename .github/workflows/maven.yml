@@ -10,14 +10,14 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ "main", "development" ] # Check both main and development
-    paths: # Trigger based on changes in specific subfolders
+    branches: [ "main", "development" ]
+    paths:
       - 'back-end/authentication/**'
       - 'back-end/record-service/**'
       - 'back-end/type-service/**'
   pull_request:
     branches: [ "main", "development" ] 
-    paths: # Trigger based on changes in specific subfolders
+    paths:
       - 'back-end/authentication/**'
       - 'back-end/record-service/**'
       - 'back-end/type-service/**'
@@ -26,7 +26,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    # Track changed subfolders:
     strategy:
       matrix:
         path: [ 'back-end/authentication', 'back-end/record-service', 'back-end/type-service' ] 

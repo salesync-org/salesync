@@ -16,19 +16,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [19.x]
-
     steps:
     - uses: actions/checkout@v4
+    - name: Start services with Docker Compose
+      working-directory: front-end
 
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Use Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: ${{ matrix.node-version }}
-
+        node-version: 19.x
     - name: Build
       working-directory: front-end
       run: |

@@ -5,6 +5,8 @@ on:
     branches:
       - main
       - development
+    paths:
+      - back-end/type-service/**
   pull_request:
     branches:
       - main

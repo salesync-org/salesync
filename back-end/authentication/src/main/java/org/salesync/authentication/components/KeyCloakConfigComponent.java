@@ -23,7 +23,8 @@ public class KeyCloakConfigComponent {
                 env.getProperty("keycloak.realm"),
                 env.getProperty("keycloak-config.username"),
                 env.getProperty("keycloak-config.password"),
-                env.getProperty("keycloak.resource"),
-                env.getProperty("keycloak-config.client-secret"));
+                env.getProperty("keycloak.resource")
+//                , env.getProperty("keycloak-config.client-secret")
+        );
     }
 }

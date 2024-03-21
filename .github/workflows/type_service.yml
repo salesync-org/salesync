@@ -18,6 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Start services with Docker Compose
+        working-directory: back-end/type-service
         run: docker-compose up -d --build
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -26,4 +27,5 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Build with Maven
-        run: mvn -B package --file back-end/type-service/pom.xml
+        working-directory: back-end/type-service 
+        run: mvn -B package --file pom.xml 

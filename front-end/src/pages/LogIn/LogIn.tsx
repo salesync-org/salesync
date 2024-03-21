@@ -72,7 +72,7 @@ const LogIn = () => {
                 </PrimaryButton>
                 <div className='mt-4 flex items-center'>
                   <input type='checkbox' />
-                  <span className='ml-1 text-sm'>Remember me</span>
+                  <span className='ml-1 text-sm'>Remember Me</span>
                 </div>
                 <div className='mt-4 flex'>
                   <Link to='/forgot-password' className='text-xs text-blue-500'>

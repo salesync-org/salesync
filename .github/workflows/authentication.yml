@@ -10,26 +10,21 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ "main", "development" ]
+    branches:
+      - main
+      - development
     paths:
       - 'back-end/authentication/**'
-      - 'back-end/record-service/**'
-      - 'back-end/type-service/**'
   pull_request:
-    branches: [ "main", "development" ] 
+    branches:
+      - main
+      - development
     paths:
       - 'back-end/authentication/**'
-      - 'back-end/record-service/**'
-      - 'back-end/type-service/**'
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        path: [ 'back-end/authentication', 'back-end/record-service', 'back-end/type-service' ] 
-
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
@@ -39,4 +34,4 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Build with Maven
-        run: mvn -B package --file ${{ matrix.path }}/pom.xml
+        run: mvn -B package --file back-end/authentication/pom.xml

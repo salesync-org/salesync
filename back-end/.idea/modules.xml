@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/authentication/authentication.iml" filepath="$PROJECT_DIR$/authentication/authentication.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/back-end.iml" filepath="$PROJECT_DIR$/.idea/back-end.iml" />
+      <module fileurl="file://$PROJECT_DIR$/record-service/record-service.iml" filepath="$PROJECT_DIR$/record-service/record-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/type-service/type-service.iml" filepath="$PROJECT_DIR$/type-service/type-service.iml" />
     </modules>
   </component>
 </project>

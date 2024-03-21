@@ -1,4 +1,4 @@
-name: Authentication Service Build
+name: Type Service Build
 
 on:
   push:

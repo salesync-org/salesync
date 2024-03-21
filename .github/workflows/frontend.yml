@@ -5,25 +5,20 @@ on:
     branches:
       - main
       - development
-    paths:
-      - front-end/**
   pull_request:
     branches:
       - main
       - development
-    paths:
-      - front-end/**
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [18.x]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '18.x'
-      - run: npm install
-      - run: npm run build
+      - working-directory: front-end
+        run: npm install
+      - working-directory: front-end
+        run: npm run build

@@ -1,7 +1,7 @@
--- DROP DATABASE IF EXISTS mydatabase;
--- CREATE DATABASE mydatabase;
-GRANT ALL PRIVILEGES ON DATABASE salesync_record_service TO record_service;
-CREATE ROLE postgres WITH LOGIN SUPERUSER PASSWORD 'strong_password';
+DROP DATABASE IF EXISTS salesync_record_service;
+CREATE DATABASE salesync_record_service;
+-- GRANT ALL PRIVILEGES ON DATABASE salesync_record_service TO record_service;
+-- CREATE ROLE postgres WITH LOGIN SUPERUSER PASSWORD 'strong_password';
 
 \c salesync_record_service;
 

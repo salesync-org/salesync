@@ -93,7 +93,7 @@ const LogIn = () => {
             <h1 className='my-5 text-4xl font-bold leading-10 text-[#032d60]'>
               Start your free trial. No credit card required, no software to install.
             </h1>
-            <span className='my-4'>With your trial, you get: </span>
+            <span className='my-4'>With your trial, you'll get: </span>
             <div className='my-2 flex items-center'>
               <Icon size='1' name='check' className='text-green-600'></Icon>
               <span className='ml-2'>Preloaded data or upload your own</span>

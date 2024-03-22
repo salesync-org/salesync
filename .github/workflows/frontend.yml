@@ -1,5 +1,10 @@
-name: Front-end Build
+name: Frontend Build
+
 on:
+  push:
+    branches:
+      - main
+      - development
   pull_request:
     branches:
       - main

@@ -1,8 +1,17 @@
 name: Front-end Build
 on:
+  push:
+    branches:
+      - main
+      - development
+    paths:
+      - front-end/**
   pull_request:
-    branches: [main, development]
-
+    branches:
+      - main
+      - development
+    paths:
+      - front-end/**
 jobs:
   build:
     runs-on: ubuntu-latest

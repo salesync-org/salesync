@@ -1,11 +1,14 @@
 name: Front-end Build
 on:
   pull_request:
-    branches: [main, development]
+    branches:
+      - main
+      - development
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: ${{ github.event.pull_request.base.ref == 'main' && startsWith(github.ref, 'refs/heads/front-end/') }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

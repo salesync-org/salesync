@@ -96,7 +96,7 @@ const LogIn = () => {
             <span className='my-4'>With your trial, you get: </span>
             <div className='my-2 flex items-center'>
               <Icon size='1' name='check' className='text-green-600'></Icon>
-              <span className='ml-2'>Preloaded data or upload your own</span>
+              <span className='ml-2'>Preloaded data or upload your own.</span>
             </div>
             <div className='my-2 flex items-center'>
               <Icon size='1' name='check' className='text-green-600'></Icon>

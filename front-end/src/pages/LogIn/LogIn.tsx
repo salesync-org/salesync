@@ -1,7 +1,6 @@
 import salesyncIcon from 'assets/salesync_icon.png';
 import { TextInput } from '@/components/ui';
 import { PrimaryButton } from '@/components/ui';
-import { Icon } from '@/components/ui';
 import { ErrorText } from '@/components/ui';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ColumnDef } from '@tanstack/react-table';
-import Icon from '../../../components/ui/Icon/Icon';
+import Icon from 'components/ui/Icon/Icon';
 import { Link } from 'react-router-dom';
-import { Checkbox } from 'ui/checkbox';
+import { Checkbox } from 'components/ui/Checkbox';
 
 export type AccountColumns = {
   id: string;

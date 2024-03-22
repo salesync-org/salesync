@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import defaultAvatar from '@/assets/default_avatar.png';
 import {Button, DropDownList, Icon, Item} from '@/components/ui';
 import { isImageShowableHead } from '@/utils/image_checking';
-import { set } from 'zod';
 
 const UserInfo = () => {
   const { user, logout, fetchUser } = useAuth();

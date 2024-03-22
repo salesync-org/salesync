@@ -82,7 +82,7 @@ const LogIn = () => {
               </form>
             </div>
           </div>
-          <div className='mx-auto mb-2 w-full text-center text-sm'>© 2024 SaleSync, Inc. All rights reserved.</div>
+          <div className='mx-auto mb-2 w-full text-center text-sm'>©2024 SaleSync, Inc. All rights reserved.</div>
         </div>
 
         <div

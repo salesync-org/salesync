@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
+import { ThemeEnum } from '@/constants/enum';
+import { useEffect, useState } from 'react';
 import useSystemTheme from './useSystemTheme';
-import { SystemThemeEnum, ThemeEnum } from '@/constants/enum';
-import { systemThemeToThemeEnum } from '@/utils/mapper';
 
 const useTheme = (): [theme: ThemeEnum, toggleTheme: (newTheme: ThemeEnum | null) => void, isSystemTheme: boolean] => {
   const systemTheme = useSystemTheme();

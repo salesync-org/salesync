@@ -5,7 +5,6 @@ import DropDown from '../ui/DropDown/DropDown';
 import Item from '../ui/Item/Item';
 import Modal, { ModalFooter } from '../ui/Modal/Modal';
 import TextInput from '../ui/TextInput/TextInput';
-import useRelation from '@/hooks/type-service/useRelation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -31,11 +30,11 @@ interface LinkModalProp {
 const INIT_SELECTED = 'Select a value';
 
 const LinkModal = ({ isOpen, setIsOpen, currentLink }: LinkModalProp) => {
-  const [selectedRelation, setSelectedRelation] = useState(INIT_SELECTED);
+  const [selectedRelation, _] = useState(INIT_SELECTED);
   const [selectedType, setSelectedType] = useState(INIT_SELECTED);
   const [loading, setLoading] = useState(false);
   const { types = [], isLoading: isTypesLoading } = useType();
-  const { relations = [], isLoading: isRelationsLoading } = useRelation();
+
 
   const { id } = useParams<{ id: string }>() as { id: string };
   const {
@@ -119,21 +118,10 @@ const LinkModal = ({ isOpen, setIsOpen, currentLink }: LinkModalProp) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onOpenChange={setIsOpen} title='Create new Type'>
+    <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title='Create new Type'>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className='grid grid-cols-2 place-content-center gap-3'>
           <div className='w-full'>
-            <DropDown
-              header='Link Type'
-              value={isRelationsLoading ? 'Loading...' : selectedRelation}
-              onValueChange={setSelectedRelation}
-              defaultValue={currentLink?.relation.name || INIT_SELECTED}
-              disabled={Boolean(currentLink)}
-            >
-              {relations.map((relation) => {
-                return <Item key={relation.id} title={relation.name} value={relation.id} />;
-              })}
-            </DropDown>
           </div>
           <DropDown
             header='Link to'

@@ -1,11 +1,11 @@
 import { Button, ButtonGroup, DropDownList, Icon, Item, Panel } from '@/components/ui';
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+// import { useParams } from 'react-router-dom';
 import GroupProperty from '@/components/RecordDetail/GroupProperty';
 
 const LeadDetail = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
-  const leadId = useParams().leadId;
+  // const leadId = useParams().leadId;
 
   const dataAbout = [
     { name: 'Name', value: 'Nguyễn Quý' },

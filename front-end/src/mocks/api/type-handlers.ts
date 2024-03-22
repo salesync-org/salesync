@@ -47,21 +47,6 @@ export const handlers = [
     return HttpResponse.json({ totalPage, result });
   }),
 
-  http.post(`${TYPE_SERVICE_URL}/:typeId/link`, async ({ request, params }) => {
-    const typeId = params.typeId;
-    const body = await request.json();
-    // const newTypeRelation = {
-    //   id: `${typeRelations.length + 1}`,
-    //   type1Id: typeId,
-    //   type1Label: body.type1Label,
-    //   relationId: body.relationId,
-    //   type2Id: body.type2Id,
-    //   type2Label: body.type2Label
-    // };
-    // typeRelations.push(newTypeRelation);
-    // return HttpResponse.json(newTypeRelation);
-  }),
-
   http.get(`${TYPE_SERVICE_URL}/:typeId/properties`, async ({ params }) => {
     const typeId = params.typeId;
 

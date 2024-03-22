@@ -16,7 +16,7 @@ const TypeTable = ({ type }: { type: Type }) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {type.fields?.[0].values?.map((vale, index) => {
+        {type.fields?.[0].values?.map((_, index) => {
           return (
             <TableRow key={index}>
               {type.fields?.map((field) => {

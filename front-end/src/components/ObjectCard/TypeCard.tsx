@@ -4,21 +4,12 @@ import Icon from '../ui/Icon/Icon';
 import Panel from '../ui/Panel/Panel';
 import TypeTable from '../ui/Table/TypeTable';
 import { Button } from '../ui/Button';
-import { useState } from 'react';
 import { DropDown, DropDownItem, TextInput } from '@/components/ui';
-import propertyApi from '@/api/propertyApi';
-import TypeModal from '@/pages/Home/TypeModal';
+import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 
 const TypeCard = ({ type }: { type: Type }) => {
   const colorName = type.background_color;
-  const [isOpen, setIsOpen] = useState(false);
-  const [properties, setProperties] = useState<TypeProperty>();
-
-  const getProperty = async (typeId: string) => {
-    const property = await propertyApi.getAllProperties(typeId);
-
-    setProperties(property);
-  };
+  const { showModal } = useGlobalModalContext();
 
   return (
     <>
@@ -28,9 +19,10 @@ const TypeCard = ({ type }: { type: Type }) => {
             <img className={cn('h-8 w-8 rounded-sm ', colorName)} src={type.icon_url ?? ''} alt='type' />
             <TextInput prefixIcon='search' className='w-full' placeholder={`My ${type.name}`}></TextInput>
             <Button
-              onClick={() => {
-                getProperty(type.id);
-                setIsOpen(true);
+              onClick={async () => {
+                showModal(MODAL_TYPES.CREATE_RECORD_MODAL, {
+                  typeId: type.id
+                });
               }}
             >
               New
@@ -57,7 +49,6 @@ const TypeCard = ({ type }: { type: Type }) => {
           </div>
         </div>
       </Panel>
-      <TypeModal properties={properties} isOpen={isOpen} setIsOpen={setIsOpen}></TypeModal>
     </>
   );
 };

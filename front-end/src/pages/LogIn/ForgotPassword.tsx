@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 const ForgotPassword = () => {
   const [username, setUserName] = useState('');
-  const [error, setError] = useState(false);
+  const [error, _] = useState(false);
   const errorText = `We can't find a username that matches what you entered. Verify that your username is an email address (for example, username@company.com).`;
   const navigate = useNavigate();
 

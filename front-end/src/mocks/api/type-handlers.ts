@@ -1,6 +1,8 @@
 import { http, HttpResponse } from 'msw';
 import { TYPE_SERVICE_URL } from '@/constants/api';
 import { types, relations, typeRelations } from '../db';
+import { properties } from '../db/properties';
+import { records } from '../db/record/records';
 
 export const handlers = [
   http.get(`${TYPE_SERVICE_URL}`, () => {
@@ -45,86 +47,22 @@ export const handlers = [
     return HttpResponse.json({ totalPage, result });
   }),
 
-  http.post(`${TYPE_SERVICE_URL}/:typeId/link`, async ({ request, params }) => {
-    const typeId = params.typeId;
-    const body = await request.json();
-    // const newTypeRelation = {
-    //   id: `${typeRelations.length + 1}`,
-    //   type1Id: typeId,
-    //   type1Label: body.type1Label,
-    //   relationId: body.relationId,
-    //   type2Id: body.type2Id,
-    //   type2Label: body.type2Label
-    // };
-    // typeRelations.push(newTypeRelation);
-    // return HttpResponse.json(newTypeRelation);
-  }),
-
   http.get(`${TYPE_SERVICE_URL}/:typeId/properties`, async ({ params }) => {
     const typeId = params.typeId;
-    if (typeId === '1') {
-      return HttpResponse.json(
-        {
-          id: '1',
-          name: 'Lead',
-          description: 'Lead type',
-          properties: [
-            {
-              id: '1',
-              label: 'Salutation',
-              name: 'Salutation',
-              type: 'dropdown',
-              options: ['Mr.', 'Ms.', 'Mrs.', 'Dr.']
-            },
-            {
-              id: '2',
-              label: 'Last Name',
-              name: 'LastName',
-              type: 'text'
-            },
-            {
-              id: '3',
-              label: 'First Name',
-              name: 'FirstName',
-              type: 'text'
-            },
-            {
-              id: '4',
-              label: 'Company',
-              name: 'Company',
-              type: 'text'
-            },
-            {
-              id: '5',
-              label: 'Title',
-              name: 'Title',
-              type: 'text'
-            },
-            {
-              id: '6',
-              label: 'Websize',
-              name: 'Websize',
-              type: 'text'
-            },
-            {
-              id: '7',
-              label: 'Description',
-              name: 'Description',
-              type: 'text'
-            },
-            {
-              id: '8',
-              label: 'Status',
-              name: 'Status',
-              type: 'dropdown',
-              options: ['New', 'Open - Not Contacted', 'close']
-            }
-          ]
-        },
-        {
-          status: 200
-        }
-      );
-    }
+
+    const typeProperty = properties.find((property) => property.id === typeId) || properties[0];
+
+    return HttpResponse.json(typeProperty, {
+      status: 200
+    });
+  }),
+  http.get(`${TYPE_SERVICE_URL}/:typeId/records`, async ({ params }) => {
+    const typeId = params.typeId;
+
+    const findRecords = records.find((record) => record.id === typeId);
+
+    return HttpResponse.json(findRecords, {
+      status: 200
+    });
   })
 ];

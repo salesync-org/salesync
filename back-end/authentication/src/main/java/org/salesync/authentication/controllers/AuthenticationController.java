@@ -3,6 +3,7 @@ package org.salesync.authentication.controllers;
 import jakarta.ws.rs.core.Response;
 import lombok.AllArgsConstructor;
 import org.keycloak.representations.AccessTokenResponse;
+import org.keycloak.representations.JsonWebToken;
 import org.salesync.authentication.dtos.CompanyRegisterDto;
 import org.salesync.authentication.dtos.LogInDto;
 import org.salesync.authentication.dtos.NewUserDto;
@@ -29,6 +30,13 @@ public class AuthenticationController {
             @RequestBody LogInDto loginDTO
     ) {
         return ResponseEntity.ok(registerService.login(realmId, loginDTO, "app-admin", "app-admin"));
+    }
+
+    @GetMapping("/{realmId}/loaduser")
+    ResponseEntity<AccessTokenResponse> loadUser(
+            @RequestHeader String access_token
+    ) {
+        return ResponseEntity.ok(registerService.validate(access_token));
     }
 
     @PostMapping("/{realmId}/logout")

@@ -73,7 +73,7 @@ const List = ({
               divide ? 'divide divide-y-2 *:py-2 divide-button-stroke-light dark:divide-button-stroke-dark' : 'py-2',
               'bg-button-background-light dark:bg-button-background-dark',
               'border-button-stroke-light dark:border-button-stroke-dark',
-              shouldDropUp ? 'top-[4.8rem] origin-top' : 'bottom-12 origin-bottom',
+              shouldDropUp ? 'top-12 origin-bottom' : 'bottom-12 origin-top',
               align &&
                 cn(
                   shouldDropUp

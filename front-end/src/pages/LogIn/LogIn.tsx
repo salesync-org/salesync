@@ -1,7 +1,6 @@
 import salesyncIcon from 'assets/salesync_icon.png';
 import { TextInput } from '@/components/ui';
 import { PrimaryButton } from '@/components/ui';
-import { Icon } from '@/components/ui';
 import { ErrorText } from '@/components/ui';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
@@ -82,35 +81,13 @@ const LogIn = () => {
               </form>
             </div>
           </div>
-          <div className='mx-auto mb-2 w-full text-center text-sm'>© 2024 SaleSync, Inc. All rights reserved.</div>
+          <div className='mx-auto mb-2 w-full text-center text-sm'>©2024 SaleSync, Inc. All rights reserved.</div>
         </div>
 
         <div
           id='right'
           className='hidden h-full w-full flex-col justify-between bg-white bg-[url("https://www.salesforce.com/content/dam/web/en_us/www/images/login-promos/php-login-free-trial-bg.jpg")] bg-cover p-5 lg:flex lg:p-10'
         >
-          <section>
-            <h1 className='my-5 text-4xl font-bold leading-10 text-[#032d60]'>
-              Start your free trial. No credit card required, no software to install.
-            </h1>
-            <span className='my-4'>With your trial, you get: </span>
-            <div className='my-2 flex items-center'>
-              <Icon size='1' name='check' className='text-green-600'></Icon>
-              <span className='ml-2'>Preloaded data or upload your own</span>
-            </div>
-            <div className='my-2 flex items-center'>
-              <Icon size='1' name='check' className='text-green-600'></Icon>
-              <span className='ml-2'>Preconfigured processes, reports, and dashboards</span>
-            </div>
-            <div className='my-2 flex items-center'>
-              <Icon size='1' name='check' className='text-green-600'></Icon>
-              <span className='ml-2'>Guided experiences for sales reps, leaders, and administrators</span>
-            </div>
-            <div className='my-2 flex items-center'>
-              <Icon size='1' name='check' className='text-green-600'></Icon>
-              <span className='ml-2'>Online training and live onboarding webinars</span>
-            </div>
-          </section>
           <img
             src='https://www.salesforce.com/content/dam/web/en_us/www/images/login-promos/php-login-free-trial-fg-2.png'
             alt=''

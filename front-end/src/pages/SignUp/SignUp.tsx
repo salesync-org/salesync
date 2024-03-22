@@ -4,7 +4,7 @@ import { ErrorText } from '@/components/ui';
 import { useState, useEffect } from 'react';
 import { TextInput } from '@/components/ui';
 import { PrimaryButton, Button, DropDown, DropDownItem } from '@/components/ui';
-import { Checkbox } from '@/components/ui/checkbox';
+import { Checkbox } from 'components/ui';
 import axios from 'axios';
 
 interface State {

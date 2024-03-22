@@ -2,7 +2,7 @@
 import { ColumnDef } from '@tanstack/react-table';
 import Icon from '../../../components/ui/Icon/Icon';
 import { Link } from 'react-router-dom';
-import { Checkbox } from 'ui/checkbox';
+import { Checkbox } from 'components/ui';
 
 export type ContactColumns = {
   id: string;

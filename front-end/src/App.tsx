@@ -31,6 +31,7 @@ function App() {
               <Route path='type/link/:id' element={<TypeDetail />} />
               <Route path='field' element={<TypeDetail />} />
               <Route path='link' element={<TypeDetail />} />
+
               
               <Route path='/type-manager' element={<TypeManager />} /> */}
               <Route path='sales' element={<Sales />} />

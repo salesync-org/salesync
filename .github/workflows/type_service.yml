@@ -13,7 +13,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: ${{ github.event.pull_request.base.ref == 'main' && startsWith(github.ref, 'refs/heads/back-end/type-service/') }}
+    if: ${{startsWith(github.ref, 'back-end/type-service/') }}
     steps:
       - uses: actions/checkout@v4
       - name: Start services with Docker Compose

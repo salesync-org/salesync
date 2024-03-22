@@ -1,9 +1,8 @@
 name: Frontend Build
 
 on:
-  pull_request:
-    paths:
-      - 'front-end/**'
+  pull_request: 
+    branches: ['front-end/**']
 
 jobs:
   build:

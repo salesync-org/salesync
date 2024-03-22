@@ -1,36 +1,30 @@
-import { Sale, columns } from './columns';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { layoutColumns } from '@/constants/layout/columns/columns';
+import { ColumnDef } from '@tanstack/react-table';
 import { DataTable } from './data-table';
+import useRecords from '@/hooks/record-service/useRecords';
+import LoadingSpinner from '../ui/Loading/LoadingSpinner';
+import ErrorToaster from '@/pages/Error/ErrorToaster';
 
-const RecordTable = () => {
-  const data: Sale[] = [
-    {
-      id: '1',
-      person: {
-        id: '1',
-        name: 'John Doe 1'
-      },
-      title: 'CEO1',
-      company: 'ACME1',
-      phone: '555-555-5554',
-      email: '',
-      leadStatus: 'New1',
-      ownerAlias: 'JD1'
-    },
-    {
-      id: '2',
-      person: {
-        id: '2',
-        name: 'John Doe 2'
-      },
-      title: 'CFO1',
-      company: 'ACME',
-      phone: '555-555-5555',
-      email: '',
-      leadStatus: 'New2',
-      ownerAlias: 'JD2'
-    }
-  ];
+interface RecordTableProps {
+  typeId: string;
+}
 
-  return <DataTable columns={columns} data={data} />;
+const RecordTable = ({ typeId }: RecordTableProps) => {
+  const columns: ColumnDef<any, any>[] | undefined = layoutColumns.find((layout) => layout.id === typeId)?.column;
+  const { data, isLoading } = useRecords(typeId);
+  if (!columns) {
+    return null;
+  }
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (!data) {
+    return <ErrorToaster errorMessage='Error loading table ' />;
+  }
+
+  return <DataTable columns={columns} data={data.data} />;
 };
 export default RecordTable;

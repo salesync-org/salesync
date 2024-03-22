@@ -1,13 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ColumnDef } from '@tanstack/react-table';
-import {Icon, Checkbox} from '@/components/ui';
+import Icon from '../../../components/ui/Icon/Icon';
 import { Link } from 'react-router-dom';
+import { Checkbox } from 'ui/checkbox';
 
-export type Sale = {
+export type LeadColumns = {
   id: string;
-  person: {
-    id: string;
-    name: string;
-  };
+  name: string;
   title: string;
   company: string;
   phone: string;
@@ -16,11 +15,11 @@ export type Sale = {
   ownerAlias: string;
 };
 
-export const columns: ColumnDef<Sale>[] = [
+export const leadColumns: ColumnDef<LeadColumns>[] = [
   {
-    id: 'index',
+    accessorKey: 'id',
     header: '',
-    cell: ({ row }) => <span className='block w-full text-center'>{row.index + 1}</span>
+    cell: () => <span></span>
   },
   {
     id: 'select',
@@ -44,7 +43,7 @@ export const columns: ColumnDef<Sale>[] = [
     enableHiding: false
   },
   {
-    accessorKey: 'person',
+    accessorKey: 'name',
     header: ({ column }) => (
       <div
         className='flex items-center justify-between'
@@ -55,10 +54,12 @@ export const columns: ColumnDef<Sale>[] = [
       </div>
     ),
     cell: ({ row }) => {
-      const person = row.getValue('person') as Sale['person'];
       return (
-        <Link to={`/records/${person.id}`} className='block items-center align-middle w-full text-blue-500 hover:underline'>
-          {person.name}
+        <Link
+          to={`/leads/${row.getValue('id')}`}
+          className='block w-full items-center align-middle text-blue-500 hover:underline'
+        >
+          {row.getValue('name')}
         </Link>
       );
     }

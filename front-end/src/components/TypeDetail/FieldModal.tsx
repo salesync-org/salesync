@@ -8,7 +8,7 @@ import Switch from '../ui/Switch/Switch';
 import Icon from '../ui/Icon/Icon';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import fieldApi from '@/api/fieldApi';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useQueryClient } from 'react-query';
@@ -27,7 +27,7 @@ const filedSchema = z.object({
 type FieldData = z.infer<typeof filedSchema>;
 
 const FieldModal = ({ isOpen, setIsOpen }: FieldModalProp) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [_, setIsLoading] = useState(false);
   const { handleSubmit, register, reset } = useForm<FieldData>({
     defaultValues: {
       fieldName: '',
@@ -59,7 +59,7 @@ const FieldModal = ({ isOpen, setIsOpen }: FieldModalProp) => {
     }
   };
   return (
-    <Modal isOpen={isOpen} onOpenChange={setIsOpen} title={`Add Field For ${searchParams.get('name')}`}>
+    <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title={`Add Field For ${searchParams.get('name')}`}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className='grid grid-cols-5 place-content-center gap-3'>
           <div className='col-span-3 flex flex-col'>

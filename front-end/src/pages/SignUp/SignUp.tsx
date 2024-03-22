@@ -7,9 +7,21 @@ import { PrimaryButton, Button, DropDown, DropDownItem } from '@/components/ui';
 import { Checkbox } from '@/components/ui/Checkbox/Checkbox';
 import axios from 'axios';
 
+interface State {
+  name: string;
+  state_code: string;
+}
+
+interface Country {
+  name: string;
+  iso3: string;
+  iso2: string;
+  states: State[];
+}
+
 const SignUp = () => {
   const [step, setStep] = useState(1);
-  const [listCountry, setListCountry] = useState([]);
+  const [listCountry, setListCountry] = useState<string[]>([]);
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -36,7 +48,7 @@ const SignUp = () => {
   useEffect(() => {
     const getListCountry = async () => {
       const response = await axios.get('https://countriesnow.space/api/v0.1/countries/states');
-      const data = response.data.data;
+      const data : Country[] = response.data.data;
       const lsCountry = data.map((item) => item.name);
       setListCountry(lsCountry);
     };

@@ -1,8 +1,8 @@
-name: Frontend Build
-
+name: Front-end Build
 on:
-  pull_request: 
-    branches: ['front-end/**']
+  pull_request:
+    paths:
+      - 'front-end/**'
 
 jobs:
   build:

@@ -100,7 +100,7 @@ const LogIn = () => {
             </div>
             <div className='my-2 flex items-center'>
               <Icon size='1' name='check' className='text-green-600'></Icon>
-              <span className='ml-2'>Preconfigured processes, reports, and dashboards</span>
+              <span className='ml-2'>Preconfigured processes, reports, and dashboards.</span>
             </div>
             <div className='my-2 flex items-center'>
               <Icon size='1' name='check' className='text-green-600'></Icon>

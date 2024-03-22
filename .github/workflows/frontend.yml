@@ -2,11 +2,8 @@ name: Frontend Build
 
 on:
   pull_request:
-    branches:
-      - main
-      - development
     paths:
-      - 'front-end/**'
+      - front-end/**
 
 jobs:
   build:

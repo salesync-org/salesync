@@ -104,10 +104,6 @@ const LogIn = () => {
             </div>
             <div className='my-2 flex items-center'>
               <Icon size='1' name='check' className='text-green-600'></Icon>
-              <span className='ml-2'>Guided experiences for sales reps, leaders, and administrators</span>
-            </div>
-            <div className='my-2 flex items-center'>
-              <Icon size='1' name='check' className='text-green-600'></Icon>
               <span className='ml-2'>Online training and live onboarding webinars</span>
             </div>
           </section>

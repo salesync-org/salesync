@@ -5,16 +5,15 @@ on:
     branches:
       - main
       - development
-      - 'front-end/**'
   pull_request:
     branches:
       - main
       - development
-      - 'front-end/**'
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    if:  ${{ !startsWith(github.head_ref, 'front-end/')}}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

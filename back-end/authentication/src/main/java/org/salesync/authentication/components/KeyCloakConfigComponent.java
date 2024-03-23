@@ -1,20 +1,16 @@
 package org.salesync.authentication.components;
 
+import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.Keycloak;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Component;
 
 @Configuration
+@RequiredArgsConstructor
 public class KeyCloakConfigComponent {
-    private final Environment env;
 
-    @Autowired
-    public KeyCloakConfigComponent(Environment env) {
-        this.env = env;
-    }
+    private final Environment env;
 
     @Bean
     public Keycloak getKeycloakInstance() {

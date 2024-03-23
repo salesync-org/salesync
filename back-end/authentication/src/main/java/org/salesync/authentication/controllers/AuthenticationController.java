@@ -3,11 +3,10 @@ package org.salesync.authentication.controllers;
 import jakarta.ws.rs.core.Response;
 import lombok.AllArgsConstructor;
 import org.keycloak.representations.AccessTokenResponse;
-import org.keycloak.representations.JsonWebToken;
 import org.salesync.authentication.dtos.CompanyRegisterDto;
 import org.salesync.authentication.dtos.LogInDto;
 import org.salesync.authentication.dtos.NewUserDto;
-import org.salesync.authentication.services.companyregister.IRegisterService;
+import org.salesync.authentication.services.companyregister.RegisterService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/auth")
 @AllArgsConstructor
 public class AuthenticationController {
-    IRegisterService registerService;
+    RegisterService registerService;
 
     @PostMapping("/realm/create")
     ResponseEntity<AccessTokenResponse> createRealm(

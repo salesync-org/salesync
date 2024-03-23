@@ -11,8 +11,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LogInDto {
-    @JsonProperty("username")
     String username;
-    @JsonProperty("password")
     String password;
 }

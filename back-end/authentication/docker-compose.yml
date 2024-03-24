@@ -7,12 +7,12 @@ services:
       - 'POSTGRES_PASSWORD=admin'
       - 'POSTGRES_USER=admin'
     ports:
-      - ':5432'
+      - '54320:5432'
   keycloak:
     image: 'quay.io/keycloak/keycloak:24.0.1'
     container_name: 'authentication' # Optional, but good for referencing
     ports:
-      - "8080:8080"
+      - '8080:8080'
     command: 'start-dev'
     environment:
       KEYCLOAK_ADMIN: admin

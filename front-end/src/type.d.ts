@@ -56,6 +56,15 @@ type User = {
   avatar_url: string;
 };
 
+type NewUser = {
+  first_name: string,
+  last_name: string,
+  job_title: string,
+  phone: string,
+  email: string,
+  role: string,
+}
+
 type AdminInfo = {
   first_name: string;
   last_name: string;

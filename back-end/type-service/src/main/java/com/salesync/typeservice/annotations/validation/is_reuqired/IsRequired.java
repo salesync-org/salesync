@@ -1,4 +1,4 @@
-package com.salesync.typeservice.annotations.validation;
+package com.salesync.typeservice.annotations.validation.is_reuqired;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class Stage extends BaseEntity {
 
     private String name;
-    private Integer weight;
+    private Integer sequenceNumber;
     @ManyToOne
     @JoinColumn(name = "type_id")
     private Type type;

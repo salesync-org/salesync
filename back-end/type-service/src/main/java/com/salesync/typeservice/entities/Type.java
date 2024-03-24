@@ -33,8 +33,8 @@ public class Type extends BaseEntity  {
     @JsonIgnore
     private List<Stage> stages;
 
-    @OneToMany(mappedBy = "type", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    private List<PropertyFieldType> propertyFieldTypes;
+    @ManyToOne
+    @JoinColumn(name = "template_id")
+    private Template template;
 
 }

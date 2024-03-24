@@ -8,7 +8,7 @@ import lombok.Getter;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Builder
 @Getter
-public class PropertyFieldTypeDto {
+public class TypePropertyFieldDto {
     private String value;
     private FieldDto field;
 }

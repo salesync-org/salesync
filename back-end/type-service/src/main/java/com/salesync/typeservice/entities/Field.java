@@ -19,7 +19,12 @@ import java.util.List;
 public class Field extends BaseEntity {
     private String inputType;
     private Boolean isMultipleValue;
+
     @OneToMany(mappedBy = "field", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<PropertyField> propertyFields;
+
+    @OneToMany(mappedBy = "field", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<TypePropertyField> typePropertyFields;
 }

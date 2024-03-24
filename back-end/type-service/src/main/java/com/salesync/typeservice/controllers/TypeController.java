@@ -7,6 +7,7 @@ import com.salesync.typeservice.dtos.TypeRelationDTO;
 import com.salesync.typeservice.dtos.TypeRelationResponseDTO;
 import com.salesync.typeservice.services.type.TypeService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,14 +18,10 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping(Route.Type.TYPE_ROUTE)
+@RequiredArgsConstructor
 public class TypeController {
 
     private final TypeService typeService;
-
-    @Autowired
-    public TypeController(TypeService typeService) {
-        this.typeService = typeService;
-    }
 
     @GetMapping(Route.Type.TYPE_ID)
     public ResponseEntity<TypeDTO> getType(@PathVariable UUID typeId) {

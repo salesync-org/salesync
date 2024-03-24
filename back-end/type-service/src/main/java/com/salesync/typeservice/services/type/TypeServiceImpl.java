@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TypeServiceImpl implements TypeService {
     private final TypeRepository typeRepository;
-
     private final TypeRelationMapper typeRelationMapper = TypeRelationMapper.INSTANCE;
 
     private final TypeRelationRepository typeRelationRepository;
@@ -39,6 +38,7 @@ public class TypeServiceImpl implements TypeService {
 
     @Override
     public TypeDTO createType(TypeDTO typeDTO) {
+
         Type savedType = typeRepository.save(typeMapper.typeDTOToType(typeDTO));
         return typeMapper.typeToTypeDTO(savedType);
 

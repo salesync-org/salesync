@@ -28,7 +28,5 @@ public class PropertyField extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "field_id")
     private Field field;
-    @OneToMany(mappedBy = "propertyField", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    private List<PropertyFieldType> propertyFieldTypes;
+
 }

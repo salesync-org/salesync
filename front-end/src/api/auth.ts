@@ -2,9 +2,15 @@ import { USER_SERVICE_URL } from '@/constants/api';
 import instance from './axiosConfig';
 
 const URL = `${import.meta.env.VITE_AUTHENTICATION_HOST}/api/v1/auth`;
+
 class Auth {
-  async login(email: string, password: string) {
-    const response = await instance.post(`${URL}/salesynctest/login`, {
+  async signUp(signUpInfo: SignUpInfo) {
+    const response = await instance.post(`${URL}/realm/create`, signUpInfo);
+    return response.data;
+  }
+
+  async login(companyName: string, email: string, password: string) {
+    const response = await instance.post(`${URL}/${companyName}/login`, {
       username: email,
       password
     });

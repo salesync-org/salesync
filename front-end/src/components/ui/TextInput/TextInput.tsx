@@ -36,7 +36,7 @@ const TextInput: React.FC<TextInputProps> = ({
       {showHeader && header && <p className='my-1'>{header}</p>}
       <div
         className={cn(
-          'relative flex h-10 items-center justify-start align-middle',
+          'relative flex h-10 items-center justify-start align-middle w-64',
           disabled ? 'opacity-80' : 'active:scale-x-[99%] active:scale-y-[99%]',
           'transform-all duration-[50ms] ease-in-out',
           'rounded placeholder:text-opacity-50',

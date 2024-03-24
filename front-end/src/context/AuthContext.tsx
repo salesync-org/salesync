@@ -42,10 +42,11 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       const res = await auth.login(email, password);
       if (res) {
-        setUser(res.user);
-        setIsAuthenticated(true);
-        localStorage.setItem('access_token', res.access_token);
-        localStorage.setItem('user', JSON.stringify(res.user));
+        console.log({ res });
+        // setUser(res.user);
+        // setIsAuthenticated(true);
+        // localStorage.setItem('access_token', res.access_token);
+        // localStorage.setItem('user', JSON.stringify(res.user));
       }
     } catch (error) {
       console.error(error);

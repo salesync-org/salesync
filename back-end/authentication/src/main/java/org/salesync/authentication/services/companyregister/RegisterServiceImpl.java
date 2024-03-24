@@ -3,24 +3,27 @@ package org.salesync.authentication.services.companyregister;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.OAuth2Constants;
+import org.keycloak.TokenVerifier;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.UserResource;
+import org.keycloak.representations.AccessToken;
 import org.keycloak.representations.AccessTokenResponse;
 import org.keycloak.representations.idm.*;
+import org.salesync.authentication.converters.PublicKeyConverter;
 import org.salesync.authentication.dtos.CompanyRegisterDto;
 import org.salesync.authentication.dtos.LogInDto;
 import org.salesync.authentication.dtos.NewUserDto;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import java.security.PublicKey;
 import java.util.Arrays;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class RegisterServiceImpl implements IRegisterService {
+public class RegisterServiceImpl implements RegisterService {
     private final Environment env;
     private final Keycloak keycloak;
 
@@ -121,6 +124,32 @@ public class RegisterServiceImpl implements IRegisterService {
     public Response logout(String token) {
         keycloak.tokenManager().invalidate(token);
         return Response.ok().build();
+    }
+
+    @Override
+    public AccessTokenResponse validate(String realmId, String accessToken) {
+//        keycloak.realm("salesynctest")
+//                .clients()
+//                .get("admin-cli").toRepresentation();
+        String key = keycloak.realm(realmId).keys().getKeyMetadata().getKeys().get(0).getPublicKey();
+        try {
+            PublicKey publicKey = PublicKeyConverter.convertStringToPublicKey(key);
+            System.out.println(key);
+            System.out.println(publicKey);
+            AccessToken token = TokenVerifier.create(accessToken, AccessToken.class)
+                    .publicKey(publicKey) // Set your RSA Public Key
+                    .verify()
+                    .getToken();
+            System.out.println(token.getSubject());
+            if (token.isActive()) {
+                AccessTokenResponse accessTokenResponse = new AccessTokenResponse();
+                accessTokenResponse.setToken(accessToken);
+                return accessTokenResponse;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 
     private ClientRepresentation getNewClientRepresentation(String clientSecret, String clientName) {

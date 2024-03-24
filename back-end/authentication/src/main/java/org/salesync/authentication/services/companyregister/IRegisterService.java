@@ -14,5 +14,5 @@ public interface IRegisterService {
 
     Response logout(String token);
 
-    AccessTokenResponse validate(String accessToken);
+    AccessTokenResponse validate(String realmId, String accessToken);
 }

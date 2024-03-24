@@ -6,7 +6,7 @@ type AuthContext = {
   isLoading: boolean;
   isAuthenticated: boolean;
   signUp: (signUpInfo: SignUpInfo) => Promise<void>;
-  login: ({ email, password }: { email: string; password: string }) => Promise<void>;
+  login: ({ companyName, email, password }: { companyName: string; email: string; password: string }) => Promise<void>;
   logout: () => Promise<void>;
   fetchUser: () => Promise<void>;
 };
@@ -45,18 +45,11 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const login = async ({ email, password }: { email: string; password: string }) => {
-    try {
-      const res = await auth.login(email, password);
-      if (res) {
-        console.log({ res });
-        // setUser(res.user);
-        // setIsAuthenticated(true);
-        // localStorage.setItem('access_token', res.access_token);
-        // localStorage.setItem('user', JSON.stringify(res.user));
-      }
-    } catch (error) {
-      console.error(error);
+  const login = async ({ companyName, email, password }: { companyName: string; email: string; password: string }) => {
+    const res = await auth.login(companyName, email, password);
+    if (res) {
+      setIsAuthenticated(true);
+      localStorage.setItem('access_token', res.access_token);
     }
   };
 

@@ -5,8 +5,9 @@ import { ErrorText } from '@/components/ui';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import useAuth from '@/hooks/useAuth';
+import { useToast } from '@/components/ui/use-toast';
 
 const loginSchema = z.object({
   username: z.string().email('Invalid email'),
@@ -20,7 +21,7 @@ const LogIn = () => {
     register,
     handleSubmit,
     setError,
-    formState: { errors }
+    formState: { errors, isSubmitting }
   } = useForm<LoginSchemaType>({
     defaultValues: {
       username: '',
@@ -32,13 +33,20 @@ const LogIn = () => {
 
   const { login } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const { companyName = '' } = useParams();
 
   // const errorText = `Please check your username and password. If you still can't log in, contact your Salesforce administrator.`;
 
   const onSubmit = async (data: LoginSchemaType) => {
     try {
-      await login({ email: data.username, password: data.password });
-      // navigate('/home');
+      await login({ companyName, email: data.username, password: data.password });
+      toast({
+        title: 'Success',
+        description: 'You have successfully logged in'
+      });
+
+      navigate(`/${companyName}/home`);
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -46,7 +54,12 @@ const LogIn = () => {
         setError(error.response.data.type, { message: error.response.data.message });
       }
 
-      console.table(error);
+      toast({
+        title: 'Error',
+        description:
+          "Please check your username and password. If you still can't log in, contact your SalesSync administrator.",
+        variant: 'destructive'
+      });
     }
   };
 
@@ -72,8 +85,8 @@ const LogIn = () => {
                 />
                 {errors.password && <ErrorText text={errors.password.message} className='text-sm' />}
 
-                <PrimaryButton className='mt-4 w-full' type='submit'>
-                  Log In
+                <PrimaryButton className='mt-4 w-full' type='submit' disabled={isSubmitting}>
+                  {isSubmitting ? 'Logging in...' : 'Log In'}
                 </PrimaryButton>
                 <div className='mt-4 flex items-center'>
                   <input type='checkbox' />

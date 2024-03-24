@@ -48,6 +48,8 @@ const RecordTabs = ({ tabs = [], name }: RecordTabsProps) => {
 
     localStorage.setItem(name, JSON.stringify(tabs));
   };
+
+  const { companyName = '' } = useParams();
   return (
     <nav className='h-full'>
       <ul className={`${name}-tabs flex`}>
@@ -63,7 +65,7 @@ const RecordTabs = ({ tabs = [], name }: RecordTabsProps) => {
               }}
             >
               <NavLink
-                to={`/sales/${tab.id}`}
+                to={`/${companyName}/sales/${tab.id}`}
                 data-index={index}
                 draggable
                 onDragStart={handleDragStart}

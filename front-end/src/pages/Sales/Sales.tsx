@@ -9,7 +9,7 @@ import ErrorToaster from '../Error/ErrorToaster';
 const Sales = () => {
   const { types = [], error, isLoading } = useType();
 
-  const { typeId } = useParams();
+  const { typeId, companyName = '' } = useParams();
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -20,7 +20,7 @@ const Sales = () => {
   }
 
   if (!typeId && types.length > 0) {
-    return <Navigate to={`/sales/${types[0].id}`} />;
+    return <Navigate to={`/${companyName}/sales/${types[0].id}`} />;
   }
 
   const type = types.find((type) => type.id === typeId);

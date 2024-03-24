@@ -126,8 +126,8 @@ INSERT INTO public.property_field(property_field_id, property_id, field_id, labe
      ('0af69dfa-f6a5-4c23-9779-e93b56444a0n', '1707e9c6-af10-419d-98a0-8c33d699b398','dcd8ffb0-5e89-45e5-9b72-b1b31374df7g','DateFormat', 'DD-MM-YYYY', 'YYYY-MM-DD', true, false),
      ('0af69dfa-f6a5-4c23-9779-e93b56444a0n', '1707e9c6-af10-419d-98a0-8c33d699b398','dcd8ffb0-5e89-45e5-9b72-b1b31374df7g','DateFormat', 'YYYY-MM-DD', null, true, false);
 
--- INSERT INTO public.type_property(type_property_id, property_id, type_id, value) VALUES
--- INSERT INTO public.property_field_type(property_field_type_id, property_field_id, type_id, value) VALUES
---     ('0af69dfa-f6a5-4c23-9779-e93b56448a7m', '0af69dfa-f6a5-4c23-9779-e93b56448a7m','32a9bf21-19fb-451f-9fcf-3de9b2d6eb88', 'No Name'),
---     ('0af69dfa-f6a5-4c23-9779-e93b56448a7n', '0af69dfa-f6a5-4c23-9779-e93b56448a7n','32a9bf21-19fb-451f-9fcf-3de9b2d6eb88', 'Text'),
---     ('0af69dfa-f6a5-4c23-9779-e93b56448a7i', '0af69dfa-f6a5-4c23-9779-e93b56448a7i','32a9bf21-19fb-451f-9fcf-3de9b2d6eb88', 'Text');
+INSERT INTO public.type_property(type_property_id, property_id, type_id, value) VALUES
+INSERT INTO public.property_field_type(property_field_type_id, property_field_id, type_id, value) VALUES
+    ('0af69dfa-f6a5-4c23-9779-e93b56448a7m', '0af69dfa-f6a5-4c23-9779-e93b56448a7m','32a9bf21-19fb-451f-9fcf-3de9b2d6eb88', 'No Name'),
+    ('0af69dfa-f6a5-4c23-9779-e93b56448a7n', '0af69dfa-f6a5-4c23-9779-e93b56448a7n','32a9bf21-19fb-451f-9fcf-3de9b2d6eb88', 'Text'),
+    ('0af69dfa-f6a5-4c23-9779-e93b56448a7i', '0af69dfa-f6a5-4c23-9779-e93b56448a7i','32a9bf21-19fb-451f-9fcf-3de9b2d6eb88', 'Text');

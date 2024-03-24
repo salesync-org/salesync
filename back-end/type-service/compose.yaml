@@ -7,7 +7,7 @@ services:
       - 'POSTGRES_USER=type_service'
     volumes:
       - ./src/main/resources/db/init:/docker-entrypoint-initdb.d
-      - postgres_data:/var/lib/postgresql/data  # Persistent data volume
+      - ./src/main/resources/db/data:/var/lib/postgresql/data  # Persistent data volume
     ports:
       - '54320:5432'
 volumes:

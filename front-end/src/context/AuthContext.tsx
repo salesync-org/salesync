@@ -5,6 +5,7 @@ type AuthContext = {
   user: User | null;
   isLoading: boolean;
   isAuthenticated: boolean;
+  signUp: (signUpInfo: SignUpInfo) => Promise<void>;
   login: ({ email, password }: { email: string; password: string }) => Promise<void>;
   logout: () => Promise<void>;
   fetchUser: () => Promise<void>;
@@ -24,12 +25,10 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       setIsLoading(true);
       const token = localStorage.getItem('access_token');
-      const userProfile = localStorage.getItem('user');
-      if (!token || !userProfile) {
+      if (!token) {
         throw new Error('No token found');
       }
 
-      setUser(JSON.parse(userProfile));
       setIsAuthenticated(true);
     } catch (error) {
       setIsAuthenticated(false);
@@ -37,6 +36,14 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setIsLoading(false);
     }
   }, []);
+
+  const signUp = async (signUpInfo: SignUpInfo) => {
+    const res: TokenResponse = await auth.signUp(signUpInfo);
+    if (res) {
+      setIsAuthenticated(true);
+      localStorage.setItem('access_token', res.access_token);
+    }
+  };
 
   const login = async ({ email, password }: { email: string; password: string }) => {
     try {
@@ -67,7 +74,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const logout = async () => {
     try {
       localStorage.removeItem('access_token');
-      localStorage.removeItem('user');
     } catch (error) {
       console.error(error);
     } finally {
@@ -76,7 +82,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const value = { user, isLoading, isAuthenticated, login, logout, fetchUser };
+  const value = { user, isLoading, isAuthenticated, login, logout, fetchUser, signUp };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 

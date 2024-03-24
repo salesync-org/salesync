@@ -9,7 +9,9 @@ import axios from 'axios';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useToast } from '@/components/ui/use-toast';
+import useAuth from '@/hooks/useAuth';
 
 interface State {
   name: string;
@@ -59,7 +61,7 @@ const SignUp = () => {
     register,
     trigger,
     getValues,
-    formState: { errors, isLoading }
+    formState: { errors, isSubmitting }
   } = useForm<SignUpFormInfo>({
     defaultValues: {
       firstName: '',
@@ -84,6 +86,10 @@ const SignUp = () => {
 
     getListCountry();
   }, []);
+
+  const { toast } = useToast();
+  const { signUp } = useAuth();
+  const navigate = useNavigate();
 
   const onNext = () => {
     const cur = step;
@@ -121,14 +127,40 @@ const SignUp = () => {
     }
   };
 
-  const onSubmit = (data: SignUpFormInfo) => {
+  const onSubmit = async (data: SignUpFormInfo) => {
     if (!check1) {
       setErrorCheck1(true);
       return;
     }
 
-    console.log({ data });
-    console.log({ country });
+    try {
+      await signUp({
+        admin_info: {
+          first_name: data.firstName,
+          last_name: data.lastName,
+          job_title: data.title,
+          phone: data.phone,
+          email: data.email,
+          role: 'admin-user'
+        },
+        noEmployees: data.noEmployees,
+        company_name: data.company,
+        country_region: country
+      });
+      toast({
+        title: 'Success',
+        description: 'Signed up successfully'
+      });
+
+      navigate('/home');
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: 'Error',
+        description: 'Failed to sign up',
+        variant: 'destructive'
+      });
+    }
   };
 
   return (
@@ -208,6 +240,7 @@ const SignUp = () => {
                   header='No. Employees'
                   className='border-slate-500 bg-white hover:bg-white'
                   name='noEmployees'
+                  onFocus={(e) => e.target.select()}
                   register={register}
                 />
                 {errors.noEmployees && <ErrorText text={errors.noEmployees.message} />}
@@ -305,11 +338,11 @@ const SignUp = () => {
 
                 <div className='my-4 flex items-center justify-between'>
                   <div className='flex'>
-                    <Button className='mr-3 bg-white' onClick={onBack} disabled={isLoading}>
+                    <Button className='mr-3 bg-white' onClick={onBack} disabled={isSubmitting}>
                       BACK
                     </Button>
-                    <PrimaryButton type='submit' disabled={isLoading}>
-                      SUBMIT
+                    <PrimaryButton type='submit' disabled={isSubmitting}>
+                      {isSubmitting ? 'PROCESSING...' : 'SUBMIT'}
                     </PrimaryButton>
                   </div>
                   <div>

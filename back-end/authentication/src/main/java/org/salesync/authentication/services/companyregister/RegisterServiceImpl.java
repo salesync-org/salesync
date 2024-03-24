@@ -132,11 +132,11 @@ public class RegisterServiceImpl implements IRegisterService {
     }
 
     @Override
-    public AccessTokenResponse validate(String accessToken) {
+    public AccessTokenResponse validate(String realmId, String accessToken) {
 //        keycloak.realm("salesynctest")
 //                .clients()
 //                .get("admin-cli").toRepresentation();
-        String key = keycloak.realm("salesynctest").keys().getKeyMetadata().getKeys().get(0).getPublicKey();
+        String key = keycloak.realm(realmId).keys().getKeyMetadata().getKeys().get(0).getPublicKey();
         try {
             PublicKey publicKey = PublicKeyConverter.convertStringToPublicKey(key);
             System.out.println(key);
@@ -147,7 +147,9 @@ public class RegisterServiceImpl implements IRegisterService {
                     .getToken();
             System.out.println(token.getSubject());
             if (token.isActive()) {
-                return new AccessTokenResponse();
+                AccessTokenResponse accessTokenResponse = new AccessTokenResponse();
+                accessTokenResponse.setToken(accessToken);
+                return accessTokenResponse;
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

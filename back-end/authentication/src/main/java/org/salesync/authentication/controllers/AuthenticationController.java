@@ -34,9 +34,10 @@ public class AuthenticationController {
 
     @GetMapping("/{realmId}/loaduser")
     ResponseEntity<AccessTokenResponse> loadUser(
-            @RequestHeader String access_token
+            @RequestHeader String access_token,
+            @PathVariable String realmId
     ) {
-        return ResponseEntity.ok(registerService.validate(access_token));
+        return ResponseEntity.ok(registerService.validate(realmId, access_token));
     }
 
     @PostMapping("/{realmId}/logout")

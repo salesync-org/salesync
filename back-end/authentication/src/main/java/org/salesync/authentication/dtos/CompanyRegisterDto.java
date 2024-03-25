@@ -1,6 +1,9 @@
 package org.salesync.authentication.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,15 +13,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class CompanyRegisterDto {
-    @JsonProperty("admin_info")
     private NewUserDto adminInfo;
-    @JsonProperty("employees")
-    private int noEmployees;
-
-    @JsonProperty("company_name")
+    private int numberOfEmployees;
     private String companyName;
-
-    @JsonProperty("country_region")
     private String countryRegion;
 }

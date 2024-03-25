@@ -3,24 +3,32 @@ package org.salesync.authentication.services.companyregister;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.OAuth2Constants;
+import org.keycloak.TokenVerifier;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
+import org.keycloak.admin.client.resource.KeyResource;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.UserResource;
+import org.keycloak.crypto.KeyUse;
+import org.keycloak.representations.AccessToken;
 import org.keycloak.representations.AccessTokenResponse;
 import org.keycloak.representations.idm.*;
+import org.salesync.authentication.converters.PublicKeyConverter;
 import org.salesync.authentication.dtos.CompanyRegisterDto;
 import org.salesync.authentication.dtos.LogInDto;
 import org.salesync.authentication.dtos.NewUserDto;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import java.security.PublicKey;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.keycloak.crypto.KeyUse.ENC;
+
 @Service
 @RequiredArgsConstructor
-public class RegisterServiceImpl implements IRegisterService {
+public class RegisterServiceImpl implements RegisterService {
     private final Environment env;
     private final Keycloak keycloak;
 
@@ -121,6 +129,51 @@ public class RegisterServiceImpl implements IRegisterService {
     public Response logout(String token) {
         keycloak.tokenManager().invalidate(token);
         return Response.ok().build();
+    }
+
+    @Override
+    public AccessTokenResponse validate(String realmId, String accessToken) {
+//        keycloak.realm("salesynctest")
+//                .clients()
+//                .get("admin-cli").toRepresentation();
+        RealmResource realmResource = keycloak.realm(realmId);
+        System.out.println("Got realmResource: " + realmResource);
+        KeyResource keyResource = realmResource.keys();
+        System.out.println("Got keyResource " + keyResource);
+        KeysMetadataRepresentation keysMetadata = keyResource.getKeyMetadata();
+        System.out.println("Got keysMetadata " + keysMetadata);
+        List<KeysMetadataRepresentation.KeyMetadataRepresentation> keyList = keysMetadata.getKeys();
+        System.out.println("Got keyMetadata " + keyList);
+        String key = null;
+
+        for (final KeysMetadataRepresentation.KeyMetadataRepresentation keyMetadata : keyList) {
+            if (keyMetadata.getUse() != KeyUse.SIG) {
+                continue;
+            }
+            key = keyMetadata.getPublicKey();
+            if (key != null) {
+                break;
+            }
+        }
+        System.out.println("Got key " + key);
+        try {
+            PublicKey publicKey = PublicKeyConverter.convertStringToPublicKey(key);
+            System.out.println(key);
+            System.out.println(publicKey);
+            AccessToken token = TokenVerifier.create(accessToken, AccessToken.class)
+                    .publicKey(publicKey) // Set your RSA Public Key
+                    .verify()
+                    .getToken();
+            System.out.println(token.getSubject());
+            if (token.isActive()) {
+                AccessTokenResponse accessTokenResponse = new AccessTokenResponse();
+                accessTokenResponse.setToken(accessToken);
+                return accessTokenResponse;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 
     private ClientRepresentation getNewClientRepresentation(String clientSecret, String clientName) {

@@ -5,7 +5,7 @@ import org.mapstruct.factory.Mappers;
 import org.salesync.record_service.dtos.RecordDto;
 import org.salesync.record_service.entities.Record;
 
-@Mapper(uses = {RecordPropertyMapper.class})
+@Mapper(uses = {RecordTypePropertyMapper.class})
 public interface RecordMapper {
     RecordMapper INSTANCE = Mappers.getMapper(RecordMapper.class);
     RecordDto recordToRecordDto(Record record);

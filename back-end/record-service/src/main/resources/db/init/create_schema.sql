@@ -36,7 +36,7 @@ ALTER TABLE IF EXISTS public.record_type_property
 
 CREATE TABLE IF NOT EXISTS public.record_type_relation
 (
-    record_relation_id uuid NOT NULL DEFAULT gen_random_uuid(),
+    record_type_relation_id uuid NOT NULL DEFAULT gen_random_uuid(),
     source_record_id uuid NOT NULL,
     destination_record_id uuid NOT NULL,
     relation_id uuid NOT NULL,

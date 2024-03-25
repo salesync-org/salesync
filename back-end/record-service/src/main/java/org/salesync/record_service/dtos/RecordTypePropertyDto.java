@@ -10,9 +10,8 @@ import java.util.List;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Builder
 @Getter
-public class RecordPropertyDto {
+public class RecordTypePropertyDto {
     private String id;
-    private String label;
-    private String value;
-    List<RecordPropertyDto> properties;
+    private String recordPropertyLabel;
+    private String itemValue;
 }

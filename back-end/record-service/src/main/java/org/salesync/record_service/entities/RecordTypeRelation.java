@@ -13,9 +13,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "relationship_of_records")
-@AttributeOverride(name="id",column = @Column(name="record_relation_id"))
-public class RelationshipOfRecords extends BaseEntity {
+@Table(name = "record_type_relation")
+@AttributeOverride(name="id",column = @Column(name="record_type_relation_id"))
+public class RecordTypeRelation extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "source_record_id")
@@ -25,5 +25,5 @@ public class RelationshipOfRecords extends BaseEntity {
     @JoinColumn(name = "destination_record_id")
     private Record destinationRecord;
 
-    private UUID relationshipId;
+    private UUID relationId;
 }

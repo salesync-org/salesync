@@ -13,14 +13,14 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "record_property")
-@AttributeOverride(name="id",column = @Column(name="record_property_id"))
-public class RecordProperty extends BaseEntity{
+@Table(name = "record_type_property")
+@AttributeOverride(name="id",column = @Column(name="record_type_property_id"))
+public class RecordTypeProperty extends BaseEntity{
 
     private UUID propertyId;
-    private String value;
-    @Column(name = "property_label")
-    private String label;
+    private String itemValue;
+    private String recordPropertyLabel;
+
     @ManyToOne
     @JoinColumn(name = "record_id")
     private Record record;

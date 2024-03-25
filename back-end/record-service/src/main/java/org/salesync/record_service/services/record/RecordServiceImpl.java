@@ -46,7 +46,7 @@ public class RecordServiceImpl implements RecordService {
         Record recordEntity = new Record();
         recordEntity.setTypeId(UUID.fromString(requestRecordDto.getTypeId()));
         recordEntity.setUserId(UUID.fromString(requestRecordDto.getUserId()));
-        recordEntity.setCurrentStageId(UUID.fromString(requestRecordDto.getCurrentStageId()));
+        recordEntity.setStageId(UUID.fromString(requestRecordDto.getCurrentStageId()));
 
         return recordMapper.recordToRecordDto(recordRepository.save(recordEntity));
     }

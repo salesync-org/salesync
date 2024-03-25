@@ -21,14 +21,23 @@ public class Record extends BaseEntity {
     private String name;
     private UUID typeId;
     private UUID userId;
-    private UUID currentStageId;
+    private UUID stageId;
+
     @OneToMany(mappedBy = "record", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    private List<RecordProperty> recordProperties;
+    private List<RecordTypeProperty> recordProperties;
+
     @OneToMany(mappedBy = "sourceRecord", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    private List<RelationshipOfRecords> sourceRelationships;
+    private List<RecordTypeRelation> sourceRelationships;
+
     @OneToMany(mappedBy = "destinationRecord", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    private List<RelationshipOfRecords> destinationRelationships;
+    private List<RecordTypeRelation> destinationRelationships;
+
+    @OneToOne(mappedBy = "record")
+    private RecordType recordType;
+
+    @OneToOne(mappedBy = "record")
+    private RecordStage recordStage;
 }

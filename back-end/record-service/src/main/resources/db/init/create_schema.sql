@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS public.record_type_relation
     source_record_id uuid NOT NULL,
     destination_record_id uuid NOT NULL,
     relation_id uuid NOT NULL,
-    CONSTRAINT pk_record_type_relation PRIMARY KEY (record_relation_id),
+    CONSTRAINT pk_record_type_relation PRIMARY KEY (record_type_relation_id),
     CONSTRAINT fk_record_type_relation_source_record FOREIGN KEY (source_record_id)
         REFERENCES public.record (record_id) MATCH SIMPLE
         ON UPDATE NO ACTION

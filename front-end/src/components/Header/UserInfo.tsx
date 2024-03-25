@@ -1,10 +1,9 @@
 import useAuth from '@/hooks/useAuth';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Button from 'ui/Button/Button';
-import DropDownList from 'ui/DropDown/DropDownList';
-import Icon from 'ui/Icon/Icon';
-import Item from 'ui/Item/Item';
+import defaultAvatar from '@/assets/default_avatar.png';
+import {Button, DropDownList, Icon, Item} from '@/components/ui';
+import { isImageShowableHead } from '@/utils/image_checking';
 
 const UserInfo = () => {
   const { user, logout, fetchUser } = useAuth();
@@ -20,11 +19,16 @@ const UserInfo = () => {
     const updateInfo = async () => {
       if (user === null) {
         setName('Unknown');
-        setAvatar('');
+        setAvatar(defaultAvatar);
       } else {
         const { name, avatar_url } = user;
         setName(name);
-        setAvatar(avatar_url);
+        const availabilty = await isImageShowableHead(avatar_url);
+        if (availabilty) {
+          setAvatar(avatar_url);
+        } else {
+          setAvatar(defaultAvatar);
+        }
       }
     };
     updateInfo();
@@ -32,8 +36,7 @@ const UserInfo = () => {
 
   return (
     <>
-      {user ? (
-        <div className='relative flex w-fit space-x-3 pl-2 align-middle'>
+      {<div className='relative flex w-fit space-x-3 pl-2 align-middle'>
           <Button rounded='icon' className='h-10 w-10' intent='normal' onClick={() => {}}>
             <Icon name='notifications' size='1rem' />
           </Button>
@@ -50,6 +53,7 @@ const UserInfo = () => {
             </Button>
             <DropDownList
               open={isMenuOpen}
+              onClose={() => {setMenuOpen(false);}}
               align='right'
               className='right-[.25rem] top-[3rem] mt-0 w-80'
               divide={false}
@@ -70,20 +74,7 @@ const UserInfo = () => {
             </DropDownList>
           </div>
         </div>
-      ) : (
-        <div>
-          <Button
-            intent='primary'
-            rounded='normal'
-            className='mx-3 w-20'
-            onClick={() => {
-              window.location.href = '/';
-            }}
-          >
-            Log in
-          </Button>
-        </div>
-      )}
+      }
     </>
   );
 };

@@ -1,6 +1,7 @@
 package com.salesync.typeservice.controllers;
 
 
+import com.salesync.typeservice.constants.Route;
 import com.salesync.typeservice.dtos.RelationDTO;
 import com.salesync.typeservice.services.relation.IRelationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/relation")
+@RequestMapping(Route.Relation.RELATION_ROUTE)
 public class RelationController {
     private final IRelationService relationService;
 
@@ -22,18 +23,8 @@ public class RelationController {
         this.relationService = relationService;
     }
 
-    @GetMapping("/get-all")
+    @GetMapping
     public ResponseEntity<List<RelationDTO>> getAllRelation(){
         return ResponseEntity.ok(relationService.getAllRelation());
-    }
-
-    @GetMapping("/get-one")
-    public String getOneRelation(){
-        return "One Relation";
-    }
-
-    @PostMapping("/create")
-    public String createRelation(){
-        return "Create Relation";
     }
 }

@@ -6,12 +6,32 @@ type TypeRelation = {
   destination_type: Type;
   destination_label: string;
 };
+
 type Type = {
+  icon_url: string?;
+  background_color: string?;
   id: string;
   name: string;
   description?: string;
   fields?: Field[];
   links?: Link[];
+};
+
+type TypeProperty = {
+  id: string;
+  label?: string;
+  name: string;
+  type?: string;
+  description?: string;
+  properties?: Property[];
+};
+
+type Property = {
+  id: string;
+  label?: string;
+  name: string;
+  type: string;
+  options?: string[];
 };
 
 type Relation = {
@@ -24,6 +44,7 @@ type Field = {
   name: string;
   label?: string;
   defaultValue?: string;
+  values?: string[];
 };
 
 type User = {
@@ -35,4 +56,3 @@ type User = {
   avatar_url: string;
 };
 
-type Theme = 'light' | 'dark';

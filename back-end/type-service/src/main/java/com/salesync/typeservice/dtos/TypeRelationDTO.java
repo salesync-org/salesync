@@ -1,7 +1,7 @@
 package com.salesync.typeservice.dtos;
 
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,17 +13,17 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Builder
 @Getter
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class TypeRelationDTO {
     UUID id;
 
-    @JsonProperty("source_type")
     TypeDTO sourceType;
-    @JsonProperty("source_type_label")
+
     String sourceTypeLabel;
-    @JsonProperty("relation")
+
     RelationDTO relation;
-    @JsonProperty("destination_type")
+
     TypeDTO destinationType;
-    @JsonProperty("destination_label")
+
     String destinationTypeLabel;
 }

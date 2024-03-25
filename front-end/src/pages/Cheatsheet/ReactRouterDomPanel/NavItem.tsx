@@ -11,9 +11,7 @@ interface Props {
 const NavItem = ({ name, path, target = '_self' }: Props) => {
   return (
     <NavLink
-      className={({ isActive }) =>
-        buttonVariants({intent: isActive ? 'primary' : 'normal'})
-      }
+      className={({ isActive }) => buttonVariants({ intent: isActive ? 'primary' : 'normal' })}
       to={path}
       target={target}
     >

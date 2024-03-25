@@ -1,19 +1,20 @@
-name: Frontend Build
-
+name: Front-end Build
 on:
   push:
     branches:
       - main
       - development
+    paths:
+      - front-end/**
   pull_request:
     branches:
       - main
       - development
-
+    paths:
+      - front-end/**
 jobs:
   build:
     runs-on: ubuntu-latest
-    if:  ${{ contains(github.head_ref, 'front-end/')}}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

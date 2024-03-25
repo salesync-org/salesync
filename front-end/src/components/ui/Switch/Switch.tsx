@@ -34,7 +34,7 @@ const Switch: React.FC<ButtonProps> = ({ onClick, className, disabled, label, ch
         className={cn(
           disabled ? 'opacity-80' : 'cursor-pointer hover:scale-105 active:scale-100',
           'inline-flex items-center rounded-full',
-          'border-2 border-button-stroke dark:border-button-stroke-dark',
+          'border-[1px] border-button-stroke dark:border-button-stroke-dark focus:outline-primary',
           className
         )}
         onClick={handleOnClick}

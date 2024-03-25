@@ -1,10 +1,5 @@
 import { useState } from 'react';
-import PrimaryButton from 'ui/Button/PrimaryButton';
-import Modal, { ModalFooter } from 'ui/Modal/Modal';
-import TextInput from 'ui/TextInput/TextInput';
-import DropDown from 'ui/DropDown/DropDown';
-import Item from 'ui/Item/Item';
-import Button from 'ui/Button/Button';
+import { PrimaryButton, Modal, ModalFooter, TextInput, DropDown, Item, Button } from '@/components/ui';
 
 function ModalPanel() {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,12 +7,13 @@ function ModalPanel() {
     <>
       <PrimaryButton onClick={() => setIsOpen(true)}>Open modal</PrimaryButton>
 
-      <Modal isOpen={isOpen} onOpenChange={setIsOpen} title='Create new Type'>
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title='Create new Type'>
         <form>
-          <div className='grid grid-cols-5 place-content-center gap-3'>
-            <div className='col-span-3 flex flex-col gap-2'>
+          <div className='grid w-full grid-cols-5 place-content-center gap-3'>
+            <div className='col-span-3 flex flex-row'>
               <TextInput header='Type Name' className='w-full' placeholder='Search for something' />
             </div>
+
             <div className='col-span-2 flex flex-col gap-2'>
               <DropDown header='Template' value='Select a value'>
                 <Item title='Item 1' />

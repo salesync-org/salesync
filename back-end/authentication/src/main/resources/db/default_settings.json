@@ -1,0 +1,25 @@
+{
+  "layout_order": {
+    "Home": [
+        "Home"
+    ],
+    "Sale": [
+        "Lead",
+        "Contact",
+        "Opportunity",
+        "Account"
+    ],
+    "Service": [
+        "Case",
+        "Contact",
+        "Account"
+    ],
+    "Marketing": [
+        "Campaign",
+        "Lead",
+        "Contact",
+        "Opportunity",
+        "Account"
+    ]
+  }
+}

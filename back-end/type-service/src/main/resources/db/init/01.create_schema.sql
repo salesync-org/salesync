@@ -16,7 +16,7 @@ DROP TABLE IF EXISTS public.type CASCADE;
 CREATE TABLE IF NOT EXISTS public.type
 (
     type_id uuid NOT NULL DEFAULT gen_random_uuid(),
-    template_id uuid NOT NULL,
+    template_id uuid,
     name text,
     CONSTRAINT pk_type PRIMARY KEY (type_id),
     CONSTRAINT fk_type_template FOREIGN KEY (template_id)
@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS public.field
 (
     field_id uuid NOT NULL DEFAULT gen_random_uuid(),
     input_type text,
-    is_multiple_value BIT,
+    is_multiple_value boolean,
     CONSTRAINT pk_field PRIMARY KEY (field_id)
 );
 ALTER TABLE IF EXISTS public.field OWNER to postgres;
@@ -114,10 +114,10 @@ CREATE TABLE IF NOT EXISTS public.property_field
     property_id uuid NOT NULL,
     field_id uuid NOT NULL,
     label text,
-    value text,
+    item_value text,
     default_value text,
-    is_required BIT,
-    is_key BIT,
+    is_required boolean,
+    is_key boolean,
     CONSTRAINT pk_property_field PRIMARY KEY (property_field_id),
     CONSTRAINT fk_property_field FOREIGN KEY (field_id)
     REFERENCES public.field (field_id) MATCH SIMPLE
@@ -151,7 +151,7 @@ CREATE TABLE IF NOT EXISTS public.type_property_field
     type_property_field_id uuid NOT NULL DEFAULT gen_random_uuid(),
     field_id uuid NOT NULL,
     type_property_id uuid NOT NULL,
-    value text,
+    item_value text,
     CONSTRAINT pk_type_property_field PRIMARY KEY (type_property_field_id),
     CONSTRAINT fk_field FOREIGN KEY (field_id)
         REFERENCES public.field (field_id) MATCH SIMPLE

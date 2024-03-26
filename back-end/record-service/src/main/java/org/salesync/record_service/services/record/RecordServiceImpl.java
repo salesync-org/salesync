@@ -1,18 +1,18 @@
 package org.salesync.record_service.services.record;
 
 import lombok.RequiredArgsConstructor;
-import org.salesync.record_service.dtos.ListRecordsRequestDto;
-import org.salesync.record_service.dtos.ListRecordsResponseDto;
-import org.salesync.record_service.dtos.RecordDto;
-import org.salesync.record_service.dtos.RequestRecordDto;
+import org.salesync.record_service.dtos.*;
 import org.salesync.record_service.entities.Record;
 import org.salesync.record_service.entities.RecordType;
 import org.salesync.record_service.mappers.RecordMapper;
 import org.salesync.record_service.repositories.RecordRepository;
 import org.salesync.record_service.repositories.RecordTypeRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -21,6 +21,7 @@ public class RecordServiceImpl implements RecordService {
 
     private final RecordRepository recordRepository;
     private final RecordTypeRepository recordTypeRepository;
+    private final RestTemplate restTemplate;
     private final RecordMapper recordMapper = RecordMapper.INSTANCE;
 
     @Override
@@ -28,6 +29,7 @@ public class RecordServiceImpl implements RecordService {
         List<Record> record = recordTypeRepository.findByTypeId(typeId).stream()
                 .map(RecordType::getRecord)
                 .toList();
+        Map typeData = restTemplate.getForObject("http://type-service/api/v1/types/{typeId}", Map.class, typeId);
         return record
                 .stream()
                 .map(recordMapper::recordToRecordDto)
@@ -54,7 +56,6 @@ public class RecordServiceImpl implements RecordService {
     public RecordDto createRecordByType(RequestRecordDto requestRecordDto) {
         Record recordEntity = new Record();
         recordEntity.setUserId(UUID.fromString(requestRecordDto.getUserId()));
-        recordEntity.setStageId(UUID.fromString(requestRecordDto.getCurrentStageId()));
 
         return recordMapper.recordToRecordDto(recordRepository.save(recordEntity));
     }

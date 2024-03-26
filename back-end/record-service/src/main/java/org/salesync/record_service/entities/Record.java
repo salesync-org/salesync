@@ -20,7 +20,6 @@ import java.util.UUID;
 public class Record extends BaseEntity {
     private String name;
     private UUID userId;
-    private UUID stageId;
 
     @OneToMany(mappedBy = "record", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore

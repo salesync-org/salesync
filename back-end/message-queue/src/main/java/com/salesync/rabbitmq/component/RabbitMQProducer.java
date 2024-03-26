@@ -13,20 +13,10 @@ public class RabbitMQProducer {
 
     private RabbitTemplate rabbitTemplate;
 
-    public void sendMessage(MessageDTO message)
+    public void sendMessage(String message)
     {
-        MessageProperties messageProperties= new MessageProperties();
-//        messageProperties.setExpiration(String.valueOf(10000));
-
-
-
-        Message rabbitMessage = new Message(message.toString().getBytes(), messageProperties);
-
-
         rabbitTemplate.convertAndSend(
-                "exchange-name", "routing-key", message.toString());
-
-
+                "exchange-name", "routing-key", message);
 
     }
 }

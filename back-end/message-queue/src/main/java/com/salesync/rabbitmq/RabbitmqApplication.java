@@ -22,7 +22,7 @@ public class RabbitmqApplication {
 	@Bean
 	public CommandLineRunner commandLineRunner(RabbitMQProducer rabbitMQProducer) {
 		return args -> {
-			rabbitMQProducer.sendMessage(MessageDTO.builder().id("thang").age(12).build());
+			rabbitMQProducer.sendMessage("thang");
 
 			};
 	};

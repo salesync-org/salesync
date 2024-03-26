@@ -1,8 +1,6 @@
-package com.salesync.rabbitmq.component;
-import com.salesync.rabbitmq.dto.MessageDTO;
+package com.salesync.consumer.component;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
-
 @Component
 public class RabbitMQConsumer {
 

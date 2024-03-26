@@ -8,4 +8,4 @@ spring:
     password: admin
 
 server:
-  port: 45320
+  port: 45321

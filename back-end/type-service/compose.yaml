@@ -7,7 +7,8 @@ services:
       - 'POSTGRES_USER=type_service'
     volumes:
       - ./src/main/resources/db/init:/docker-entrypoint-initdb.d
-      - postgres_data:/var/lib/postgresql/data  # Persistent data volume
+# Uncomment the below line to allow Postgres to store data on the host machine even after the container is removed
+#      - ./src/main/resources/db/data:/var/lib/postgresql/data
     ports:
       - '54320:5432'
 volumes:

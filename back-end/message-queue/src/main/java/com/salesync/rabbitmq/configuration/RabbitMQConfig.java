@@ -8,21 +8,38 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfig {
 
     @Bean
-    public Queue queue() {
-        return new Queue("queue-name", true,false,false);
+    public Queue typeQueue() {
+        return new Queue("type-queue", true,false,false);
+    }
+
+    @Bean
+    public Queue recordQueue() {
+        return new Queue("record-queue", true,false,false);
     }
 
     @Bean public Exchange exchange()
     {
-        return new DirectExchange("exchange-name");
+        return new TopicExchange("topic-exchange");
+    }
+
+
+
+    // map các routing_key
+    @Bean
+    public Binding binding1(Queue typeQueue, Exchange exchange)
+    {
+        return BindingBuilder.bind(typeQueue)
+                .to(exchange)
+                .with("type")
+                .noargs();
     }
 
     @Bean
-    public Binding binding(Queue queue, Exchange exchange)
+    public Binding binding2(Queue recordQueue, Exchange exchange)
     {
-        return BindingBuilder.bind(queue)
+        return BindingBuilder.bind(recordQueue)
                 .to(exchange)
-                .with("routing-key")
+                .with("record")
                 .noargs();
     }
 

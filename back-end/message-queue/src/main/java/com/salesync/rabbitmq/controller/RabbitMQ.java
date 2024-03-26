@@ -9,12 +9,5 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 @RestController
 public class RabbitMQ {
-    RabbitMQProducer rabbitMQProducer;
 
-
-//
-//    @PostMapping("send")
-//    public void sendMsg(){
-//        rabbitMQProducer.sendMessage("he looo");
-//    }
 }

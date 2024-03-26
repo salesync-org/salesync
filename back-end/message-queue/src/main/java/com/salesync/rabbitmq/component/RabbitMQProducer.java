@@ -13,10 +13,11 @@ public class RabbitMQProducer {
 
     private RabbitTemplate rabbitTemplate;
 
-    public void sendMessage(String message)
+    //routing key theo các key đã map trong file RabbitMQConfig
+    public void sendMessage(String routingKey,String message)
     {
         rabbitTemplate.convertAndSend(
-                "exchange-name", "routing-key", message);
+                "topic-exchange", routingKey, message);
 
     }
 }

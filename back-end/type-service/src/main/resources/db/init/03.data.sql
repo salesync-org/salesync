@@ -114,7 +114,7 @@ INSERT INTO public.property_field(property_id, field_id, label,
 
 -- CALL assign_template(get_id('template_id', 'template', 'StageObject'), get_id('type_id', 'type', 'Lead'));
 CALL assign_template(get_id('template_id', 'template', 'StageObject'), get_id('type_id', 'type', 'Opportunity'));
-CALL assign_template(get_id('template_id', 'template', 'Human'), get_id('type_id', 'type', 'Contact'));
+-- CALL assign_template(get_id('template_id', 'template', 'Human'), get_id('type_id', 'type', 'Contact'));
 CALL assign_template(get_id('template_id', 'template', 'Group'), get_id('type_id', 'type', 'Account'));
 CALL assign_template(get_id('template_id', 'template', 'Activity'), get_id('type_id', 'type', 'Task'));
 CALL assign_template(get_id('template_id', 'template', 'Activity'), get_id('type_id', 'type', 'Event'));
@@ -131,7 +131,11 @@ INSERT INTO public.type_property(type_property_id, property_id, type_id, name, l
     ('11111111-1111-1111-1111-111111111111', get_id('property_id', 'property', 'Text'), '11111111-1111-1111-1111-111111111111', 'Email', 'Email','NoEmail', 1),
     ('22222222-2222-2222-2222-222222222222', get_id('property_id', 'property', 'Text'), '11111111-1111-1111-1111-111111111111', 'Title', 'Title','NoTitle', 2),
     ('33333333-3333-3333-3333-333333333333',get_id('property_id', 'property', 'Text'), '11111111-1111-1111-1111-111111111111', 'Company', 'Company','NoCompany', 3),
-    ('44444444-4444-4444-4444-444444444444', get_id('property_id', 'property', 'PhoneNumber'), '11111111-1111-1111-1111-111111111111', 'Phone', 'Phone','NoPhone', 4);
+    ('44444444-4444-4444-4444-444444444444', get_id('property_id', 'property', 'PhoneNumber'), '11111111-1111-1111-1111-111111111111', 'Phone', 'Phone','NoPhone', 4),
+    ('55555555-5555-5555-5555-555555555555', get_id('property_id', 'property', 'Text'), '22222222-2222-2222-2222-222222222222', 'Email', 'Email','NoEmail', 1),
+    ('66666666-6666-6666-6666-666666666666', get_id('property_id', 'property', 'Text'), '22222222-2222-2222-2222-222222222222', 'Title', 'Title','NoTitle', 2),
+    ('77777777-7777-7777-7777-777777777777',get_id('property_id', 'property', 'Text'), '22222222-2222-2222-2222-222222222222', 'Company', 'Company','NoCompany', 3),
+    ('88888888-8888-8888-8888-888888888888', get_id('property_id', 'property', 'PhoneNumber'), '22222222-2222-2222-2222-222222222222', 'Phone', 'Phone','NoPhone', 4);
 
 INSERT INTO stage (stage_id, name, type_id, sequence_number) VALUES
     ('11111111-1111-1111-1111-111111111111', 'LeadStage1', get_id('type_id', 'type', 'Lead'), 1),

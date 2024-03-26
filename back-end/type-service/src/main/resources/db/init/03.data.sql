@@ -7,10 +7,10 @@ INSERT INTO public.template (name) VALUES
 
 
 INSERT INTO public.type (name) VALUES
-    ('Lead'),
-    ('Opportunity'),
-    ('Contact'),
-    ('Account'),
+--     ('Lead'),
+--     ('Opportunity'),
+--     ('Contact'),
+--     ('Account'),
     ('Task'),
     ('Event'),
     ('Deal'),
@@ -20,6 +20,12 @@ INSERT INTO public.type (name) VALUES
     ('Product'),
     ('Case'),
     ('Contract');
+
+INSERT INTO public.type (type_id, name) VALUES
+('11111111-1111-1111-1111-111111111111', 'Lead'),
+('22222222-2222-2222-2222-222222222222', 'Contact'),
+('33333333-3333-3333-3333-333333333333', 'Opportunity'),
+('44444444-4444-4444-4444-444444444444', 'Account');
 
 INSERT INTO public.relation (name) VALUES
     ('One-to-Many'),
@@ -31,25 +37,28 @@ UPDATE public.relation SET inverse_relation_id = (SELECT relation_id FROM public
 UPDATE public.relation SET inverse_relation_id = (SELECT relation_id FROM public.relation rl WHERE rl.name = 'Many-to-One') WHERE name = 'One-to-Many';
 UPDATE public.relation SET inverse_relation_id = (SELECT relation_id FROM public.relation rl WHERE rl.name = 'Many-to-Many') WHERE name = 'Many-to-Many';
 
-INSERT INTO public.type_relation (relation_id,
+INSERT INTO public.type_relation (type_relation_id, relation_id,
                                   source_id, source_type_label,
-                                  destination_id, destination_label)
-VALUES
-    (get_id('relation_id', 'relation', 'One-to-Many'),
-           get_id('template_id', 'type', 'Account'), 'Account',
-           get_id('template_id', 'type', 'Case'), 'Case'),
+                                  destination_id, destination_label) VALUES
+    ('11111111-1111-1111-1111-111111111111',
+    get_id('relation_id', 'relation', 'One-to-Many'),
+    get_id('template_id', 'type', 'Account'), 'Account',
+    get_id('template_id', 'type', 'Case'), 'Case'),
 
-    (get_id('relation_id', 'relation', 'One-to-Many'),
-          get_id('template_id', 'type', 'Account'), 'Account',
-          get_id('template_id', 'type', 'Contact'), 'Contact'),
+    ('22222222-2222-2222-2222-222222222222',
+     get_id('relation_id', 'relation', 'One-to-Many'),
+     get_id('template_id', 'type', 'Account'), 'Account',
+     get_id('template_id', 'type', 'Contact'), 'Contact'),
 
-    (get_id('relation_id', 'relation', 'One-to-Many'),
-          get_id('template_id', 'type', 'Account'), 'Account',
-          get_id('template_id', 'type', 'Opportunity'), 'Opportunity'),
+    ('33333333-3333-3333-3333-333333333333',
+    get_id('relation_id', 'relation', 'One-to-Many'),
+    get_id('template_id', 'type', 'Account'), 'Account',
+    get_id('template_id', 'type', 'Opportunity'), 'Opportunity'),
 
-    (get_id('relation_id', 'relation', 'One-to-Many'),
-          get_id('template_id', 'type', 'Contact'), 'Contact',
-          get_id('template_id', 'type', 'Task'), 'Task');
+    ('44444444-4444-4444-4444-444444444444',
+    get_id('relation_id', 'relation', 'One-to-Many'),
+    get_id('template_id', 'type', 'Contact'), 'Contact',
+    get_id('template_id', 'type', 'Task'), 'Task');
 
 INSERT INTO public.property (name) VALUES
     ('Text'),
@@ -103,7 +112,7 @@ INSERT INTO public.property_field(property_id, field_id, label,
         'Date Format', 'YYYY-MM-DD', null, true, false);
 
 
-CALL assign_template(get_id('template_id', 'template', 'StageObject'), get_id('type_id', 'type', 'Lead'));
+-- CALL assign_template(get_id('template_id', 'template', 'StageObject'), get_id('type_id', 'type', 'Lead'));
 CALL assign_template(get_id('template_id', 'template', 'StageObject'), get_id('type_id', 'type', 'Opportunity'));
 CALL assign_template(get_id('template_id', 'template', 'Human'), get_id('type_id', 'type', 'Contact'));
 CALL assign_template(get_id('template_id', 'template', 'Group'), get_id('type_id', 'type', 'Account'));
@@ -117,4 +126,20 @@ CALL assign_template(get_id('template_id', 'template', 'Object'), get_id('type_i
 CALL assign_template(get_id('template_id', 'template', 'Object'), get_id('type_id', 'type', 'Case'));
 CALL assign_template(get_id('template_id', 'template', 'Object'), get_id('type_id', 'type', 'Contract'));
 
+
+INSERT INTO public.type_property(type_property_id, property_id, type_id, name, label, default_value, sequence) VALUES
+    ('11111111-1111-1111-1111-111111111111', get_id('property_id', 'property', 'Text'), '11111111-1111-1111-1111-111111111111', 'Email', 'Email','NoEmail', 1),
+    ('22222222-2222-2222-2222-222222222222', get_id('property_id', 'property', 'Text'), '11111111-1111-1111-1111-111111111111', 'Title', 'Title','NoTitle', 2),
+    ('33333333-3333-3333-3333-333333333333',get_id('property_id', 'property', 'Text'), '11111111-1111-1111-1111-111111111111', 'Company', 'Company','NoCompany', 3),
+    ('44444444-4444-4444-4444-444444444444', get_id('property_id', 'property', 'PhoneNumber'), '11111111-1111-1111-1111-111111111111', 'Phone', 'Phone','NoPhone', 4);
+
+INSERT INTO stage (stage_id, name, type_id, sequence_number) VALUES
+    ('11111111-1111-1111-1111-111111111111', 'LeadStage1', get_id('type_id', 'type', 'Lead'), 1),
+    ('22222222-2222-2222-2222-222222222222', 'LeadStage2', get_id('type_id', 'type', 'Lead'), 2),
+    ('33333333-3333-3333-3333-333333333333', 'LeadStage3', get_id('type_id', 'type', 'Lead'), 3),
+    ('44444444-4444-4444-4444-444444444444', 'LeadStage4', get_id('type_id', 'type', 'Lead'), 4),
+    ('55555555-5555-5555-5555-555555555555', 'OpportunityStage1', get_id('type_id', 'type', 'Opportunity'), 1),
+    ('66666666-6666-6666-6666-666666666666', 'OpportunityStage2', get_id('type_id', 'type', 'Opportunity'), 2),
+    ('77777777-7777-7777-7777-777777777777', 'OpportunityStage3', get_id('type_id', 'type', 'Opportunity'), 3),
+    ('88888888-8888-8888-8888-888888888888', 'OpportunityStage4', get_id('type_id', 'type', 'Opportunity'), 4);
 

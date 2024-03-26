@@ -4,6 +4,7 @@ CREATE ROLE postgres WITH LOGIN SUPERUSER PASSWORD 'strong_password';
 
 \c salesync_record_service;
 
+DROP TABLE IF EXISTS public.record CASCADE;
 CREATE TABLE IF NOT EXISTS public.record
 (
     record_id uuid NOT NULL DEFAULT gen_random_uuid(),
@@ -15,6 +16,7 @@ CREATE TABLE IF NOT EXISTS public.record
 ALTER TABLE IF EXISTS public.record
     OWNER to postgres;
 
+DROP TABLE IF EXISTS public.record_type_property CASCADE;
 CREATE TABLE IF NOT EXISTS public.record_type_property
 (
     record_type_property_id uuid NOT NULL DEFAULT gen_random_uuid(),
@@ -22,7 +24,7 @@ CREATE TABLE IF NOT EXISTS public.record_type_property
     type_property_id uuid NOT NULL,
     record_type_property_label text,
     item_value text,
-    CONSTRAINT pk_record_type_property PRIMARY KEY (property_record_id),
+    CONSTRAINT pk_record_type_property PRIMARY KEY (record_type_property_id),
     CONSTRAINT fk_record_type_property_record FOREIGN KEY (record_id)
         REFERENCES public.record (record_id) MATCH SIMPLE
         ON UPDATE NO ACTION
@@ -32,6 +34,7 @@ CREATE TABLE IF NOT EXISTS public.record_type_property
 ALTER TABLE IF EXISTS public.record_type_property
     OWNER to postgres;
 
+DROP TABLE IF EXISTS public.record_type_relation CASCADE;
 CREATE TABLE IF NOT EXISTS public.record_type_relation
 (
     record_type_relation_id uuid NOT NULL DEFAULT gen_random_uuid(),
@@ -52,6 +55,7 @@ CREATE TABLE IF NOT EXISTS public.record_type_relation
 ALTER TABLE IF EXISTS public.record_type_relation
     OWNER to postgres;
 
+DROP TABLE IF EXISTS public.record_type CASCADE;
 CREATE TABLE IF NOT EXISTS public.record_type
 (
     record_type_id uuid NOT NULL DEFAULT gen_random_uuid(),
@@ -67,6 +71,7 @@ CREATE TABLE IF NOT EXISTS public.record_type
 ALTER TABLE IF EXISTS public.record_type
     OWNER to postgres;
 
+DROP TABLE IF EXISTS public.record_stage CASCADE;
 CREATE TABLE IF NOT EXISTS public.record_stage
 (
     record_stage_id uuid NOT NULL DEFAULT gen_random_uuid(),

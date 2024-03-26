@@ -1,41 +1,36 @@
-import { useNavigate } from 'react-router-dom';
 import Icon from '../Icon/Icon';
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from './Table';
+import { Table, TableHeader, TableRow, TableBody, TableCell } from './Table';
 
-// interface Type {
-//   id: string;
-//   name: string;
-//   fields: Field[] | null;
-//   links: Link[] | null;
-// }
-
-const TypeTable = ({ types }: { types: Type[] }) => {
-  const navigate = useNavigate();
+const TypeTable = ({ type }: { type: Type }) => {
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Type Name</TableHead>
-          <TableHead>No. Fields</TableHead>
-          <TableHead>No. Links</TableHead>
+          {type.fields?.map((field) => {
+            return (
+              <TableCell key={field.id} className='font-medium'>
+                {field.label}
+              </TableCell>
+            );
+          })}
         </TableRow>
       </TableHeader>
       <TableBody>
-        {types &&
-          types.map((type: Type) => {
-            return (
-              <TableRow key={type.id}>
-                <TableCell className='font-medium'>{type.name}</TableCell>
-                <TableCell>{type.fields?.length ?? 0}</TableCell>
-                <TableCell>{type.fields?.length ?? 0}</TableCell>
-                <TableCell>
-                  <button onClick={() => {navigate(`/type/link/${type.id}?name=${type.name}`)}}>
-                    <Icon name='navigate_next'></Icon>
-                  </button>
-                </TableCell>
-              </TableRow>
-            );
-          })}
+        {type.fields?.[0].values?.map((_, index) => {
+          return (
+            <TableRow key={index}>
+              {type.fields?.map((field) => {
+                return <TableCell key={field.id}>{field.values?.[index]}</TableCell>;
+              })}
+
+              <TableCell>
+                <button>
+                  <Icon name='navigate_next' />
+                </button>
+              </TableCell>
+            </TableRow>
+          );
+        })}
       </TableBody>
     </Table>
   );

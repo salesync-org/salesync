@@ -1,101 +1,39 @@
+import RecordSection from '@/components/Records/RecordSection';
 import Icon from '@/components/ui/Icon/Icon';
-import { useState } from 'react';
+import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
+import useType from '@/hooks/type-service/useType';
+import { Navigate, useParams } from 'react-router-dom';
 import RecordTabs from '../../components/Records/RecordTabs';
-import { useLocation, useNavigate } from 'react-router-dom';
-import RecordTable from '@/components/Records/RecordTable';
-import icon from 'assets/type-icon/lead_icon.png';
-import Panel from '@/components/ui/Panel/Panel';
-import Button from '@/components/ui/Button/Button';
-import TextInput from '@/components/ui/TextInput/TextInput';
-
-const initTabs = [
-  { title: 'Leads', href: 'sales/leads' },
-  { title: 'Contacts', href: 'sales/contacts' },
-  { title: 'Accounts', href: 'sales/accounts' },
-  { title: 'Opportunities', href: 'sales/opportunities' },
-  { title: 'Products', href: 'sales/products' },
-  { title: 'Price Books', href: 'sales/price-books' },
-  { title: 'Calendar', href: 'sales/calendar' },
-  { title: 'Analytics', href: 'sales/analytics' }
-];
+import ErrorToaster from '../Error/ErrorToaster';
 
 const Sales = () => {
-  const [tabs, setTabs] = useState(() => {
-    const savedTabs = localStorage.getItem('salesTabs');
-    return savedTabs ? JSON.parse(savedTabs) : initTabs;
-  });
+  const { types = [], error, isLoading } = useType();
 
-  const location = useLocation();
-  const navigate = useNavigate();
+  const { typeId } = useParams();
 
-  if (location.pathname.endsWith('sales') && tabs.length > 0) {
-    navigate(`/records/${tabs[0].href}`);
+  if (isLoading) {
+    return <LoadingSpinner />;
   }
+
+  if (error) {
+    return <ErrorToaster errorTitle='adasd' errorMessage='fetch fail' />;
+  }
+
+  if (!typeId && types.length > 0) {
+    return <Navigate to={`/sales/${types[0].id}`} />;
+  }
+
+  const type = types.find((type) => type.id === typeId);
 
   return (
     <div className='flex h-full flex-col'>
-      <section className='flex items-center bg-white px-6'>
-        <h1 className='pr-6 text-lg font-normal leading-6'>Sales</h1>
-        <RecordTabs tabs={tabs} setTabs={setTabs} name='salesTabs' />
+      <section className='fixed left-[76px] right-0 z-50 flex items-center bg-white px-6'>
+        <h2 className='pr-6 leading-6'>Sales</h2>
+        <RecordTabs tabs={types} name='salesTabs' />
         <Icon name='edit' className='ml-auto' />
       </section>
-      <section className='h-full flex-grow p-4'>
-        <Panel className='m-0 h-full overflow-hidden p-0'>
-          <section className='px flex items-center justify-between p-4'>
-            <div className='flex items-center gap-2'>
-              <div className='w-fit cursor-pointer overflow-hidden rounded-sm bg-primary-color'>
-                <img className='h-8 w-8' src={icon} alt='icon' />
-              </div>
-              <div>
-                <h2 className='text-[13px] font-normal leading-[13px]'>Leads</h2>
-                <span className='flex cursor-pointer border-b border-transparent text-lg font-bold leading-[22.5px] text-[#080707] hover:border-black'>
-                  <span>All Open Leads</span>
-                  <Icon name='arrow_drop_down' size='32px' />
-                </span>
-              </div>
-            </div>
-            <div className='flex'>
-              <Button intent='normal'>New</Button>
-              <Button intent='normal'>Import</Button>
-              <Button intent='normal'>Send List Email</Button>
-              <Button intent='normal'>Change Owner</Button>
-              <Button intent='normal'>Add to Cadence</Button>
-            </div>
-          </section>
-          <section className='my-2 flex items-center justify-between p-4'>
-            <ul className='flex gap-1 text-xs leading-[18px]'>
-              <li>• Sorted by Name</li>
-              <li>• Filtered by All leads - Lead Status</li>
-              <li>• Updated 8 minutes ago</li>
-            </ul>
-            <div className='flex items-center'>
-              <TextInput placeholder='Search this list...' prefixIcon='search' className='h-8' />
-              <div className='hidden md:flex'>
-                <Button className='h-8 w-8'>
-                  <Icon name='settings' />
-                </Button>
-                <Button className='h-8 w-8'>
-                  <Icon name='table' />
-                </Button>
-                <Button className='h-8 w-8'>
-                  <Icon name='replay' />
-                </Button>
-                <Button className='h-8 w-8'>
-                  <Icon name='edit' />
-                </Button>
-                <Button className='h-8 w-8'>
-                  <Icon name='pie_chart' />
-                </Button>
-                <Button className='h-8 w-8'>
-                  <Icon name='filter_alt' />
-                </Button>
-              </div>
-            </div>
-          </section>
-          <div>
-            <RecordTable />
-          </div>
-        </Panel>
+      <section className='h-full flex-grow px-4 py-14'>
+        <RecordSection type={type} />
       </section>
     </div>
   );

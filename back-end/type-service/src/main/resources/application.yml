@@ -2,9 +2,9 @@ spring:
   application:
     name: type-service
   datasource:
-    url: jdbc:postgresql://localhost:54321/salesync_type_service
-    username: type_service
-    password: type_service
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: none

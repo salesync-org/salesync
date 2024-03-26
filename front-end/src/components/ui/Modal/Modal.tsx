@@ -7,16 +7,17 @@ import useClickOutside from '@/hooks/useClickOutside';
 interface Props {
   children: React.ReactNode;
   isOpen: boolean;
-  onOpenChange: (isOpen: boolean) => void;
+  onClose: () => void;
   isStatic?: boolean;
   title: string;
+  className?: string;
 }
 
 export const ModalFooter = ({ children, className }: { children: React.ReactNode; className?: string }) => {
   return <div className={cn('flex items-center justify-end space-x-4', className)}>{children}</div>;
 };
 
-const Modal = ({ children, title, isOpen, onOpenChange, isStatic = true }: Props) => {
+const Modal = ({ children, title, isOpen, onClose, className, isStatic = true }: Props) => {
   // const handleCloseWhenClickOutside = (e: React.MouseEvent<HTMLDivElement>) => {
   //   if (isStatic) return;
 
@@ -26,12 +27,13 @@ const Modal = ({ children, title, isOpen, onOpenChange, isStatic = true }: Props
   // };
   const ref = useRef<HTMLDivElement>(null);
   useClickOutside([ref], () => {
-    !isStatic && onOpenChange(false);
+    !isStatic && onClose();
   });
+
   useEffect(() => {
     const keyPressHandler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        onOpenChange(false);
+        onClose();
       }
     };
 
@@ -42,27 +44,28 @@ const Modal = ({ children, title, isOpen, onOpenChange, isStatic = true }: Props
     return () => {
       window.removeEventListener('keydown', keyPressHandler);
     };
-  }, [isOpen, onOpenChange]);
+  }, [isOpen, onClose]);
 
   return ReactDOM.createPortal(
     <>
       {isOpen && (
         <div
-          className='fixed left-0 right-0 top-0 z-50 flex h-[calc(100%-1rem)] max-h-full w-full items-center justify-center overflow-y-auto overflow-x-hidden bg-black bg-opacity-50 transition-all dark:bg-gray-900 dark:bg-opacity-50 md:inset-0'
+          className='fixed left-0 right-0 top-0 z-50 flex h-[calc(100%-1rem)] max-h-full w-full items-center justify-center overflow-x-hidden overflow-y-hidden bg-black bg-opacity-50 transition-all dark:bg-gray-900 dark:bg-opacity-50 md:inset-0'
           // onClick={handleCloseWhenClickOutside}
         >
-          <div ref={ref} className='animate-modal relative max-h-full w-full max-w-2xl origin-[0_50%]' id='modal'>
+          <div ref={ref} className='relative max-h-full w-[1000px] origin-[0_50%] animate-modal' id='modal'>
             {/* <!-- Modal content --> */}
-            <div className='relative rounded-lg bg-panel px-3 py-4 shadow dark:bg-panel-dark'>
+            <div className={cn('relative rounded-lg bg-panel px-3 py-4 shadow dark:bg-panel-dark', className)}>
               {/* <!-- Modal header --> */}
               <FocusTrap>
-                <div className='flex items-center justify-between p-4 md:p-5'>
-                  <h3 className='text-2xl font-bold'>{title}</h3>
+                <div className='flex  items-center p-4 md:p-5'>
+                  {/* //header */}
+                  <h3 className='absolute right-0 z-10 w-full text-center text-2xl font-bold'>{title}</h3>
                   <button
                     type='button'
-                    className='ms-auto inline-flex h-8 w-8 items-center justify-center rounded-sm bg-transparent text-sm transition-all hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white'
+                    className='absolute right-2 z-30 ms-auto inline-flex h-8 w-8 items-center justify-center rounded-sm bg-transparent text-sm transition-all hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white'
                     data-modal-hide='default-modal'
-                    onClick={() => onOpenChange(false)}
+                    onClick={onClose}
                   >
                     <svg
                       className='h-4 w-4'

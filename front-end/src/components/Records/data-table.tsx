@@ -31,17 +31,18 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 
   return (
     <div className='border'>
-      <Table className='text-[13px]'>
+      <Table className=''>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id} className='bg-background-color cursor-pointer transition-all'>
+            <TableRow key={headerGroup.id} className='cursor-pointer bg-background-color transition-all'>
               {headerGroup.headers.map((header, index) => {
                 return (
                   <TableHead
                     key={header.id}
                     className={cn(
                       'h-8 truncate border-r-2 font-bold last:border-x-0 hover:bg-button-background-hover',
-                      index < 1 && 'text-center'
+                      index === 0 && 'w-0',
+                      index === 1 && 'w-12'
                     )}
                   >
                     {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}

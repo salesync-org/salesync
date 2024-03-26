@@ -6,8 +6,10 @@ import org.salesync.record_service.dtos.ListRecordsResponseDto;
 import org.salesync.record_service.dtos.RecordDto;
 import org.salesync.record_service.dtos.RequestRecordDto;
 import org.salesync.record_service.entities.Record;
+import org.salesync.record_service.entities.RecordType;
 import org.salesync.record_service.mappers.RecordMapper;
-import org.salesync.record_service.repositories.record.RecordRepository;
+import org.salesync.record_service.repositories.RecordRepository;
+import org.salesync.record_service.repositories.RecordTypeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,11 +20,14 @@ import java.util.UUID;
 public class RecordServiceImpl implements RecordService {
 
     private final RecordRepository recordRepository;
+    private final RecordTypeRepository recordTypeRepository;
     private final RecordMapper recordMapper = RecordMapper.INSTANCE;
 
     @Override
-    public List<RecordDto> getRecordsByType(String typeId) {
-        List<Record> record = recordRepository.findByTypeId(UUID.fromString(typeId));
+    public List<RecordDto> getRecordsByType(UUID typeId) {
+        List<Record> record = recordTypeRepository.findByTypeId(typeId).stream()
+                .map(RecordType::getRecord)
+                .toList();
         return record
                 .stream()
                 .map(recordMapper::recordToRecordDto)
@@ -38,13 +43,16 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public ListRecordsResponseDto getAllRecordsWithCondition(ListRecordsRequestDto listRecordsRequestDto) {
-        return recordRepository.getListRecord(listRecordsRequestDto);
+        return ListRecordsResponseDto.builder()
+                .records(recordRepository.findAll().stream()
+                        .map(recordMapper::recordToRecordDto)
+                        .toList())
+                .build();
     }
 
     @Override
     public RecordDto createRecordByType(RequestRecordDto requestRecordDto) {
         Record recordEntity = new Record();
-        recordEntity.setTypeId(UUID.fromString(requestRecordDto.getTypeId()));
         recordEntity.setUserId(UUID.fromString(requestRecordDto.getUserId()));
         recordEntity.setStageId(UUID.fromString(requestRecordDto.getCurrentStageId()));
 

@@ -1,15 +1,17 @@
 import Icon from '@/components/ui/Icon/Icon';
 import { cn } from '@/utils/utils';
-import { NavLink, useLocation } from 'react-router-dom';
+import { useQueryClient } from 'react-query';
+import { NavLink, useParams } from 'react-router-dom';
 
 interface RecordTabsProps {
-  tabs: { title: string; href: string }[];
-  setTabs: React.Dispatch<React.SetStateAction<{ title: string; href: string }[]>>;
+  tabs: Type[];
+  // setTabs: React.Dispatch<React.SetStateAction<{ title: string; href: string }[]>>;
   name: string;
 }
 
-const RecordTabs = ({ tabs, setTabs, name }: RecordTabsProps) => {
-  const location = useLocation();
+const RecordTabs = ({ tabs = [], name }: RecordTabsProps) => {
+  const id = useParams().typeId as string;
+  const queryClient = useQueryClient();
 
   const handleDragStart = (e: React.DragEvent<HTMLAnchorElement>) => {
     e.currentTarget.classList.add('opacity-0');
@@ -32,7 +34,7 @@ const RecordTabs = ({ tabs, setTabs, name }: RecordTabsProps) => {
       const to = Number(sibling.getAttribute('value'));
       const newTabs = [...tabs];
       newTabs.splice(to, 0, newTabs.splice(from, 1)[0]);
-      setTabs(newTabs);
+      queryClient.setQueryData('types', newTabs);
     }
   };
 
@@ -46,13 +48,15 @@ const RecordTabs = ({ tabs, setTabs, name }: RecordTabsProps) => {
 
     localStorage.setItem(name, JSON.stringify(tabs));
   };
+
+  const { companyName = '' } = useParams();
   return (
     <nav className='h-full'>
       <ul className={`${name}-tabs flex`}>
         {tabs.map((tab, index) => {
           return (
             <li
-              key={tab.title}
+              key={tab.id}
               className={`-translate-x-[${index * 2}%] relative text-sm leading-5`}
               value={index}
               style={{
@@ -61,7 +65,7 @@ const RecordTabs = ({ tabs, setTabs, name }: RecordTabsProps) => {
               }}
             >
               <NavLink
-                to={tab.href}
+                to={`/${companyName}/sales/${tab.id}`}
                 data-index={index}
                 draggable
                 onDragStart={handleDragStart}
@@ -77,12 +81,12 @@ const RecordTabs = ({ tabs, setTabs, name }: RecordTabsProps) => {
                   )
                 }
               >
-                {tab.href.split('/').pop() === (location.pathname.split('/').pop() ?? '') && (
+                {tab.id === id && (
                   <span
                     className={cn('absolute left-[-1px] right-[-1px] top-0 h-[3px] animate-to-top bg-primary')}
                   ></span>
                 )}
-                <p>{tab.title}</p>
+                <p>{tab.name}</p>
                 <Icon name='expand_more' />
               </NavLink>
             </li>

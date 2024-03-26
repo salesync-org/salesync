@@ -2,6 +2,9 @@ package com.salesync.typeservice.dtos;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,9 +16,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Builder
 @Getter
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class RelationDTO {
     UUID id;
     String name;
-    @JsonProperty("inverse_id")
     UUID inverseId;
 }

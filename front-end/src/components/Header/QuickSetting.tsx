@@ -1,9 +1,11 @@
 import { cn } from '@/utils/utils';
 import { useState } from 'react';
 import { Button, Icon } from '../ui';
+import UserModal from '../UserModal/UserModal';
 
 const QuickSetting = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isUserSettingOpen, setUserSetting] = useState(false);
 
   return (
     <div>
@@ -58,7 +60,12 @@ const QuickSetting = () => {
             <h3 className='mb-2 font-bold leading-8'>Company</h3>
             <ul>
               <li>
-                <QuickSettingItem icon='person_add' title='Users' desc='Add and manage users.' href='#' />
+                <QuickSettingItem
+                  icon='person_add'
+                  title='Users'
+                  onClick={() => {setUserSetting(true)}}
+                  desc='Add and manage users.' href='#' />
+              <UserModal isOpen={isUserSettingOpen} setIsOpen={setUserSetting} />
               </li>
               <li>
                 <QuickSettingItem

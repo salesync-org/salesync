@@ -7,6 +7,7 @@ export {Item} from './Item';
 export {Modal, ModalFooter} from './Modal';
 export {Pagination} from './Pagination';
 export {Panel} from './Panel';
+export {Checkbox} from './Checkbox';
 export {Popup} from './Popup';
 export {Skeleton} from './Skeleton';
 export {Switch} from './Switch';

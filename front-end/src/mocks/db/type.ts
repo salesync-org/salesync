@@ -1,75 +1,35 @@
 const types = [
   {
-    id: '1',
-    name: 'Lead'
+    id: 'f4828793-28c2-465b-b783-0c697e41dafb',
+    name: 'Leads'
   },
   {
-    id: '2',
-    name: 'Account'
+    id: '32a9bf21-19fb-451f-9fcf-3de9b2d6eb88',
+    name: 'Contacts'
   },
   {
-    id: '3',
-    name: 'Contact'
+    id: '27d0c628-94c2-4650-828f-3c26e61bb692',
+    name: 'Accounts'
   },
   {
-    id: '4',
-    name: 'Opportunity'
+    id: '9515a156-82c1-49aa-bc6c-824c02f20da5',
+    name: 'Opportunities'
   },
   {
-    id: '5',
-    name: 'Task'
+    id: '9f484d26-ee10-454f-a1a8-3632bee8958b',
+    name: 'Products'
   },
   {
-    id: '6',
-    name: 'Event'
+    id: 'e7571c42-dc94-4fd2-b94b-6618500b170f',
+    name: 'Price Books'
   },
   {
-    id: '7',
-    name: 'Deal'
+    id: 'f457698a-6f25-4920-91e2-9bd4d3e4fe4e',
+    name: 'Calendar'
   },
   {
-    id: '8',
-    name: 'Invoice'
-  },
-  {
-    id: '9',
-    name: 'Quote'
-  },
-  {
-    id: '10',
-    name: 'Product'
-  },
-  {
-    id: '11',
-    name: 'Service'
-  },
-  {
-    id: '12',
-    name: 'Campaign'
-  },
-  {
-    id: '13',
-    name: 'Note'
-  },
-  {
-    id: '14',
-    name: 'Document'
-  },
-  {
-    id: '15',
-    name: 'Case'
-  },
-  {
-    id: '16',
-    name: 'Contract'
-  },
-  {
-    id: '17',
-    name: 'Milestone'
-  },
-  {
-    id: '18',
-    name: 'Feedback'
+    id: 'a49425ba-c570-427e-8279-f15cf26e3bc3',
+    name: 'Analytics'
   }
 ];
 

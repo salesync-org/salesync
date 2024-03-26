@@ -1,5 +1,5 @@
-import React, { ChangeEvent } from 'react';
-import {Icon} from '@/components/ui';
+import React, { ChangeEvent, FocusEvent } from 'react';
+import { Icon } from '@/components/ui';
 import { cn } from 'utils/utils';
 
 interface TextInputProps {
@@ -8,6 +8,7 @@ interface TextInputProps {
   placeholder?: string;
   disabled?: boolean;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onFocus?: (e: FocusEvent<HTMLInputElement>) => void;
   name?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   register?: any;

@@ -1,11 +1,11 @@
 import TypeCard from '@/components/ObjectCard/TypeCard';
 const HomeLayout = () => {
   //lead
-  let Lead: Type = {
+  const Lead: Type = {
     icon_url: 'https://momentum-enterprise-925.my.salesforce.com/img/icon/t4v35/standard/lead_120.png',
     //tailwind color
     background_color: 'bg-red-500',
-    id: '1',
+    id: 'f4828793-28c2-465b-b783-0c697e41dafb',
     name: 'Lead',
     description: 'Lead type',
     fields: [
@@ -16,10 +16,10 @@ const HomeLayout = () => {
   };
 
   //Opportunity type
-  let Opportunity: Type = {
+  const Opportunity: Type = {
     icon_url: 'https://momentum-enterprise-925.my.salesforce.com/img/icon/t4v35/standard/opportunity_120.png',
     background_color: 'bg-green-500',
-    id: '2',
+    id: '9515a156-82c1-49aa-bc6c-824c02f20da5',
     name: 'Opportunity',
     description: 'Opportunity type',
     fields: [
@@ -29,10 +29,10 @@ const HomeLayout = () => {
     ]
   };
   //contact
-  let Contact: Type = {
+  const Contact: Type = {
     icon_url: 'https://momentum-enterprise-925.my.salesforce.com/img/icon/t4v35/standard/contact_120.png',
     background_color: 'bg-blue-500',
-    id: '3',
+    id: '32a9bf21-19fb-451f-9fcf-3de9b2d6eb88',
     name: 'Contact',
     description: 'Contact type',
     fields: [
@@ -43,10 +43,10 @@ const HomeLayout = () => {
   };
 
   //case
-  let Case: Type = {
+  const Case: Type = {
     icon_url: 'https://momentum-enterprise-925.my.salesforce.com/img/icon/t4v35/standard/case_120.png',
     background_color: 'bg-yellow-500',
-    id: '4',
+    id: '27d0c628-94c2-4650-828f-3c26e61bb692',
     name: 'Case',
     description: 'Case type',
     fields: [

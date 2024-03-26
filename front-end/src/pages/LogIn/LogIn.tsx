@@ -1,13 +1,13 @@
 import salesyncIcon from 'assets/salesync_icon.png';
 import { TextInput } from '@/components/ui';
 import { PrimaryButton } from '@/components/ui';
-import { Icon } from '@/components/ui';
 import { ErrorText } from '@/components/ui';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import useAuth from '@/hooks/useAuth';
+import { useToast } from '@/components/ui/use-toast';
 
 const loginSchema = z.object({
   username: z.string().email('Invalid email'),
@@ -21,7 +21,7 @@ const LogIn = () => {
     register,
     handleSubmit,
     setError,
-    formState: { errors }
+    formState: { errors, isSubmitting }
   } = useForm<LoginSchemaType>({
     defaultValues: {
       username: '',
@@ -33,13 +33,20 @@ const LogIn = () => {
 
   const { login } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const { companyName = '' } = useParams();
 
   // const errorText = `Please check your username and password. If you still can't log in, contact your Salesforce administrator.`;
 
   const onSubmit = async (data: LoginSchemaType) => {
     try {
-      await login({ email: data.username, password: data.password });
-      navigate('/home');
+      await login({ companyName, email: data.username, password: data.password });
+      toast({
+        title: 'Success',
+        description: 'You have successfully logged in'
+      });
+
+      navigate(`/${companyName}/home`);
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -47,7 +54,12 @@ const LogIn = () => {
         setError(error.response.data.type, { message: error.response.data.message });
       }
 
-      console.table(error);
+      toast({
+        title: 'Error',
+        description:
+          "Please check your username and password. If you still can't log in, contact your SalesSync administrator.",
+        variant: 'destructive'
+      });
     }
   };
 
@@ -64,11 +76,17 @@ const LogIn = () => {
                 {/* {error && <ErrorText text={errorText} className='text-sm' />} */}
                 <TextInput placeholder='Enter email' header='Email' register={register} name='username' />
                 {errors.username && <ErrorText text={errors.username.message} className='text-sm' />}
-                <TextInput placeholder='Enter password' isPassword={true} header='Password' register={register} name='password' />
+                <TextInput
+                  placeholder='Enter password'
+                  isPassword={true}
+                  header='Password'
+                  register={register}
+                  name='password'
+                />
                 {errors.password && <ErrorText text={errors.password.message} className='text-sm' />}
 
-                <PrimaryButton className='mt-4 w-full' type='submit'>
-                  Log In
+                <PrimaryButton className='mt-4 w-full' type='submit' disabled={isSubmitting}>
+                  {isSubmitting ? 'Logging in...' : 'Log In'}
                 </PrimaryButton>
                 <div className='mt-4 flex items-center'>
                   <input type='checkbox' />
@@ -82,35 +100,13 @@ const LogIn = () => {
               </form>
             </div>
           </div>
-          <div className='mx-auto mb-2 w-full text-center text-sm'>© 2024 SaleSync, Inc. All rights reserved.</div>
+          <div className='mx-auto mb-2 w-full text-center text-sm'>©2024 SaleSync, Inc. All rights reserved.</div>
         </div>
 
         <div
           id='right'
           className='hidden h-full w-full flex-col justify-between bg-white bg-[url("https://www.salesforce.com/content/dam/web/en_us/www/images/login-promos/php-login-free-trial-bg.jpg")] bg-cover p-5 lg:flex lg:p-10'
         >
-          <section>
-            <h1 className='my-5 text-4xl font-bold leading-10 text-[#032d60]'>
-              Start your free trial. No credit card required, no software to install.
-            </h1>
-            <span className='my-4'>With your trial, you get: </span>
-            <div className='my-2 flex items-center'>
-              <Icon size='1' name='check' className='text-green-600'></Icon>
-              <span className='ml-2'>Preloaded data or upload your own</span>
-            </div>
-            <div className='my-2 flex items-center'>
-              <Icon size='1' name='check' className='text-green-600'></Icon>
-              <span className='ml-2'>Preconfigured processes, reports, and dashboards</span>
-            </div>
-            <div className='my-2 flex items-center'>
-              <Icon size='1' name='check' className='text-green-600'></Icon>
-              <span className='ml-2'>Guided experiences for sales reps, leaders, and administrators</span>
-            </div>
-            <div className='my-2 flex items-center'>
-              <Icon size='1' name='check' className='text-green-600'></Icon>
-              <span className='ml-2'>Online training and live onboarding webinars</span>
-            </div>
-          </section>
           <img
             src='https://www.salesforce.com/content/dam/web/en_us/www/images/login-promos/php-login-free-trial-fg-2.png'
             alt=''

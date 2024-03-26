@@ -5,12 +5,13 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['system-ui', 'Avenir', 'Helvetica', 'Arial', 'sans-serif']
+        sans: ['"Segoe UI Variable Display"', 'system-ui', 'Avenir', 'Helvetica', 'Arial', 'sans-serif']
       },
       lineHeight: {
         1.5: '1.5'
       },
       fontSize: {
+        DEFAULT: '1rem',
         icon: '1rem'
       },
       fontWeight: 'normal',

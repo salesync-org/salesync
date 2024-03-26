@@ -7,7 +7,7 @@ function ModalPanel() {
     <>
       <PrimaryButton onClick={() => setIsOpen(true)}>Open modal</PrimaryButton>
 
-      <Modal isOpen={isOpen} onOpenChange={setIsOpen} title='Create new Type'>
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title='Create new Type'>
         <form>
           <div className='grid w-full grid-cols-5 place-content-center gap-3'>
             <div className='col-span-3 flex flex-row'>

@@ -1,11 +1,15 @@
 package com.salesync.typeservice.controllers;
 
 
+import com.salesync.typeservice.constants.Route;
 import com.salesync.typeservice.dtos.TypeDTO;
 import com.salesync.typeservice.dtos.TypeRelationDTO;
 import com.salesync.typeservice.dtos.TypeRelationResponseDTO;
-import com.salesync.typeservice.services.type.ITypeService;
+import com.salesync.typeservice.services.type.TypeService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,41 +17,42 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/type")
+@RequestMapping(Route.Type.TYPE_ROUTE)
+@RequiredArgsConstructor
 public class TypeController {
 
-    private final ITypeService typeService;
+    private final TypeService typeService;
 
-    @Autowired
-    public TypeController(ITypeService typeService) {
-        this.typeService = typeService;
+    @GetMapping(Route.Type.TYPE_ID)
+    public ResponseEntity<TypeDTO> getType(@PathVariable UUID typeId) {
+        return ResponseEntity.ok(typeService.getType(typeId));
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<TypeDTO> createType(@RequestBody TypeDTO typeDTO) {
-        return ResponseEntity.ok(typeService.createType(typeDTO));
+    @PostMapping
+    public ResponseEntity<TypeDTO> createType(@Valid @RequestBody TypeDTO typeDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(typeService.createType(typeDTO));
     }
 
-    @GetMapping("/get-all")
+    @GetMapping
     public ResponseEntity<List<TypeDTO>> getAllType() {
 
         return ResponseEntity.ok(typeService.getAllType());
     }
 
-    @GetMapping("/{id}/link")
-    public ResponseEntity<List<TypeRelationDTO>> getAllTypeLink(@PathVariable String id) {
-        return ResponseEntity.ok(typeService.getAllTypeLinks(UUID.fromString(id)));
+    @GetMapping(Route.Type.GET_RELATION)
+    public ResponseEntity<List<TypeRelationDTO>> getAllRelationsByType(@PathVariable UUID typeId) {
+        return ResponseEntity.ok(typeService.getAllRelationsByType(typeId));
     }
 
-
-    @PostMapping("/link")
+    @PostMapping(Route.Type.CREATE_RELATION)
     public ResponseEntity<TypeRelationResponseDTO> createLink(@RequestBody TypeRelationDTO typeRelationDTO) {
-        return ResponseEntity.ok(typeService.createLink(typeRelationDTO));
+        return ResponseEntity.ok(typeService.makeRelation(typeRelationDTO));
     }
 
-    @PutMapping("/update")
+    @PutMapping
     public ResponseEntity<TypeRelationResponseDTO> updateTypeRelation(@RequestBody TypeRelationDTO typeRelationDTO) {
-        return ResponseEntity.ok(typeService.updateTypeRelation(typeRelationDTO));
+        return ResponseEntity.ok(typeService.updateLabelOfTypeRelation(typeRelationDTO));
     }
 
 

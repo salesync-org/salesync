@@ -1,0 +1,23 @@
+keycloak:
+  realm: master
+  auth-server-url: http://localhost:9090
+  ssl-required: none
+  resource: admin-cli
+  use-resource-role-mappings: true
+  bearer-only: true
+  cors: true
+  principal-attribute: preferred_username
+
+keycloak-config:
+  username: admin
+  password: admin
+
+server:
+  servlet:
+    context-path: /api/v1
+  port: 8082
+
+spring:
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false

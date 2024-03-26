@@ -1,5 +1,4 @@
 import Header from '@/components/Header/Header';
-import AsideNav from '@/components/RecordLayout/AsideNav';
 import { Outlet } from 'react-router-dom';
 
 const RecordsLayout = () => {

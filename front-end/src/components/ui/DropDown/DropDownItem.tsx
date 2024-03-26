@@ -10,7 +10,7 @@ interface DropDownItemProps {
 const DropDownItem: React.FC<DropDownItemProps> = ({ value, title, children }) => {
   return (
     <div>
-      <input defaultValue={value} className='hidden' title={title} tabIndex={-1}></input>
+      <input defaultValue={value} value={value} className='hidden' title={title} onChange={()=>{}} tabIndex={-1}></input>
       {children ? children : <Item title={title}></Item>}
     </div>
   );

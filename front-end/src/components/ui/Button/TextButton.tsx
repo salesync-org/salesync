@@ -1,10 +1,3 @@
-import React from 'react';
-
-interface TextButtonProps {
-  text?: string;
-  onClick: () => void;
-}
-
 function TextButton({ text, onClick }: { text: string; onClick: () => void }) {
   return (
     <button onClick={onClick} className='text-blue-400 hover:underline focus:text-blue-800'>

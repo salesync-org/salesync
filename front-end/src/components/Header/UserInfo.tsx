@@ -1,6 +1,6 @@
 import useAuth from '@/hooks/useAuth';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import defaultAvatar from '@/assets/default_avatar.png';
 import {Button, DropDownList, Icon, Item} from '@/components/ui';
 import { isImageShowableHead } from '@/utils/image_checking';
@@ -33,6 +33,8 @@ const UserInfo = () => {
     };
     updateInfo();
   }, [user]);
+
+  const {companyName = ''} = useParams();
 
   return (
     <>

@@ -25,5 +25,5 @@ public class RecordTypeRelation extends BaseEntity {
     @JoinColumn(name = "destination_record_id")
     private Record destinationRecord;
 
-    private UUID relationId;
+    private UUID typeRelationId;
 }

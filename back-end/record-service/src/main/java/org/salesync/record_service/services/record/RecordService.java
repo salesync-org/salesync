@@ -4,12 +4,12 @@ import org.salesync.record_service.dtos.ListRecordsRequestDto;
 import org.salesync.record_service.dtos.ListRecordsResponseDto;
 import org.salesync.record_service.dtos.RecordDto;
 import org.salesync.record_service.dtos.RequestRecordDto;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface RecordService {
-    List<RecordDto> getRecordsByType(String typeId);
+    List<RecordDto> getRecordsByType(UUID typeId);
 
     List<RecordDto> getAllRecords();
 

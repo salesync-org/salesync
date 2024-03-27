@@ -1,5 +1,8 @@
+import { createUser } from '@/api/users';
 import { Modal, Panel, ModalFooter, PrimaryButton, TextInput, DropDown, DropDownItem } from '@/components/ui';
 import UserTable from '@/components/ui/Table/UserTable';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 interface props {
   isOpen: boolean;
@@ -7,19 +10,39 @@ interface props {
 }
 
 const UserModal = ({ isOpen, setIsOpen }: props) => {
+  const [email, setEmail] = useState('');
+  const [profile, setProfile] = useState('');
+  const { companyName = '' } = useParams();
+
+    const handleSubmit = (event: React.FormEvent) => {
+      event.preventDefault();
+      const user: NewUser = {
+        email: email,
+        role: profile,
+        first_name: '',
+        last_name: '',
+        job_title: '',
+        phone: ''
+      };
+
+      const token = localStorage.getItem('access_token');
+      createUser(companyName, user, token ? token : '');
+      setEmail('');
+      setProfile('');
+    };
   return (
     <Modal isOpen={isOpen} onClose={()=> setIsOpen(false)} className='h-[600px]' title='Invite your team'>
       <div className='-z-1 absolute bottom-2 left-2 right-2 top-20 overflow-x-hidden  pb-32  '>
         <form className='flex w-full flex-col place-content-center gap-2   p-6'>
           <Panel className='flex flex-col items-center bg-gray-100 p-5'>
             <div className='w-full'>
-              <TextInput header='Email'></TextInput>
-              <DropDown value='Choose Profile' header='Profile'>
-                <DropDownItem title='System Administrator' value='123'></DropDownItem>
-                <DropDownItem title='Standard User' value='123'></DropDownItem>
+              <TextInput value={email} onChange={(e) => {setEmail(e.target.value)}} header='Email'></TextInput>
+              <DropDown value='Choose Profile' onValueChange={(newValue) => setProfile(newValue)} header='Profile'>
+                <DropDownItem title='System Administrator' value='admin-user'></DropDownItem>
+                <DropDownItem title='Standard User' value='standard-user'></DropDownItem>
               </DropDown>
             </div>
-            <PrimaryButton className='mt-5' onClick={() => {}}>
+            <PrimaryButton className='mt-5' onClick={(e) => {handleSubmit(e)}}>
               Send Invitation
             </PrimaryButton>
           </Panel>

@@ -1,5 +1,5 @@
 import { cn } from '@/utils/utils';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import Icon from '../ui/Icon/Icon';
 import { useState } from 'react';
 
@@ -98,9 +98,12 @@ const AsideItem = ({
 
     localStorage.setItem('asideItems', JSON.stringify(currentAsideItems));
   };
+
+  const { companyName = '' } = useParams();
+
   return (
     <NavLink
-      to={href}
+      to={`/${companyName}${href}`}
       title={title}
       draggable
       onDragStart={handleDragStart}

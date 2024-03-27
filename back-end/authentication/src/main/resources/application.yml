@@ -1,6 +1,6 @@
 keycloak:
   realm: master
-  auth-server-url: http://localhost:8080
+  auth-server-url: http://localhost:9090
   ssl-required: none
   resource: admin-cli
   use-resource-role-mappings: true

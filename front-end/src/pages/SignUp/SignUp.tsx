@@ -6,6 +6,12 @@ import { TextInput } from '@/components/ui';
 import { PrimaryButton, Button, DropDown, DropDownItem } from '@/components/ui';
 import { Checkbox } from 'components/ui';
 import axios from 'axios';
+import * as z from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Link, useNavigate } from 'react-router-dom';
+import { useToast } from '@/components/ui/use-toast';
+import useAuth from '@/hooks/useAuth';
 
 interface State {
   name: string;
@@ -19,80 +25,96 @@ interface Country {
   states: State[];
 }
 
+const signUpSchema = z.object({
+  firstName: z.string().min(1, 'Enter your first name'),
+  lastName: z.string().min(1, 'Enter your last name'),
+  title: z.string().min(1, 'Enter your title'),
+  noEmployees: z.coerce
+    .number({
+      required_error: 'Enter your number of employees',
+      invalid_type_error: 'Enter a valid number of employees'
+    })
+    .int()
+    .positive('Enter a valid number of employees')
+    .min(1, 'Enter a valid number of employees'),
+  company: z.string().min(1, 'Enter your company name'),
+  phone: z.string().regex(/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s./0-9]*$/g, 'Enter a valid phone number'),
+  email: z.string().email('Enter a valid email address')
+});
+
+type SignUpFormInfo = z.infer<typeof signUpSchema>;
+
 const SignUp = () => {
   const [step, setStep] = useState(1);
   const [listCountry, setListCountry] = useState<string[]>([]);
 
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [title, setTitle] = useState('');
-  const [employees, setEmployees] = useState('');
-  const [company, setCompany] = useState('');
   const [country, setCountry] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
   const [check1, setCheck1] = useState(true);
   const [check2, setCheck2] = useState(true);
 
-  const [errorFirstName, setErrorFirstName] = useState(false);
-  const [errorLastName, setErrorLastName] = useState(false);
-  const [errorTitle, setErrorTitle] = useState(false);
-  const [errorEmployees, setErrorEmployees] = useState(false);
-  const [errorCompany, setErrorCompany] = useState(false);
   const [errorCountry, setErrorCountry] = useState(false);
-  const [errorPhone, setErrorPhone] = useState(false);
-  const [errorEmail, setErrorEmail] = useState(false);
   const [errorCheck1, setErrorCheck1] = useState(false);
   // check1: acceptAgreement, check2: receiveMarketingCommunications
+
+  const {
+    handleSubmit,
+    register,
+    trigger,
+    getValues,
+    formState: { errors, isSubmitting }
+  } = useForm<SignUpFormInfo>({
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      title: '',
+      noEmployees: 0,
+      company: '',
+      phone: '',
+      email: ''
+    },
+    resolver: zodResolver(signUpSchema),
+    mode: 'all'
+  });
 
   useEffect(() => {
     const getListCountry = async () => {
       const response = await axios.get('https://countriesnow.space/api/v0.1/countries/states');
-      const data : Country[] = response.data.data;
+      const data: Country[] = response.data.data;
       const lsCountry = data.map((item) => item.name);
       setListCountry(lsCountry);
     };
+
     getListCountry();
+  }, []);
 
-    if (firstName === '') setErrorFirstName(true);
-    else setErrorFirstName(false);
-
-    if (lastName === '') setErrorLastName(true);
-    else setErrorLastName(false);
-
-    if (title === '') setErrorTitle(true);
-    else setErrorTitle(false);
-
-    if (employees === '') setErrorEmployees(true);
-    else setErrorEmployees(false);
-
-    if (company === '') setErrorCompany(true);
-    else setErrorCompany(false);
-
-    if (country === '') setErrorCountry(true);
-    else setErrorCountry(false);
-
-    const regexPhoneNumber = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s./0-9]*$/g;
-    if (!phone.match(regexPhoneNumber)) setErrorPhone(true);
-    else setErrorPhone(false);
-
-    const regexEmail = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g;
-    if (!email.match(regexEmail)) setErrorEmail(true);
-    else setErrorEmail(false);
-
-    if (check1 === false) setErrorCheck1(true);
-    else setErrorCheck1(false);
-  }, [firstName, lastName, title, employees, company, country, phone, email, check1]);
+  const { toast } = useToast();
+  const { signUp } = useAuth();
+  const navigate = useNavigate();
 
   const onNext = () => {
     const cur = step;
     if (cur === 1) {
-      if (!errorFirstName && !errorLastName && !errorTitle) {
+      trigger('firstName');
+      trigger('lastName');
+      trigger('title');
+
+      if (!getValues('firstName') || !getValues('lastName') || !getValues('title')) {
+        return;
+      }
+
+      if (!errors.firstName && !errors.lastName && !errors.title) {
         setStep(cur + 1);
       }
     }
     if (cur === 2) {
-      if (!errorEmployees && !errorCompany && !errorCountry) {
+      trigger('company');
+      setErrorCountry(!country);
+
+      if (!getValues('company') || !getValues('noEmployees') || !country) {
+        return;
+      }
+
+      if (!errors.noEmployees && !errors.company && !errorCountry) {
         setStep(cur + 1);
       }
     }
@@ -105,18 +127,39 @@ const SignUp = () => {
     }
   };
 
-  const onSubmit = () => {
-    if (!errorPhone && !errorEmail && !errorCheck1) {
-      console.log('firstName', firstName);
-      console.log('lastName', lastName);
-      console.log('title', title);
-      console.log('employees', employees);
-      console.log('company', company);
-      console.log('country', country);
-      console.log('phone', phone);
-      console.log('email', email);
-      console.log('acceptAgreement', check1);
-      console.log('receiveMarketingCommunications', check2);
+  const onSubmit = async (data: SignUpFormInfo) => {
+    if (!check1) {
+      setErrorCheck1(true);
+      return;
+    }
+
+    try {
+      await signUp({
+        admin_info: {
+          first_name: data.firstName,
+          last_name: data.lastName,
+          job_title: data.title,
+          phone: data.phone,
+          email: data.email,
+          role: 'admin-user'
+        },
+        noEmployees: data.noEmployees,
+        company_name: data.company,
+        country_region: country
+      });
+      toast({
+        title: 'Success',
+        description: 'Signed up successfully'
+      });
+
+      navigate('/home');
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: 'Error',
+        description: 'Failed to sign up',
+        variant: 'destructive'
+      });
     }
   };
 
@@ -125,9 +168,9 @@ const SignUp = () => {
       <div className='grid h-screen w-full grid-cols-2 bg-white pt-8'>
         <div className='flex'>
           <div className='ml-10 mr-5 h-32 w-32'>
-            <a href='/' className=''>
+            <Link to='/' className=''>
               <img src={salesyncIcon} className='h-full w-full object-contain' alt='header icon' />
-            </a>
+            </Link>
           </div>
           <div>
             <h1>Start your free trial today.</h1>
@@ -143,7 +186,7 @@ const SignUp = () => {
         </div>
 
         <div className='mb-3 flex w-full justify-center'>
-          <form className='h-fit w-96 rounded-sm bg-zinc-100 p-5'>
+          <form onSubmit={handleSubmit(onSubmit)} className='h-fit w-96 rounded-sm bg-zinc-100 p-5'>
             {step === 1 && (
               <>
                 <div className='mb-5'>
@@ -161,24 +204,24 @@ const SignUp = () => {
                 <TextInput
                   header='First name'
                   className='border-slate-500 bg-white hover:bg-white'
-                  onChange={(e) => setFirstName(e.target.value)}
-                  value={firstName}
+                  name='firstName'
+                  register={register}
                 />
-                {errorFirstName && <ErrorText text='Enter your first name' />}
+                {errors.firstName && <ErrorText text={errors.firstName.message} />}
                 <TextInput
                   header='Last name'
                   className='border-slate-500 bg-white hover:bg-white'
-                  onChange={(e) => setLastName(e.target.value)}
-                  value={lastName}
+                  name='lastName'
+                  register={register}
                 />
-                {errorLastName && <ErrorText text='Enter your last name' />}
+                {errors.lastName && <ErrorText text={errors.lastName.message} />}
                 <TextInput
                   header='Job title name'
                   className='border-slate-500 bg-white hover:bg-white'
-                  onChange={(e) => setTitle(e.target.value)}
-                  value={title}
+                  name='title'
+                  register={register}
                 />
-                {errorTitle && <ErrorText text='Enter your title' />}
+                {errors.title && <ErrorText text={errors.title.message} />}
 
                 <div className='my-4 flex items-center justify-between'>
                   <PrimaryButton onClick={onNext}>NEXT</PrimaryButton>
@@ -193,26 +236,21 @@ const SignUp = () => {
                 <div className='mb-5'>
                   <h2 className='font-normal'>Answer 5 more questions and we'll get you into your free trial.</h2>
                 </div>
-
-                <DropDown
-                  header='Employees'
-                  value={employees}
-                  onValueChange={setEmployees}
-                  className='w-full justify-start border-slate-500 bg-white hover:bg-white'
-                >
-                  <DropDownItem title='1 - 20 employees' value='1 - 20 employees'></DropDownItem>
-                  <DropDownItem title='21 - 200 employees' value='21 - 200 employees'></DropDownItem>
-                  <DropDownItem title='201 - 10,000 employees' value='201 - 10,000 employees'></DropDownItem>
-                  <DropDownItem title='10,000+ employees' value='10,000+ employees'></DropDownItem>
-                </DropDown>
-                {errorEmployees && <ErrorText text='Enter your number of employees' />}
+                <TextInput
+                  header='No. Employees'
+                  className='border-slate-500 bg-white hover:bg-white'
+                  name='noEmployees'
+                  onFocus={(e) => e.target.select()}
+                  register={register}
+                />
+                {errors.noEmployees && <ErrorText text={errors.noEmployees.message} />}
                 <TextInput
                   header='Company'
                   className='border-slate-500 bg-white hover:bg-white'
-                  onChange={(e) => setCompany(e.target.value)}
-                  value={company}
+                  name='company'
+                  register={register}
                 />
-                {errorCompany && <ErrorText text='Enter your company name' />}
+                {errors.company && <ErrorText text={errors.company.message} />}
                 <DropDown
                   header='Country/Region'
                   value={country}
@@ -247,17 +285,17 @@ const SignUp = () => {
                 <TextInput
                   header='Phone'
                   className='border-slate-500 bg-white hover:bg-white'
-                  onChange={(e) => setPhone(e.target.value)}
-                  value={phone}
+                  name='phone'
+                  register={register}
                 />
-                {errorPhone && <ErrorText text='Enter a valid phone number' />}
+                {errors.phone && <ErrorText text={errors.phone.message} />}
                 <TextInput
                   header='Email'
                   className='border-slate-500 bg-white hover:bg-white'
-                  onChange={(e) => setEmail(e.target.value)}
-                  value={email}
+                  name='email'
+                  register={register}
                 />
-                {errorEmail && <ErrorText text='Enter a valid email address' />}
+                {errors.email && <ErrorText text={errors.email.message} />}
 
                 <div className='mt-2 flex'>
                   <Checkbox className='mt-1' checked={check1} onClick={() => setCheck1(!check1)}></Checkbox>
@@ -300,10 +338,12 @@ const SignUp = () => {
 
                 <div className='my-4 flex items-center justify-between'>
                   <div className='flex'>
-                    <Button className='mr-3 bg-white' onClick={onBack}>
+                    <Button className='mr-3 bg-white' onClick={onBack} disabled={isSubmitting}>
                       BACK
                     </Button>
-                    <PrimaryButton onClick={onSubmit}>SUBMIT</PrimaryButton>
+                    <PrimaryButton type='submit' disabled={isSubmitting}>
+                      {isSubmitting ? 'PROCESSING...' : 'SUBMIT'}
+                    </PrimaryButton>
                   </div>
                   <div>
                     <span>Step 3 of 3</span>

@@ -1,5 +1,5 @@
-import React, { ChangeEvent } from 'react';
-import {Icon} from '@/components/ui';
+import React, { ChangeEvent, FocusEvent } from 'react';
+import { Icon } from '@/components/ui';
 import { cn } from 'utils/utils';
 
 interface TextInputProps {
@@ -8,6 +8,7 @@ interface TextInputProps {
   placeholder?: string;
   disabled?: boolean;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onFocus?: (e: FocusEvent<HTMLInputElement>) => void;
   name?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   register?: any;
@@ -36,7 +37,7 @@ const TextInput: React.FC<TextInputProps> = ({
       {showHeader && header && <p className='my-1'>{header}</p>}
       <div
         className={cn(
-          'flex h-10 items-center justify-start align-middle',
+          'relative flex h-10 items-center justify-start align-middle w-64',
           disabled ? 'opacity-80' : 'active:scale-x-[99%] active:scale-y-[99%]',
           'transform-all duration-[50ms] ease-in-out',
           'rounded placeholder:text-opacity-50',
@@ -50,7 +51,7 @@ const TextInput: React.FC<TextInputProps> = ({
           type={isPassword ? 'password' : 'text'}
           placeholder={placeholder}
           className={cn(
-            'h-full w-full rounded bg-transparent py-2 pr-2 placeholder:text-opacity-50 focus:outline-primary',
+            'h-full w-full absolute rounded bg-transparent py-2 pr-2 placeholder:text-opacity-50 focus:outline-primary',
             prefixIcon ? 'pl-10' : 'pl-4'
           )}
           value={value}
@@ -59,8 +60,8 @@ const TextInput: React.FC<TextInputProps> = ({
           {...register(name)}
           {...restProps}
         />
-        <div className='absolute flex h-fit items-center justify-center rounded px-4 py-2'>
-          <div className='relative h-full w-4'>{prefixIcon && <Icon className='mt-[.4rem]' name={prefixIcon} />}</div>
+        <div className='relative flex h-full items-center justify-start rounded px-4'>
+          <div className=' absolute flex items-center top-0 bottom-0 w-4'>{prefixIcon && <Icon className='' name={prefixIcon} />}</div>
         </div>
       </div>
     </>

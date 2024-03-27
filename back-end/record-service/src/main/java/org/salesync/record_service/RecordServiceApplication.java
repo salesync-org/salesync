@@ -1,14 +1,7 @@
 package org.salesync.record_service;
 
-import org.salesync.record_service.dtos.ListRecordsRequestDto;
-import org.salesync.record_service.repositories.record.RecordRepository;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.core.env.Environment;
-
-import java.util.UUID;
 
 @SpringBootApplication
 public class RecordServiceApplication {

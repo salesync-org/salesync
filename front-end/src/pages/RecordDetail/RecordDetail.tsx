@@ -2,7 +2,7 @@ import { Button, ButtonGroup, DropDownList, Icon, Item, Panel } from '@/componen
 import { useState } from 'react';
 // import { useParams } from 'react-router-dom';
 import GroupProperty from '@/components/RecordDetail/GroupProperty';
-import Stages from '@/components/Stage/Stages';
+import StageSection from '@/components/Stage/StageSection';
 
 const RecordDetail = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -32,6 +32,34 @@ const RecordDetail = () => {
     { name: 'Created By', value: '' },
     { name: 'Last Modified By', value: '' }
   ];
+
+  const record = {
+    stage: {
+      stages: [
+        {
+          id: '1',
+          name: 'New'
+        },
+        {
+          id: '2',
+          name: 'Contacted'
+        },
+        {
+          id: '3',
+          name: 'Nurturing'
+        },
+        {
+          id: '4',
+          name: 'Unqualified'
+        },
+        {
+          id: '5',
+          name: 'Converted'
+        }
+      ],
+      currentStage: '5'
+    }
+  };
 
   return (
     <div className='flex flex-col'>
@@ -95,7 +123,7 @@ const RecordDetail = () => {
         </Panel>
         <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
           <div className='px-4'>
-            <Stages />
+            <StageSection stage={record.stage} />
           </div>
         </Panel>
         <Panel className='col-span-1 h-fit p-4'>

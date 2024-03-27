@@ -1,5 +1,6 @@
 package org.salesync.authentication.services.companyregister;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.OAuth2Constants;
@@ -8,21 +9,29 @@ import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.admin.client.resource.KeyResource;
 import org.keycloak.admin.client.resource.RealmResource;
+import org.keycloak.admin.client.resource.UserProfileResource;
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.crypto.KeyUse;
 import org.keycloak.representations.AccessToken;
 import org.keycloak.representations.AccessTokenResponse;
 import org.keycloak.representations.idm.*;
+import org.keycloak.representations.userprofile.config.UPAttribute;
+import org.keycloak.representations.userprofile.config.UPAttributePermissions;
+import org.keycloak.representations.userprofile.config.UPConfig;
 import org.salesync.authentication.converters.PublicKeyConverter;
 import org.salesync.authentication.dtos.CompanyRegisterDto;
 import org.salesync.authentication.dtos.LogInDto;
 import org.salesync.authentication.dtos.NewUserDto;
+import org.salesync.authentication.dtos.UserDto;
+import org.salesync.authentication.helpers.SettingsManager;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.security.PublicKey;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static org.keycloak.crypto.KeyUse.ENC;
 
@@ -47,6 +56,10 @@ public class RegisterServiceImpl implements RegisterService {
             keycloak.realm(realmName).clients().create(getNewClientRepresentation("app-user", "app-user"));
             createRoles(keycloak.realm(realmName), "standard-user");
             createRoles(keycloak.realm(realmName), "admin-user");
+            createAttribute(keycloak.realm(realmName), "avatarUrl", "Avatar URL");
+            createAttribute(keycloak.realm(realmName), "jobTitle", "Job Title");
+            createAttribute(keycloak.realm(realmName), "phone", "Phone");
+            createAttribute(keycloak.realm(realmName), "settings", "Settings");
             adminRegisterResponse = registerUser(companyRegisterDTO.getAdminInfo(), realmName, "account");
             System.out.println("Status Register" + adminRegisterResponse.getStatus());
             return login(realmName, new LogInDto(companyRegisterDTO.getAdminInfo().getEmail(), "admin"), "app-admin", "app-admin");
@@ -72,6 +85,10 @@ public class RegisterServiceImpl implements RegisterService {
             user.setFirstName(newUserDTO.getFirstName());
             user.setLastName(newUserDTO.getLastName());
             user.singleAttribute("jobTitle", newUserDTO.getJobTitle());
+            user.singleAttribute("avatarUrl", "default");
+            user.singleAttribute("phone", newUserDTO.getPhone());
+            SettingsManager settingsManager = new SettingsManager();
+            user.singleAttribute("settings", settingsManager.loadSettingsFromFile());
             user.setEnabled(true);
 
             response = keycloak.realm(realmName).users().create(user);
@@ -104,9 +121,7 @@ public class RegisterServiceImpl implements RegisterService {
             String clientId,
             String clientSecret
     ) {
-        Keycloak keycloak = null;
-        Response response = null;
-            keycloak = KeycloakBuilder.builder()
+        Keycloak keycloak = KeycloakBuilder.builder()
                     .serverUrl(env.getProperty("keycloak.auth-server-url"))
                     .realm(realmName)
                     .grantType(OAuth2Constants.PASSWORD)
@@ -132,18 +147,11 @@ public class RegisterServiceImpl implements RegisterService {
     }
 
     @Override
-    public AccessTokenResponse validate(String realmId, String accessToken) {
-//        keycloak.realm("salesynctest")
-//                .clients()
-//                .get("admin-cli").toRepresentation();
+    public UserDto validateUser(String realmId, String accessToken) {
         RealmResource realmResource = keycloak.realm(realmId);
-        System.out.println("Got realmResource: " + realmResource);
         KeyResource keyResource = realmResource.keys();
-        System.out.println("Got keyResource " + keyResource);
         KeysMetadataRepresentation keysMetadata = keyResource.getKeyMetadata();
-        System.out.println("Got keysMetadata " + keysMetadata);
         List<KeysMetadataRepresentation.KeyMetadataRepresentation> keyList = keysMetadata.getKeys();
-        System.out.println("Got keyMetadata " + keyList);
         String key = null;
 
         for (final KeysMetadataRepresentation.KeyMetadataRepresentation keyMetadata : keyList) {
@@ -155,20 +163,32 @@ public class RegisterServiceImpl implements RegisterService {
                 break;
             }
         }
-        System.out.println("Got key " + key);
+        if (key == null) {
+            return null;
+        }
         try {
             PublicKey publicKey = PublicKeyConverter.convertStringToPublicKey(key);
-            System.out.println(key);
-            System.out.println(publicKey);
             AccessToken token = TokenVerifier.create(accessToken, AccessToken.class)
                     .publicKey(publicKey) // Set your RSA Public Key
                     .verify()
                     .getToken();
-            System.out.println(token.getSubject());
             if (token.isActive()) {
-                AccessTokenResponse accessTokenResponse = new AccessTokenResponse();
-                accessTokenResponse.setToken(accessToken);
-                return accessTokenResponse;
+                String userId = token.getSubject();
+                UserRepresentation user = realmResource.users().get(userId).toRepresentation();
+                Map<String, List<String>> attributes = user.getAttributes();
+                UserDto userDto = new UserDto();
+                userDto.setFirstName(user.getFirstName());
+                userDto.setLastName(user.getLastName());
+                userDto.setEmail(user.getEmail());
+                userDto.setUserId(user.getId());
+                userDto.setUserName(user.getUsername());
+                userDto.setAvatarUrl(attributes.get("avatarUrl").get(0));
+                userDto.setJobTitle(attributes.get("jobTitle").get(0));
+                userDto.setPhone(attributes.get("phone").get(0));
+                userDto.setRoles(user.getRealmRoles());
+                SettingsManager settings = new SettingsManager();
+                userDto.setSettings(settings.parseSettings(attributes.get("settings").get(0)));
+                return userDto;
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -198,5 +218,19 @@ public class RegisterServiceImpl implements RegisterService {
     private void addRoleToUser(RealmResource realmResource, String roleName, String userId) {
         RoleRepresentation roleRepresentation = realmResource.roles().get(roleName).toRepresentation();
         realmResource.users().get(userId).roles().realmLevel().add(Arrays.asList(roleRepresentation));
+    }
+
+    private void createAttribute(RealmResource realmResource, String attributeName,  String attributeDisplayName) {
+        UPConfig config = realmResource.users().userProfile().getConfiguration();
+        UPAttribute attribute = new UPAttribute();
+        attribute.setName(attributeName);
+        attribute.setDisplayName(attributeDisplayName);
+        UPAttributePermissions permissions = new UPAttributePermissions();
+        permissions.setEdit(Set.of("user", "admin"));
+        permissions.setView(Set.of("user", "admin"));
+        attribute.setPermissions(permissions);
+        config.addOrReplaceAttribute(attribute);
+        realmResource.users().userProfile().update(config);
+
     }
 }

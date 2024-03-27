@@ -2,8 +2,9 @@ import { Button, ButtonGroup, DropDownList, Icon, Item, Panel } from '@/componen
 import { useState } from 'react';
 // import { useParams } from 'react-router-dom';
 import GroupProperty from '@/components/RecordDetail/GroupProperty';
+import Stages from '@/components/Stage/Stages';
 
-const LeadDetail = () => {
+const RecordDetail = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   // const leadId = useParams().leadId;
 
@@ -85,15 +86,17 @@ const LeadDetail = () => {
       </Panel>
 
       {/* record contain  */}
-      <div className='grid grid-cols-4'>
+      <div className='grid grid-cols-2 md:grid-cols-4'>
         <Panel className='col-span-1 mr-0 h-fit p-4'>
           <GroupProperty name='About' data={dataAbout} className='mb-4' />
           <GroupProperty name='Get in Touch' data={dataTouch} className='mb-4' />
           <GroupProperty name='Segment' data={dataSegment} className='mb-4' />
           <GroupProperty name='History' data={dataHistory} />
         </Panel>
-        <Panel className='col-span-2 mr-0 h-fit p-4'>
-          <div></div>
+        <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
+          <div className='px-4'>
+            <Stages />
+          </div>
         </Panel>
         <Panel className='col-span-1 h-fit p-4'>
           <div></div>
@@ -103,4 +106,4 @@ const LeadDetail = () => {
   );
 };
 
-export default LeadDetail;
+export default RecordDetail;

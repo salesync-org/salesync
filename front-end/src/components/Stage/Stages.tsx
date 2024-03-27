@@ -1,14 +1,13 @@
-import { useState } from 'react';
 import Stage from './Stage';
 
 interface StagesProps {
   stages: Stage[];
   currentStage: string;
+  stageIdChosen: string;
+  setStageIdChosen: (stageId: string) => void;
 }
 
-const Stages = ({ stages, currentStage }: StagesProps) => {
-  const [stageIdChosen, setStageIdChosen] = useState(currentStage);
-
+const Stages = ({ stages, currentStage, stageIdChosen, setStageIdChosen }: StagesProps) => {
   const findIndex = stages.findIndex((stage) => stage.id === currentStage);
 
   return (

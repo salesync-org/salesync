@@ -3,6 +3,9 @@ import { useState } from 'react';
 // import { useParams } from 'react-router-dom';
 import GroupProperty from '@/components/RecordDetail/GroupProperty';
 import StageSection from '@/components/Stage/StageSection';
+import useRecord from '@/hooks/record-service/useRecord';
+import { useParams } from 'react-router-dom';
+import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
 
 const RecordDetail = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -33,33 +36,16 @@ const RecordDetail = () => {
     { name: 'Last Modified By', value: '' }
   ];
 
-  const record = {
-    stage: {
-      stages: [
-        {
-          id: '1',
-          name: 'New'
-        },
-        {
-          id: '2',
-          name: 'Contacted'
-        },
-        {
-          id: '3',
-          name: 'Nurturing'
-        },
-        {
-          id: '4',
-          name: 'Unqualified'
-        },
-        {
-          id: '5',
-          name: 'Converted'
-        }
-      ],
-      currentStage: '5'
-    }
-  };
+  const { recordId = '' } = useParams();
+  const { data: record, isLoading } = useRecord(recordId);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (!record) {
+    return null;
+  }
 
   return (
     <div className='flex flex-col'>
@@ -121,11 +107,13 @@ const RecordDetail = () => {
           <GroupProperty name='Segment' data={dataSegment} className='mb-4' />
           <GroupProperty name='History' data={dataHistory} />
         </Panel>
-        <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
-          <div className='px-4'>
-            <StageSection stage={record.stage} />
-          </div>
-        </Panel>
+        {Object.keys(record).includes('stage') && (
+          <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
+            <div className='px-4'>
+              <StageSection stage={record.stage} />
+            </div>
+          </Panel>
+        )}
         <Panel className='col-span-1 h-fit p-4'>
           <div></div>
         </Panel>

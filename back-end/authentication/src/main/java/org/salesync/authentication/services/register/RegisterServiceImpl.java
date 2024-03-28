@@ -12,10 +12,10 @@ import org.keycloak.representations.idm.*;
 import org.keycloak.representations.userprofile.config.UPAttribute;
 import org.keycloak.representations.userprofile.config.UPAttributePermissions;
 import org.keycloak.representations.userprofile.config.UPConfig;
-import org.salesync.authentication.dtos.CompanyRegisterDto;
-import org.salesync.authentication.dtos.LogInDto;
-import org.salesync.authentication.dtos.NewUserDto;
+import org.salesync.authentication.dtos.*;
 import org.salesync.authentication.helpers.SettingsManager;
+import org.salesync.authentication.services.user.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +27,8 @@ import java.util.Set;
 public class RegisterServiceImpl implements RegisterService {
     private final Environment env;
     private final Keycloak keycloak;
+    @Autowired
+    private UserService userService;
 
     @Override
     public AccessTokenResponse registerCompany(CompanyRegisterDto companyRegisterDTO) {
@@ -124,7 +126,20 @@ public class RegisterServiceImpl implements RegisterService {
             System.out.println("Username: " + logInDTO.getUsername());
             System.out.println("Password: " + logInDTO.getPassword());
             System.out.println("Client ID: " + clientId);
-            return keycloak.tokenManager().getAccessToken();
+            LogInResponseDto logInResponseDto = new LogInResponseDto();
+            AccessTokenResponse accessTokenResponse = keycloak.tokenManager().getAccessToken();
+            UserDto userDto = userService.validateUser(realmName, accessTokenResponse.getToken());
+            logInResponseDto.setToken(accessTokenResponse.getToken());
+            logInResponseDto.setRefreshToken(accessTokenResponse.getRefreshToken());
+            logInResponseDto.setExpiresIn(accessTokenResponse.getExpiresIn());
+            logInResponseDto.setFirstName(userDto.getFirstName());
+            logInResponseDto.setLastName(userDto.getLastName());
+            logInResponseDto.setEmail(userDto.getEmail());
+            logInResponseDto.setSettings(userDto.getSettings());
+            logInResponseDto.setAvatarUrl(userDto.getAvatarUrl());
+            logInResponseDto.setJobTitle(userDto.getJobTitle());
+            logInResponseDto.setPhone(userDto.getPhone());
+            return logInResponseDto;
     }
 
     @Override

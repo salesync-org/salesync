@@ -7,7 +7,7 @@ import org.salesync.authentication.dtos.CompanyRegisterDto;
 import org.salesync.authentication.dtos.LogInDto;
 import org.salesync.authentication.dtos.NewUserDto;
 import org.salesync.authentication.dtos.UserDto;
-import org.salesync.authentication.services.companyregister.RegisterService;
+import org.salesync.authentication.services.register.RegisterService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,14 +30,6 @@ public class AuthenticationController {
             @RequestBody LogInDto loginDTO
     ) {
         return ResponseEntity.ok(registerService.login(realmId, loginDTO, "app-admin", "app-admin"));
-    }
-
-    @GetMapping("/{realmId}/loaduser")
-    ResponseEntity<UserDto> loadUser(
-            @RequestHeader String access_token,
-            @PathVariable String realmId
-    ) {
-        return ResponseEntity.ok(registerService.validateUser(realmId, access_token));
     }
 
     @PostMapping("/{realmId}/logout")

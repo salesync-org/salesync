@@ -8,7 +8,6 @@ import java.io.InputStream;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -16,17 +15,31 @@ import org.springframework.core.io.Resource;
 public class SettingsManager {
     private static final String SETTINGS_FILE_PATH = "default_settings.json";
 
-    public String loadSettingsFromFile() throws IOException {
+    public String loadStringSettingsFromFile() {
+    try {
         Resource resource = new ClassPathResource("db/" + SETTINGS_FILE_PATH);
 
         File file = resource.getFile();
         InputStream inputStream = new FileInputStream(file);
 
         ObjectMapper mapper = new ObjectMapper();
-        try {
             return mapper.writeValueAsString(mapper.readTree(inputStream));
-        } catch (JsonProcessingException e) {
-            throw new IOException("Error parsing settings file.", e);
+        } catch (IOException e) {
+            return "{}";
+        }
+    }
+
+    public JsonNode loadObjectSettingsFromFile() {
+        try {
+            Resource resource = new ClassPathResource("db/" + SETTINGS_FILE_PATH);
+
+            File file = resource.getFile();
+            InputStream inputStream = new FileInputStream(file);
+
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.readTree(inputStream);
+        } catch (IOException e) {
+            return null;
         }
     }
 

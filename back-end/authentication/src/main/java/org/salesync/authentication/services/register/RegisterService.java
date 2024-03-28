@@ -1,4 +1,4 @@
-package org.salesync.authentication.services.companyregister;
+package org.salesync.authentication.services.register;
 
 import jakarta.ws.rs.core.Response;
 import org.keycloak.representations.AccessTokenResponse;
@@ -13,6 +13,4 @@ public interface RegisterService {
     AccessTokenResponse login(String realmName, LogInDto logInDTO, String clientId, String clientSecret);
 
     Response logout(String token);
-
-    UserDto validateUser(String realmId, String accessToken);
 }

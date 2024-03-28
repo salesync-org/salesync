@@ -1,39 +1,26 @@
-package org.salesync.authentication.services.companyregister;
+package org.salesync.authentication.services.register;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.OAuth2Constants;
-import org.keycloak.TokenVerifier;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
-import org.keycloak.admin.client.resource.KeyResource;
 import org.keycloak.admin.client.resource.RealmResource;
-import org.keycloak.admin.client.resource.UserProfileResource;
 import org.keycloak.admin.client.resource.UserResource;
-import org.keycloak.crypto.KeyUse;
-import org.keycloak.representations.AccessToken;
 import org.keycloak.representations.AccessTokenResponse;
 import org.keycloak.representations.idm.*;
 import org.keycloak.representations.userprofile.config.UPAttribute;
 import org.keycloak.representations.userprofile.config.UPAttributePermissions;
 import org.keycloak.representations.userprofile.config.UPConfig;
-import org.salesync.authentication.converters.PublicKeyConverter;
 import org.salesync.authentication.dtos.CompanyRegisterDto;
 import org.salesync.authentication.dtos.LogInDto;
 import org.salesync.authentication.dtos.NewUserDto;
-import org.salesync.authentication.dtos.UserDto;
 import org.salesync.authentication.helpers.SettingsManager;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
-import java.security.PublicKey;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
-
-import static org.keycloak.crypto.KeyUse.ENC;
 
 @Service
 @RequiredArgsConstructor
@@ -88,7 +75,7 @@ public class RegisterServiceImpl implements RegisterService {
             user.singleAttribute("avatarUrl", "default");
             user.singleAttribute("phone", newUserDTO.getPhone());
             SettingsManager settingsManager = new SettingsManager();
-            user.singleAttribute("settings", settingsManager.loadSettingsFromFile());
+            user.singleAttribute("settings", settingsManager.loadStringSettingsFromFile());
             user.setEnabled(true);
 
             response = keycloak.realm(realmName).users().create(user);
@@ -144,56 +131,6 @@ public class RegisterServiceImpl implements RegisterService {
     public Response logout(String token) {
         keycloak.tokenManager().invalidate(token);
         return Response.ok().build();
-    }
-
-    @Override
-    public UserDto validateUser(String realmId, String accessToken) {
-        RealmResource realmResource = keycloak.realm(realmId);
-        KeyResource keyResource = realmResource.keys();
-        KeysMetadataRepresentation keysMetadata = keyResource.getKeyMetadata();
-        List<KeysMetadataRepresentation.KeyMetadataRepresentation> keyList = keysMetadata.getKeys();
-        String key = null;
-
-        for (final KeysMetadataRepresentation.KeyMetadataRepresentation keyMetadata : keyList) {
-            if (keyMetadata.getUse() != KeyUse.SIG) {
-                continue;
-            }
-            key = keyMetadata.getPublicKey();
-            if (key != null) {
-                break;
-            }
-        }
-        if (key == null) {
-            return null;
-        }
-        try {
-            PublicKey publicKey = PublicKeyConverter.convertStringToPublicKey(key);
-            AccessToken token = TokenVerifier.create(accessToken, AccessToken.class)
-                    .publicKey(publicKey) // Set your RSA Public Key
-                    .verify()
-                    .getToken();
-            if (token.isActive()) {
-                String userId = token.getSubject();
-                UserRepresentation user = realmResource.users().get(userId).toRepresentation();
-                Map<String, List<String>> attributes = user.getAttributes();
-                UserDto userDto = new UserDto();
-                userDto.setFirstName(user.getFirstName());
-                userDto.setLastName(user.getLastName());
-                userDto.setEmail(user.getEmail());
-                userDto.setUserId(user.getId());
-                userDto.setUserName(user.getUsername());
-                userDto.setAvatarUrl(attributes.get("avatarUrl").get(0));
-                userDto.setJobTitle(attributes.get("jobTitle").get(0));
-                userDto.setPhone(attributes.get("phone").get(0));
-                userDto.setRoles(user.getRealmRoles());
-                SettingsManager settings = new SettingsManager();
-                userDto.setSettings(settings.parseSettings(attributes.get("settings").get(0)));
-                return userDto;
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        return null;
     }
 
     private ClientRepresentation getNewClientRepresentation(String clientSecret, String clientName) {

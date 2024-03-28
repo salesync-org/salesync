@@ -73,6 +73,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto resetSettings(String accessToken, String realmId) {
+        try {
+            RealmResource realmResource = keycloak.realm(realmId);
+            PublicKey publicKey = PublicKeyConverter.convertStringToPublicKey(getKey(realmResource));
+            AccessToken token = TokenVerifier.create(accessToken, AccessToken.class)
+                    .publicKey(publicKey) // Set your RSA Public Key
+                    .verify()
+                    .getToken();
+            if (token.isActive()) {
+                String userId = token.getSubject();
+                UserRepresentation user = realmResource.users().get(userId).toRepresentation();
+                Map<String, List<String>> attributes = user.getAttributes();
+                attributes.put("settings", List.of(new SettingsManager().loadStringSettingsFromFile()));
+                user.setAttributes(attributes);
+                realmResource.users().get(userId).update(user);
+                return loadUser(realmResource, userId);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         return null;
     }
 

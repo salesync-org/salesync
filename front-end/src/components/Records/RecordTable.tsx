@@ -5,13 +5,17 @@ import { DataTable } from './data-table';
 import useRecords from '@/hooks/record-service/useRecords';
 import LoadingSpinner from '../ui/Loading/LoadingSpinner';
 import ErrorToaster from '@/pages/Error/ErrorToaster';
+import { useParams } from 'react-router-dom';
 
 interface RecordTableProps {
   typeId: string;
 }
 
 const RecordTable = ({ typeId }: RecordTableProps) => {
-  const columns: ColumnDef<any, any>[] | undefined = layoutColumns.find((layout) => layout.id === typeId)?.column;
+  const { companyName = '' } = useParams();
+  const columns: ColumnDef<any, any>[] | undefined = layoutColumns
+    .find((layout) => layout.id === typeId)
+    ?.createColumn(companyName);
   const { data, isLoading } = useRecords(typeId);
   if (!columns) {
     return null;

@@ -1,9 +1,11 @@
 import { http, HttpResponse } from 'msw';
 
+import { SAMPLE_ACCESS_TOKEN, TYPE_SERVICE_URL, USER_SERVICE_URL } from '@/constants/api';
 import { setupWorker } from 'msw/browser';
-import { USER_SERVICE_URL, SAMPLE_ACCESS_TOKEN, TYPE_SERVICE_URL } from '@/constants/api';
-import { handlers as typeHandlers } from './type-handlers';
+import { leads } from '../db/record/leads';
+import { stages } from '../db/record/stages';
 import { users } from '../db/user';
+import { handlers as typeHandlers } from './type-handlers';
 
 export const handlers = [
   ...typeHandlers,
@@ -72,6 +74,59 @@ export const handlers = [
           status: 201
         }
       );
+    }
+
+    return HttpResponse.error();
+  }),
+
+  http.get(`${TYPE_SERVICE_URL}/record/:recordId`, async ({ params }) => {
+    const recordId = params.recordId;
+
+    const leadsDb = localStorage.getItem('records') ? JSON.parse(localStorage.getItem('records')!) : leads;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let findRecord: any = leadsDb.find((record: any) => record.id === recordId);
+
+    if (findRecord) {
+      if (Object.keys(findRecord).includes('currentStage')) {
+        findRecord = {
+          ...findRecord,
+          stage: {
+            stages,
+            currentStage: findRecord.currentStage
+          }
+        };
+
+        delete findRecord.currentStage;
+      }
+
+      return HttpResponse.json(findRecord, {
+        status: 200
+      });
+    }
+
+    return HttpResponse.error();
+  }),
+
+  http.put(`${TYPE_SERVICE_URL}/record/:recordId`, async ({ params, request }) => {
+    const recordId = params.recordId;
+    const body = (await request.json()) as { stageId: string };
+
+    const leadsDb = localStorage.getItem('records') ? JSON.parse(localStorage.getItem('records')!) : leads;
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const findIndex = leadsDb.findIndex((record: any) => record.id === recordId);
+
+    if (findIndex >= 0) {
+      leadsDb[findIndex] = {
+        ...leadsDb[findIndex],
+        currentStage: body.stageId
+      };
+
+      localStorage.setItem('records', JSON.stringify(leadsDb));
+
+      return HttpResponse.json(leadsDb, {
+        status: 200
+      });
     }
 
     return HttpResponse.error();

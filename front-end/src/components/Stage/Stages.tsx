@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import Stage from './Stage';
 
 interface StagesProps {
@@ -8,7 +9,7 @@ interface StagesProps {
 }
 
 const Stages = ({ stages, currentStage, stageIdChosen, setStageIdChosen }: StagesProps) => {
-  const findIndex = stages.findIndex((stage) => stage.id === currentStage);
+  const findIndex = useMemo(() => stages.findIndex((stage) => stage.id === currentStage), [stages, currentStage]);
 
   return (
     <ul className='flex items-center gap-[4px]'>

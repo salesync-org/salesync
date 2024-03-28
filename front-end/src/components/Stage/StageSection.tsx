@@ -27,8 +27,8 @@ const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) =>
       const res = await recordApi.updateRecordStage(recordId, stageIdChosen);
 
       if (res) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         queryClient.setQueryData(['record', recordId], (data: any) => {
-          console.log({ data });
           return {
             ...data,
             stage: {

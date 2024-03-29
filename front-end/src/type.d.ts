@@ -47,23 +47,14 @@ type Field = {
   values?: string[];
 };
 
-type User = {
-  id: string;
-  name: string;
-  email: string;
-  password: string;
-  role: string;
-  avatar_url: string;
-};
-
 type NewUser = {
-  first_name: string,
-  last_name: string,
-  job_title: string,
-  phone: string,
-  email: string,
-  role: string,
-}
+  first_name: string;
+  last_name: string;
+  job_title: string;
+  phone: string;
+  email: string;
+  role: string;
+};
 
 type AdminInfo = {
   first_name: string;
@@ -82,6 +73,7 @@ type SignUpInfo = {
 };
 
 type TokenResponse = {
+  user: User;
   access_token: string;
   expires_in: number;
   refresh_expires_in: number;
@@ -94,4 +86,33 @@ type TokenResponse = {
   error?: string;
   error_description?: string;
   error_uri?: string;
+};
+
+type User = {
+  first_name: string;
+  last_name: string;
+  job_title: string;
+  phone: string;
+  email: string;
+  user_id: string;
+  user_name: string;
+  avatar_url: string;
+  settings: Settings;
+  roles?: string;
+};
+
+type Settings = {
+  layout_order: LayoutOrder;
+};
+
+type LayoutOrder = {
+  Home: Types[];
+  Sale: Types[];
+  Service: Types[];
+  Marketing: Types[];
+};
+
+type Types = {
+  name: string;
+  type_id: string;
 };

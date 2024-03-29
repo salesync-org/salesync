@@ -2,27 +2,24 @@ import useAuth from '@/hooks/useAuth';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import defaultAvatar from '@/assets/default_avatar.png';
-import {Button, DropDownList, Icon, Item} from '@/components/ui';
+import { Button, DropDownList, Icon, Item } from '@/components/ui';
 import { isImageShowableHead } from '@/utils/image_checking';
 
 const UserInfo = () => {
-  const { user, logout, fetchUser } = useAuth();
+  const { user, logout } = useAuth();
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [name, setName] = useState('Unknown');
   const [avatar_url, setAvatar] = useState('');
   const navigate = useNavigate();
-  
-  if (user === null) {
-    fetchUser();
-  }
+
   useEffect(() => {
     const updateInfo = async () => {
       if (user === null) {
         setName('Unknown');
         setAvatar(defaultAvatar);
       } else {
-        const { name, avatar_url } = user;
-        setName(name);
+        const { first_name, last_name, avatar_url } = user;
+        setName(`${first_name} ${last_name}`);
         const availabilty = await isImageShowableHead(avatar_url);
         if (availabilty) {
           setAvatar(avatar_url);
@@ -34,11 +31,10 @@ const UserInfo = () => {
     updateInfo();
   }, [user]);
 
-  const {companyName = ''} = useParams();
-
   return (
     <>
-      {<div className='relative flex w-fit space-x-3 pl-2 align-middle'>
+      {
+        <div className='relative flex w-fit space-x-3 pl-2 align-middle'>
           <Button rounded='icon' className='h-10 w-10' intent='normal' onClick={() => {}}>
             <Icon name='notifications' size='1rem' />
           </Button>
@@ -55,7 +51,9 @@ const UserInfo = () => {
             </Button>
             <DropDownList
               open={isMenuOpen}
-              onClose={() => {setMenuOpen(false);}}
+              onClose={() => {
+                setMenuOpen(false);
+              }}
               align='right'
               className='right-[.25rem] top-[3rem] mt-0 w-80'
               divide={false}
@@ -63,7 +61,14 @@ const UserInfo = () => {
               <div className='mb-2 border-b-2 border-button-stroke'>
                 <Item title={name} icon={<img className='w-full rounded-full' src={avatar_url} alt='avatar'></img>} />
               </div>
-              <Item className='py-0' icon={<Icon name='settings' size='2rem' />} title='Settings & Administration' onClick={()=>{navigate('/setting')}} />
+              <Item
+                className='py-0'
+                icon={<Icon name='settings' size='2rem' />}
+                title='Settings & Administration'
+                onClick={() => {
+                  navigate('/setting');
+                }}
+              />
               <Item
                 className='py-0'
                 icon={<Icon name='logout' size='2rem' />}

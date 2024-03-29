@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { Button, Icon } from '../ui';
-import Stages from './Stages';
-import { useToast } from '../ui/use-toast';
 import recordApi from '@/api/record';
-import { useParams } from 'react-router-dom';
-import { useQueryClient } from 'react-query';
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
+import { useMemo, useState } from 'react';
+import { useQueryClient } from 'react-query';
+import { useParams } from 'react-router-dom';
+import { Button, Icon } from '../ui';
+import { useToast } from '../ui/use-toast';
+import Stages from './Stages';
 
 interface StageSectionProps {
   stage: {
@@ -13,6 +13,15 @@ interface StageSectionProps {
     currentStage: string;
   };
 }
+
+const lastStages = {
+  lead: {
+    id: '5',
+    name: 'Converted',
+    title: 'Select Convert Status',
+    modalName: MODAL_TYPES.CREATE_RECORD_MODAL
+  }
+};
 
 const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) => {
   const [stageIdChosen, setStageIdChosen] = useState(currentStage);
@@ -22,16 +31,28 @@ const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) =>
   const queryClient = useQueryClient();
   const { showModal } = useGlobalModalContext();
 
+  const lastStage = lastStages['lead'];
+  const updatedStages = useMemo(
+    () => [
+      ...stages,
+      {
+        id: lastStage.id,
+        name: lastStage.name
+      }
+    ],
+    [lastStage.id, lastStage.name, stages]
+  );
+
   const handleMarkStatusAsComplete = async () => {
     try {
       if (!recordId || !stageIdChosen) return;
-      const findIndex = stages.findIndex((stage) => stage.id === stageIdChosen);
+      const findIndex = updatedStages.findIndex((stage) => stage.id === stageIdChosen);
 
       if (findIndex < 0) {
         throw new Error("Can't find the stage");
       }
 
-      const newStage = stages[findIndex + 1];
+      const newStage = updatedStages[findIndex + 1];
 
       const res = await recordApi.updateRecordStage(recordId, newStage.id);
 
@@ -65,27 +86,27 @@ const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) =>
   };
 
   const handleSelectStatus = () => {
-    showModal(MODAL_TYPES.CREATE_RECORD_MODAL, { typeId: 'f4828793-28c2-465b-b783-0c697e41dafb' });
+    showModal(lastStage.modalName, { typeId: 'f4828793-28c2-465b-b783-0c697e41dafb' });
   };
 
   if (!recordId) return null;
 
-  const isLastStage = stages.findIndex((stage) => stage.id === stageIdChosen) === stages.length - 1;
+  const isLastStage = updatedStages.findIndex((stage) => stage.id === stageIdChosen) === updatedStages.length - 1;
 
   return (
     <>
       <Stages
         currentStage={currentStage}
-        stages={stages}
+        stages={updatedStages}
         stageIdChosen={stageIdChosen}
         setStageIdChosen={setStageIdChosen}
       />
       <div className='mt-4 flex items-center justify-between text-[13px]'>
-        <h3>Status: {stages.find((stage) => stage.id === currentStage)?.name}</h3>
+        <h3>Status: {updatedStages.find((stage) => stage.id === currentStage)?.name}</h3>
         {isLastStage ? (
           <Button intent='primary' className='py-0' onClick={handleSelectStatus}>
             <Icon name='check' />
-            <span className='text-xs'>Select Convert Status</span>
+            <span className='text-xs'>{lastStage.title}</span>
           </Button>
         ) : (
           <Button intent='primary' className='py-0' onClick={handleMarkStatusAsComplete}>

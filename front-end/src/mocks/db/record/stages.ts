@@ -14,9 +14,5 @@ export const stages = [
   {
     id: '4',
     name: 'Unqualified'
-  },
-  {
-    id: '5',
-    name: 'Converted'
   }
 ];

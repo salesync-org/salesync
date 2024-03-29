@@ -44,7 +44,7 @@ const buttonVariants = cva(
     defaultVariants: {
       intent: 'normal',
       rounded: false,
-      zoom: true,
+      zoom: true
     }
   }
 );

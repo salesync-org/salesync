@@ -74,7 +74,7 @@ const LogIn = () => {
             <div className='mb-3 flex w-full justify-center'>
               <form onSubmit={handleSubmit(onSubmit)} className='h-auto w-96 rounded-sm bg-white p-5'>
                 {/* {error && <ErrorText text={errorText} className='text-sm' />} */}
-                <TextInput placeholder='Enter email' header='Email' register={register} name='username' />
+                <TextInput placeholder='Enter email' header='Email' register={register} name='username' className='w-full' />
                 {errors.username && <ErrorText text={errors.username.message} className='text-sm' />}
                 <TextInput
                   placeholder='Enter password'
@@ -82,6 +82,7 @@ const LogIn = () => {
                   header='Password'
                   register={register}
                   name='password'
+                  className='w-full'
                 />
                 {errors.password && <ErrorText text={errors.password.message} className='text-sm' />}
 

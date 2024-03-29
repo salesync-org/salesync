@@ -40,6 +40,7 @@ const DropDown: React.FC<DropdownButtonProps> = ({
     setSelectedOption(option.title!);
     const inputNode = option as HTMLInputElement;
     if (inputNode) {
+      console.log('inputNode.value: ', inputNode.value);
       onValueChange(inputNode.value);
     }
   }

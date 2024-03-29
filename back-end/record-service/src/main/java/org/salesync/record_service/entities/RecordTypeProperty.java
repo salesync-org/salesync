@@ -17,9 +17,9 @@ import java.util.UUID;
 @AttributeOverride(name="id",column = @Column(name="record_type_property_id"))
 public class RecordTypeProperty extends BaseEntity{
 
-    private UUID propertyId;
+    private UUID typePropertyId;
     private String itemValue;
-    private String recordPropertyLabel;
+    private String recordTypePropertyLabel;
 
     @ManyToOne
     @JoinColumn(name = "record_id")

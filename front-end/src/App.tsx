@@ -1,9 +1,9 @@
 import { Suspense, lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import ConfigLayout from './components/Layout/ConfigLayout';
-import PrivateRoute from './pages/PrivateRoute/PrivateRoute';
-import { Toaster } from './components/ui/toaster';
 import LoadingSpinner from './components/ui/Loading/LoadingSpinner';
+import { Toaster } from './components/ui/toaster';
+import PrivateRoute from './pages/PrivateRoute/PrivateRoute';
 
 // const LogIn = lazy(() => import('pages/LogIn/LogIn'));
 // const Setting = lazy(() => import('pages/Setting/Setting'));
@@ -15,7 +15,7 @@ const SignUp = lazy(() => import('./pages/SignUp/SignUp'));
 const HomeLayout = lazy(() => import('./pages/Home/Home'));
 const LogIn = lazy(() => import('pages/LogIn/LogIn'));
 const ForgotPassword = lazy(() => import('pages/LogIn/ForgotPassword'));
-const LeadDetail = lazy(() => import('./pages/LeadDetail/LeadDetail'));
+const RecordDetail = lazy(() => import('./pages/RecordDetail/RecordDetail'));
 
 function App() {
   return (
@@ -23,17 +23,19 @@ function App() {
       <Suspense fallback={<LoadingSpinner />}>
         <Routes>
           <Route path='cheatsheet' element={<Cheatsheet />} />
-          <Route element={<PrivateRoute />}>
-            <Route path='/' element={<ConfigLayout />}>
-              <Route path='/home' element={<HomeLayout />} />
-              <Route path='cheatsheet' element={<Cheatsheet />} />
-              <Route path='/sales/:typeId' element={<Sales />} />
-              <Route path='/leads/:recordId' element={<LeadDetail />} />
-              <Route path='*' element={<Sales />} />
+          <Route path='/:companyName'>
+            <Route element={<PrivateRoute />}>
+              <Route element={<ConfigLayout />}>
+                <Route path='home' element={<HomeLayout />} />
+                <Route path='cheatsheet' element={<Cheatsheet />} />
+                <Route path='sales/:typeId' element={<Sales />} />
+                <Route path='record/:recordId' element={<RecordDetail />} />
+                <Route path='*' element={<Sales />} />
+              </Route>
             </Route>
+            <Route path='login' element={<LogIn />}></Route>
           </Route>
           <Route path='/sign-up' element={<SignUp />} />
-          <Route path='/login' element={<LogIn />}></Route>
           <Route path='/forgot-password' element={<ForgotPassword />}></Route>
         </Routes>
       </Suspense>

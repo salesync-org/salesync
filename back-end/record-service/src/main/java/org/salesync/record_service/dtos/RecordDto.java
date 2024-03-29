@@ -7,15 +7,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.UUID;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Builder
 @Getter
 @Setter
 public class RecordDto {
-    private String id;
-    private String typeId;
-    private String userId;
+    private UUID id;
+    private UUID typeId;
     private String currentStageId;
     private List<RecordTypePropertyDto> properties;
 }

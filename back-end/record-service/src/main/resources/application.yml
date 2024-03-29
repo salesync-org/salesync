@@ -17,6 +17,10 @@ spring:
       ddl-auto: none
     show-sql: true
 
+springdoc:
+  api-docs:
+    path: /api-docs
+
 eureka:
   client:
     service-url:

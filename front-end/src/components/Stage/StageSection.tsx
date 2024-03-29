@@ -43,6 +43,43 @@ const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) =>
     [lastStage.id, lastStage.name, stages]
   );
 
+  const handleUpdateStage = async (recordId: string, stageId: string) => {
+    const res = await recordApi.updateRecordStage(recordId, stageId);
+
+    if (res) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      queryClient.setQueryData(['record', recordId], (data: any) => {
+        return {
+          ...data,
+          stage: {
+            ...data.stage,
+            currentStage: stageId
+          }
+        };
+      });
+
+      setStageIdChosen(stageId);
+
+      toast({
+        title: 'Success',
+        description: 'Status marked as complete successfully'
+      });
+    }
+  };
+
+  const handleMarkStatusAsCurrent = async () => {
+    try {
+      await handleUpdateStage(recordId, stageIdChosen);
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: 'Error',
+        description: 'An error occurred while marking status as current',
+        variant: 'destructive'
+      });
+    }
+  };
+
   const handleMarkStatusAsComplete = async () => {
     try {
       if (!recordId || !stageIdChosen) return;
@@ -54,27 +91,7 @@ const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) =>
 
       const newStage = updatedStages[findIndex + 1];
 
-      const res = await recordApi.updateRecordStage(recordId, newStage.id);
-
-      if (res) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        queryClient.setQueryData(['record', recordId], (data: any) => {
-          return {
-            ...data,
-            stage: {
-              ...data.stage,
-              currentStage: newStage.id
-            }
-          };
-        });
-
-        setStageIdChosen(newStage.id);
-
-        toast({
-          title: 'Success',
-          description: 'Status marked as complete successfully'
-        });
-      }
+      await handleUpdateStage(recordId, newStage.id);
     } catch (error) {
       console.error(error);
       toast({
@@ -89,9 +106,46 @@ const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) =>
     showModal(lastStage.modalName, { typeId: 'f4828793-28c2-465b-b783-0c697e41dafb' });
   };
 
+  const stageIdChosenIndex = useMemo(
+    () => updatedStages.findIndex((stage) => stage.id === stageIdChosen),
+    [stageIdChosen, updatedStages]
+  );
+  const currentStageIndex = useMemo(
+    () => updatedStages.findIndex((stage) => stage.id === currentStage),
+    [currentStage, updatedStages]
+  );
+
+  const isLastStage = stageIdChosenIndex === updatedStages.length - 1;
+  const isCompletedStageClick = stageIdChosenIndex < currentStageIndex;
+
   if (!recordId) return null;
 
-  const isLastStage = updatedStages.findIndex((stage) => stage.id === stageIdChosen) === updatedStages.length - 1;
+  const ActionButton = () => {
+    if (isLastStage) {
+      return (
+        <Button intent='primary' className='py-0' onClick={handleSelectStatus}>
+          <Icon name='check' />
+          <span className='text-xs'>{lastStage.title}</span>
+        </Button>
+      );
+    }
+
+    if (isCompletedStageClick) {
+      return (
+        <Button intent='primary' className='py-0' onClick={handleMarkStatusAsCurrent}>
+          <Icon name='check' />
+          <span className='text-xs'>Marks as Current Status</span>
+        </Button>
+      );
+    }
+
+    return (
+      <Button intent='primary' className='py-0' onClick={handleMarkStatusAsComplete}>
+        <Icon name='check' />
+        <span className='text-xs'>Mark Status as Complete</span>
+      </Button>
+    );
+  };
 
   return (
     <>
@@ -103,17 +157,7 @@ const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) =>
       />
       <div className='mt-4 flex items-center justify-between text-[13px]'>
         <h3>Status: {updatedStages.find((stage) => stage.id === currentStage)?.name}</h3>
-        {isLastStage ? (
-          <Button intent='primary' className='py-0' onClick={handleSelectStatus}>
-            <Icon name='check' />
-            <span className='text-xs'>{lastStage.title}</span>
-          </Button>
-        ) : (
-          <Button intent='primary' className='py-0' onClick={handleMarkStatusAsComplete}>
-            <Icon name='check' />
-            <span className='text-xs'>Mark Status as Complete</span>
-          </Button>
-        )}
+        <ActionButton />
       </div>
     </>
   );

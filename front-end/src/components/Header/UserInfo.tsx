@@ -1,9 +1,9 @@
-import useAuth from '@/hooks/useAuth';
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 import defaultAvatar from '@/assets/default_avatar.png';
 import { Button, DropDownList, Icon, Item } from '@/components/ui';
+import useAuth from '@/hooks/useAuth';
 import { isImageShowableHead } from '@/utils/image_checking';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const UserInfo = () => {
   const { user, logout } = useAuth();
@@ -20,8 +20,8 @@ const UserInfo = () => {
       } else {
         const { first_name, last_name, avatar_url } = user;
         setName(`${first_name} ${last_name}`);
-        const availabilty = await isImageShowableHead(avatar_url);
-        if (availabilty) {
+        const availability = await isImageShowableHead(avatar_url);
+        if (availability) {
           setAvatar(avatar_url);
         } else {
           setAvatar(defaultAvatar);

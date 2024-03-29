@@ -1,6 +1,5 @@
 import auth from '@/api/auth';
 import { useState, createContext, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 
 type AuthContext = {
   user: User | null;
@@ -31,7 +30,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setIsLoading(true);
         const token = localStorage.getItem('access_token');
         const user = await auth.getUser(companyName);
-        console.log({ user });
 
         if (!token || !user) {
           throw new Error('No token found');

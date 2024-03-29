@@ -102,17 +102,11 @@ type User = {
 };
 
 type Settings = {
-  layout_order: LayoutOrder;
+  layout_order: LayoutOrder[];
 };
 
 type LayoutOrder = {
-  Home: Types[];
-  Sale: Types[];
-  Service: Types[];
-  Marketing: Types[];
-};
-
-type Types = {
   name: string;
-  type_id: string;
+  icon: string;
+  types: Type[];
 };

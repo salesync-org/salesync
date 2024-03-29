@@ -5,6 +5,7 @@ import { useToast } from '../ui/use-toast';
 import recordApi from '@/api/record';
 import { useParams } from 'react-router-dom';
 import { useQueryClient } from 'react-query';
+import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 
 interface StageSectionProps {
   stage: {
@@ -19,12 +20,20 @@ const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) =>
   const { toast } = useToast();
   const { recordId = '' } = useParams();
   const queryClient = useQueryClient();
+  const { showModal } = useGlobalModalContext();
 
   const handleMarkStatusAsComplete = async () => {
     try {
       if (!recordId || !stageIdChosen) return;
+      const findIndex = stages.findIndex((stage) => stage.id === stageIdChosen);
 
-      const res = await recordApi.updateRecordStage(recordId, stageIdChosen);
+      if (findIndex < 0) {
+        throw new Error("Can't find the stage");
+      }
+
+      const newStage = stages[findIndex + 1];
+
+      const res = await recordApi.updateRecordStage(recordId, newStage.id);
 
       if (res) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -33,10 +42,12 @@ const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) =>
             ...data,
             stage: {
               ...data.stage,
-              currentStage: stageIdChosen
+              currentStage: newStage.id
             }
           };
         });
+
+        setStageIdChosen(newStage.id);
 
         toast({
           title: 'Success',
@@ -53,7 +64,13 @@ const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) =>
     }
   };
 
+  const handleSelectStatus = () => {
+    showModal(MODAL_TYPES.CREATE_RECORD_MODAL, { typeId: 'f4828793-28c2-465b-b783-0c697e41dafb' });
+  };
+
   if (!recordId) return null;
+
+  const isLastStage = stages.findIndex((stage) => stage.id === stageIdChosen) === stages.length - 1;
 
   return (
     <>
@@ -65,10 +82,17 @@ const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) =>
       />
       <div className='mt-4 flex items-center justify-between text-[13px]'>
         <h3>Status: {stages.find((stage) => stage.id === currentStage)?.name}</h3>
-        <Button intent='primary' className='py-0' onClick={handleMarkStatusAsComplete}>
-          <Icon name='check' />
-          <span className='text-xs'>Mark Status as Complete</span>
-        </Button>
+        {isLastStage ? (
+          <Button intent='primary' className='py-0' onClick={handleSelectStatus}>
+            <Icon name='check' />
+            <span className='text-xs'>Select Convert Status</span>
+          </Button>
+        ) : (
+          <Button intent='primary' className='py-0' onClick={handleMarkStatusAsComplete}>
+            <Icon name='check' />
+            <span className='text-xs'>Mark Status as Complete</span>
+          </Button>
+        )}
       </div>
     </>
   );

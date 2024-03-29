@@ -7,6 +7,7 @@ import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.UserResource;
+import org.keycloak.common.util.MultivaluedHashMap;
 import org.keycloak.representations.AccessTokenResponse;
 import org.keycloak.representations.idm.*;
 import org.keycloak.representations.userprofile.config.UPAttribute;
@@ -19,8 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -35,20 +35,7 @@ public class RegisterServiceImpl implements RegisterService {
         System.out.println("Starting registerCompany");
         Response adminRegisterResponse = null;
         try {
-            RealmRepresentation realm = new RealmRepresentation();
-            String realmName = companyRegisterDTO.getCompanyName().replaceAll("\\s+", "").toLowerCase();
-            realm.setRealm(realmName);
-            realm.setEnabled(true);
-            keycloak.realms().create(realm);
-            System.out.println("Created Realm with name: " + realmName);
-            keycloak.realm(realmName).clients().create(getNewClientRepresentation("app-admin", "app-admin"));
-            keycloak.realm(realmName).clients().create(getNewClientRepresentation("app-user", "app-user"));
-            createRoles(keycloak.realm(realmName), "standard-user");
-            createRoles(keycloak.realm(realmName), "admin-user");
-            createAttribute(keycloak.realm(realmName), "avatarUrl", "Avatar URL");
-            createAttribute(keycloak.realm(realmName), "jobTitle", "Job Title");
-            createAttribute(keycloak.realm(realmName), "phone", "Phone");
-            createAttribute(keycloak.realm(realmName), "settings", "Settings");
+            String realmName = createRealm(companyRegisterDTO.getCompanyName());
             adminRegisterResponse = registerUser(companyRegisterDTO.getAdminInfo(), realmName, "account");
             System.out.println("Status Register" + adminRegisterResponse.getStatus());
             return login(realmName, new LogInDto(companyRegisterDTO.getAdminInfo().getEmail(), "admin"), "app-admin", "app-admin");
@@ -83,8 +70,7 @@ public class RegisterServiceImpl implements RegisterService {
             response = keycloak.realm(realmName).users().create(user);
             UserRepresentation newUser = keycloak.realm(realmName).users().search(newUserDTO.getEmail()).get(0);
             UserResource userResource = keycloak.realm(realmName).users().get(newUser.getId());
-            // The below line of code is not yet performable due to the lack of an email server
-//            keycloak.realm(realmName).users().get(newUser.getId()).executeActionsEmail(Arrays.asList("UPDATE_PASSWORD"));
+            userResource.sendVerifyEmail();
             CredentialRepresentation credential = new CredentialRepresentation();
             credential.setType(CredentialRepresentation.PASSWORD);
             credential.setValue("admin"); // Bad practice, I know
@@ -132,13 +118,7 @@ public class RegisterServiceImpl implements RegisterService {
             logInResponseDto.setToken(accessTokenResponse.getToken());
             logInResponseDto.setRefreshToken(accessTokenResponse.getRefreshToken());
             logInResponseDto.setExpiresIn(accessTokenResponse.getExpiresIn());
-            logInResponseDto.setFirstName(userDto.getFirstName());
-            logInResponseDto.setLastName(userDto.getLastName());
-            logInResponseDto.setEmail(userDto.getEmail());
-            logInResponseDto.setSettings(userDto.getSettings());
-            logInResponseDto.setAvatarUrl(userDto.getAvatarUrl());
-            logInResponseDto.setJobTitle(userDto.getJobTitle());
-            logInResponseDto.setPhone(userDto.getPhone());
+            logInResponseDto.setUser(userDto);
             return logInResponseDto;
     }
 
@@ -146,6 +126,41 @@ public class RegisterServiceImpl implements RegisterService {
     public Response logout(String token) {
         keycloak.tokenManager().invalidate(token);
         return Response.ok().build();
+    }
+
+    private String createRealm(String realmName) {
+        realmName = realmName.replaceAll("\\s+", "").toLowerCase();
+        RealmRepresentation realmRepresentation = new RealmRepresentation();
+        realmRepresentation.setRealm(realmName);
+        realmRepresentation.setAttributes(Map.of("frontendUrl", "https://www.salesync.org"));
+        realmRepresentation.setEnabled(true);
+        keycloak.realms().create(realmRepresentation);
+        System.out.println("Created Realm with name: " + realmName);
+        keycloak.realm(realmName).clients().create(getNewClientRepresentation("app-admin", "app-admin"));
+        keycloak.realm(realmName).clients().create(getNewClientRepresentation("app-user", "app-user"));
+        createRoles(keycloak.realm(realmName), "standard-user");
+        createRoles(keycloak.realm(realmName), "admin-user");
+        createAttribute(keycloak.realm(realmName), "avatarUrl", "Avatar URL");
+        createAttribute(keycloak.realm(realmName), "jobTitle", "Job Title");
+        createAttribute(keycloak.realm(realmName), "phone", "Phone");
+        createAttribute(keycloak.realm(realmName), "settings", "Settings");
+        addEmailConfiguration(keycloak.realm(realmName));
+        return realmName;
+    }
+
+    private void addEmailConfiguration(RealmResource realmResource) {
+        RealmRepresentation realmRepresentation = realmResource.toRepresentation();
+
+        Map<String, String> smtpConfig = new HashMap<>();
+        smtpConfig.put("host", "email-smtp.ap-southeast-2.amazonaws.com");
+        smtpConfig.put("port", "25");
+        smtpConfig.put("from", "quang@salesync.org");
+        smtpConfig.put("starttls", "true");
+        smtpConfig.put("auth", "true");
+        smtpConfig.put("password", "BJgTrgX3Xqh2nmZQJx0hCsz6+464nOB5iC1vMYTkyy8E");
+        smtpConfig.put("user", "AKIA3FLDYTVIAYFRK6SH");
+        realmRepresentation.setSmtpServer(smtpConfig);
+        realmResource.update(realmRepresentation);
     }
 
     private ClientRepresentation getNewClientRepresentation(String clientSecret, String clientName) {

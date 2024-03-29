@@ -17,14 +17,5 @@ import java.util.List;
 @Setter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class LogInResponseDto extends AccessTokenResponse {
-    private String firstName = "";
-    private String lastName = "";
-    private String jobTitle = "";
-    private String phone = "";
-    private String email;
-    private String userId = "";
-    private String userName = "";
-    private String avatarUrl = "";
-    private JsonNode settings;
-    private List<String> roles;
+    UserDto user;
 }

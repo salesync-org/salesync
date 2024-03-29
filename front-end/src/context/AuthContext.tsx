@@ -8,6 +8,7 @@ type AuthContext = {
   signUp: (signUpInfo: SignUpInfo) => Promise<void>;
   login: ({ companyName, email, password }: { companyName: string; email: string; password: string }) => Promise<void>;
   logout: () => Promise<void>;
+  updateUser: (companyName: string, updatedUser: User) => Promise<void>;
 };
 
 export const AuthContext = createContext<AuthContext | null>(null);
@@ -77,9 +78,21 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const updateUser = async (companyName: string, updatedUser: User) => {
+    try {
+      const res = await auth.updateUser(companyName, updatedUser);
+
+      if (res) {
+        setUser(updatedUser);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   if (!companyName) return null;
 
-  const value = { user, isLoading, isAuthenticated, login, logout, signUp };
+  const value = { user, isLoading, isAuthenticated, login, logout, signUp, updateUser };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 

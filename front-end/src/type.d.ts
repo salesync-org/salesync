@@ -10,7 +10,7 @@ type TypeRelation = {
 type Type = {
   icon_url: string?;
   background_color: string?;
-  id: string;
+  type_id: string;
   name: string;
   description?: string;
   fields?: Field[];

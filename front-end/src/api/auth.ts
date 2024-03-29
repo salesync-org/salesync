@@ -19,11 +19,21 @@ class Auth {
 
   async logOut() {
     const response = await instance.post(`${URL}/auth/logout`);
+
     return response.data;
   }
 
   async getUser(companyName: string) {
     const response = await instance.get(`${URL}/user/${companyName}/loaduser`);
+
+    return response.data;
+  }
+
+  async updateUser(companyName: string, updatedUser: User) {
+    const response = await instance.post(`${URL}/user/${companyName}/user/modify`, {
+      updatedUser
+    });
+
     return response.data;
   }
 }

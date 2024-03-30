@@ -5,7 +5,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Segoe UI Variable Display"', 'system-ui', 'Avenir', 'Helvetica', 'Arial', 'sans-serif']
+        sans: ['Inter', 'system-ui', 'Avenir', 'Helvetica', 'Arial', 'sans-serif']
       },
       lineHeight: {
         1.5: '1.5'
@@ -30,14 +30,14 @@ export default {
           color: '#f3f3f3'
         },
         panel: {
-          light: '#ffffff',
-          DEFAULT: '#ffffff',
+          light: '#fafafa',
+          DEFAULT: '#fafafa',
           dark: '#313439'
         },
         text: {
-          light: '#000000',
-          DEFAULT: '#000000',
-          dark: '#ffffff'
+          light: '#475569',
+          DEFAULT: '#475569',
+          dark: '#f2ffff'
         },
         primary: {
           DEFAULT: '#037EC9',
@@ -89,8 +89,8 @@ export default {
           dark: '#373a3f'
         },
         'input-background': {
-          light: '#f4f4f4',
-          DEFAULT: '#f4f4f4',
+          light: '#ffffff',
+          DEFAULT: '#ffffff',
           dark: '#282b2d'
         },
         'input-stroke': {

@@ -1,5 +1,5 @@
 import salesyncIcon from 'assets/salesync_icon.png';
-import { TextInput } from '@/components/ui';
+import { Checkbox, Panel, TextInput } from '@/components/ui';
 import { PrimaryButton } from '@/components/ui';
 import { ErrorText } from '@/components/ui';
 import { z } from 'zod';
@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import useAuth from '@/hooks/useAuth';
 import { useToast } from '@/components/ui/use-toast';
+import { cn } from '@/utils/utils';
 
 const loginSchema = z.object({
   username: z.string().email('Invalid email'),
@@ -65,14 +66,16 @@ const LogIn = () => {
 
   return (
     <>
-      <div className='grid h-screen w-full bg-zinc-100 lg:grid-cols-2'>
-        <div id='left' className='flex h-full w-full flex-col justify-between'>
-          <div id='wrapper' className='mx-auto grid w-full grid-cols-1'>
+      <div className='grid h-screen w-full bg-white/80 lg:grid-cols-2'>
+        <div className='flex h-full w-full flex-col  items-center justify-between'>
+          <div className='mx-auto w-full my-auto grid-cols-1'>
             <div className='mb-3 mt-5 flex h-36 w-full items-center justify-center'>
-              <img src={salesyncIcon} className='h-full w-full object-contain' alt='header icon' />
+              <img src={salesyncIcon}
+              className={cn('aspect-square w-[100px] object-contain',
+              'transition-all hover:-translate-y-2 hover:scale-105 duration-200 ease-in-out')}alt='header icon' />
             </div>
-            <div className='mb-3 flex w-full justify-center'>
-              <form onSubmit={handleSubmit(onSubmit)} className='h-auto w-96 rounded-sm bg-white p-5'>
+            <Panel className='mb-20 flex w-fit justify-center mx-auto py-2 px-2'>
+              <form onSubmit={handleSubmit(onSubmit)} className='h-auto w-96 rounded-sm p-5'>
                 {/* {error && <ErrorText text={errorText} className='text-sm' />} */}
                 <TextInput placeholder='Enter email' header='Email' register={register} name='username' className='w-full' />
                 {errors.username && <ErrorText text={errors.username.message} className='text-sm' />}
@@ -90,16 +93,16 @@ const LogIn = () => {
                   {isSubmitting ? 'Logging in...' : 'Log In'}
                 </PrimaryButton>
                 <div className='mt-4 flex items-center'>
-                  <input type='checkbox' />
-                  <span className='ml-1 text-sm'>Remember me</span>
+                  <Checkbox></Checkbox>
+                  <p className='ml-2'> Remember me</p>
                 </div>
                 <div className='mt-4 flex'>
-                  <Link to='/forgot-password' className='text-xs text-blue-500'>
+                  <Link to='/forgot-password' className='text-sm text-blue-500'>
                     Forgot Your Password?
                   </Link>
                 </div>
               </form>
-            </div>
+            </Panel>
           </div>
           <div className='mx-auto mb-2 w-full text-center text-sm'>©2024 SaleSync, Inc. All rights reserved.</div>
         </div>

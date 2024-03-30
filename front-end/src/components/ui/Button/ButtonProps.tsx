@@ -3,7 +3,7 @@ import { cn } from 'utils/utils';
 
 const buttonVariants = cva(
   cn(
-    'border-[1px] py-2 px-4 rounded h-10 flex items-center justify-center',
+    'border-[2px] py-2 px-4 rounded h-10 flex items-center justify-center',
     'enabled:active:text-opacity-80',
     'enabled:scale-100 enabled:active:scale-100 focus:outline-primary',
     'disabled:opacity-80',
@@ -21,7 +21,7 @@ const buttonVariants = cva(
         ),
         primary: cn(
           'bg-primary',
-          'text-on-primary',
+          'text-on-primary font-semibold',
           'border-primary-stroke dark:border-primary-stroke-dark',
           'enabled:hover:bg-primary-hover focus:outline-secondary',
           'enabled:active:bg-primary-active'
@@ -37,7 +37,7 @@ const buttonVariants = cva(
         icon: 'flex w-fit aspect-square items-center justify-center rounded-full border-transparent'
       },
       zoom: {
-        true: 'enabled:hover:scale-[102%] enabled:active:translate-y-[0.1rem]',
+        true: 'enabled:active:scale-[96%]',
         false: ''
       }
     },

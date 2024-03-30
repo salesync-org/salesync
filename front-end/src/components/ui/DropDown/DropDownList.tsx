@@ -33,6 +33,7 @@ const List = ({
     setIsOpen(open);
   }, [open]);
 
+
   const handleTabKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === 'Enter') {
       handleOptionClick(event.target as HTMLElement);
@@ -63,17 +64,18 @@ const List = ({
 
   return (
     <>
+    <div className='bg-transparent '></div>
       {/* <div ref={menuRef} className={cn(isOpen && 'fixed left-0 right-0 top-0 z-[51] w-[1500px] h-[1500px] bg-blue')} onClick={()=>{setIsOpen(false)}}/> */}
         <div ref={menuRef}>
           <Popup
             className={cn(
-              'absolute z-[50] backdrop-blur-2xl max-h-[400px] overflow-y-auto overflow-x-hidden rounded border-[1px] px-2 transition-all duration-100 ease-in-out',
+              'z-[50] max-h-[400px] overflow-y-auto overflow-x-hidden rounded border-[1px] px-2 transition-all duration-100 ease-in-out',
               align === 'left' && 'left-0',
               align === 'right' && 'right-0',
               divide ? 'divide divide-y-2 *:py-2 divide-button-stroke-light dark:divide-button-stroke-dark' : 'py-2',
               'bg-button-background-light dark:bg-button-background-dark',
               'border-button-stroke-light dark:border-button-stroke-dark',
-              shouldDropUp ? 'top-12 origin-bottom' : 'bottom-12 origin-top',
+              shouldDropUp ? 'origin-center top-[60px]' : 'origin-center bottom-10',
               align &&
                 cn(
                   shouldDropUp

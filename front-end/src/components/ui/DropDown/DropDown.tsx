@@ -31,13 +31,13 @@ const DropDown: React.FC<DropdownButtonProps> = ({
 }) => {
   // const { isOpen, setIsOpen, shoulDropUp, selectedOption, setSelectedOption, buttonContentRef, buttonRef, menuRef } =
   //   useDropDown();
-  const [selectedOption, setSelectedOption] = useState(defaultValue);
+  const [selectedOption, setSelectedOption] = useState(value ? value : defaultValue);
   const buttonRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
   function handleOptionClick(option: HTMLElement): void {
     console.log('onItemClick: ', option);
-    setSelectedOption(option.title!);
+    setSelectedOption(option.title);
     const inputNode = option as HTMLInputElement;
     if (inputNode) {
       console.log('inputNode.value: ', inputNode.value);
@@ -46,10 +46,10 @@ const DropDown: React.FC<DropdownButtonProps> = ({
   }
 
   return (
-    <div ref={buttonRef} className='dropdown relative'>
+    <div ref={buttonRef} className='dropdown relative '>
       <Button header={header} showHeader={showHeader} className={cn(className)} disabled={disabled} onClick={() => {setIsOpen(!isOpen)}}>
         {prefixIcon}
-        <p className='truncate w-fit'>{selectedOption || value}</p>
+        <p className='truncate w-fit'>{selectedOption ? selectedOption : value}</p>
         {suffixIcon}
       </Button>
       <DropDownList onItemClick={handleOptionClick} className={cn(className)} onClose={() => {setIsOpen(false);}} open={isOpen} divide={divide}>

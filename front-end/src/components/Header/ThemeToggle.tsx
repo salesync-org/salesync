@@ -18,7 +18,7 @@ const ThemeToggle = () => {
       >
         {theme == ThemeEnum.LIGHT ? <Icon name='light_mode' size='1rem' /> : <Icon name='dark_mode' size='1rem' />}
       </Button>
-      <DropDownList open={isThemeMenuOpen}onClose={()=>{setThemeMenuOpen(false);}} className='right-[.25rem] top-[3rem] mt-0 w-80 py-2' divide={false}>
+      <DropDownList open={isThemeMenuOpen} onClose={()=>{setThemeMenuOpen(false);}} className='right-[.25rem] top-[3rem] mt-0 w-80 py-2' divide={false}>
         <DropDownItem title='Light' value='Light'>
           <Item
             icon={<Icon name='light_mode' size='2rem' />}

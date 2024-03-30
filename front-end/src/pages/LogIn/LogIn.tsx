@@ -77,7 +77,7 @@ const LogIn = () => {
             <Panel className='mb-20 flex w-fit justify-center mx-auto py-2 px-2'>
               <form onSubmit={handleSubmit(onSubmit)} className='h-auto w-96 rounded-sm p-5'>
                 {/* {error && <ErrorText text={errorText} className='text-sm' />} */}
-                <TextInput placeholder='Enter email' header='Email' register={register} name='username' className='w-full' />
+                <TextInput placeholder='Enter email' header='Email' register={register} name='username' className='w-full h-12' />
                 {errors.username && <ErrorText text={errors.username.message} className='text-sm' />}
                 <TextInput
                   placeholder='Enter password'
@@ -85,11 +85,11 @@ const LogIn = () => {
                   header='Password'
                   register={register}
                   name='password'
-                  className='w-full'
+                  className='w-full h-12'
                 />
                 {errors.password && <ErrorText text={errors.password.message} className='text-sm' />}
 
-                <PrimaryButton className='mt-4 w-full' type='submit' disabled={isSubmitting}>
+                <PrimaryButton className='mt-5 w-full h-12' type='submit' disabled={isSubmitting}>
                   {isSubmitting ? 'Logging in...' : 'Log In'}
                 </PrimaryButton>
                 <div className='mt-4 flex items-center'>

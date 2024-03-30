@@ -238,8 +238,8 @@ const SignUp = () => {
                   onValueChange={setCountry}
                   className='w-full justify-start'
                 >
-                  {listCountry.map((item) => (
-                    <DropDownItem title={item} value={item}></DropDownItem>
+                  {listCountry.map((item, index) => (
+                    <DropDownItem key={index} title={item} value={`${index}-${item}`}></DropDownItem>
                   ))}
                 </DropDown>
                 {errorCountry && <ErrorText text='Enter your country/region' />}

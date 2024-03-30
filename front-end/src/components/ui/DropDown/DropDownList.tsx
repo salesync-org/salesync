@@ -1,4 +1,4 @@
-import React, { Ref, RefObject, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDropDownList } from 'hooks/useDropDownList';
 import { cn } from 'utils/utils';
 import {Popup } from '..';

@@ -69,8 +69,8 @@ export default {
           dark: '#cefaff'
         },
         'button-background': {
-          light: '#f5f5f5',
-          DEFAULT: '#f5f5f5',
+          light: '#fcfcfc',
+          DEFAULT: '#fcfcfc',
           dark: '#424449'
         },
         'button-background-hover': {
@@ -86,7 +86,7 @@ export default {
         'button-stroke': {
           light: '#d3d3d3',
           DEFAULT: '#d3d3d3',
-          dark: '#373a3f'
+          dark: '#50555C'
         },
         'input-background': {
           light: '#ffffff',
@@ -96,7 +96,7 @@ export default {
         'input-stroke': {
           light: '#e4e4e4',
           DEFAULT: '#e4e4e4',
-          dark: '#424449'
+          dark: '#50555C'
         },
         'on-primary': {
           DEFAULT: '#ffffff'

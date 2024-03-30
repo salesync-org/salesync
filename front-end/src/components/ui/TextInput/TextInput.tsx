@@ -51,7 +51,7 @@ const TextInput: React.FC<TextInputProps> = ({
           type={isPassword ? 'password' : 'text'}
           placeholder={placeholder}
           className={cn(
-            'h-full w-full absolute rounded bg-transparent py-2 pr-2 placeholder:text-opacity-50 focus:outline-primary',
+            'h-full w-full absolute rounded bg-transparent py-2 pr-2 placeholder:text-opacity-50 placeholder:text-ellipsis focus:outline-primary',
             prefixIcon ? 'pl-10' : 'pl-4'
           )}
           value={value}

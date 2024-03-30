@@ -32,7 +32,7 @@ const buttonVariants = cva(
         )
       },
       rounded: {
-        normal: 'flex items-center justify-center rounded-full p-0 dark:p-0',
+        normal: 'flex items-center justify-center rounded-full p-0 dark:p-0 border-transparent',
         false: '',
         icon: 'flex w-fit aspect-square items-center justify-center rounded-full border-transparent'
       },

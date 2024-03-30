@@ -58,8 +58,8 @@ const DropDown: React.FC<DropdownButtonProps> = ({
         const title = findTitleByValue(listRef, value);
         setSelectedOption(title ? title : defaultValue);
       }
-      setIsOpen(false);
     }
+    setIsOpen(false);
   }, [listRef]);
   
   function handleOptionClick(option: HTMLElement): void {

@@ -32,9 +32,11 @@ const TypeCard = ({ type }: { type: Type }) => {
               <DropDownItem title='View Card' value={''} />
             </DropDown>
           </div>
-          <TypeTable type={type}></TypeTable>
+          <div className='mt-3'>
+            <TypeTable type={type}></TypeTable>
+          </div>
         </div>
-        <div className='flex w-full flex-row items-center justify-between border-t border-black'>
+        <div className='flex w-full flex-row items-center justify-between border-t border-input-stroke dark:border-input-stroke-dark pt-3'>
           <TextButton
             onClick={() => {
               console.log('first');

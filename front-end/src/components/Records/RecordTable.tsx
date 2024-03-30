@@ -29,6 +29,10 @@ const RecordTable = ({ typeId }: RecordTableProps) => {
     return <ErrorToaster errorMessage='Error loading table ' />;
   }
 
-  return <DataTable columns={columns} data={data.data} />;
+  return (
+  <div className='px-4 py-2'>
+    <DataTable columns={columns} data={data.data} />
+  </div>
+  );
 };
 export default RecordTable;

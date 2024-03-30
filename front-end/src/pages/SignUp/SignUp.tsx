@@ -1,6 +1,4 @@
-import salesyncIcon from 'assets/salesync_icon.png';
-import ScriptGetTrial from '@/components/Authentication/ScriptGetTrial';
-import { ErrorText } from '@/components/ui';
+import { ErrorText, Panel } from '@/components/ui';
 import { useState, useEffect } from 'react';
 import { TextInput } from '@/components/ui';
 import { PrimaryButton, Button, DropDown, DropDownItem } from '@/components/ui';
@@ -9,7 +7,7 @@ import axios from 'axios';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
 import useAuth from '@/hooks/useAuth';
 
@@ -165,66 +163,49 @@ const SignUp = () => {
 
   return (
     <>
-      <div className='grid h-screen w-full grid-cols-2 bg-white pt-8'>
+      <div className='h-screen w-full mx-auto pt-8'>
         <div className='flex'>
-          <div className='ml-10 mr-5 h-32 w-32'>
-            <Link to='/' className=''>
-              <img src={salesyncIcon} className='h-full w-full object-contain' alt='header icon' />
-            </Link>
-          </div>
-          <div>
-            <h1>Start your free trial today.</h1>
-            <div className='my-5'>
-              <h2>No credit card required, no software to install.</h2>
-            </div>
-
-            <ScriptGetTrial />
-            <div className='my-5'>
-              <span>Questions? Talk to an expert: 000-000-0000</span>
-            </div>
-          </div>
         </div>
 
-        <div className='mb-3 flex w-full justify-center'>
-          <form onSubmit={handleSubmit(onSubmit)} className='h-fit w-96 rounded-sm bg-zinc-100 p-5'>
+        <Panel className='mb-3 flex w-fit mx-auto justify-center'>
+          <form onSubmit={handleSubmit(onSubmit)} className='h-fit w-96 rounded-sm p-5'>
             {step === 1 && (
               <>
                 <div className='mb-5'>
-                  <h2 className='font-normal'>
-                    Answer a few questions and we'll get you into your free trial. (8 answers total)
+                  <h2>
+                    Answer a few questions and we'll get you into your workspace. (8 answers total)
                   </h2>
                 </div>
                 <div className='mb-5'>
-                  <span className='text-sm'>
-                    Complete the form to start your free trial. Our team will be in touch to help you make the most of
-                    your trial.
-                  </span>
+                  <h5>
+                    Complete the form to start your workspace. Our team will be in touch to help you make the most of it.
+                  </h5>
                 </div>
 
                 <TextInput
                   header='First name'
-                  className='border-slate-500 bg-white hover:bg-white'
                   name='firstName'
+                  className='w-full'
                   register={register}
-                />
+                  />
                 {errors.firstName && <ErrorText text={errors.firstName.message} />}
                 <TextInput
                   header='Last name'
-                  className='border-slate-500 bg-white hover:bg-white'
                   name='lastName'
+                  className='w-full'
                   register={register}
-                />
+                  />
                 {errors.lastName && <ErrorText text={errors.lastName.message} />}
                 <TextInput
                   header='Job title name'
-                  className='border-slate-500 bg-white hover:bg-white'
                   name='title'
+                  className='w-full'
                   register={register}
-                />
+                  />
                 {errors.title && <ErrorText text={errors.title.message} />}
 
                 <div className='my-4 flex items-center justify-between'>
-                  <PrimaryButton onClick={onNext}>NEXT</PrimaryButton>
+                  <PrimaryButton onClick={onNext}>Next</PrimaryButton>
                   <div>
                     <span>Step 1 of 3</span>
                   </div>
@@ -234,19 +215,19 @@ const SignUp = () => {
             {step === 2 && (
               <>
                 <div className='mb-5'>
-                  <h2 className='font-normal'>Answer 5 more questions and we'll get you into your free trial.</h2>
+                  <h2>Answer 5 more questions and we'll get you into your free workspace.</h2>
                 </div>
                 <TextInput
                   header='No. Employees'
-                  className='border-slate-500 bg-white hover:bg-white'
                   name='noEmployees'
                   onFocus={(e) => e.target.select()}
+                  className='w-full'
                   register={register}
-                />
+                  />
                 {errors.noEmployees && <ErrorText text={errors.noEmployees.message} />}
                 <TextInput
                   header='Company'
-                  className='border-slate-500 bg-white hover:bg-white'
+                  className='w-full'
                   name='company'
                   register={register}
                 />
@@ -255,10 +236,10 @@ const SignUp = () => {
                   header='Country/Region'
                   value={country}
                   onValueChange={setCountry}
-                  className='w-full justify-start border-slate-500 bg-white hover:bg-white'
+                  className='w-full justify-start'
                 >
-                  {listCountry.map((item) => (
-                    <DropDownItem title={item} value={item}></DropDownItem>
+                  {listCountry.map((item, index) => (
+                    <DropDownItem key={index} title={item} value={`${index}-${item}`}></DropDownItem>
                   ))}
                 </DropDown>
                 {errorCountry && <ErrorText text='Enter your country/region' />}
@@ -266,9 +247,9 @@ const SignUp = () => {
                 <div className='my-4 flex items-center justify-between'>
                   <div className='flex'>
                     <Button className='mr-3 bg-white' onClick={onBack}>
-                      BACK
+                      Back
                     </Button>
-                    <PrimaryButton onClick={onNext}>NEXT</PrimaryButton>
+                    <PrimaryButton onClick={onNext}>Next</PrimaryButton>
                   </div>
                   <div>
                     <span>Step 2 of 3</span>
@@ -279,25 +260,25 @@ const SignUp = () => {
             {step === 3 && (
               <>
                 <div className='mb-5'>
-                  <h2 className='font-normal'>Answer 2 more questions and we'll get you into your free trial.</h2>
+                  <h2>Answer 2 more questions and we'll get you into your free workspace.</h2>
                 </div>
 
                 <TextInput
                   header='Phone'
-                  className='border-slate-500 bg-white hover:bg-white'
+                  className='w-full'
                   name='phone'
                   register={register}
                 />
                 {errors.phone && <ErrorText text={errors.phone.message} />}
                 <TextInput
                   header='Email'
-                  className='border-slate-500 bg-white hover:bg-white'
+                  className='w-full'
                   name='email'
                   register={register}
                 />
                 {errors.email && <ErrorText text={errors.email.message} />}
 
-                <div className='mt-2 flex'>
+                <div className='mt-4 flex'>
                   <Checkbox className='mt-1' checked={check1} onClick={() => setCheck1(!check1)}></Checkbox>
                   <div className='ml-2'>
                     <span>I agree to the </span>
@@ -316,33 +297,24 @@ const SignUp = () => {
                   <Checkbox className='mt-1' checked={check2} onClick={() => setCheck2(!check2)}></Checkbox>
                   <div className='ml-2'>
                     <span>
-                      Yes, I would like to receive marketing communications regarding Salesforce products, services, and
+                      Yes, I would like to receive marketing communications regarding SaleSync products, services, and
                       events. I can unsubscribe at any time.
                     </span>
                   </div>
                 </div>
-                <div className='my-2'>
-                  <span className='text-xs'>
-                    Your free trial may be provisioned on or migrated to Hyperforce, Salesforce's public cloud
-                    infrastructure.
-                  </span>
-                </div>
-                <div className='mb-5'>
-                  <span className='text-xs'>
-                    By registering, you agree to the processing of your personal data by Salesforce as described in the{' '}
-                  </span>
-                  <a href='' className='text-xs text-blue-500'>
-                    Privacy Statement
-                  </a>
+                <div className='my-5 flex space-x-1'>
+                  <h5>
+                    By registering, you agree to the processing of your personal data by SaleSync as described in the Privacy Statement.
+                  </h5>
                 </div>
 
                 <div className='my-4 flex items-center justify-between'>
                   <div className='flex'>
                     <Button className='mr-3 bg-white' onClick={onBack} disabled={isSubmitting}>
-                      BACK
+                      Back
                     </Button>
                     <PrimaryButton type='submit' disabled={isSubmitting}>
-                      {isSubmitting ? 'PROCESSING...' : 'SUBMIT'}
+                      {isSubmitting ? 'Processing...' : 'Submit'}
                     </PrimaryButton>
                   </div>
                   <div>
@@ -352,7 +324,7 @@ const SignUp = () => {
               </>
             )}
           </form>
-        </div>
+        </Panel>
       </div>
     </>
   );

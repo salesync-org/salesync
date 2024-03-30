@@ -27,7 +27,7 @@ const Sales = () => {
 
   return (
     <div className='flex h-full flex-col'>
-      <section className='fixed left-[76px] right-0 z-50 flex items-center bg-white px-6'>
+      <section className='fixed left-[76px] right-0 z-50 flex items-center bg-panel dark:bg-panel-dark px-6'>
         <h2 className='pr-6 leading-6'>Sales</h2>
         <RecordTabs tabs={types} name='salesTabs' />
         <Icon name='edit' className='ml-auto' />

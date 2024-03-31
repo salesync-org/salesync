@@ -1,8 +1,9 @@
 import auth from '@/api/auth';
-import { useState, createContext, useEffect } from 'react';
+import { useState, createContext, useEffect, Dispatch, useCallback } from 'react';
 
 type AuthContext = {
   user: User | null;
+  setUser: Dispatch<React.SetStateAction<User | null>>;
   isLoading: boolean;
   isAuthenticated: boolean;
   signUp: (signUpInfo: SignUpInfo) => Promise<void>;
@@ -78,21 +79,27 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const updateUser = async (companyName: string, updatedUser: User) => {
-    try {
-      const res = await auth.updateUser(companyName, updatedUser);
+  const updateUser = useCallback(
+    async (companyName: string, updatedUser: User) => {
+      try {
+        if (updatedUser.avatar_url === 'default') {
+          updatedUser.avatar_url = 'https://salesync.s3.ap-southeast-2.amazonaws.com/avatars/default-48.jpg';
+        }
+        const res = await auth.updateUser(companyName, updatedUser);
 
-      if (res) {
-        setUser(updatedUser);
+        if (res) {
+          setUser(updatedUser);
+        }
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    },
+    [setUser]
+  );
 
   if (!companyName) return null;
 
-  const value = { user, isLoading, isAuthenticated, login, logout, signUp, updateUser };
+  const value = { user, setUser, isLoading, isAuthenticated, login, logout, signUp, updateUser };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 

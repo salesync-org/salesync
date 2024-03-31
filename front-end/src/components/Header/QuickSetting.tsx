@@ -22,7 +22,7 @@ const QuickSetting = () => {
       </Button>
       <nav
         className={cn(
-          'fixed bottom-0 right-0 top-[104px] flex w-[400px] flex-col gap-6 rounded-sm bg-white shadow-2xl transition-all duration-200',
+          'fixed bottom-0 right-0 top-[104px] flex w-[400px] flex-col gap-6 overflow-y-auto rounded-sm bg-white pb-8 shadow-2xl transition-all duration-200',
           isOpen ? 'translate-x-0' : 'translate-x-[100%]'
         )}
       >
@@ -63,9 +63,13 @@ const QuickSetting = () => {
                 <QuickSettingItem
                   icon='person_add'
                   title='Users'
-                  onClick={() => {setUserSetting(true)}}
-                  desc='Add and manage users.' href='#' />
-              <UserModal isOpen={isUserSettingOpen} setIsOpen={setUserSetting} />
+                  onClick={() => {
+                    setUserSetting(true);
+                  }}
+                  desc='Add and manage users.'
+                  href='#'
+                />
+                <UserModal isOpen={isUserSettingOpen} setIsOpen={setUserSetting} />
               </li>
               <li>
                 <QuickSettingItem

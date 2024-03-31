@@ -82,13 +82,10 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const updateUser = useCallback(
     async (companyName: string, updatedUser: User) => {
       try {
-        if (updatedUser.avatar_url === 'default') {
-          updatedUser.avatar_url = 'https://salesync.s3.ap-southeast-2.amazonaws.com/avatars/default-48.jpg';
-        }
         const res = await auth.updateUser(companyName, updatedUser);
 
         if (res) {
-          setUser(updatedUser);
+        setUser(updatedUser);
         }
       } catch (error) {
         console.error(error);

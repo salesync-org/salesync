@@ -19,8 +19,8 @@ const RecordTabs = ({ tabs = [], name }: RecordTabsProps) => {
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (user) {
-        // updateUser(companyName, user);
-        console.log('user updated', user);
+        updateUser(companyName, user);
+        // console.log(JSON.stringify(user));
       }
     }, 3000);
 

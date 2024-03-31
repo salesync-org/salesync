@@ -6,10 +6,9 @@ import org.salesync.record_service.dtos.RecordDto;
 import org.salesync.record_service.dtos.RequestRecordDto;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface RecordService {
-    List<RecordDto> getRecordsByType(UUID typeId);
+    ListRecordsResponseDto getFilteredRecords(ListRecordsRequestDto requestDto);
 
     List<RecordDto> getAllRecords();
 

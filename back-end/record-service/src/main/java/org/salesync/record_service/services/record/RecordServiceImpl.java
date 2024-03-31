@@ -3,16 +3,16 @@ package org.salesync.record_service.services.record;
 import lombok.RequiredArgsConstructor;
 import org.salesync.record_service.dtos.*;
 import org.salesync.record_service.entities.Record;
-import org.salesync.record_service.entities.RecordType;
 import org.salesync.record_service.mappers.RecordMapper;
 import org.salesync.record_service.repositories.RecordRepository;
 import org.salesync.record_service.repositories.RecordTypeRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -25,15 +25,26 @@ public class RecordServiceImpl implements RecordService {
     private final RecordMapper recordMapper = RecordMapper.INSTANCE;
 
     @Override
-    public List<RecordDto> getRecordsByType(UUID typeId) {
-        List<Record> record = recordTypeRepository.findByTypeId(typeId).stream()
-                .map(RecordType::getRecord)
-                .toList();
-        Map typeData = restTemplate.getForObject("http://type-service/api/v1/types/{typeId}", Map.class, typeId);
-        return record
-                .stream()
+    public ListRecordsResponseDto getFilteredRecords(ListRecordsRequestDto requestDto) {
+        Pageable pageRequest = PageRequest.of(requestDto.getCurrentPage() - 1, requestDto.getPageSize());
+        Page<Record> page = recordRepository
+                .getFilteredRecord(requestDto.getTypePropertyId(),
+                        requestDto.getTypeId(),
+                        requestDto.getSearchTerm(),
+                        requestDto.getIsAsc(),
+                        pageRequest
+                );
+//        Map typeData = restTemplate.getForObject("http://type-service/api/v1/types/{typeId}", Map.class, typeId);
+        List<RecordDto> recordDtos = page.getContent().stream()
                 .map(recordMapper::recordToRecordDto)
                 .toList();
+
+        return ListRecordsResponseDto.builder()
+                .records(recordDtos)
+                .totalSize(page.getTotalElements())
+                .pageSize(page.getSize())
+                .currentPage(page.getNumber() + 1)
+                .build();
     }
 
     @Override

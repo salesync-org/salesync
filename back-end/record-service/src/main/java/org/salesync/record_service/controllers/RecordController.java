@@ -21,8 +21,8 @@ public class RecordController {
     private final RecordService recordService;
 
     @PostMapping(Route.LIST_RECORD)
-    public ResponseEntity<ListRecordsResponseDto> getRecordsByType(@Valid @RequestBody ListRecordsRequestDto listRecordsRequestDto) {
-        return ResponseEntity.ok(recordService.getAllRecordsWithCondition(listRecordsRequestDto));
+    public ResponseEntity<ListRecordsResponseDto> getFilteredRecords(@Valid @RequestBody ListRecordsRequestDto listRecordsRequestDto) {
+        return ResponseEntity.ok(recordService.getFilteredRecords(listRecordsRequestDto));
     }
 
     @GetMapping(Route.RECORD_ID)

@@ -6,6 +6,7 @@ import StageSection from '@/components/Stage/StageSection';
 import useRecord from '@/hooks/record-service/useRecord';
 import { useParams } from 'react-router-dom';
 import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
+import RecordActivity from './RecordActivity/RecordActivity';
 
 const RecordDetail = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -49,7 +50,7 @@ const RecordDetail = () => {
 
   return (
     <div className='flex flex-col'>
-      <Panel className='flex flex-row items-center justify-between p-2'>
+      <Panel className='flex flex-row items-center justify-between p-2 mb-0'>
         <div className='flex flex-row items-center'>
           <img
             className='mx-2 h-[32px] w-[32px] rounded-sm bg-blue-500'
@@ -93,8 +94,8 @@ const RecordDetail = () => {
             <Item title='New Task' />
             <Item title='Delete' />
           </DropDownList>
-          <Button zoom={false} intent='normal' className='p-0' onClick={() => setMenuOpen(true)}>
-            <Icon name='arrow_drop_down' className='text-3xl'></Icon>
+          <Button zoom={false} intent='normal' className='px-1' onClick={() => setMenuOpen(true)}>
+            <Icon name='arrow_drop_down' size='1'></Icon>
           </Button>
         </ButtonGroup>
       </Panel>
@@ -107,15 +108,29 @@ const RecordDetail = () => {
           <GroupProperty name='Segment' data={dataSegment} className='mb-4' />
           <GroupProperty name='History' data={dataHistory} />
         </Panel>
-        {Object.keys(record).includes('stage') && (
-          <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
-            <div className='px-4'>
-              <StageSection stage={record.stage} />
-            </div>
+
+        <div className='col-span-2'>
+          {Object.keys(record).includes('stage') && (
+            <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
+              <div className='px-4'>
+                <StageSection stage={record.stage} />
+              </div>
+            </Panel>
+          )}
+          <Panel className='h-fit p-4 md:order-none md:mr-0'>
+            <RecordActivity />
           </Panel>
-        )}
+        </div>
+
         <Panel className='col-span-1 h-fit p-4'>
-          <div></div>
+          <div className='flex items-center'>
+            <div className='mr-2'>
+              <Icon name='merge' className='mr-1 rounded bg-orange-400 p-0.5 text-white'></Icon>
+            </div>
+            <div>
+              <span className='font-bold'>We found no potential duplicates of this Lead.</span>
+            </div>
+          </div>
         </Panel>
       </div>
     </div>

@@ -1,6 +1,5 @@
 package org.salesync.authentication.services.user;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.TokenVerifier;
 import org.keycloak.admin.client.Keycloak;
@@ -9,6 +8,7 @@ import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.crypto.KeyUse;
 import org.keycloak.representations.AccessToken;
 import org.keycloak.representations.idm.*;
+import org.salesync.authentication.constants.UserAttributes;
 import org.salesync.authentication.converters.PublicKeyConverter;
 import org.salesync.authentication.dtos.UserDto;
 import org.salesync.authentication.helpers.SettingsManager;
@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
             RealmResource realmResource = keycloak.realm(realmId);
             PublicKey publicKey = PublicKeyConverter.convertStringToPublicKey(getKey(realmResource));
             AccessToken token = TokenVerifier.create(accessToken, AccessToken.class)
-                    .publicKey(publicKey) // Set your RSA Public Key
+                    .publicKey(publicKey)
                     .verify()
                     .getToken();
             if (token.isActive()) {
@@ -57,10 +57,10 @@ public class UserServiceImpl implements UserService {
                 user.setFirstName(userDto.getFirstName());
                 user.setLastName(userDto.getLastName());
                 Map<String, List<String>> attributes = user.getAttributes();
-                attributes.put("avatarUrl", List.of(userDto.getAvatarUrl()));
-                attributes.put("jobTitle", List.of(userDto.getJobTitle()));
-                attributes.put("phone", List.of(userDto.getPhone()));
-                attributes.put("settings", List.of(new SettingsManager().updatedSettingsString(userDto.getSettings())));
+                attributes.put(UserAttributes.AVATAR, List.of(userDto.getAvatarUrl()));
+                attributes.put(UserAttributes.JOB_TITLE, List.of(userDto.getJobTitle()));
+                attributes.put(UserAttributes.PHONE, List.of(userDto.getPhone()));
+                attributes.put(UserAttributes.SETTINGS, List.of(new SettingsManager().updatedSettingsString(userDto.getSettings())));
                 user.setAttributes(attributes);
                 realmResource.users().get(userId).update(user);
                 return loadUser(realmResource, userId);
@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService {
                 String userId = token.getSubject();
                 UserRepresentation user = realmResource.users().get(userId).toRepresentation();
                 Map<String, List<String>> attributes = user.getAttributes();
-                attributes.put("settings", List.of(new SettingsManager().loadStringSettingsFromFile()));
+                attributes.put(UserAttributes.SETTINGS, List.of(new SettingsManager().loadStringSettingsFromFile()));
                 user.setAttributes(attributes);
                 realmResource.users().get(userId).update(user);
                 return loadUser(realmResource, userId);
@@ -123,13 +123,13 @@ public class UserServiceImpl implements UserService {
         userDto.setEmail(user.getEmail());
         userDto.setUserId(user.getId());
         userDto.setUserName(user.getUsername());
-        userDto.setAvatarUrl(attributes.get("avatarUrl").get(0));
-        userDto.setJobTitle(attributes.get("jobTitle").get(0));
-        userDto.setPhone(attributes.get("phone").get(0));
+        userDto.setAvatarUrl(attributes.get(UserAttributes.AVATAR).get(0));
+        userDto.setJobTitle(attributes.get(UserAttributes.JOB_TITLE).get(0));
+        userDto.setPhone(attributes.get(UserAttributes.PHONE).get(0));
         userDto.setRoles(user.getRealmRoles());
         SettingsManager settings = new SettingsManager();
         try {
-            userDto.setSettings(settings.parseSettings(attributes.get("settings").get(0)));
+            userDto.setSettings(settings.parseSettings(attributes.get(UserAttributes.SETTINGS).get(0)));
         } catch (IOException e) {
             userDto.setSettings(settings.loadObjectSettingsFromFile());
         }

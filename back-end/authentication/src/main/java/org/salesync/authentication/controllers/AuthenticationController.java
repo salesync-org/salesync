@@ -3,48 +3,48 @@ package org.salesync.authentication.controllers;
 import jakarta.ws.rs.core.Response;
 import lombok.AllArgsConstructor;
 import org.keycloak.representations.AccessTokenResponse;
+import org.salesync.authentication.constants.Routes;
 import org.salesync.authentication.dtos.CompanyRegisterDto;
 import org.salesync.authentication.dtos.LogInDto;
 import org.salesync.authentication.dtos.NewUserDto;
-import org.salesync.authentication.dtos.UserDto;
 import org.salesync.authentication.services.register.RegisterService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "/auth")
+@RequestMapping(path = Routes.AUTH)
 @AllArgsConstructor
 public class AuthenticationController {
     RegisterService registerService;
 
-    @PostMapping("/realm/create")
+    @PostMapping(Routes.AUTH_COMPANY_CREATE)
     ResponseEntity<AccessTokenResponse> createRealm(
             @RequestBody CompanyRegisterDto companyRegisterDTO
     ) {
         return ResponseEntity.ok(registerService.registerCompany(companyRegisterDTO));
     }
 
-    @PostMapping("/{realmId}/login")
+    @PostMapping(Routes.AUTH_LOGIN)
     ResponseEntity<AccessTokenResponse> login(
-            @PathVariable String realmId,
+            @PathVariable String realmName,
             @RequestBody LogInDto loginDTO
     ) {
-        return ResponseEntity.ok(registerService.login(realmId, loginDTO, "app-admin", "app-admin"));
+        return ResponseEntity.ok(registerService.login(realmName, loginDTO));
     }
 
-    @PostMapping("/{realmId}/logout")
+    @PostMapping(Routes.AUTH_LOGOUT)
     ResponseEntity<Response> logout(
-            @RequestHeader("Authorization") String token
-    ) {
-        return ResponseEntity.ok(registerService.logout(token));
+            @RequestHeader("Authorization") String token,
+            @PathVariable String realmName) {
+        return ResponseEntity.ok(registerService.logout(realmName, token));
     }
 
-    @PostMapping("/{realmId}/user/create")
+    @PostMapping(Routes.AUTH_USER_CREATE)
     ResponseEntity<Response> createUser(
-            @PathVariable String realmId,
+            @PathVariable String realmName,
             @RequestBody NewUserDto newUserDTO
             ) {
-        return ResponseEntity.ok(registerService.registerUser(newUserDTO, realmId, "app-admin"));
+        return ResponseEntity.ok(registerService.registerUser(newUserDTO, realmName));
     }
 
 }

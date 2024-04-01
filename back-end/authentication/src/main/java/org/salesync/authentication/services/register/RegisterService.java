@@ -5,12 +5,11 @@ import org.keycloak.representations.AccessTokenResponse;
 import org.salesync.authentication.dtos.CompanyRegisterDto;
 import org.salesync.authentication.dtos.LogInDto;
 import org.salesync.authentication.dtos.NewUserDto;
-import org.salesync.authentication.dtos.UserDto;
 
 public interface RegisterService {
     AccessTokenResponse registerCompany(CompanyRegisterDto companyRegisterDTO);
-    Response registerUser(NewUserDto newUserDTO, String realmName, String clientId);
-    AccessTokenResponse login(String realmName, LogInDto logInDTO, String clientId, String clientSecret);
+    Response registerUser(NewUserDto newUserDTO, String realmName);
+    AccessTokenResponse login(String realmName, LogInDto logInDTO);
 
-    Response logout(String token);
+    Response logout(String realmName, String token);
 }

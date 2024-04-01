@@ -8,7 +8,6 @@ import java.io.InputStream;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
@@ -51,18 +50,6 @@ public class SettingsManager {
         } catch (JsonProcessingException e) {
             throw new IOException("Error parsing settings string.", e);
         }
-    }
-
-    public JsonNode modifyLayoutOrder(JsonNode settingsNode, String layoutName, JsonNode newLayoutItems) {
-        JsonNode layoutOrder = settingsNode.path("layout_order");
-
-        if (layoutOrder.isMissingNode()) {
-            return settingsNode;
-        }
-
-        ((ObjectNode) layoutOrder).replace(layoutName, newLayoutItems);
-
-        return settingsNode;
     }
 
     public String updatedSettingsString(JsonNode settingsNode) throws IOException {

@@ -5,7 +5,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Segoe UI Variable Display"', 'system-ui', 'Avenir', 'Helvetica', 'Arial', 'sans-serif']
+        sans: ['Inter', 'system-ui', 'Avenir', 'Helvetica', 'Arial', 'sans-serif']
       },
       lineHeight: {
         1.5: '1.5'
@@ -30,14 +30,14 @@ export default {
           color: '#f3f3f3'
         },
         panel: {
-          light: '#ffffff',
-          DEFAULT: '#ffffff',
+          light: '#fafafa',
+          DEFAULT: '#fafafa',
           dark: '#313439'
         },
         text: {
-          light: '#000000',
-          DEFAULT: '#000000',
-          dark: '#ffffff'
+          light: '#475569',
+          DEFAULT: '#475569',
+          dark: '#f2ffff'
         },
         primary: {
           DEFAULT: '#037EC9',
@@ -69,8 +69,8 @@ export default {
           dark: '#cefaff'
         },
         'button-background': {
-          light: '#f5f5f5',
-          DEFAULT: '#f5f5f5',
+          light: '#fcfcfc',
+          DEFAULT: '#fcfcfc',
           dark: '#424449'
         },
         'button-background-hover': {
@@ -86,17 +86,17 @@ export default {
         'button-stroke': {
           light: '#d3d3d3',
           DEFAULT: '#d3d3d3',
-          dark: '#373a3f'
+          dark: '#50555C'
         },
         'input-background': {
-          light: '#f4f4f4',
-          DEFAULT: '#f4f4f4',
+          light: '#ffffff',
+          DEFAULT: '#ffffff',
           dark: '#282b2d'
         },
         'input-stroke': {
           light: '#e4e4e4',
           DEFAULT: '#e4e4e4',
-          dark: '#424449'
+          dark: '#50555C'
         },
         'on-primary': {
           DEFAULT: '#ffffff'

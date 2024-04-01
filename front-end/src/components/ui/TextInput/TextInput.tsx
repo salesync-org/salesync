@@ -38,12 +38,12 @@ const TextInput: React.FC<TextInputProps> = ({
       <div
         className={cn(
           'relative flex h-10 items-center justify-start align-middle w-64',
-          disabled ? 'opacity-80' : 'active:scale-x-[99%] active:scale-y-[99%]',
+          disabled && 'opacity-80',
           'transform-all duration-[50ms] ease-in-out',
           'rounded placeholder:text-opacity-50',
           'bg-input-background-light dark:bg-input-background-dark ',
-          'border-[1px] border-input-stroke-light  dark:border-input-background-dark',
-          !disabled && 'hover:bg-button-background-light dark:hover:bg-button-background-dark',
+          'border-[2px] border-input-stroke-light  dark:border-input-background-dark',
+          !disabled &&  'dark:hover:bg-button-background-dark',
           className
         )}
       >
@@ -51,7 +51,7 @@ const TextInput: React.FC<TextInputProps> = ({
           type={isPassword ? 'password' : 'text'}
           placeholder={placeholder}
           className={cn(
-            'h-full w-full absolute rounded bg-transparent py-2 pr-2 placeholder:text-opacity-50 focus:outline-primary',
+            'h-full w-full absolute rounded bg-transparent py-2 pr-2 placeholder:text-opacity-50 placeholder:text-ellipsis focus:outline-primary',
             prefixIcon ? 'pl-10' : 'pl-4'
           )}
           value={value}

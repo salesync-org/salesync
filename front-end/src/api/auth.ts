@@ -4,7 +4,7 @@ const URL = `${import.meta.env.VITE_AUTHENTICATION_HOST}/api/v1`;
 
 class Auth {
   async signUp(signUpInfo: SignUpInfo) {
-    const response = await instance.post(`${URL}/auth/realm/create`, signUpInfo);
+    const response = await instance.post(`${URL}/auth/create`, signUpInfo);
     return response.data;
   }
 
@@ -24,16 +24,13 @@ class Auth {
   }
 
   async getUser(companyName: string) {
-    const response = await instance.get(`${URL}/user/${companyName}/loaduser`);
+    const response = await instance.get(`${URL}/user/${companyName}`);
 
     return response.data;
   }
 
   async updateUser(companyName: string, updatedUser: User) {
-    // console.log(JSON.stringify(updatedUser));
-    const response = await instance.post(`${URL}/user/${companyName}/user/modify`, 
-      updatedUser
-    );
+    const response = await instance.put(`${URL}/user/${companyName}`, updatedUser);
 
     return response.data;
   }

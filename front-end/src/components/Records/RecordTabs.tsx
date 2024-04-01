@@ -1,6 +1,7 @@
 import Icon from '@/components/ui/Icon/Icon';
 import useAuth from '@/hooks/useAuth';
 import { cn } from '@/utils/utils';
+import { useEffect } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import LoadingSpinner from '../ui/Loading/LoadingSpinner';
 
@@ -13,7 +14,18 @@ interface RecordTabsProps {
 const RecordTabs = ({ tabs = [], name }: RecordTabsProps) => {
   const id = useParams().typeId as string;
   const companyName = useParams().companyName as string;
-  const { updateUser, user, isLoading } = useAuth();
+  const { updateUser, user, isLoading, setUser } = useAuth();
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (user) {
+        updateUser(companyName, user);
+        // console.log(JSON.stringify(user));
+      }
+    }, 3000);
+
+    return () => clearTimeout(timeout);
+  }, [companyName, updateUser, user]);
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -57,14 +69,7 @@ const RecordTabs = ({ tabs = [], name }: RecordTabsProps) => {
         }
       };
 
-      console.log(updatedUser);
-      // updateUser(companyName, {
-      //   ...user,
-      //   settings: {
-      //     ...user.settings,
-      //     layout_order: layoutOrders
-      //   }
-      // });
+      setUser(updatedUser);
     }
   };
 

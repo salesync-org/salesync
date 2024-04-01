@@ -30,9 +30,10 @@ class Auth {
   }
 
   async updateUser(companyName: string, updatedUser: User) {
-    const response = await instance.post(`${URL}/user/${companyName}/user/modify`, {
+    // console.log(JSON.stringify(updatedUser));
+    const response = await instance.post(`${URL}/user/${companyName}/user/modify`, 
       updatedUser
-    });
+    );
 
     return response.data;
   }

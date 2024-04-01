@@ -2,11 +2,8 @@ package org.salesync.record_service.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.salesync.record_service.dtos.ListRecordsRequestDto;
-import org.salesync.record_service.dtos.ListRecordsResponseDto;
-import org.salesync.record_service.dtos.RecordDto;
+import org.salesync.record_service.dtos.*;
 import org.salesync.record_service.constants.Route;
-import org.salesync.record_service.dtos.RequestRecordDto;
 import org.salesync.record_service.services.record.RecordService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,5 +35,11 @@ public class RecordController {
     @PostMapping
     public RecordDto createRecordByType(@RequestBody RequestRecordDto requestRecordDto) {
         return recordService.createRecordByType(requestRecordDto);
+    }
+
+    @PutMapping(Route.RECORD_TYPE_RELATION)
+    public RequestRecordTypeRelationDto createRecordTypeRelation(@RequestBody RequestRecordTypeRelationDto requestRecordTypeRelationDto) {
+         recordService.createRecordTypeRelation(requestRecordTypeRelationDto);
+        return requestRecordTypeRelationDto;
     }
 }

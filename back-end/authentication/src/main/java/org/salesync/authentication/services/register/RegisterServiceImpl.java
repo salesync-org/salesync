@@ -142,6 +142,7 @@ public class RegisterServiceImpl implements RegisterService {
         logger.info("Starting Logout...");
         UserDto userInfo = userService.validateUser(realmName, token);
         keycloak.realm(realmName).users().get(userInfo.getUserId()).logout();
+        logger.info("Finish logging out.");
         return Response.ok().build();
     }
 

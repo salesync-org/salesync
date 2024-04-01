@@ -21,7 +21,7 @@ public class UserController {
         return ResponseEntity.ok(userService.validateUser(realmName, access_token));
     }
 
-    @PostMapping(Routes.USER_MODIFY)
+    @PutMapping(Routes.USER_MODIFY)
     ResponseEntity<UserDto> modifyInfo(
             @PathVariable String realmName,
             @RequestHeader String access_token,

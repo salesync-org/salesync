@@ -1,5 +1,7 @@
 package org.salesync.authentication.services.user;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.TokenVerifier;
 import org.keycloak.admin.client.Keycloak;
@@ -8,26 +10,35 @@ import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.crypto.KeyUse;
 import org.keycloak.representations.AccessToken;
 import org.keycloak.representations.idm.*;
+import org.salesync.authentication.configurations.KeyStoreConfig;
 import org.salesync.authentication.constants.UserAttributes;
-import org.salesync.authentication.converters.PublicKeyConverter;
+import org.salesync.authentication.converters.KeyConverter;
 import org.salesync.authentication.dtos.UserDto;
+import org.salesync.authentication.dtos.ValidationResponseDto;
 import org.salesync.authentication.helpers.SettingsManager;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.security.PublicKey;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final Keycloak keycloak;
+    private final KeyStoreConfig keyStore;
+    private final Environment env;
     @Override
-    public UserDto validateUser(String realmId, String accessToken) {
+    public UserDto validateUser(String realmName, String accessToken) {
         try {
-            RealmResource realmResource = keycloak.realm(realmId);
-            PublicKey publicKey = PublicKeyConverter.convertStringToPublicKey(getKey(realmResource));
+            RealmResource realmResource = keycloak.realm(realmName);
+            PublicKey publicKey = KeyConverter.convertStringToPublicKey(getKey(realmResource));
             AccessToken token = TokenVerifier.create(accessToken, AccessToken.class)
                     .publicKey(publicKey)
                     .verify()
@@ -43,10 +54,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto modifyInfo(String accessToken, UserDto userDto, String realmId) {
+    public UserDto modifyInfo(String accessToken, UserDto userDto, String realmName) {
         try {
-            RealmResource realmResource = keycloak.realm(realmId);
-            PublicKey publicKey = PublicKeyConverter.convertStringToPublicKey(getKey(realmResource));
+            RealmResource realmResource = keycloak.realm(realmName);
+            PublicKey publicKey = KeyConverter.convertStringToPublicKey(getKey(realmResource));
             AccessToken token = TokenVerifier.create(accessToken, AccessToken.class)
                     .publicKey(publicKey) // Set your RSA Public Key
                     .verify()
@@ -72,10 +83,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto resetSettings(String accessToken, String realmId) {
+    public UserDto resetSettings(String accessToken, String realmName) {
         try {
-            RealmResource realmResource = keycloak.realm(realmId);
-            PublicKey publicKey = PublicKeyConverter.convertStringToPublicKey(getKey(realmResource));
+            RealmResource realmResource = keycloak.realm(realmName);
+            PublicKey publicKey = KeyConverter.convertStringToPublicKey(getKey(realmResource));
             AccessToken token = TokenVerifier.create(accessToken, AccessToken.class)
                     .publicKey(publicKey) // Set your RSA Public Key
                     .verify()
@@ -88,6 +99,27 @@ public class UserServiceImpl implements UserService {
                 user.setAttributes(attributes);
                 realmResource.users().get(userId).update(user);
                 return loadUser(realmResource, userId);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    @Override
+    public ValidationResponseDto validate(String realmName, String accessToken) {
+        try {
+            RealmResource realmResource = keycloak.realm(realmName);
+            PublicKey publicKey = KeyConverter.convertStringToPublicKey(getKey(realmResource));
+            AccessToken token = TokenVerifier.create(accessToken, AccessToken.class)
+                    .publicKey(publicKey)
+                    .verify()
+                    .getToken();
+            if (token.isActive()) {
+                String responseToken = generateToken(loadUser(realmResource, token.getSubject()));
+                ValidationResponseDto response = new ValidationResponseDto();
+                response.setToken(responseToken);
+                return response;
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -137,4 +169,18 @@ public class UserServiceImpl implements UserService {
         return userDto;
     }
 
+    public String generateToken(UserDto userDetails) {
+        Algorithm algorithm = Algorithm.RSA256(
+                (RSAPublicKey) keyStore.loadPublicKey(),
+                (RSAPrivateKey) keyStore.loadPrivateKey());
+        return JWT.create()
+                .withClaim("userId", userDetails.getUserId())
+                .withClaim("roles", userDetails.getRoles())
+                .withSubject(userDetails.getUserName())
+                .withIssuedAt(new Date(System.currentTimeMillis()))
+                .withExpiresAt(new Date(System.currentTimeMillis()
+                        + Long.parseLong(Objects.requireNonNull(
+                                env.getProperty("jwt.expiration.ms")))))
+                        .sign(algorithm);
+    }
 }

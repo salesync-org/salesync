@@ -86,7 +86,7 @@ public class RegisterServiceImpl implements RegisterService {
             Response response = keycloak.realm(realmName).users().create(user);
             UserRepresentation newUser = keycloak.realm(realmName).users().search(newUserDTO.getEmail()).get(0);
             UserResource userResource = keycloak.realm(realmName).users().get(newUser.getId());
-//            userResource.sendVerifyEmail();
+            userResource.sendVerifyEmail();
             CredentialRepresentation credential = new CredentialRepresentation();
             credential.setType(CredentialRepresentation.PASSWORD);
             credential.setValue(AuthenticationInfo.DEFAULT_PASSWORD);
@@ -141,7 +141,10 @@ public class RegisterServiceImpl implements RegisterService {
     public Response logout(String realmName, String token) {
         logger.info("Starting Logout...");
         UserDto userInfo = userService.validateUser(realmName, token);
-        keycloak.realm(realmName).users().get(userInfo.getUserId()).logout();
+        List<UserSessionRepresentation> sessions = keycloak.realm(realmName).users().get(userInfo.getUserId()).getUserSessions();
+        for (UserSessionRepresentation session : sessions) {
+            keycloak.realm(realmName).deleteSession(session.getId());
+        }
         logger.info("Finish logging out.");
         return Response.ok().build();
     }

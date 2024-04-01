@@ -20,9 +20,8 @@ const RecordTabs = ({ tabs = [], name }: RecordTabsProps) => {
     const timeout = setTimeout(() => {
       if (user) {
         updateUser(companyName, user);
-        // console.log(JSON.stringify(user));
       }
-    }, 3000);
+    }, 1000);
 
     return () => clearTimeout(timeout);
   }, [companyName, updateUser, user]);

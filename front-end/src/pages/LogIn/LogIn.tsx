@@ -1,4 +1,4 @@
-import salesyncIcon from 'assets/salesync_icon.png';
+import salesyncLogo from 'assets/salesync_logo.png';
 import { Checkbox, Panel, TextInput } from '@/components/ui';
 import { PrimaryButton } from '@/components/ui';
 import { ErrorText } from '@/components/ui';
@@ -36,6 +36,7 @@ const LogIn = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { companyName = '' } = useParams();
+  const checkListIconLink = 'https://salesync.s3.ap-southeast-2.amazonaws.com/system/checklist_icon.svg';
 
   // const errorText = `Please check your username and password. If you still can't log in, contact your Salesforce administrator.`;
 
@@ -65,14 +66,14 @@ const LogIn = () => {
   };
 
   return (
-    <>
-      <div className='grid h-screen w-full bg-white/80 lg:grid-cols-2'>
-        <div className='flex h-full w-full flex-col  items-center justify-between'>
+    <div className='bg-white/80 bg-cover h-full overflow-hidden'>
+      <div className='grid w-full lg:grid-cols-2'>
+        <div className='flex w-full h-screen flex-col  items-center justify-between'>
           <div className='mx-auto w-full my-auto grid-cols-1'>
-            <div className='mb-3 mt-5 flex h-36 w-full items-center justify-center'>
-              <img src={salesyncIcon}
-              className={cn('aspect-square w-[100px] object-contain',
-              'transition-all hover:-translate-y-2 hover:scale-105 duration-200 ease-in-out')}alt='header icon' />
+            <div className='mt-5 flex h-fit w-full items-center justify-center'>
+              <img src={salesyncLogo}
+              className={cn('w-[340px] object-contain',
+              'transition-all hover:scale-105 duration-200 ease-in-out')}alt='header icon' />
             </div>
             <Panel className='mb-20 flex w-fit justify-center mx-auto py-2 px-2'>
               <form onSubmit={handleSubmit(onSubmit)} className='h-auto w-96 rounded-sm p-5'>
@@ -104,21 +105,45 @@ const LogIn = () => {
               </form>
             </Panel>
           </div>
-          <div className='mx-auto mb-2 w-full text-center text-sm'>©2024 SaleSync, Inc. All rights reserved.</div>
+          <div className='mx-auto mb-4 w-full text-center text-sm'>©2024 SaleSync, Inc. All rights reserved.</div>
         </div>
-
         <div
           id='right'
-          className='hidden h-full w-full flex-col justify-between bg-white bg-[url("https://www.salesforce.com/content/dam/web/en_us/www/images/login-promos/php-login-free-trial-bg.jpg")] bg-cover p-5 lg:flex lg:p-10'
+          className='h-screen w-full flex-col justify-between bg-[url("https://salesync.s3.ap-southeast-2.amazonaws.com/system/login_background.svg")] bg-cover lg:flex lg:p-10 lg:bg-white/40'
         >
+          <div className='px-10 hidden mt-5 lg:block space-y-2'>
+            <h1 className='text-[2rem] leading-[2.5rem] text-primary-bold'>Start your company's workspace.</h1>
+            <h2 className='text-primary-bold text-[1.5rem]'>No credit card, no software to install.</h2>
+            <div className='py-6 space-y-4'>
+              <div className='flex space-x-3'>
+                <img src={checkListIconLink} alt='checklist icon' className='aspect-square w-5' />
+                <h3 className='font-normal'>Managed communications with prospective leads</h3>
+              </div>
+              <div className='flex space-x-3'>
+                <img src={checkListIconLink} alt='checklist icon' className='aspect-square w-5' />
+                <h3 className='font-normal'>Centralized database of information</h3>
+              </div>
+              <div className='flex space-x-3'>
+                <img src={checkListIconLink} alt='checklist icon' className='aspect-square w-5' />
+                <h3 className='font-normal'>Improved customer retention</h3>
+              </div>
+              <div className='flex space-x-3'>
+                <img src={checkListIconLink} alt='checklist icon' className='aspect-square w-5' />
+                <h3 className='font-normal'>Detailed analytics and reports</h3>
+              </div>
+            </div>
+            <PrimaryButton className='mt-5 w-80' type='submit' disabled={isSubmitting}>
+                  Sign Up Now
+              </PrimaryButton>
+          </div>
           <img
-            src='https://www.salesforce.com/content/dam/web/en_us/www/images/login-promos/php-login-free-trial-fg-2.png'
-            alt=''
-            className='mx-auto w-[680px]'
+            src='https://salesync.s3.ap-southeast-2.amazonaws.com/system/login_panel.png'
+            alt='hero graphic'
+            className='mx-auto lg:w-[680px]'
           />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

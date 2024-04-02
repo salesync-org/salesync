@@ -22,20 +22,21 @@
 
 @layer base {
     h1 {
-        font-size: 1.85em;
+        font-size: 1.85rem;
         font-weight: 650;
         line-height: 1.85rem;
         color: rgb(15, 23, 42);
         @apply dark:text-white;
     }
     h2 {
-        font-size: 1.4em;
+        font-size: 1.4rem;
         font-weight: 620;
         line-height: 1.7rem;
         color: rgb(15, 23, 42);
         @apply dark:text-white;
     }
     h3 {
+        font-size: 1.1rem;
         font-weight: 600;
         line-height: 1.5rem;
         color: rgb(15, 23, 42);

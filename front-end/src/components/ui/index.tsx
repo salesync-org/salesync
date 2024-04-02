@@ -13,3 +13,4 @@ export {Skeleton} from './Skeleton';
 export {Switch} from './Switch';
 export {Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption} from './Table';
 export {TextInput} from './TextInput';
+export {TextArea} from './TextArea';

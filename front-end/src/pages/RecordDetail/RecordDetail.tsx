@@ -6,7 +6,7 @@ import StageSection from '@/components/Stage/StageSection';
 import useRecord from '@/hooks/record-service/useRecord';
 import { useParams } from 'react-router-dom';
 import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
-import RecordActivity from './RecordActivity/RecordActivity';
+import RecordActivity from '@/components/RecordDetail/RecordActivity';
 
 const RecordDetail = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);

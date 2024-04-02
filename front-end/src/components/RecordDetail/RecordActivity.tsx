@@ -1,5 +1,6 @@
-import { Button, Icon, Switch, ButtonGroup, DropDownList, Item, PrimaryButton } from '@/components/ui';
+import { Button, Icon, Switch, PrimaryButton } from '@/components/ui';
 import { useState } from 'react';
+import ButtonActivity from './ButtonActivity';
 
 const RecordActivity = () => {
   const [isEmailOpen, setEmailOpen] = useState(false);
@@ -21,82 +22,34 @@ const RecordActivity = () => {
   return (
     <>
       <div className='flex flex-wrap'>
-        <ButtonGroup className='mb-1 mr-1'>
-          <Button>
-            <div className='flex items-center'>
-              <Icon name='mail' className='mr-1 rounded bg-neutral-400 p-0.5 text-white'></Icon>
-              <span className='text-blue-500'>Email</span>
-            </div>
-          </Button>
-          <DropDownList
-            open={isEmailOpen}
-            onClose={() => {
-              setEmailOpen(false);
-            }}
-          >
-            <Item title='Delete' />
-          </DropDownList>
-          <Button zoom={false} intent='normal' className='px-1' onClick={() => setEmailOpen(true)}>
-            <Icon name='arrow_drop_down' size='1'></Icon>
-          </Button>
-        </ButtonGroup>
-        <ButtonGroup className='mb-1 mr-1'>
-          <Button>
-            <div className='flex items-center'>
-              <Icon name='calendar_month' className='mr-1 rounded bg-purple-400 p-0.5 text-white'></Icon>
-              <span className='text-blue-500'>New Event</span>
-            </div>
-          </Button>
-          <DropDownList
-            open={isEventOpen}
-            onClose={() => {
-              setEventOpen(false);
-            }}
-          >
-            <Item title='Delete' />
-          </DropDownList>
-          <Button zoom={false} intent='normal' className='px-1' onClick={() => setEmailOpen(true)}>
-            <Icon name='arrow_drop_down' size='1'></Icon>
-          </Button>
-        </ButtonGroup>
-        <ButtonGroup className='mb-1 mr-1'>
-          <Button>
-            <div className='flex items-center'>
-              <Icon name='call_log' className='mr-1 rounded bg-teal-600 p-0.5 text-white'></Icon>
-              <span className='text-blue-500'>Log a Call</span>
-            </div>
-          </Button>
-          <DropDownList
-            open={isCallOpen}
-            onClose={() => {
-              setCallOpen(false);
-            }}
-          >
-            <Item title='Delete' />
-          </DropDownList>
-          <Button zoom={false} intent='normal' className='px-1' onClick={() => setEmailOpen(true)}>
-            <Icon name='arrow_drop_down' size='1'></Icon>
-          </Button>
-        </ButtonGroup>
-        <ButtonGroup className='mb-1'>
-          <Button>
-            <div className='flex items-center'>
-              <Icon name='checklist' className='mr-1 rounded bg-green-600 p-0.5 text-white'></Icon>
-              <span className='text-blue-500'>New Task</span>
-            </div>
-          </Button>
-          <DropDownList
-            open={isTaskOpen}
-            onClose={() => {
-              setTaskOpen(false);
-            }}
-          >
-            <Item title='Delete' />
-          </DropDownList>
-          <Button zoom={false} intent='normal' className='px-1' onClick={() => setEmailOpen(true)}>
-            <Icon name='arrow_drop_down' size='1'></Icon>
-          </Button>
-        </ButtonGroup>
+        <ButtonActivity
+          name='Email'
+          icon='mail'
+          color='bg-neutral-400'
+          open={isEmailOpen}
+          onClose={setEmailOpen}
+        />
+        <ButtonActivity
+          name='New Event'
+          icon='calendar_month'
+          color='bg-purple-400'
+          open={isEventOpen}
+          onClose={setEventOpen}
+        />
+        <ButtonActivity
+          name='Log a Call'
+          icon='call_log'
+          color='bg-teal-600'
+          open={isCallOpen}
+          onClose={setCallOpen}
+        />
+        <ButtonActivity
+          name='New Task'
+          icon='checklist'
+          color='bg-green-400'
+          open={isTaskOpen}
+          onClose={setTaskOpen}
+        />
       </div>
 
       <div className='bg my-4 flex w-fit rounded px-3'>
@@ -104,12 +57,14 @@ const RecordActivity = () => {
         <span>Only show activities with insights</span>
         <Switch onClick={() => setShowActivity(!showActivity)} checked={false} className='ml-2'></Switch>
       </div>
+
       <div className='flex items-center'>
         <span>Filters: Within 2 months • All activities • Logged calls, Email, Events, List email, and Tasks</span>
-        <Button className='ml-2 p-3'>
+        <Button className='ml-2 p-3' onClick={() => {}} title='Timeline Settings'>
           <Icon name='settings'></Icon>
         </Button>
       </div>
+
       <div className='flex flex-row-reverse'>
         <button>
           <span className='text-blue-500'>Expand All</span>
@@ -121,7 +76,7 @@ const RecordActivity = () => {
       </div>
 
       <div>
-        <Button className='my-2 flex w-full justify-start' onClick={() => setExpand(!expand)}>
+        <Button className='my-2 flex w-full justify-start' onClick={() => setExpand(!expand)} title='Upcoming & Overdue'>
           {expand && <Icon name='expand_more' size='1' />}
           {!expand && <Icon name='chevron_right' size='1' />}
           <span className='font-bold'>Upcoming & Overdue</span>
@@ -141,7 +96,7 @@ const RecordActivity = () => {
       {showActivity && (
         <>
           <div>
-            <Button className='my-2 flex w-full justify-between' onClick={() => setExpand2(!expand2)}>
+            <Button className='my-2 flex w-full justify-between' onClick={() => setExpand2(!expand2)} title='March • 2024'>
               <div className='item-center flex'>
                 {expand2 && <Icon name='expand_more' size='1' />}
                 {!expand2 && <Icon name='chevron_right' size='1' />}
@@ -358,7 +313,8 @@ const RecordActivity = () => {
           <span>To change what's shown, try changing your filters.</span>
         </div>
       </Button>
-      <PrimaryButton className='mt-4 mb-12 mx-auto' onClick={() => {}}>
+
+      <PrimaryButton className='mx-auto mb-12 mt-4' onClick={() => {}}>
         <span>Show All Activities</span>
       </PrimaryButton>
     </>

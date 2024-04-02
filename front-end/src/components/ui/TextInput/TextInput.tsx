@@ -15,6 +15,7 @@ interface TextInputProps {
   header?: string;
   showHeader?: boolean;
   prefixIcon?: string;
+  postfixIcon?: string;
   restProps?: React.HTMLAttributes<HTMLInputElement>;
   isPassword?: boolean;
 }
@@ -26,6 +27,7 @@ const TextInput: React.FC<TextInputProps> = ({
   header,
   showHeader = true,
   prefixIcon,
+  postfixIcon,
   isPassword = false,
   onChange,
   name = '',
@@ -52,7 +54,8 @@ const TextInput: React.FC<TextInputProps> = ({
           placeholder={placeholder}
           className={cn(
             'h-full w-full absolute rounded bg-transparent py-2 pr-2 placeholder:text-opacity-50 placeholder:text-ellipsis focus:outline-primary',
-            prefixIcon ? 'pl-10' : 'pl-4'
+            prefixIcon ? 'pl-10' : 'pl-4',
+            postfixIcon ? 'pr-10' : 'pr-2'
           )}
           value={value}
           disabled={disabled}
@@ -62,6 +65,9 @@ const TextInput: React.FC<TextInputProps> = ({
         />
         <div className='relative flex h-full items-center justify-start rounded px-4'>
           <div className=' absolute flex items-center top-0 bottom-0 w-4'>{prefixIcon && <Icon className='' name={prefixIcon} />}</div>
+        </div>
+        <div className='absolute right-3 flex h-full items-center justify-start rounded px-4'>
+          <div className=' absolute flex items-center top-0 bottom-0 w-4'>{postfixIcon && <Icon className='' name={postfixIcon} />}</div>
         </div>
       </div>
     </>

@@ -25,6 +25,9 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -82,11 +85,10 @@ public class RegisterServiceImpl implements RegisterService {
             SettingsManager settingsManager = new SettingsManager();
             user.singleAttribute(UserAttributes.SETTINGS, settingsManager.loadStringSettingsFromFile());
             user.setEnabled(true);
-
             Response response = keycloak.realm(realmName).users().create(user);
             UserRepresentation newUser = keycloak.realm(realmName).users().search(newUserDTO.getEmail()).get(0);
             UserResource userResource = keycloak.realm(realmName).users().get(newUser.getId());
-            userResource.sendVerifyEmail();
+            sendEmailVerification(userResource);
             CredentialRepresentation credential = new CredentialRepresentation();
             credential.setType(CredentialRepresentation.PASSWORD);
             credential.setValue(AuthenticationInfo.DEFAULT_PASSWORD);
@@ -214,6 +216,35 @@ public class RegisterServiceImpl implements RegisterService {
         attribute.setPermissions(permissions);
         config.addOrReplaceAttribute(attribute);
         realmResource.users().userProfile().update(config);
+    }
 
+    private void sendEmailVerification(UserResource userResource) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.submit(() -> {
+            int maxAttempts = AuthenticationInfo.EMAIL_SENDING_ATTEMPT;
+            int retryDelay = AuthenticationInfo.RETRY_ATTEMPT_DELAY_SECOND;
+
+            for (int attempt = 1; attempt <= maxAttempts; attempt++) {
+                try {
+                    userResource.sendVerifyEmail();
+                    logger.info("Email sent successfully, attempt " + attempt);
+                    return; // Exit if successful
+                } catch (Exception e) {
+                    logger.error("Email sending failed, on attempt " + attempt);
+                    if (attempt < maxAttempts) {
+                        try {
+                            TimeUnit.SECONDS.sleep(retryDelay);
+                        } catch (InterruptedException ex) {
+                            // Handle interruption if needed
+                        }
+                    }
+                }
+            }
+
+            // If all attempts fail
+            logger.error("Failed to send email after all attempts.");
+        });
+
+        executor.shutdown();
     }
 }

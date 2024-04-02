@@ -1,26 +1,17 @@
-import salesyncLogo from 'assets/salesync_logo.png';
-import salesyncLogoDark from 'assets/salesync_logo_dark.png';
 import ComponentPanel from './ComponentPanel/ComponentPanel';
 import TypographyPanel from './TypographyPanel/TypographyPanel';
 import PalettePanel from './PalettePanel/PalettePanel';
-import ReactRouterDomPanel from './ReactRouterDomPanel/ReactRouterDomPanel';
+import { Header } from '@/components/Header';
 
 function Cheatsheet() {
   return (
     <>
-      <div className='mx-auto px-10'>
-        <div className='my-6'>
-          <div className='visible mx-auto max-w-96 dark:hidden'>
-            <img src={salesyncLogo} alt='logo' />
-          </div>
-          <div className='mx-auto hidden max-w-96 dark:flex'>
-            <img src={salesyncLogoDark} alt='logo' />
-          </div>
-        </div>
+      <div className='fixed w-full h-full bg-white/80 dark:bg-transparent backdrop-blur-lg -z-50'></div>
+      <Header className='left-0 w-full'></Header>
+      <div className='mx-auto px-10 pt-16'>
         <TypographyPanel />
         <ComponentPanel />
         <PalettePanel />
-        <ReactRouterDomPanel />
       </div>
     </>
   );

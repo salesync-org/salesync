@@ -15,7 +15,7 @@ const SignUp = lazy(() => import('./pages/SignUp/SignUp'));
 const HomeLayout = lazy(() => import('./pages/Home/Home'));
 const LogIn = lazy(() => import('pages/LogIn/LogIn'));
 const ForgotPassword = lazy(() => import('pages/LogIn/ForgotPassword'));
-const LeadDetail = lazy(() => import('./pages/LeadDetail/LeadDetail'));
+const RecordDetail = lazy(() => import('./pages/RecordDetail/RecordDetail'));
 
 function App() {
   return (
@@ -29,7 +29,7 @@ function App() {
                 <Route path='home' element={<HomeLayout />} />
                 <Route path='cheatsheet' element={<Cheatsheet />} />
                 <Route path='sales/:typeId' element={<Sales />} />
-                <Route path='leads/:recordId' element={<LeadDetail />} />
+                <Route path='record/:recordId' element={<RecordDetail />} />
                 <Route path='*' element={<Sales />} />
               </Route>
             </Route>

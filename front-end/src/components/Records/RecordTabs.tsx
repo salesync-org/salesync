@@ -108,8 +108,8 @@ const RecordTabs = ({ tabs = [], name }: RecordTabsProps) => {
                 className={({ isActive }) =>
                   cn(
                     'flex cursor-pointer items-center gap-1 truncate border-t-[3px] border-transparent bg-clip-border px-3 py-2 transition-all duration-100 ease-in-out',
-                    isActive && 'bg-secondary/40',
-                    'hover:bg-secondary/30',
+                    isActive && 'bg-secondary/40 dark:bg-secondary-dark/40',
+                    'hover:bg-secondary/30 dark:hover:bg-secondary-dark/30',
                     `${name}-tab`
                   )
                 }

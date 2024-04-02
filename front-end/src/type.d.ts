@@ -56,6 +56,15 @@ type NewUser = {
   role: string;
 };
 
+type NewUser = {
+  first_name: string;
+  last_name: string;
+  job_title: string;
+  phone: string;
+  email: string;
+  role: string;
+};
+
 type AdminInfo = {
   first_name: string;
   last_name: string;
@@ -86,6 +95,11 @@ type TokenResponse = {
   error?: string;
   error_description?: string;
   error_uri?: string;
+};
+
+type Stage = {
+  id: string;
+  name: string;
 };
 
 type User = {

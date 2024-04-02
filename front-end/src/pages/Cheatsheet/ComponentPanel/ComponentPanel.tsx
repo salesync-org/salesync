@@ -1,4 +1,4 @@
-import {PrimaryButton, Button, Panel, Switch, Icon, TextInput, DropDown, Item, DropDownItem} from '@/components/ui';
+import {PrimaryButton, Checkbox, Button, Panel, Switch, Icon, TextInput, DropDown, Item, DropDownItem} from '@/components/ui';
 import ModalPanel from '../ModalPanel/ModalPanel';
 
 function ComponentPanel() {
@@ -70,10 +70,17 @@ function ComponentPanel() {
             <ModalPanel />
         </div>
         <div>
-            <h2 className='mb-4'>Popup</h2>
+            <h2 className='mb-4'>Checkbox</h2>
+            <div className='flex space-x-2 items-center'>
+              <Checkbox></Checkbox>
+              <p>Unchecked</p>
+            </div>
+            <div className='mt-2 flex space-x-2 items-center'>
+              <Checkbox></Checkbox>
+              <p>Checked</p>
+            </div>
         </div>
       </div>
-      <h5>Comming more.</h5>
     </Panel>
   );
 }

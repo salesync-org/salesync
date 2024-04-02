@@ -32,7 +32,7 @@ const Switch: React.FC<ButtonProps> = ({ onClick, className, disabled, label, ch
       {showHeader && header && <p className='my-1'>{header}</p>}
       <div
         className={cn(
-          disabled ? 'opacity-80' : 'cursor-pointer hover:scale-105 active:scale-100',
+          disabled ? 'opacity-80' : 'cursor-pointer active:scale-95',
           'inline-flex items-center rounded-full',
           'border-[1px] border-button-stroke dark:border-button-stroke-dark focus:outline-primary',
           className

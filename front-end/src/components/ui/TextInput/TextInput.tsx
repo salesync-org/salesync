@@ -37,13 +37,13 @@ const TextInput: React.FC<TextInputProps> = ({
       {showHeader && header && <p className='my-1'>{header}</p>}
       <div
         className={cn(
-          'flex h-10 items-center justify-start align-middle',
-          disabled ? 'opacity-80' : 'active:scale-x-[99%] active:scale-y-[99%]',
+          'relative flex h-10 items-center justify-start align-middle w-64',
+          disabled && 'opacity-80',
           'transform-all duration-[50ms] ease-in-out',
           'rounded placeholder:text-opacity-50',
           'bg-input-background-light dark:bg-input-background-dark ',
-          'border-[1px] border-input-stroke-light  dark:border-input-background-dark',
-          !disabled && 'hover:bg-button-background-light dark:hover:bg-button-background-dark',
+          'border-[2px] border-input-stroke-light  dark:border-input-background-dark',
+          !disabled &&  'dark:hover:bg-button-background-dark',
           className
         )}
       >
@@ -51,7 +51,7 @@ const TextInput: React.FC<TextInputProps> = ({
           type={isPassword ? 'password' : 'text'}
           placeholder={placeholder}
           className={cn(
-            'h-full w-full rounded bg-transparent py-2 pr-2 placeholder:text-opacity-50 focus:outline-primary',
+            'h-full w-full absolute rounded bg-transparent py-2 pr-2 placeholder:text-opacity-50 placeholder:text-ellipsis focus:outline-primary',
             prefixIcon ? 'pl-10' : 'pl-4'
           )}
           value={value}
@@ -60,8 +60,8 @@ const TextInput: React.FC<TextInputProps> = ({
           {...register(name)}
           {...restProps}
         />
-        <div className='absolute flex h-fit items-center justify-center rounded px-4 py-2'>
-          <div className='relative h-full w-4'>{prefixIcon && <Icon className='mt-[.4rem]' name={prefixIcon} />}</div>
+        <div className='relative flex h-full items-center justify-start rounded px-4'>
+          <div className=' absolute flex items-center top-0 bottom-0 w-4'>{prefixIcon && <Icon className='' name={prefixIcon} />}</div>
         </div>
       </div>
     </>

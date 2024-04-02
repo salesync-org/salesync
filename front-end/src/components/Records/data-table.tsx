@@ -30,17 +30,17 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
   });
 
   return (
-    <div className='border'>
+    <div className='border-[1px] border-button-stroke dark:border-button-stroke-dark rounded-sm'>
       <Table className=''>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id} className='cursor-pointer bg-background-color transition-all'>
+            <TableRow key={headerGroup.id} className='cursor-pointer bg-background-light dark:bg-background-dark transition-all'>
               {headerGroup.headers.map((header, index) => {
                 return (
                   <TableHead
                     key={header.id}
                     className={cn(
-                      'h-8 truncate border-r-2 font-bold last:border-x-0 hover:bg-button-background-hover',
+                      'h-8 truncate border-r-2 font-semibold last:border-x-0 hover:bg-button-background-hover dark:hover:bg-button-background-hover-dark',
                       index === 0 && 'w-0',
                       index === 1 && 'w-12'
                     )}
@@ -57,11 +57,11 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
-                className='group h-8 transition-all hover:bg-[#f3f3f3]'
+                className='group h-8 transition-all hover:bg-button-background-hover dark:hover:bg-button-background-hover-dark'
                 data-state={row.getIsSelected() && 'selected'}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell className='h-8 truncate py-0 leading-5 transition-all hover:bg-white' key={cell.id}>
+                  <TableCell className='h-8 truncate py-0 leading-5 transition-all hover:bg-secondary-light/40 dark:hover:bg-secondary-dark/40' key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

@@ -124,3 +124,21 @@ type LayoutOrder = {
   icon: string;
   types: Type[];
 };
+type RecordsResponse = {
+  records: RecordResponse[];
+  total_size: number;
+  page_size: number;
+  current_page: number;
+};
+type RecordResponse = {
+  id: string;
+  name: string;
+  user_id: string;
+  properties: PropertyResponse[];
+};
+type PropertyResponse = {
+  id: string;
+  type_property_id: string;
+  record_type_property_label: string;
+  item_value: string;
+};

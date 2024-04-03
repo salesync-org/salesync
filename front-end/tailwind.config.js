@@ -48,7 +48,7 @@ export default {
           bold: '#2E5572',
         },
         'primary-hover': {
-          DEFAULT: '##67A1ED'
+          DEFAULT: '#518DC9'
         },
         'primary-active': {
           DEFAULT: '#0375BA'

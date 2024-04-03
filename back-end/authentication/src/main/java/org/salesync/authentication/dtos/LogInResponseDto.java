@@ -6,17 +6,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.keycloak.representations.AccessTokenResponse;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class NewUserDto {
-    private String firstName = "";
-    private String lastName = "User";
-    private String jobTitle = "";
-    private String phone = "";
-    private String email;
-    private String role = "standard-user";
+public class LogInResponseDto extends AccessTokenResponse {
+    UserDto user;
 }

@@ -64,9 +64,13 @@ const QuickSetting = () => {
                 <QuickSettingItem
                   icon='person_add'
                   title='Users'
-                  onClick={() => {setUserSetting(true)}}
-                  desc='Add and manage users.' href='#' />
-              <UserModal isOpen={isUserSettingOpen} setIsOpen={setUserSetting} />
+                  onClick={() => {
+                    setUserSetting(true);
+                  }}
+                  desc='Add and manage users.'
+                  href='#'
+                />
+                <UserModal isOpen={isUserSettingOpen} setIsOpen={setUserSetting} />
               </li>
               <li>
                 <QuickSettingItem

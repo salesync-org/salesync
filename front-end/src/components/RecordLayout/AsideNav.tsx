@@ -1,36 +1,42 @@
 import { cn } from '@/utils/utils';
 import { NavLink, useParams } from 'react-router-dom';
 import Icon from '../ui/Icon/Icon';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import useAuth from '@/hooks/useAuth';
 
 type AsideItem = {
-  icon: string;
   href: string;
-  title: string;
+  name: string;
+  icon: string;
+  types: Type[];
   active?: boolean;
   className?: string;
 };
 
-const asideItems: AsideItem[] = [
-  { icon: 'home', href: '/home', title: 'Home' },
-  { icon: 'monitoring', href: '/sales', title: 'Sales', active: true },
-  { icon: 'ecg_heart', href: '/services', title: 'Services' },
-  { icon: 'mail', href: '/outreach', title: 'Outreach' },
-  { icon: 'shopping_cart', href: '/commerce', title: 'Commerce' },
-  { icon: 'domain', href: '/your-account', title: 'Your account' }
-];
-
 const AsideNav = () => {
-  const [currentAsideItems, setCurrentAsideItems] = useState<AsideItem[]>(() => {
-    return localStorage.getItem('asideItems') !== null ? JSON.parse(localStorage.getItem('asideItems')!) : asideItems;
-  });
+  const [currentAsideItems, setCurrentAsideItems] = useState<AsideItem[]>([]);
+
+  const { user } = useAuth();
+  useEffect(() => {
+    const layoutOrders = user?.settings.layout_order;
+    if (layoutOrders) {
+      const mapAsideItems = layoutOrders.map((layoutOrder) => {
+        return {
+          ...layoutOrder,
+          href: `/${layoutOrder.name.toLowerCase()}`
+        };
+      });
+
+      setCurrentAsideItems(mapAsideItems);
+    }
+  }, [user]);
 
   return (
     <aside className='fixed z-50 grid min-h-dvh w-[76px] justify-center bg-[#014486] text-white'>
       <nav className='p-1'>
         <ul className='flex flex-col gap-1'>
           {currentAsideItems.map((item, index) => (
-            <li key={item.title} value={index}>
+            <li key={item.name} value={index}>
               <AsideItem
                 {...item}
                 currentAsideItems={currentAsideItems}
@@ -48,7 +54,7 @@ const AsideNav = () => {
 const AsideItem = ({
   icon,
   href,
-  title,
+  name,
   className,
   currentAsideItems,
   setCurrentAsideItems,
@@ -56,7 +62,7 @@ const AsideItem = ({
 }: {
   icon: string;
   href: string;
-  title: string;
+  name: string;
   active?: boolean;
   className?: string;
   currentAsideItems: AsideItem[];
@@ -104,7 +110,7 @@ const AsideItem = ({
   return (
     <NavLink
       to={`/${companyName}${href}`}
-      title={title}
+      title={name}
       draggable
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}
@@ -120,7 +126,7 @@ const AsideItem = ({
       }
     >
       <Icon name={icon} size='32px' />
-      <span className='mt-1 w-full truncate px-[2px] text-[10px] leading-4'>{title}</span>
+      <span className='mt-1 w-full truncate px-[2px] text-[10px] leading-4'>{name}</span>
     </NavLink>
   );
 };

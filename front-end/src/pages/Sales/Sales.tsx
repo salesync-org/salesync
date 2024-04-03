@@ -1,13 +1,13 @@
 import RecordSection from '@/components/Records/RecordSection';
 import Icon from '@/components/ui/Icon/Icon';
 import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
-import useType from '@/hooks/type-service/useType';
+import useAuth from '@/hooks/useAuth';
 import { Navigate, useParams } from 'react-router-dom';
 import RecordTabs from '../../components/Records/RecordTabs';
 import ErrorToaster from '../Error/ErrorToaster';
 
 const Sales = () => {
-  const { types = [], error, isLoading } = useType();
+  const { user, isLoading } = useAuth();
 
   const { typeId, companyName = '' } = useParams();
 
@@ -15,15 +15,18 @@ const Sales = () => {
     return <LoadingSpinner />;
   }
 
-  if (error) {
+  if (!user) {
     return <ErrorToaster errorTitle='adasd' errorMessage='fetch fail' />;
   }
 
+  const layoutOrders = user.settings.layout_order;
+  const types: Type[] = layoutOrders.find((layoutOrder) => layoutOrder.name === 'Sales')?.types ?? [];
+
   if (!typeId && types.length > 0) {
-    return <Navigate to={`/${companyName}/sales/${types[0].id}`} />;
+    return <Navigate to={`/${companyName}/sales/${types[0].type_id}`} />;
   }
 
-  const type = types.find((type) => type.id === typeId);
+  const type = types.find((type) => type.type_id === typeId);
 
   return (
     <div className='flex h-full flex-col'>

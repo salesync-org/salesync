@@ -23,7 +23,7 @@ const buttonVariants = cva(
           'bg-primary',
           'text-on-primary font-semibold',
           'border-primary-stroke dark:border-primary-stroke-dark',
-          'enabled:hover:bg-primary-hover focus:outline-secondary',
+          'enabled:hover:bg-primary-hover focus:outline-secondary enabled:hover:bg-primary-hover',
           'enabled:active:bg-primary-active'
         ),
         link: cn(
@@ -60,6 +60,7 @@ export interface ButtonProps
   children: React.ReactNode;
   header?: string;
   showHeader?: boolean;
+  headerClassName?: string;
   type?: 'button' | 'submit' | 'reset';
   restProps?: React.HTMLAttributes<HTMLButtonElement>;
 }

@@ -1,4 +1,4 @@
-package org.salesync.authentication.components;
+package org.salesync.authentication.configurations;
 
 import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.Keycloak;
@@ -8,7 +8,7 @@ import org.springframework.core.env.Environment;
 
 @Configuration
 @RequiredArgsConstructor
-public class KeyCloakConfigComponent {
+public class KeyCloakConfig {
 
     private final Environment env;
 

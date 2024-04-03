@@ -66,19 +66,28 @@ const LogIn = () => {
   };
 
   return (
-    <div className='bg-white/80 bg-cover h-full overflow-hidden'>
-      <div className='grid w-full lg:grid-cols-2'>
-        <div className='flex w-full h-screen min-h-screen flex-col  items-center justify-between'>
-          <div className='mx-auto w-full my-auto grid-cols-1'>
+    <div className='h-full overflow-hidden bg-white/80 bg-cover'>
+      <div className='grid w-full md:grid-cols-1 lg:grid-cols-2'>
+        <div className='flex h-screen min-h-screen w-full flex-col  items-center justify-between'>
+          <div className='mx-auto my-auto w-full grid-cols-1'>
             <div className='mt-5 flex h-fit w-full items-center justify-center'>
-              <img src={salesyncLogo}
-              className={cn('w-[340px] object-contain',
-              'transition-all hover:scale-105 duration-200 ease-in-out')}alt='header icon' />
+              <img
+                src={salesyncLogo}
+                className={cn('w-[340px] object-contain', 'transition-all duration-200 ease-in-out hover:scale-105')}
+                alt='header icon'
+              />
             </div>
-            <Panel className='mb-20 flex w-fit justify-center mx-auto py-2 px-2'>
+            <Panel className='mx-auto mb-20 flex w-fit justify-center px-2 py-2'>
               <form onSubmit={handleSubmit(onSubmit)} className='h-auto w-96 rounded-sm p-5'>
                 {/* {error && <ErrorText text={errorText} className='text-sm' />} */}
-                <TextInput placeholder='Enter your username' header='Username' register={register} name='username' className='w-full h-12' />
+                <TextInput
+                  placeholder='Enter your username'
+                  header='Username'
+                  register={register}
+                  name='username'
+                  className='h-12 w-full'
+                  isError={!!errors.username}
+                />
                 {errors.username && <ErrorText text={errors.username.message} className='text-sm' />}
                 <TextInput
                   placeholder='Enter password'
@@ -86,11 +95,12 @@ const LogIn = () => {
                   header='Password'
                   register={register}
                   name='password'
-                  className='w-full h-12'
+                  className='h-12 w-full'
+                  isError={!!errors.password}
                 />
                 {errors.password && <ErrorText text={errors.password.message} className='text-sm' />}
 
-                <PrimaryButton className='mt-5 w-full h-12' type='submit' disabled={isSubmitting}>
+                <PrimaryButton className='mt-5 h-12 w-full' type='submit' disabled={isSubmitting}>
                   {isSubmitting ? 'Logging in...' : 'Log In'}
                 </PrimaryButton>
                 <div className='mt-4 flex items-center'>
@@ -109,39 +119,39 @@ const LogIn = () => {
         </div>
         <div
           id='right'
-          className='h-screen w-full flex-col justify-between bg-[url("https://salesync.s3.ap-southeast-2.amazonaws.com/system/login_background.svg")] bg-cover lg:flex lg:p-10 lg:bg-white/40'
+          className='h-screen w-full flex-col justify-center bg-[url("https://salesync.s3.ap-southeast-2.amazonaws.com/system/login_background.svg")] bg-contain bg-bottom bg-no-repeat lg:flex lg:bg-white/40 lg:p-10'
         >
-          <div className='px-10 hidden mt-5 lg:block space-y-2'>
+          <div className='mt-5 hidden space-y-2 px-10 lg:block'>
             <h1 className='text-[2rem] leading-[2.5rem] text-primary-bold'>Start your company's workspace.</h1>
-            <h2 className='text-primary-bold text-[1.5rem]'>No credit card, no software to install.</h2>
-            <div className='py-6 space-y-4'>
-              <div className='flex space-x-3 items-center'>
-                <img src={checkListIconLink} alt='checklist icon' className='aspect-square w-5 h-5' />
+            <h2 className='text-[1.5rem] text-primary-bold'>No credit card, no software to install.</h2>
+            <div className='space-y-4 py-6'>
+              <div className='flex items-center space-x-3'>
+                <img src={checkListIconLink} alt='checklist icon' className='aspect-square h-5 w-5' />
                 <h3 className='font-normal'>Managed communications with prospective leads</h3>
               </div>
-              <div className='flex space-x-3 items-center'>
-                <img src={checkListIconLink} alt='checklist icon' className='aspect-square w-5 h-5' />
+              <div className='flex items-center space-x-3'>
+                <img src={checkListIconLink} alt='checklist icon' className='aspect-square h-5 w-5' />
                 <h3 className='font-normal'>Centralized database of information</h3>
               </div>
-              <div className='flex space-x-3 items-center'>
-                <img src={checkListIconLink} alt='checklist icon' className='aspect-square w-5 h-5' />
+              <div className='flex items-center space-x-3'>
+                <img src={checkListIconLink} alt='checklist icon' className='aspect-square h-5 w-5' />
                 <h3 className='font-normal'>Improved customer retention</h3>
               </div>
-              <div className='flex space-x-3 items-center'>
-                <img src={checkListIconLink} alt='checklist icon' className='aspect-square w-5 h-5' />
+              <div className='flex items-center space-x-3'>
+                <img src={checkListIconLink} alt='checklist icon' className='aspect-square h-5 w-5' />
                 <h3 className='font-normal'>Detailed analytics and reports</h3>
               </div>
             </div>
             <Link to={'/sign-up'}>
               <PrimaryButton className='mt-5 w-80' type='submit' disabled={isSubmitting}>
-                    Sign Up Now
-                </PrimaryButton>
+                Sign Up Now
+              </PrimaryButton>
             </Link>
           </div>
           <img
             src='https://salesync.s3.ap-southeast-2.amazonaws.com/system/login_panel.png'
             alt='hero graphic'
-            className='mx-auto lg:w-[680px]'
+            className='mx-auto w-[100%] '
           />
         </div>
       </div>

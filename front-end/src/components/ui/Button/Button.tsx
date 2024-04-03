@@ -10,13 +10,14 @@ const Button: React.FC<ButtonProps> = ({
   zoom,
   header,
   showHeader = true,
+  headerClassName = '',
   type = 'button',
   onClick,
   ...restProps
 }) => {
   return (
     <>
-      {showHeader && header && <p className='my-1'>{header}</p>}
+      {showHeader && header && <p className={cn('my-1', headerClassName)}>{header}</p>}
       <button
         className={cn(
           buttonVariants({ intent, rounded, zoom }),

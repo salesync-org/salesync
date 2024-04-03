@@ -60,6 +60,7 @@ export interface ButtonProps
   children: React.ReactNode;
   header?: string;
   showHeader?: boolean;
+  headerClassName?: string;
   type?: 'button' | 'submit' | 'reset';
   restProps?: React.HTMLAttributes<HTMLButtonElement>;
 }

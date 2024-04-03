@@ -1,15 +1,13 @@
-import { ErrorText, Panel } from '@/components/ui';
-import { useState, useEffect } from 'react';
-import { TextInput } from '@/components/ui';
-import { PrimaryButton, Button, DropDown, DropDownItem } from '@/components/ui';
-import { Checkbox } from 'components/ui';
-import axios from 'axios';
-import * as z from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useNavigate } from 'react-router-dom';
+import { Button, DropDown, DropDownItem, ErrorText, Panel, PrimaryButton, TextInput } from '@/components/ui';
 import { useToast } from '@/components/ui/use-toast';
 import useAuth from '@/hooks/useAuth';
+import { zodResolver } from '@hookform/resolvers/zod';
+import axios from 'axios';
+import { Checkbox } from 'components/ui';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import * as z from 'zod';
 
 interface State {
   name: string;
@@ -34,6 +32,7 @@ const signUpSchema = z.object({
     })
     .int()
     .positive('Enter a valid number of employees')
+    .gt(0, 'Enter your number of employees')
     .min(1, 'Enter a valid number of employees'),
   company: z.string().min(1, 'Enter your company name'),
   phone: z.string().regex(/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s./0-9]*$/g, 'Enter a valid phone number'),
@@ -106,6 +105,7 @@ const SignUp = () => {
     }
     if (cur === 2) {
       trigger('company');
+      trigger('noEmployees');
       setErrorCountry(!country);
 
       if (!getValues('company') || !getValues('noEmployees') || !country) {
@@ -163,22 +163,20 @@ const SignUp = () => {
 
   return (
     <>
-      <div className='h-screen w-full mx-auto pt-8'>
-        <div className='flex'>
-        </div>
+      <div className='mx-auto h-screen w-full pt-8'>
+        <div className='flex'></div>
 
-        <Panel className='mb-3 flex w-fit mx-auto justify-center'>
+        <Panel className='mx-auto mb-3 flex w-fit justify-center'>
           <form onSubmit={handleSubmit(onSubmit)} className='h-fit w-96 rounded-sm p-5'>
             {step === 1 && (
               <>
                 <div className='mb-5'>
-                  <h2>
-                    Answer a few questions and we'll get you into your workspace. (8 answers total)
-                  </h2>
+                  <h2>Answer a few questions and we'll get you into your workspace. (8 answers total)</h2>
                 </div>
                 <div className='mb-5'>
                   <h5>
-                    Complete the form to start your workspace. Our team will be in touch to help you make the most of it.
+                    Complete the form to start your workspace. Our team will be in touch to help you make the most of
+                    it.
                   </h5>
                 </div>
 
@@ -187,21 +185,24 @@ const SignUp = () => {
                   name='firstName'
                   className='w-full'
                   register={register}
-                  />
+                  isError={!!errors.firstName}
+                />
                 {errors.firstName && <ErrorText text={errors.firstName.message} />}
                 <TextInput
                   header='Last name'
                   name='lastName'
                   className='w-full'
                   register={register}
-                  />
+                  isError={!!errors.lastName}
+                />
                 {errors.lastName && <ErrorText text={errors.lastName.message} />}
                 <TextInput
                   header='Job title name'
                   name='title'
                   className='w-full'
                   register={register}
-                  />
+                  isError={!!errors.title}
+                />
                 {errors.title && <ErrorText text={errors.title.message} />}
 
                 <div className='my-4 flex items-center justify-between'>
@@ -223,13 +224,15 @@ const SignUp = () => {
                   onFocus={(e) => e.target.select()}
                   className='w-full'
                   register={register}
-                  />
+                  isError={!!errors.noEmployees}
+                />
                 {errors.noEmployees && <ErrorText text={errors.noEmployees.message} />}
                 <TextInput
                   header='Company'
                   className='w-full'
                   name='company'
                   register={register}
+                  isError={!!errors.company}
                 />
                 {errors.company && <ErrorText text={errors.company.message} />}
                 <DropDown
@@ -237,6 +240,8 @@ const SignUp = () => {
                   value={country}
                   onValueChange={setCountry}
                   className='w-full justify-start'
+                  isError={!!errorCountry}
+                  setError={setErrorCountry}
                 >
                   {listCountry.map((item, index) => (
                     <DropDownItem key={index} title={item} value={`${index}-${item}`}></DropDownItem>
@@ -268,6 +273,7 @@ const SignUp = () => {
                   className='w-full'
                   name='phone'
                   register={register}
+                  isError={!!errors.phone}
                 />
                 {errors.phone && <ErrorText text={errors.phone.message} />}
                 <TextInput
@@ -275,6 +281,7 @@ const SignUp = () => {
                   className='w-full'
                   name='email'
                   register={register}
+                  isError={!!errors.email}
                 />
                 {errors.email && <ErrorText text={errors.email.message} />}
 
@@ -304,7 +311,8 @@ const SignUp = () => {
                 </div>
                 <div className='my-5 flex space-x-1'>
                   <h5>
-                    By registering, you agree to the processing of your personal data by SaleSync as described in the Privacy Statement.
+                    By registering, you agree to the processing of your personal data by SaleSync as described in the
+                    Privacy Statement.
                   </h5>
                 </div>
 

@@ -2,11 +2,15 @@ package org.salesync.record_service.services.record;
 
 import lombok.RequiredArgsConstructor;
 import org.salesync.record_service.dtos.*;
+import org.salesync.record_service.dtos.record_type_relation_dto.ListRecordTypeRelationsDto;
+import org.salesync.record_service.dtos.record_type_relation_dto.RecordTypeRelationDto;
+import org.salesync.record_service.dtos.record_type_relation_dto.RequestRecordTypeRelationDto;
 import org.salesync.record_service.entities.Record;
 import org.salesync.record_service.entities.RecordTypeRelation;
 import org.salesync.record_service.exceptions.ObjectNotFoundException;
 import org.salesync.record_service.mappers.RecordMapper;
 import org.salesync.record_service.mappers.RecordTypeRelationMapper;
+import org.salesync.record_service.mappers.RelationItemMapper;
 import org.salesync.record_service.repositories.RecordRepository;
 import org.salesync.record_service.repositories.RecordTypeRepository;
 import org.salesync.record_service.repositories.RecordTypeRelationRepository;
@@ -29,6 +33,8 @@ public class RecordServiceImpl implements RecordService {
     private final RecordTypeRelationRepository recordTypeRelationRepository;
     private final RecordMapper recordMapper = RecordMapper.INSTANCE;
     private final RecordTypeRelationMapper recordTypeRelationMapper = RecordTypeRelationMapper.INSTANCE;
+
+    private final RelationItemMapper relationItemMapper = RelationItemMapper.INSTANCE;
 
 
     @Override
@@ -114,4 +120,28 @@ public class RecordServiceImpl implements RecordService {
                 recordTypeRelationRepository.save(recordTypeRelation)
         );
     }
+
+    @Override
+    public ListRecordTypeRelationsDto getListRecordTypeRelationsById(UUID sourceRecordId){
+
+        List<RecordTypeRelation> listRecordTypeRelations = recordTypeRelationRepository.findBySourceRecordId(sourceRecordId);
+        RecordDto sourceRecordDto;
+
+        if (listRecordTypeRelations.isEmpty()){
+            sourceRecordDto = recordMapper.recordToRecordDto(recordRepository.findById(sourceRecordId).orElse(null));
+            if (sourceRecordDto == null)
+            {
+                throw new ObjectNotFoundException("Record type relations", sourceRecordId.toString());
+            }
+        }
+        else
+            sourceRecordDto = recordMapper.recordToRecordDto(listRecordTypeRelations.get(0).getSourceRecord());
+
+        return ListRecordTypeRelationsDto.builder()
+                .sourceRecord(sourceRecordDto)
+                .relations(relationItemMapper.recordTypeRelationsToRelationItemDtos(listRecordTypeRelations))
+                .build();
+    }
+
+
 }

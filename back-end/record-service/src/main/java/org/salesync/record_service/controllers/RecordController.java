@@ -4,12 +4,16 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.salesync.record_service.dtos.*;
 import org.salesync.record_service.constants.Route;
+import org.salesync.record_service.dtos.record_type_relation_dto.ListRecordTypeRelationsDto;
+import org.salesync.record_service.dtos.record_type_relation_dto.RecordTypeRelationDto;
+import org.salesync.record_service.dtos.record_type_relation_dto.RequestRecordTypeRelationDto;
 import org.salesync.record_service.entities.RecordTypeRelation;
 import org.salesync.record_service.services.record.RecordService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(Route.RECORD_ROUTE)
@@ -42,5 +46,10 @@ public class RecordController {
     public RecordTypeRelationDto createRecordTypeRelation(@RequestBody RequestRecordTypeRelationDto requestRecordTypeRelationDto) {
 
         return recordService.createRecordTypeRelation(requestRecordTypeRelationDto);
+    }
+
+    @GetMapping(Route.LIST_RECORD_TYPE_RELATION)
+    public ListRecordTypeRelationsDto getListRecordTypeRelationsById(@PathVariable String sourceRecordId) {
+        return recordService.getListRecordTypeRelationsById(UUID.fromString(sourceRecordId));
     }
 }

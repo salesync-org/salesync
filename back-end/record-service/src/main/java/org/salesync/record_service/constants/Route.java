@@ -8,4 +8,6 @@ public final class Route {
     public static final String LIST_RECORD = "/list";
 
     public  static final String RECORD_TYPE_RELATION = "/create-record-type-relation";
+
+    public static final String LIST_RECORD_TYPE_RELATION = "/list-record-type-relation/{sourceRecordId}";
 }

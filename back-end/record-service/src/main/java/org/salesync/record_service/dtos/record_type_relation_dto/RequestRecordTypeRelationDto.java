@@ -1,4 +1,4 @@
-package org.salesync.record_service.dtos;
+package org.salesync.record_service.dtos.record_type_relation_dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

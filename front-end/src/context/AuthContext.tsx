@@ -23,15 +23,14 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   });
 
   const location = window.location.href;
-
-  const companyName = location.split('/')[3];
-
+  const companyName = location.length > 3 ? location.split('/')[3] : '';
+  console.log('companyName', companyName);
   useEffect(() => {
     const authenticated = async () => {
       try {
         setIsLoading(true);
         const token = localStorage.getItem('access_token');
-        const user = await auth.getUser(companyName);
+        const user = companyName && companyName.length > 0 ? await auth.getUser(companyName) : null;
 
         if (!token || !user) {
           throw new Error('No token found');
@@ -85,7 +84,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const res = await auth.updateUser(companyName, updatedUser);
 
         if (res) {
-        setUser(updatedUser);
+          setUser(updatedUser);
         }
       } catch (error) {
         console.error(error);
@@ -94,7 +93,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     [setUser]
   );
 
-  if (!companyName) return null;
+  // if (!companyName) return null;
 
   const value = { user, setUser, isLoading, isAuthenticated, login, logout, signUp, updateUser };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

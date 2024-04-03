@@ -1,14 +1,14 @@
-import salesyncLogo from 'assets/salesync_logo.png';
-import { Checkbox, Panel, TextInput } from '@/components/ui';
-import { PrimaryButton } from '@/components/ui';
-import { ErrorText } from '@/components/ui';
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import useAuth from '@/hooks/useAuth';
+import { Checkbox, ErrorText, Panel, PrimaryButton, TextInput } from '@/components/ui';
 import { useToast } from '@/components/ui/use-toast';
+import useAuth from '@/hooks/useAuth';
 import { cn } from '@/utils/utils';
+import { zodResolver } from '@hookform/resolvers/zod';
+import salesyncLogo from 'assets/salesync_logo.png';
+import { CloudCog } from 'lucide-react';
+import { useEffect, useRef } from 'react';
+import { useForm } from 'react-hook-form';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { z } from 'zod';
 
 const loginSchema = z.object({
   username: z.string().email('Invalid email'),
@@ -40,6 +40,25 @@ const LogIn = () => {
 
   // const errorText = `Please check your username and password. If you still can't log in, contact your Salesforce administrator.`;
 
+  const loginRef = useRef<HTMLDivElement>(null);
+  const signupRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    console.log('Started');
+    const adjustSignupRefHeight = () => {
+      if (loginRef.current && signupRef.current) {
+        const loginHeight = loginRef.current.offsetHeight;
+        signupRef.current.style.height = `${loginHeight}px`;
+      }
+    };
+    adjustSignupRefHeight();
+    window.addEventListener('resize', adjustSignupRefHeight);
+    return () => {
+      console.log('Returned');
+      window.removeEventListener('resize', adjustSignupRefHeight);
+    };
+  }, []);
+
   const onSubmit = async (data: LoginSchemaType) => {
     try {
       await login({ companyName, email: data.username, password: data.password });
@@ -66,10 +85,10 @@ const LogIn = () => {
   };
 
   return (
-    <div className='h-full overflow-hidden bg-white/80 bg-cover'>
+    <div className='h-full overflow-auto bg-white/80 bg-cover'>
       <div className='grid w-full md:grid-cols-1 lg:grid-cols-2'>
-        <div className='flex h-screen min-h-screen w-full flex-col  items-center justify-between'>
-          <div className='mx-auto my-auto w-full grid-cols-1'>
+        <section ref={loginRef} className='flex min-h-screen w-full flex-col  items-center justify-between'>
+          <div className='min-[calc(100%-10px)] mx-auto my-auto w-full grid-cols-1'>
             <div className='mt-5 flex h-fit w-full items-center justify-center'>
               <img
                 src={salesyncLogo}
@@ -116,12 +135,14 @@ const LogIn = () => {
             </Panel>
           </div>
           <div className='mx-auto mb-4 w-full text-center text-sm'>©2024 SaleSync, Inc. All rights reserved.</div>
-        </div>
-        <div
+        </section>
+        <section
+          ref={signupRef}
+          style={{ height: loginRef.current?.offsetHeight }}
           id='right'
-          className='h-screen w-full flex-col justify-center bg-[url("https://salesync.s3.ap-southeast-2.amazonaws.com/system/login_background.svg")] bg-contain bg-bottom bg-no-repeat lg:flex lg:bg-white/40 lg:p-10'
+          className='h-screen w-full shrink-0 flex-col justify-start overflow-hidden bg-contain bg-bottom bg-no-repeat lg:flex lg:bg-white/40 lg:bg-[url("https://salesync.s3.ap-southeast-2.amazonaws.com/system/login_background.svg")] lg:p-10'
         >
-          <div className='mt-5 hidden space-y-2 px-10 lg:block'>
+          <div className=' mt-5 hidden space-y-2 px-10 lg:block'>
             <h1 className='text-[2rem] leading-[2.5rem] text-primary-bold'>Start your company's workspace.</h1>
             <h2 className='text-[1.5rem] text-primary-bold'>No credit card, no software to install.</h2>
             <div className='space-y-4 py-6'>
@@ -151,9 +172,9 @@ const LogIn = () => {
           <img
             src='https://salesync.s3.ap-southeast-2.amazonaws.com/system/login_panel.png'
             alt='hero graphic'
-            className='mx-auto w-[100%] '
+            className='mx-auto w-[100%]'
           />
-        </div>
+        </section>
       </div>
     </div>
   );

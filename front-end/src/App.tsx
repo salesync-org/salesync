@@ -1,5 +1,5 @@
 import { Suspense, lazy } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Router, Routes } from 'react-router-dom';
 import ConfigLayout from './components/Layout/ConfigLayout';
 import LoadingSpinner from './components/ui/Loading/LoadingSpinner';
 import { Toaster } from './components/ui/toaster';
@@ -20,23 +20,30 @@ const RecordDetail = lazy(() => import('./pages/RecordDetail/RecordDetail'));
 function App() {
   return (
     <div>
-      <Suspense fallback={<div className='h-screen'><LoadingSpinner /></div>}>
+      <Suspense
+        fallback={
+          <div className='h-screen'>
+            <LoadingSpinner />
+          </div>
+        }
+      >
         <Routes>
-          <Route path='cheatsheet' element={<Cheatsheet />} />
-          <Route path='/:companyName'>
-            <Route element={<PrivateRoute />}>
-              <Route element={<ConfigLayout />}>
-                <Route path='home' element={<HomeLayout />} />
-                <Route path='cheatsheet' element={<Cheatsheet />} />
-                <Route path='sales/:typeId' element={<Sales />} />
-                <Route path='record/:recordId' element={<RecordDetail />} />
-                <Route path='*' element={<Sales />} />
-              </Route>
-            </Route>
-            <Route path='login' element={<LogIn />}></Route>
-          </Route>
+          <Route path='/' element={<Navigate to='/home' replace />}></Route>
+          <Route path='/home' element={<LogIn />}></Route>
+          <Route path='/login' element={<LogIn />}></Route>
+          <Route path='/cheatsheet' element={<Cheatsheet />} />
           <Route path='/sign-up' element={<SignUp />} />
           <Route path='/forgot-password' element={<ForgotPassword />}></Route>
+          <Route path='/:companyName/' element={<PrivateRoute />}>
+            <Route element={<ConfigLayout />}>
+              <Route path='home' element={<HomeLayout />} />
+              <Route path='sales/:typeId' element={<Sales />} />
+              <Route path='record/:recordId' element={<RecordDetail />} />
+              <Route path='*' element={<Sales />} />
+            </Route>
+          </Route>
+          <Route path='/:companyName/login' element={<LogIn />}></Route>
+          <Route path='*' element={<div>Oops</div>} />
         </Routes>
       </Suspense>
       <Toaster />

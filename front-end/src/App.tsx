@@ -20,7 +20,7 @@ const RecordDetail = lazy(() => import('./pages/RecordDetail/RecordDetail'));
 function App() {
   return (
     <div>
-      <Suspense fallback={<LoadingSpinner />}>
+      <Suspense fallback={<div className='h-screen'><LoadingSpinner /></div>}>
         <Routes>
           <Route path='cheatsheet' element={<Cheatsheet />} />
           <Route path='/:companyName'>

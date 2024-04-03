@@ -68,7 +68,7 @@ const LogIn = () => {
   return (
     <div className='bg-white/80 bg-cover h-full overflow-hidden'>
       <div className='grid w-full lg:grid-cols-2'>
-        <div className='flex w-full h-screen flex-col  items-center justify-between'>
+        <div className='flex w-full h-screen min-h-screen flex-col  items-center justify-between'>
           <div className='mx-auto w-full my-auto grid-cols-1'>
             <div className='mt-5 flex h-fit w-full items-center justify-center'>
               <img src={salesyncLogo}
@@ -78,7 +78,7 @@ const LogIn = () => {
             <Panel className='mb-20 flex w-fit justify-center mx-auto py-2 px-2'>
               <form onSubmit={handleSubmit(onSubmit)} className='h-auto w-96 rounded-sm p-5'>
                 {/* {error && <ErrorText text={errorText} className='text-sm' />} */}
-                <TextInput placeholder='Enter email' header='Email' register={register} name='username' className='w-full h-12' />
+                <TextInput placeholder='Enter your username' header='Username' register={register} name='username' className='w-full h-12' />
                 {errors.username && <ErrorText text={errors.username.message} className='text-sm' />}
                 <TextInput
                   placeholder='Enter password'
@@ -115,24 +115,24 @@ const LogIn = () => {
             <h1 className='text-[2rem] leading-[2.5rem] text-primary-bold'>Start your company's workspace.</h1>
             <h2 className='text-primary-bold text-[1.5rem]'>No credit card, no software to install.</h2>
             <div className='py-6 space-y-4'>
-              <div className='flex space-x-3'>
-                <img src={checkListIconLink} alt='checklist icon' className='aspect-square w-5' />
+              <div className='flex space-x-3 items-center'>
+                <img src={checkListIconLink} alt='checklist icon' className='aspect-square w-5 h-5' />
                 <h3 className='font-normal'>Managed communications with prospective leads</h3>
               </div>
-              <div className='flex space-x-3'>
-                <img src={checkListIconLink} alt='checklist icon' className='aspect-square w-5' />
+              <div className='flex space-x-3 items-center'>
+                <img src={checkListIconLink} alt='checklist icon' className='aspect-square w-5 h-5' />
                 <h3 className='font-normal'>Centralized database of information</h3>
               </div>
-              <div className='flex space-x-3'>
-                <img src={checkListIconLink} alt='checklist icon' className='aspect-square w-5' />
+              <div className='flex space-x-3 items-center'>
+                <img src={checkListIconLink} alt='checklist icon' className='aspect-square w-5 h-5' />
                 <h3 className='font-normal'>Improved customer retention</h3>
               </div>
-              <div className='flex space-x-3'>
-                <img src={checkListIconLink} alt='checklist icon' className='aspect-square w-5' />
+              <div className='flex space-x-3 items-center'>
+                <img src={checkListIconLink} alt='checklist icon' className='aspect-square w-5 h-5' />
                 <h3 className='font-normal'>Detailed analytics and reports</h3>
               </div>
             </div>
-            <PrimaryButton className='mt-5 w-80' type='submit' disabled={isSubmitting}>
+            <PrimaryButton className='mt-5 w-80' type='submit' disabled={isSubmitting} onClick={()=>{navigate('/sign-up', {})}}>
                   Sign Up Now
               </PrimaryButton>
           </div>

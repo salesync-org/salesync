@@ -23,7 +23,7 @@ const buttonVariants = cva(
           'bg-primary',
           'text-on-primary font-semibold',
           'border-primary-stroke dark:border-primary-stroke-dark',
-          'enabled:hover:bg-primary-hover focus:outline-secondary',
+          'enabled:hover:bg-primary-hover focus:outline-secondary enabled:hover:bg-primary-hover',
           'enabled:active:bg-primary-active'
         ),
         link: cn(

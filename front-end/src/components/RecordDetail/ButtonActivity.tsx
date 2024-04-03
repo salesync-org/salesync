@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import { Button, Icon, ButtonGroup, DropDownList, Item, PrimaryButton, TextInput, TextArea } from '@/components/ui';
+import {
+  Button,
+  Icon,
+  ButtonGroup,
+  DropDownList,
+  Item,
+  PrimaryButton,
+  TextInput,
+  TextArea,
+  DateInput
+} from '@/components/ui';
 import { cn } from 'utils/utils';
 
 interface ButtonActivityProps {
@@ -10,11 +20,12 @@ interface ButtonActivityProps {
   onClose: (value: boolean) => void;
   className?: string;
 }
-  // open: state to manage mini popup (button triangle on the right)
-  // onClose: change value of 'open' parameter
+// open: state to manage mini popup (button triangle on the right)
+// onClose: change value of 'open' parameter
 
 const ButtonActivity: React.FC<ButtonActivityProps> = ({ icon, name, className, color, open, onClose }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [subject, setSubject] = useState('');
 
   return (
     <>
@@ -59,7 +70,7 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({ icon, name, className, 
         <div className='flex h-[40px] items-center justify-between border-b-2 border-primary-stroke px-4 dark:border-primary-stroke-dark'>
           <div className='flex items-center'>
             <Icon name={icon} className={cn('mr-1 rounded p-0.5 text-white', color ? color : 'bg-teal-600')}></Icon>
-            <h2 className='text-base font-normal leading-5'>{name}</h2>
+            <h2 className='text-base font-normal leading-5'>{subject ? subject : name}</h2>
           </div>
           <div className='flex gap-2'>
             <span title='Minimize'>
@@ -76,14 +87,50 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({ icon, name, className, 
 
         <div className='flex max-h-[410px] overflow-y-auto'>
           <form className='w-full p-4'>
-            <TextInput header='Subject' className='w-full' postfixIcon='search' />
-            <TextArea header='Description' />
+            <TextInput
+              header='Subject'
+              className='mb-5 w-full'
+              postfixIcon='search'
+              onChange={(e) => setSubject(e.target.value)}
+            />
+            {name === 'Email' && <></>}
+            {name === 'New Event' && (
+              <>
+                <TextArea header='Description' className='mb-4' />
+                <div className='grid grid-cols-2 gap-2'>
+                  <div>
+                    <span className='font-semibold'>Start</span>
+                    <div className='grid grid-cols-2'>
+                      <div>
+                        <DateInput header='* Date' type='date' />
+                      </div>
+                      <div>
+                        <DateInput header='* Time' type='time' />
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <span className='font-semibold'>End</span>
+                    <div className='grid grid-cols-2'>
+                      <div>
+                        <DateInput header='* Date' type='date' />
+                      </div>
+                      <div>
+                        <DateInput header='* Time' type='time' />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+            {name === 'Log a Call' && <></>}
+            {name === 'New Task' && <></>}
 
             <div className='invisible h-2'></div>
           </form>
         </div>
 
-        <div className='absolute bottom-0 flex h-[50px] w-full items-center justify-end bg-secondary dark:bg-sky-950 pr-2'>
+        <div className='absolute bottom-0 flex h-[50px] w-full items-center justify-end bg-secondary pr-2 dark:bg-sky-950'>
           <PrimaryButton>Save</PrimaryButton>
         </div>
       </nav>

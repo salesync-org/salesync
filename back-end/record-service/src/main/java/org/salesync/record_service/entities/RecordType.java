@@ -1,5 +1,6 @@
 package org.salesync.record_service.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,7 @@ public class RecordType extends BaseEntity {
     private UUID typeId;
 
     @OneToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
     @JoinColumn(name = "record_id")
     private Record record;
 }

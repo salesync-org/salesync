@@ -6,6 +6,7 @@ import org.salesync.record_service.entities.Record;
 import org.salesync.record_service.entities.RecordTypeRelation;
 import org.salesync.record_service.exceptions.ObjectNotFoundException;
 import org.salesync.record_service.mappers.RecordMapper;
+import org.salesync.record_service.mappers.RecordTypeRelationMapper;
 import org.salesync.record_service.repositories.RecordRepository;
 import org.salesync.record_service.repositories.RecordTypeRepository;
 import org.salesync.record_service.repositories.RecordTypeRelationRepository;
@@ -27,6 +28,7 @@ public class RecordServiceImpl implements RecordService {
     private final RestTemplate restTemplate;
     private final RecordTypeRelationRepository recordTypeRelationRepository;
     private final RecordMapper recordMapper = RecordMapper.INSTANCE;
+    private final RecordTypeRelationMapper recordTypeRelationMapper = RecordTypeRelationMapper.INSTANCE;
 
 
     @Override
@@ -82,7 +84,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public RecordDto createRecordTypeRelation(RequestRecordTypeRelationDto requestRecordTypeRelationDto) {
+    public RecordTypeRelationDto createRecordTypeRelation(RequestRecordTypeRelationDto requestRecordTypeRelationDto) {
         System.out.println(requestRecordTypeRelationDto);
 
         UUID sourceRecordId= requestRecordTypeRelationDto.getSourceRecordId();
@@ -107,7 +109,9 @@ public class RecordServiceImpl implements RecordService {
                 .destinationRecord(destinationRecord)
                 .build();
 
-        recordTypeRelationRepository.save(recordTypeRelation);
-        return null;
+
+        return recordTypeRelationMapper.recordTypeRelationToRecordTypeRelationDto(
+                recordTypeRelationRepository.save(recordTypeRelation)
+        );
     }
 }

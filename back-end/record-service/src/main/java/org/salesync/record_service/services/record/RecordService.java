@@ -1,6 +1,7 @@
 package org.salesync.record_service.services.record;
 
 import org.salesync.record_service.dtos.*;
+import org.salesync.record_service.entities.RecordTypeRelation;
 
 import java.util.List;
 
@@ -15,5 +16,5 @@ public interface RecordService {
 
     RecordDto getRecordById(String recordId);
 
-    RecordDto createRecordTypeRelation(RequestRecordTypeRelationDto requestRecordTypeRelationDto);
+    RecordTypeRelationDto createRecordTypeRelation(RequestRecordTypeRelationDto requestRecordTypeRelationDto);
 }

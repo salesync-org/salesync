@@ -1,5 +1,6 @@
 package org.salesync.record_service.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,11 +20,14 @@ public class RecordTypeRelation extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "source_record_id")
+
     private Record sourceRecord;
 
     @ManyToOne
+
     @JoinColumn(name = "destination_record_id")
     private Record destinationRecord;
+
 
     private UUID typeRelationId;
 }

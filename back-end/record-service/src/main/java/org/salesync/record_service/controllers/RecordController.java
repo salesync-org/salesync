@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.salesync.record_service.dtos.*;
 import org.salesync.record_service.constants.Route;
+import org.salesync.record_service.entities.RecordTypeRelation;
 import org.salesync.record_service.services.record.RecordService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,8 +39,8 @@ public class RecordController {
     }
 
     @PutMapping(Route.RECORD_TYPE_RELATION)
-    public RequestRecordTypeRelationDto createRecordTypeRelation(@RequestBody RequestRecordTypeRelationDto requestRecordTypeRelationDto) {
-         recordService.createRecordTypeRelation(requestRecordTypeRelationDto);
-        return requestRecordTypeRelationDto;
+    public RecordTypeRelationDto createRecordTypeRelation(@RequestBody RequestRecordTypeRelationDto requestRecordTypeRelationDto) {
+
+        return recordService.createRecordTypeRelation(requestRecordTypeRelationDto);
     }
 }

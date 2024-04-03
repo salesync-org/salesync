@@ -13,10 +13,11 @@ import java.util.UUID;
 @Builder
 @Getter
 public class ListRecordsRequestDto {
-    private String searchCriteria;
+    private String searchTerm;
     @IsRequired
     private UUID typeId;
-    private SortDto sort;
+    private UUID typePropertyId;
+    private Boolean isAsc;
     private Integer pageSize;
     private Integer currentPage;
 }

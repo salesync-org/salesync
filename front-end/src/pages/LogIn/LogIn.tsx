@@ -132,9 +132,11 @@ const LogIn = () => {
                 <h3 className='font-normal'>Detailed analytics and reports</h3>
               </div>
             </div>
-            <PrimaryButton className='mt-5 w-80' type='submit' disabled={isSubmitting} onClick={()=>{navigate('/sign-up', {})}}>
-                  Sign Up Now
-              </PrimaryButton>
+            <Link to={'/sign-up'}>
+              <PrimaryButton className='mt-5 w-80' type='submit' disabled={isSubmitting}>
+                    Sign Up Now
+                </PrimaryButton>
+            </Link>
           </div>
           <img
             src='https://salesync.s3.ap-southeast-2.amazonaws.com/system/login_panel.png'

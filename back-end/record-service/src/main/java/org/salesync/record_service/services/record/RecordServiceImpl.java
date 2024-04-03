@@ -6,21 +6,25 @@ import org.salesync.record_service.dtos.record_type_relation_dto.ListRecordTypeR
 import org.salesync.record_service.dtos.record_type_relation_dto.RecordTypeRelationDto;
 import org.salesync.record_service.dtos.record_type_relation_dto.RequestRecordTypeRelationDto;
 import org.salesync.record_service.entities.Record;
+import org.salesync.record_service.entities.RecordType;
 import org.salesync.record_service.entities.RecordTypeRelation;
 import org.salesync.record_service.exceptions.ObjectNotFoundException;
 import org.salesync.record_service.mappers.RecordMapper;
 import org.salesync.record_service.mappers.RecordTypeRelationMapper;
 import org.salesync.record_service.mappers.RelationItemMapper;
 import org.salesync.record_service.repositories.RecordRepository;
-import org.salesync.record_service.repositories.RecordTypeRepository;
 import org.salesync.record_service.repositories.RecordTypeRelationRepository;
+import org.salesync.record_service.repositories.RecordTypeRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service

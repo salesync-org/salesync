@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(Route.RECORD_ROUTE)
+@RequestMapping("/{realm}" + Route.RECORD_ROUTE)
 @RequiredArgsConstructor
 public class RecordController {
 

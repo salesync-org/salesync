@@ -86,6 +86,7 @@ const LogIn = () => {
                   register={register}
                   name='username'
                   className='h-12 w-full'
+                  isError={!!errors.username}
                 />
                 {errors.username && <ErrorText text={errors.username.message} className='text-sm' />}
                 <TextInput
@@ -95,6 +96,7 @@ const LogIn = () => {
                   register={register}
                   name='password'
                   className='h-12 w-full'
+                  isError={!!errors.password}
                 />
                 {errors.password && <ErrorText text={errors.password.message} className='text-sm' />}
 

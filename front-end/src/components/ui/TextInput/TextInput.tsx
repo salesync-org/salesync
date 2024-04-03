@@ -54,9 +54,9 @@ const TextInput: React.FC<TextInputProps> = ({
           type={isPassword ? 'password' : 'text'}
           placeholder={placeholder}
           className={cn(
-            'absolute h-full w-full rounded bg-transparent py-2 pr-2 placeholder:text-ellipsis placeholder:text-opacity-50 focus:outline-primary',
+            'absolute h-full w-full rounded bg-transparent py-2 pr-2 placeholder:text-ellipsis placeholder:text-[13px] placeholder:text-opacity-50 focus:outline-primary',
             prefixIcon ? 'pl-10' : 'pl-4',
-            isError && 'focus-visible:outline-red-400'
+            isError && 'placeholder:font-medium placeholder:text-red-500 focus-visible:outline-red-400'
           )}
           value={value}
           disabled={disabled}

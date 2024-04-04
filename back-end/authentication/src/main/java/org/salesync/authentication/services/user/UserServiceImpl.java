@@ -7,15 +7,19 @@ import org.keycloak.TokenVerifier;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.KeyResource;
 import org.keycloak.admin.client.resource.RealmResource;
+import org.keycloak.admin.client.resource.RoleResource;
 import org.keycloak.crypto.KeyUse;
 import org.keycloak.representations.AccessToken;
 import org.keycloak.representations.idm.*;
 import org.salesync.authentication.configurations.KeyStoreConfig;
 import org.salesync.authentication.constants.UserAttributes;
 import org.salesync.authentication.converters.KeyConverter;
+import org.salesync.authentication.dtos.UserDetailDto;
 import org.salesync.authentication.dtos.UserDto;
 import org.salesync.authentication.dtos.ValidationResponseDto;
 import org.salesync.authentication.helpers.SettingsManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -23,10 +27,7 @@ import java.io.IOException;
 import java.security.PublicKey;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +35,8 @@ public class UserServiceImpl implements UserService {
     private final Keycloak keycloak;
     private final KeyStoreConfig keyStore;
     private final Environment env;
+    private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
     @Override
     public UserDto validateUser(String realmName, String accessToken) {
         try {
@@ -116,7 +119,7 @@ public class UserServiceImpl implements UserService {
                     .verify()
                     .getToken();
             if (token.isActive()) {
-                String responseToken = generateToken(loadUser(realmResource, token.getSubject()));
+                String responseToken = generateToken(loadDetailUser(realmResource, token.getSubject()));
                 ValidationResponseDto response = new ValidationResponseDto();
                 response.setToken(responseToken);
                 return response;
@@ -169,13 +172,53 @@ public class UserServiceImpl implements UserService {
         return userDto;
     }
 
-    public String generateToken(UserDto userDetails) {
+    private UserDetailDto loadDetailUser(RealmResource realmResource, String userId) {
+
+        try {
+            UserRepresentation user = realmResource.users().get(userId).toRepresentation();
+            UserDto userDto = loadUser(realmResource, userId);
+            UserDetailDto userDetailDto = new UserDetailDto();
+            userDetailDto.setFirstName(userDto.getFirstName());
+            userDetailDto.setLastName(userDto.getLastName());
+            userDetailDto.setEmail(userDto.getEmail());
+            userDetailDto.setUserId(userDto.getUserId());
+            userDetailDto.setUserName(userDto.getUserName());
+            userDetailDto.setAvatarUrl(userDto.getAvatarUrl());
+            userDetailDto.setJobTitle(userDto.getJobTitle());
+            userDetailDto.setPhone(userDto.getPhone());
+            userDetailDto.setSettings(userDto.getSettings());
+            List<RoleRepresentation> roleMappings = realmResource.users().get(userId).roles().realmLevel().listAll();
+            List<String> roles = new ArrayList<>();
+            List<String> permissions = new ArrayList<>();
+            logger.info("Loading " + roleMappings.size() + " Roles For User: " + userDto.getUserName() + " with userId: " + userDto.getUserId());
+            for (RoleRepresentation roleRepresentation : roleMappings) {
+                String roleName = roleRepresentation.getName();
+                if (roleRepresentation.isComposite()) {
+                    roles.add(roleName);
+                    RoleResource roleResource = realmResource.roles().get(roleName);
+                    Set<RoleRepresentation> rolePermissions = roleResource.getRoleComposites();
+                    for (RoleRepresentation rolePermission : rolePermissions) {
+                        permissions.add(rolePermission.getName());
+                    }
+                }
+            }
+            userDetailDto.setRoles(roles);
+            userDetailDto.setPermissions(permissions);
+            return userDetailDto;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public String generateToken(UserDetailDto userDetails) {
         Algorithm algorithm = Algorithm.RSA256(
                 (RSAPublicKey) keyStore.loadPublicKey(),
                 (RSAPrivateKey) keyStore.loadPrivateKey());
         return JWT.create()
                 .withClaim("userId", userDetails.getUserId())
                 .withClaim("roles", userDetails.getRoles())
+                .withClaim("permissions", userDetails.getPermissions())
                 .withSubject(userDetails.getUserName())
                 .withIssuedAt(new Date(System.currentTimeMillis()))
                 .withExpiresAt(new Date(System.currentTimeMillis()

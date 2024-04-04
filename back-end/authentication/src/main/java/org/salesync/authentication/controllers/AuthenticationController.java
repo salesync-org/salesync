@@ -8,6 +8,7 @@ import org.salesync.authentication.dtos.CompanyRegisterDto;
 import org.salesync.authentication.dtos.LogInDto;
 import org.salesync.authentication.dtos.NewUserDto;
 import org.salesync.authentication.services.register.RegisterService;
+import org.salesync.authentication.utils.StringUtility;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,15 +37,16 @@ public class AuthenticationController {
     ResponseEntity<Response> logout(
             @RequestHeader("Authorization") String token,
             @PathVariable String realmName) {
-        return ResponseEntity.ok(registerService.logout(realmName, token));
+        return ResponseEntity.ok(registerService.logout(realmName, StringUtility.removeBearer(token)));
     }
 
     @PostMapping(Routes.AUTH_USER_CREATE)
     ResponseEntity<Response> createUser(
             @PathVariable String realmName,
+            @RequestHeader("Authorization") String token,
             @RequestBody NewUserDto newUserDTO
             ) {
-        return ResponseEntity.ok(registerService.registerUser(newUserDTO, realmName));
+        return ResponseEntity.ok(registerService.registerUser(newUserDTO, realmName, StringUtility.removeBearer(token)));
     }
 
 }

@@ -8,7 +8,7 @@ import org.salesync.authentication.dtos.NewUserDto;
 
 public interface RegisterService {
     AccessTokenResponse registerCompany(CompanyRegisterDto companyRegisterDTO);
-    Response registerUser(NewUserDto newUserDTO, String realmName);
+    Response registerUser(NewUserDto newUserDTO, String realmName, String token);
     AccessTokenResponse login(String realmName, LogInDto logInDTO);
 
     Response logout(String realmName, String token);

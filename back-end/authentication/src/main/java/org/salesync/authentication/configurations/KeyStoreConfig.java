@@ -23,7 +23,7 @@ public class KeyStoreConfig {
         try {
             String keystoreLocation = env.getProperty("keystore.location");
             String keystorePassword = env.getProperty("keystore.password");
-            String keyAlias = env.getProperty("key.alias");
+            String keyAlias = env.getProperty("keystore.alias");
             KeyStore keystore = KeyStore.getInstance("JKS");
             FileInputStream inputKeyStore = null;
             if (keystoreLocation != null) {
@@ -41,7 +41,7 @@ public class KeyStoreConfig {
         try {
             String keystoreLocation = env.getProperty("keystore.location");
             String keystorePassword = env.getProperty("keystore.password");
-            String keyAlias = env.getProperty("key.alias");
+            String keyAlias = env.getProperty("keystore.alias");
             KeyStore keystore = KeyStore.getInstance("JKS");
             logger.info(String.format("Loading keystore from: %s", keystoreLocation));
             assert keystoreLocation != null;

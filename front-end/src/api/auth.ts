@@ -4,12 +4,12 @@ const URL = `${import.meta.env.VITE_AUTHENTICATION_HOST}/api/v1`;
 
 class Auth {
   async signUp(signUpInfo: SignUpInfo) {
-    const response = await instance.post(`${URL}/auth/create`, signUpInfo);
+    const response = await instance.post(`${URL}/create`, signUpInfo);
     return response.data;
   }
 
   async login(companyName: string, email: string, password: string) {
-    const response = await instance.post(`${URL}/auth/${companyName}/login`, {
+    const response = await instance.post(`${URL}/${companyName}/login`, {
       username: email,
       password
     });
@@ -18,19 +18,19 @@ class Auth {
   }
 
   async logOut() {
-    const response = await instance.post(`${URL}/auth/logout`);
+    const response = await instance.post(`${URL}/logout`);
 
     return response.data;
   }
 
   async getUser(companyName: string) {
-    const response = await instance.get(`${URL}/user/${companyName}`);
+    const response = await instance.get(`${URL}/${companyName}/user`);
 
     return response.data;
   }
 
   async updateUser(companyName: string, updatedUser: User) {
-    const response = await instance.put(`${URL}/user/${companyName}`, updatedUser);
+    const response = await instance.put(`${URL}/${companyName}/user`, updatedUser);
 
     return response.data;
   }

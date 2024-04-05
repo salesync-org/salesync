@@ -17,3 +17,7 @@ export function getSearchParams(search: string) {
 export const formatCurrency = (value: number) => {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
 };
+
+export const formatCompanyName = (name: string) => {
+  return name.split(' ').join('').toLowerCase();
+}

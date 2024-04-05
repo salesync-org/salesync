@@ -11,7 +11,7 @@ interface TextAreaProps {
   name?: string;
   onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   register?: any;
-  restProps?: React.HTMLAttributes<HTMLInputElement>;
+  restProps?: React.HTMLAttributes<HTMLTextAreaElement>;
 }
 
 const TextArea: React.FC<TextAreaProps> = ({
@@ -27,7 +27,7 @@ const TextArea: React.FC<TextAreaProps> = ({
   ...restProps
 }) => {
   return (
-    <>
+    <div>
       {showHeader && header && <p className='my-1'>{header}</p>}
       <div
         className={cn(
@@ -53,7 +53,7 @@ const TextArea: React.FC<TextAreaProps> = ({
           {...restProps}
         />
       </div>
-    </>
+    </div>
   );
 };
 

@@ -11,6 +11,7 @@ import {
   DateInput
 } from '@/components/ui';
 import { cn } from 'utils/utils';
+import InputRecordRelative from './InputRecordRelative';
 
 interface ButtonActivityProps {
   name?: string;
@@ -27,11 +28,31 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({ icon, name, className, 
   const [isOpen, setIsOpen] = useState(false);
   const [subject, setSubject] = useState('');
 
+  const [dateStart, setDateStart] = useState('');
+  const [dateEnd, setDateEnd] = useState('');
+  const [timeStart, setTimeStart] = useState('');
+  const [timeEnd, setTimeEnd] = useState('');
+
   return (
-    <>
+    <div>
       <ButtonGroup className='mb-1 mr-1'>
         <Button
           onClick={() => {
+            // init date and time now
+            const date = new Date();
+            const currentDate = date.toLocaleDateString();
+            const currentTime = date.toLocaleTimeString();
+            const arrDate = currentDate.split('/');
+            const arrTime = currentTime.split(/[/:\s]/);
+            if (arrDate[0].length === 1) arrDate[0] = '0' + arrDate[0];
+            if (arrDate[1].length === 1) arrDate[1] = '0' + arrDate[1];
+            if (arrTime[3] === 'PM' && arrTime[0] !== '12') arrTime[0] = (Number(arrTime[0]) + 12).toString();
+            const fineTuneCurrentDate = arrDate[2] + '-' + arrDate[0] + '-' + arrDate[1]; //yyyy-mm-dd
+            const fineTuneCurrentTime = arrTime[0] + ':' + arrTime[1]; //hh:mm
+            setDateStart(fineTuneCurrentDate);
+            setTimeStart(fineTuneCurrentTime);
+            setDateEnd(fineTuneCurrentDate);
+            setTimeEnd(fineTuneCurrentTime);
             setIsOpen(!isOpen);
           }}
           title={name}
@@ -87,54 +108,90 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({ icon, name, className, 
 
         <div className='flex max-h-[410px] overflow-y-auto'>
           <form className='w-full p-4'>
-            <TextInput
-              header='Subject'
-              className='mb-5 w-full'
-              postfixIcon='search'
-              onChange={(e) => setSubject(e.target.value)}
-            />
             {name === 'Email' && <></>}
-            {name === 'New Event' && (
+
+            {name !== 'Email' && (
               <>
-                <TextArea header='Description' className='mb-4' />
-                <div className='grid grid-cols-2 gap-2'>
-                  <div>
-                    <span className='font-semibold'>Start</span>
-                    <div className='grid grid-cols-2'>
+                <TextInput
+                  header='Subject'
+                  className='mb-5 w-full'
+                  postfixIcon='search'
+                  onChange={(e) => setSubject(e.target.value)}
+                />
+
+                {name === 'New Event' && (
+                  <>
+                    {/* description */}
+                    <TextArea header='Description' className='mb-4' />
+
+                    {/* date time */}
+                    <div className='grid grid-cols-2 gap-2'>
                       <div>
-                        <DateInput header='* Date' type='date' />
+                        <span className='font-semibold'>Start</span>
+                        <div className='grid grid-cols-2'>
+                          <DateInput
+                            header='* Date'
+                            type='date'
+                            value={dateStart}
+                            onChange={(e) => setDateStart(e.target.value)}
+                          />
+                          <DateInput
+                            header='* Time'
+                            type='time'
+                            value={timeStart}
+                            onChange={(e) => setTimeStart(e.target.value)}
+                          />
+                        </div>
                       </div>
                       <div>
-                        <DateInput header='* Time' type='time' />
+                        <span className='font-semibold'>End</span>
+                        <div className='grid grid-cols-2'>
+                          <DateInput
+                            header='* Date'
+                            type='date'
+                            value={dateEnd}
+                            onChange={(e) => setDateEnd(e.target.value)}
+                          />
+                          <DateInput
+                            header='* Time'
+                            type='time'
+                            value={timeEnd}
+                            onChange={(e) => setTimeEnd(e.target.value)}
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div>
-                    <span className='font-semibold'>End</span>
-                    <div className='grid grid-cols-2'>
-                      <div>
-                        <DateInput header='* Date' type='date' />
-                      </div>
-                      <div>
-                        <DateInput header='* Time' type='time' />
-                      </div>
-                    </div>
-                  </div>
+                  </>
+                )}
+
+                {name === 'Log a Call' && <></>}
+
+                {name === 'New Task' && <></>}
+
+                {/* Name and Relative to */}
+                <div className='grid grid-cols-2 gap-3'>
+                  <InputRecordRelative header='Name' pattern='name'/>
+                  <InputRecordRelative header='Relative To' pattern='relation'/>
                 </div>
               </>
             )}
-            {name === 'Log a Call' && <></>}
-            {name === 'New Task' && <></>}
 
             <div className='invisible h-2'></div>
           </form>
         </div>
 
         <div className='absolute bottom-0 flex h-[50px] w-full items-center justify-end bg-secondary pr-2 dark:bg-sky-950'>
-          <PrimaryButton>Save</PrimaryButton>
+          <PrimaryButton
+            onClick={() => {
+              console.log('Start', dateStart, timeStart);
+              console.log('End', dateEnd, timeEnd);
+            }}
+          >
+            Save
+          </PrimaryButton>
         </div>
       </nav>
-    </>
+    </div>
   );
 };
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {Button, Icon, DropDownList} from '@/components/ui';
+import { Button, Icon, DropDownList } from '@/components/ui';
 import { cn } from '@/utils/utils';
 
 interface DropdownButtonProps {
@@ -14,6 +14,8 @@ interface DropdownButtonProps {
   showHeader?: boolean;
   disabled?: boolean;
   divide?: boolean;
+  maxHeightList?: number;
+  maxWidthList?: number;
 }
 
 const DropDown: React.FC<DropdownButtonProps> = ({
@@ -27,7 +29,9 @@ const DropDown: React.FC<DropdownButtonProps> = ({
   suffixIcon = null,
   disabled,
   divide = false,
-  showHeader = true
+  showHeader = true,
+  maxHeightList = 0,
+  maxWidthList = 0,
 }) => {
   // const { isOpen, setIsOpen, shoulDropUp, selectedOption, setSelectedOption, buttonContentRef, buttonRef, menuRef } =
   //   useDropDown();
@@ -36,8 +40,6 @@ const DropDown: React.FC<DropdownButtonProps> = ({
   const [selectedOption, setSelectedOption] = useState(defaultValue);
   const [isOpen, setIsOpen] = useState(true);
 
-
-  
   useEffect(() => {
     function findTitleByValue(ref: React.RefObject<HTMLDivElement>, value: string): string | null {
       const currentElement = ref.current;
@@ -61,7 +63,7 @@ const DropDown: React.FC<DropdownButtonProps> = ({
     }
     setIsOpen(false);
   }, [listRef]);
-  
+
   function handleOptionClick(option: HTMLElement): void {
     console.log('onItemClick: ', option);
     const inputNode = option as HTMLInputElement;
@@ -75,13 +77,31 @@ const DropDown: React.FC<DropdownButtonProps> = ({
   return (
     <div ref={listRef} className='dropdown relative'>
       <div ref={buttonRef} className='h-fit'>
-        <Button  header={header} showHeader={showHeader} className={cn(className)} disabled={disabled} onClick={() => {setIsOpen(!isOpen)}}>
+        <Button
+          header={header}
+          showHeader={showHeader}
+          className={cn(className)}
+          disabled={disabled}
+          onClick={() => {
+            setIsOpen(!isOpen);
+          }}
+        >
           {prefixIcon}
-          <p className='truncate w-fit'>{selectedOption ? selectedOption : value}</p>
+          <p className='w-fit truncate'>{selectedOption ? selectedOption : value}</p>
           {suffixIcon}
         </Button>
       </div>
-      <DropDownList onItemClick={handleOptionClick} className={cn(className)} onClose={() => {setIsOpen(false);}} open={isOpen} divide={divide}>
+      <DropDownList
+        onItemClick={handleOptionClick}
+        className={cn(className)}
+        onClose={() => {
+          setIsOpen(false);
+        }}
+        open={isOpen}
+        divide={divide}
+        maxHeight={maxHeightList}
+        maxWidth={maxWidthList}
+      >
         {children}
       </DropDownList>
     </div>

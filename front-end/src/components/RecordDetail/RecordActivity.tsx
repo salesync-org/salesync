@@ -20,7 +20,7 @@ const RecordActivity = () => {
   const [showActivity, setShowActivity] = useState(true);
 
   return (
-    <>
+    <div>
       <div className='flex flex-wrap'>
         <ButtonActivity
           name='Email'
@@ -317,7 +317,7 @@ const RecordActivity = () => {
       <PrimaryButton className='mx-auto mb-12 mt-4' onClick={() => {}}>
         <span>Show All Activities</span>
       </PrimaryButton>
-    </>
+    </div>
   );
 };
 

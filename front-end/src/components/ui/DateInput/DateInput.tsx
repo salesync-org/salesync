@@ -10,7 +10,7 @@ interface DateInputProps {
   disabled?: boolean;
   value?: string;
   name?: string;
-  onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   register?: any;
   restProps?: React.HTMLAttributes<HTMLInputElement>;
 }
@@ -29,7 +29,7 @@ const DateInput: React.FC<DateInputProps> = ({
   ...restProps
 }) => {
   return (
-    <>
+    <div>
       {showHeader && header && <p className='my-1'>{header}</p>}
       <div
         className={cn(
@@ -56,7 +56,7 @@ const DateInput: React.FC<DateInputProps> = ({
           {...restProps}
         />
       </div>
-    </>
+    </div>
   );
 };
 

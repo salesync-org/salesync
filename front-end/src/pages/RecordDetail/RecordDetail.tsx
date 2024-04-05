@@ -54,8 +54,8 @@ const RecordDetail = () => {
         <div className='flex flex-row items-center'>
           <img
             className='mx-2 h-[32px] w-[32px] rounded-sm bg-blue-500'
-            src='https://momentum-enterprise-925.my.salesforce.com/img/icon/t4v35/standard/lead_120.png'
-            alt=''
+            src='/src/assets/type-icon/lead_icon.png' // type = lead
+            alt='icon'
           />
           <div className='flex flex-col'>
             <div className=''>Lead</div>
@@ -69,13 +69,6 @@ const RecordDetail = () => {
           <Button intent='normal' zoom={false}>
             Change owner
           </Button>
-
-          {/* <div>
-          <DropDownList align={'left'}>
-            <Item title='Delete' value={''} />
-          </DropDownList>
-        </div> */}
-
           <Button intent='normal' zoom={false}>
             Edit
           </Button>

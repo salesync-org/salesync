@@ -18,6 +18,10 @@ export const formatCurrency = (value: number) => {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
 };
 
+export const formatCompanyName = (name: string) => {
+  return name.split(' ').join('').toLowerCase();
+}
+
 export const formatRecords = (records: RecordResponse[]) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const formattedRecords: any = new Array(records.length).fill({});

@@ -24,6 +24,8 @@ eureka:
       defaultZone: http://localhost:8761/eureka
     fetch-registry: true
     register-with-eureka: true
+  instance:
+    prefer-ip-address: true
 
-
-
+token:
+  public-key: ${TOKEN_PUBLIC_KEY}

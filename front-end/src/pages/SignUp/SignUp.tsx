@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import * as z from 'zod';
-import { cn } from '@/utils/utils';
+import { cn, formatCompanyName } from '@/utils/utils';
 
 interface State {
   name: string;
@@ -49,8 +49,8 @@ const SignUp = () => {
   const [listCountry, setListCountry] = useState<string[]>([]);
 
   const [country, setCountry] = useState('');
-  const [check1, setCheck1] = useState(true);
-  const [check2, setCheck2] = useState(true);
+  const [check1, setCheck1] = useState(false);
+  const [check2, setCheck2] = useState(false);
   const checkListIconLink = 'https://salesync.s3.ap-southeast-2.amazonaws.com/system/checklist_icon.svg';
 
   const [errorCountry, setErrorCountry] = useState(false);
@@ -154,7 +154,8 @@ const SignUp = () => {
         description: 'Signed up successfully'
       });
 
-      navigate('/home');
+      const formattedCompanyName = formatCompanyName(data.company);
+      navigate(`/${formattedCompanyName}/home`);
     } catch (error) {
       console.error(error);
       toast({
@@ -336,7 +337,7 @@ const SignUp = () => {
                   {errors.email && <ErrorText text={errors.email.message} />}
 
                   <div className='mt-4 flex'>
-                    <Checkbox className='mt-1' checked={check1} onClick={() => setCheck1(!check1)}></Checkbox>
+                    <Checkbox className='mt-1' checked={check1} onClick={() => {setCheck1(!check1); setErrorCheck1(false)}}></Checkbox>
                     <div className='ml-2'>
                       <span>I agree to the </span>
                       <a href='' className='text-blue-500'>

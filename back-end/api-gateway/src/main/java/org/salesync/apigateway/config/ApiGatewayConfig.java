@@ -1,29 +1,37 @@
 package org.salesync.apigateway.config;
 
+import lombok.RequiredArgsConstructor;
 import org.salesync.apigateway.constants.Service;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import java.text.MessageFormat;
 
 @Configuration
+@RequiredArgsConstructor
 public class ApiGatewayConfig {
+
+    private final AuthenticationFilter authenticationFilter;
+
     @Bean
     public RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route(Service.Type.NAME,
                         r -> r.path(MessageFormat
-                                        .format("{0}{1}/**", Service.CONTEXT_PATH, Service.Type.ENDPOINT))
+                                        .format("{0}{1}{2}/**", Service.CONTEXT_PATH, "/{realm}", Service.Type.ENDPOINT))
+                                .filters(f -> f.filter(authenticationFilter))
                                 .uri(MessageFormat
                                         .format("{0}{1}", Service.LOADBALANCER, Service.Type.NAME))
+
                 )
                 .route(Service.Record.NAME,
                         r -> r.path(MessageFormat
-                                        .format("{0}{1}/**", Service.CONTEXT_PATH, Service.Record.ENDPOINT))
+                                        .format("{0}{1}{2}/**", Service.CONTEXT_PATH, "/{realm}", Service.Record.ENDPOINT))
+                                .filters(f -> f.filter(authenticationFilter))
                                 .uri(MessageFormat
                                         .format("{0}{1}", Service.LOADBALANCER, Service.Record.NAME))
+
                 )
                 .route("eureka-server",
                         r -> r.path("/eureka/web")

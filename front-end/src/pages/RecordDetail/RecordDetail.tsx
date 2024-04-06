@@ -6,6 +6,7 @@ import StageSection from '@/components/Stage/StageSection';
 import useRecord from '@/hooks/record-service/useRecord';
 import { useParams } from 'react-router-dom';
 import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
+import RelationSection from '@/components/Relation/RelationSection';
 
 const RecordDetail = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -100,23 +101,31 @@ const RecordDetail = () => {
       </Panel>
 
       {/* record contain  */}
-      <div className='grid grid-cols-2 md:grid-cols-4'>
+      <div className='grid grid-cols-4 md:grid-cols-4'>
         <Panel className='col-span-1 mr-0 h-fit p-4'>
           <GroupProperty name='About' data={dataAbout} className='mb-4' />
           <GroupProperty name='Get in Touch' data={dataTouch} className='mb-4' />
           <GroupProperty name='Segment' data={dataSegment} className='mb-4' />
           <GroupProperty name='History' data={dataHistory} />
         </Panel>
-        {Object.keys(record).includes('stage') && (
-          <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
-            <div className='px-4'>
-              <StageSection stage={record.stage} />
-            </div>
-          </Panel>
-        )}
-        <Panel className='col-span-1 h-fit p-4'>
-          <div></div>
-        </Panel>
+
+        <section className='col-span-2'>
+          {Object.keys(record).includes('stage') ? (
+            <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
+              <div className='px-4'>
+                <StageSection stage={record.stage} />
+              </div>
+            </Panel>
+          ) : (
+            <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
+              <div></div>
+            </Panel>
+          )}
+        </section>
+
+        <section className='col-span-1'>
+          <RelationSection />
+        </section>
       </div>
     </div>
   );

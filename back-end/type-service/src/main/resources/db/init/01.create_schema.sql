@@ -75,6 +75,27 @@ CREATE TABLE IF NOT EXISTS public.property
 );
 ALTER TABLE IF EXISTS public.property OWNER to postgres;
 
+DROP TABLE IF EXISTS public.type_property CASCADE;
+CREATE TABLE IF NOT EXISTS public.type_property
+(
+    type_property_id uuid NOT NULL DEFAULT gen_random_uuid(),
+    property_id uuid NOT NULL,
+    type_id uuid NOT NULL,
+    name text,
+    label text,
+    sequence integer,
+    default_value text,
+    CONSTRAINT pk_type_property PRIMARY KEY (type_property_id),
+    CONSTRAINT fk_property_type FOREIGN KEY (type_id)
+    REFERENCES public.type (type_id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION,
+    CONSTRAINT fk_type_property FOREIGN KEY (property_id)
+    REFERENCES public.property (property_id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+);
+ALTER TABLE IF EXISTS public.type_property OWNER to postgres;
 
 DROP TABLE IF EXISTS public.field CASCADE;
 CREATE TABLE IF NOT EXISTS public.field
@@ -115,7 +136,7 @@ CREATE TABLE IF NOT EXISTS public.stage
     stage_id uuid NOT NULL DEFAULT gen_random_uuid(),
     type_id uuid NOT NULL,
     name text,
---     sequence_number integer NOT NULL DEFAULT 1,
+    sequence_number integer NOT NULL DEFAULT 1,
     CONSTRAINT pk_stage PRIMARY KEY (stage_id),
     CONSTRAINT fk_stage_type FOREIGN KEY (type_id)
         REFERENCES public.type (type_id) MATCH SIMPLE
@@ -125,40 +146,20 @@ CREATE TABLE IF NOT EXISTS public.stage
 ALTER TABLE IF EXISTS public.stage OWNER to postgres;
 
 DROP TABLE IF EXISTS public.type_property_field CASCADE;
--- CREATE TABLE IF NOT EXISTS public.type_property_field
--- (
---     type_property_field_id uuid NOT NULL DEFAULT gen_random_uuid(),
---     type_id uuid NOT NULL,
---     property_field_id uuid NOT NULL,
---     name text NOT NULL UNIQUE,
---     item_value text,
---     CONSTRAINT pk_type_property_field PRIMARY KEY (type_property_field_id),
---     CONSTRAINT fk_type FOREIGN KEY (type_id)
---         REFERENCES public.type (type_id) MATCH SIMPLE
---         ON UPDATE NO ACTION
---         ON DELETE NO ACTION
---     CONSTRAINT fk_property_field FOREIGN KEY (property_field_id)
---         REFERENCES public.property_field (property_field_id) MATCH SIMPLE
---         ON UPDATE NO ACTION
---         ON DELETE NO ACTION
--- );
--- ALTER TABLE IF EXISTS public.type_property_field OWNER to postgres;
-
 CREATE TABLE IF NOT EXISTS public.type_property_field
 (
     type_property_field_id uuid NOT NULL DEFAULT gen_random_uuid(),
-    type_id uuid NOT NULL,
-    property_field_id uuid NOT NULL,
-    name text NOT NULL,
+    type_property_id uuid NOT NULL,
     item_value text,
+    property_field_id uuid,
     CONSTRAINT pk_type_property_field PRIMARY KEY (type_property_field_id),
-    CONSTRAINT fk_type FOREIGN KEY (type_id)
-        REFERENCES public.type (type_id) MATCH SIMPLE
+    CONSTRAINT fk_type_property FOREIGN KEY (type_property_id)
+        REFERENCES public.type_property (type_property_id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION,
     CONSTRAINT fk_property_field FOREIGN KEY (property_field_id)
         REFERENCES public.property_field (property_field_id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
-);
+    );
 ALTER TABLE IF EXISTS public.type_property_field OWNER to postgres;

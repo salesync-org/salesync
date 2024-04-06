@@ -19,6 +19,9 @@ import java.util.List;
 public class Property extends BaseEntity {
 
     private String name;
+
+
+    @JsonIgnore
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TypeProperty> typeProperties;
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)

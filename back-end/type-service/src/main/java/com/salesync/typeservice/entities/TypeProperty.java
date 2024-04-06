@@ -1,6 +1,7 @@
 package com.salesync.typeservice.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,15 +21,19 @@ public class TypeProperty extends BaseEntity {
     private String name;
     private String label;
 
+
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "type_id")
     private Type type;
+
 
     @ManyToOne
     @JoinColumn(name = "property_id")
     private Property property;
 
+
+    @JsonProperty("fields")
     @OneToMany(mappedBy = "typeProperty", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
     private List<TypePropertyField> typePropertyFields;
 }

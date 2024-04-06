@@ -35,14 +35,14 @@ class Auth {
     return response.data;
   }
 
-  async verifyEmail(companyName: string, email: string, accessToken: string) {
+  async verifyEmail(companyName: string, accessToken: string) {
     // const response = await instance.post(`${URL}]/${companyName}/verify-email`, {
     //   email,
     //   accessToken
     // });
 
     // return response.data;
-    const data = { companyName, email, accessToken };
+    const data = { companyName, accessToken };
 
     console.log(data);
 

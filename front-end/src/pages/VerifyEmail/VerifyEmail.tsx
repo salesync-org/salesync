@@ -18,7 +18,7 @@ const VerifyEmail = () => {
         if (!accessToken || !companyName) {
           throw new Error('Invalid verification link');
         }
-        const res = await auth.verifyEmail(companyName || '', searchParams.get('email') || '', accessToken);
+        const res = await auth.verifyEmail(companyName || '', accessToken);
 
         if (res) {
           toast({

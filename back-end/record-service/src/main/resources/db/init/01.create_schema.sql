@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS public.record_type_property
 (
     record_type_property_id uuid NOT NULL DEFAULT gen_random_uuid(),
     record_id uuid NOT NULL,
-    type_property_id uuid NOT NULL,
+    name text NOT NULL,
     record_type_property_label text,
     item_value text,
     CONSTRAINT pk_record_type_property PRIMARY KEY (record_type_property_id),

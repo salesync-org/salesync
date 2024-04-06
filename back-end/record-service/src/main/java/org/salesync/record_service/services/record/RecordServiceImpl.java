@@ -1,12 +1,14 @@
 package org.salesync.record_service.services.record;
 
 import lombok.RequiredArgsConstructor;
-import org.salesync.record_service.dtos.*;
+import org.salesync.record_service.dtos.ListRecordsRequestDto;
+import org.salesync.record_service.dtos.ListRecordsResponseDto;
+import org.salesync.record_service.dtos.RecordDto;
+import org.salesync.record_service.dtos.RequestRecordDto;
 import org.salesync.record_service.dtos.record_type_relation_dto.ListRecordTypeRelationsDto;
 import org.salesync.record_service.dtos.record_type_relation_dto.RecordTypeRelationDto;
 import org.salesync.record_service.dtos.record_type_relation_dto.RequestRecordTypeRelationDto;
 import org.salesync.record_service.entities.Record;
-import org.salesync.record_service.entities.RecordType;
 import org.salesync.record_service.entities.RecordTypeRelation;
 import org.salesync.record_service.exceptions.ObjectNotFoundException;
 import org.salesync.record_service.mappers.RecordMapper;
@@ -20,11 +22,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -40,18 +39,26 @@ public class RecordServiceImpl implements RecordService {
 
     private final RelationItemMapper relationItemMapper = RelationItemMapper.INSTANCE;
 
-
     @Override
     public ListRecordsResponseDto getFilteredRecords(ListRecordsRequestDto requestDto) {
         Pageable pageRequest = PageRequest.of(requestDto.getCurrentPage() - 1, requestDto.getPageSize());
-        Page<Record> page = recordRepository
-                .getFilteredRecord(requestDto.getTypePropertyId(),
-                        requestDto.getTypeId(),
-                        requestDto.getSearchTerm(),
-                        requestDto.getIsAsc(),
-                        pageRequest
-                );
-//        Map typeData = restTemplate.getForObject("http://type-service/api/v1/types/{typeId}", Map.class, typeId);
+        Page<Record> page = null;
+        if (requestDto.getPropertyName() != null) {
+            page = recordRepository
+                    .getFilteredRecord(requestDto.getPropertyName(),
+                            requestDto.getTypeId(),
+                            requestDto.getSearchTerm(),
+                            requestDto.getIsAsc(),
+                            pageRequest
+                    );
+        } else {
+            page = recordRepository
+                    .getFilteredRecordsAndOrderByName(requestDto.getTypeId(),
+                            requestDto.getSearchTerm(),
+                            requestDto.getIsAsc(),
+                            pageRequest
+                    );
+        }
         List<RecordDto> recordDtos = page.getContent().stream()
                 .map(recordMapper::recordToRecordDto)
                 .toList();
@@ -97,7 +104,7 @@ public class RecordServiceImpl implements RecordService {
     public RecordTypeRelationDto createRecordTypeRelation(RequestRecordTypeRelationDto requestRecordTypeRelationDto) {
         System.out.println(requestRecordTypeRelationDto);
 
-        UUID sourceRecordId= requestRecordTypeRelationDto.getSourceRecordId();
+        UUID sourceRecordId = requestRecordTypeRelationDto.getSourceRecordId();
         Record sourceRecord = recordRepository.findById(sourceRecordId).orElseThrow(
                 () -> new ObjectNotFoundException(
                         "Source type",
@@ -119,26 +126,23 @@ public class RecordServiceImpl implements RecordService {
                 .destinationRecord(destinationRecord)
                 .build();
 
-
         return recordTypeRelationMapper.recordTypeRelationToRecordTypeRelationDto(
                 recordTypeRelationRepository.save(recordTypeRelation)
         );
     }
 
     @Override
-    public ListRecordTypeRelationsDto getListRecordTypeRelationsById(UUID sourceRecordId){
+    public ListRecordTypeRelationsDto getListRecordTypeRelationsById(UUID sourceRecordId) {
 
         List<RecordTypeRelation> listRecordTypeRelations = recordTypeRelationRepository.findBySourceRecordId(sourceRecordId);
         RecordDto sourceRecordDto;
 
-        if (listRecordTypeRelations.isEmpty()){
+        if (listRecordTypeRelations.isEmpty()) {
             sourceRecordDto = recordMapper.recordToRecordDto(recordRepository.findById(sourceRecordId).orElse(null));
-            if (sourceRecordDto == null)
-            {
+            if (sourceRecordDto == null) {
                 throw new ObjectNotFoundException("Record type relations", sourceRecordId.toString());
             }
-        }
-        else
+        } else
             sourceRecordDto = recordMapper.recordToRecordDto(listRecordTypeRelations.get(0).getSourceRecord());
 
         return ListRecordTypeRelationsDto.builder()

@@ -14,6 +14,8 @@ const Sales = lazy(() => import('./pages/Sales/Sales'));
 const SignUp = lazy(() => import('./pages/SignUp/SignUp'));
 const HomeLayout = lazy(() => import('./pages/Home/Home'));
 const LogIn = lazy(() => import('pages/LogIn/LogIn'));
+const VerifyEmail = lazy(() => import('pages/VerifyEmail/VerifyEmail'));
+const ChangePassword = lazy(() => import('pages/ChangePassword/ChangePassword'));
 const ForgotPassword = lazy(() => import('pages/LogIn/ForgotPassword'));
 const RecordDetail = lazy(() => import('./pages/RecordDetail/RecordDetail'));
 
@@ -43,6 +45,8 @@ function App() {
             </Route>
           </Route>
           <Route path='/:companyName/login' element={<LogIn />}></Route>
+          <Route path='/realms/:companyName/login-actions/action-token' element={<VerifyEmail />}></Route>
+          <Route path='/:companyName/change-password' element={<ChangePassword />}></Route>
           <Route path='*' element={<div>Oops</div>} />
         </Routes>
       </Suspense>

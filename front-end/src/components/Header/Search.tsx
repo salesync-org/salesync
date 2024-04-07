@@ -16,7 +16,7 @@ const Search = ({ className }: { className?: string }) => {
       <TextInput
         placeholder='Search for anything'
         className={cn(
-          'absolute left-0 right-6 top-2 mx-auto',
+          'absolute left-0 right-6 top-3 mx-auto',
           'sm:visible sm:w-5/12 md:w-1/2',
           isSearchOpen ? 'visible z-50 w-[75%]' : 'invisible'
         )}

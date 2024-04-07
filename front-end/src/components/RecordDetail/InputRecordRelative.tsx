@@ -8,7 +8,7 @@ interface InputRecordRelativeProps {
   showHeader?: boolean;
   className?: string;
   disabled?: boolean;
-  pattern: string; // 'name' or 'relation'
+  pattern: 'name' | 'relation';
 }
 
 const InputRecordRelative: React.FC<InputRecordRelativeProps> = ({
@@ -19,7 +19,7 @@ const InputRecordRelative: React.FC<InputRecordRelativeProps> = ({
   pattern
 }) => {
   // const [search, setSearch] = useState('');
-  const [isChoose, setIsChoose] = useState(false);
+  const [isChoose, setIsChoose] = useState(true);
   const [type, setType] = useState('lead');
 
   const listTypes1 = [
@@ -80,7 +80,7 @@ const InputRecordRelative: React.FC<InputRecordRelativeProps> = ({
       {showHeader && header && <p className='my-1'>{header}</p>}
       <div
         className={cn(
-          'flex h-fit p-1',
+          'flex h-fit items-center p-1',
           disabled && 'opacity-80',
           'transform-all duration-[50ms] ease-in-out',
           'rounded placeholder:text-opacity-50',
@@ -107,9 +107,9 @@ const InputRecordRelative: React.FC<InputRecordRelativeProps> = ({
                     <Icon name='arrow_drop_down' size='1' className='-m-1' />
                   </div>
                 }
-                className='m-0 border  p-0 dark:border-input-background-dark dark:bg-input-background-dark'
+                className='m-0 border p-0 dark:border-input-background-dark dark:bg-input-background-dark'
                 maxHeightList={300}
-                maxWidthList={200} 
+                maxWidthList={200}
                 onValueChange={setType}
               >
                 {pattern === 'name' && listTypes1.map((item) => <ItemType name={item.name} color={item.color} />)}

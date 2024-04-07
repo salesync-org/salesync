@@ -10,6 +10,7 @@ interface ListProps {
   open?: boolean;
   maxHeight?: number;
   maxWidth?: number;
+  isHaveHeader: boolean;
   align?: 'left' | 'right' | null;
   divide?: boolean;
   onItemClick?: (option: HTMLElement) => void;
@@ -21,6 +22,7 @@ const List = ({
   children,
   maxHeight = 0,
   maxWidth = 0,
+  isHaveHeader = false,
   open = false,
   divide = false,
   className,
@@ -98,7 +100,7 @@ const List = ({
             divide ? 'divide divide-y-2 divide-button-stroke-light *:py-2 dark:divide-button-stroke-dark' : 'py-2',
             'bg-button-background-light dark:bg-button-background-dark',
             'border-button-stroke-light dark:border-button-stroke-dark',
-            shouldDropUp ? 'bottom-10 origin-center' : 'top-[60px] origin-center',
+            shouldDropUp ? 'bottom-10 origin-center' : cn(isHaveHeader ? 'top-[60px] origin-center' : 'top-[40px] origin-center'),
             align &&
               cn(
                 shouldDropUp

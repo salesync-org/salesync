@@ -1,20 +1,20 @@
 package org.salesync.record_service.services.record;
 
 import lombok.RequiredArgsConstructor;
-import org.salesync.record_service.dtos.ListRecordsRequestDto;
-import org.salesync.record_service.dtos.ListRecordsResponseDto;
-import org.salesync.record_service.dtos.RecordDto;
-import org.salesync.record_service.dtos.RequestRecordDto;
+import org.salesync.record_service.dtos.*;
 import org.salesync.record_service.dtos.record_type_relation_dto.ListRecordTypeRelationsDto;
 import org.salesync.record_service.dtos.record_type_relation_dto.RecordTypeRelationDto;
 import org.salesync.record_service.dtos.record_type_relation_dto.RequestRecordTypeRelationDto;
 import org.salesync.record_service.entities.Record;
+import org.salesync.record_service.entities.RecordTypeProperty;
 import org.salesync.record_service.entities.RecordTypeRelation;
 import org.salesync.record_service.exceptions.ObjectNotFoundException;
 import org.salesync.record_service.mappers.RecordMapper;
+import org.salesync.record_service.mappers.RecordTypePropertyMapper;
 import org.salesync.record_service.mappers.RecordTypeRelationMapper;
 import org.salesync.record_service.mappers.RelationItemMapper;
 import org.salesync.record_service.repositories.RecordRepository;
+import org.salesync.record_service.repositories.RecordTypePropertyRepository;
 import org.salesync.record_service.repositories.RecordTypeRelationRepository;
 import org.salesync.record_service.repositories.RecordTypeRepository;
 import org.springframework.data.domain.Page;
@@ -32,12 +32,13 @@ public class RecordServiceImpl implements RecordService {
 
     private final RecordRepository recordRepository;
     private final RecordTypeRepository recordTypeRepository;
+    private final RecordTypePropertyRepository recordTypePropertyRepository;
     private final RestTemplate restTemplate;
     private final RecordTypeRelationRepository recordTypeRelationRepository;
     private final RecordMapper recordMapper = RecordMapper.INSTANCE;
     private final RecordTypeRelationMapper recordTypeRelationMapper = RecordTypeRelationMapper.INSTANCE;
-
     private final RelationItemMapper relationItemMapper = RelationItemMapper.INSTANCE;
+    private final RecordTypePropertyMapper recordTypePropertyMapper = RecordTypePropertyMapper.INSTANCE;
 
     @Override
     public ListRecordsResponseDto getFilteredRecords(ListRecordsRequestDto requestDto) {
@@ -129,6 +130,18 @@ public class RecordServiceImpl implements RecordService {
         return recordTypeRelationMapper.recordTypeRelationToRecordTypeRelationDto(
                 recordTypeRelationRepository.save(recordTypeRelation)
         );
+    }
+
+    @Override
+    public RecordTypePropertyDto updateRecordProperty(RecordTypePropertyDto recordTypePropertyDto) {
+        RecordTypeProperty recordTypeProperty = recordTypePropertyRepository.findById(recordTypePropertyDto.getId()).orElseThrow(
+                () -> new ObjectNotFoundException(
+                        "Record type property",
+                        recordTypePropertyDto.getId().toString()
+                )
+        );
+        recordTypeProperty.setItemValue(recordTypePropertyDto.getItemValue());
+        return recordTypePropertyMapper.entityToDto(recordTypePropertyRepository.save(recordTypeProperty));
     }
 
     @Override

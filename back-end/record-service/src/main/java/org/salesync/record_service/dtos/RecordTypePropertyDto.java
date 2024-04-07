@@ -14,6 +14,6 @@ import java.util.UUID;
 public class RecordTypePropertyDto {
     private UUID id;
     private String propertyName;
-    private String recordTypePropertyLabel;
+    private String PropertyLabel;
     private String itemValue;
 }

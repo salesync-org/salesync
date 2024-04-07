@@ -4,7 +4,6 @@ import org.salesync.record_service.dtos.*;
 import org.salesync.record_service.dtos.record_type_relation_dto.ListRecordTypeRelationsDto;
 import org.salesync.record_service.dtos.record_type_relation_dto.RecordTypeRelationDto;
 import org.salesync.record_service.dtos.record_type_relation_dto.RequestRecordTypeRelationDto;
-import org.salesync.record_service.entities.RecordTypeRelation;
 
 import java.util.List;
 import java.util.UUID;
@@ -22,7 +21,7 @@ public interface RecordService {
 
     RecordTypeRelationDto createRecordTypeRelation(RequestRecordTypeRelationDto requestRecordTypeRelationDto);
 
-
+    RecordTypePropertyDto updateRecordProperty(RecordTypePropertyDto recordTypePropertyDto);
 
     ListRecordTypeRelationsDto getListRecordTypeRelationsById(UUID sourceRecordId);
 }

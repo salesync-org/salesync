@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.text.MessageFormat;
 
 @RestControllerAdvice
-public class RecordServiceHandle {
+public class RecordServiceHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleRecordServiceException(MethodArgumentNotValidException ex) {
         String message = ex.getMessage();
@@ -31,6 +31,16 @@ public class RecordServiceHandle {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                 ResponseErrorDto.builder()
                         .status(HttpStatus.NOT_FOUND.value())
+                        .message(ex.getMessage())
+                        .build()
+        );
+    }
+
+    @ExceptionHandler(ConcurrentUpdateException.class)
+    public ResponseEntity<?> handleConcurrentUpdateException(ConcurrentUpdateException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                ResponseErrorDto.builder()
+                        .status(HttpStatus.CONFLICT.value())
                         .message(ex.getMessage())
                         .build()
         );

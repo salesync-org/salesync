@@ -1,6 +1,7 @@
 package org.salesync.record_service.services.record;
 
 import lombok.RequiredArgsConstructor;
+import org.salesync.record_service.constants.Message;
 import org.salesync.record_service.dtos.*;
 import org.salesync.record_service.dtos.record_type_relation_dto.ListRecordTypeRelationsDto;
 import org.salesync.record_service.dtos.record_type_relation_dto.RecordTypeRelationDto;
@@ -8,6 +9,7 @@ import org.salesync.record_service.dtos.record_type_relation_dto.RequestRecordTy
 import org.salesync.record_service.entities.Record;
 import org.salesync.record_service.entities.RecordTypeProperty;
 import org.salesync.record_service.entities.RecordTypeRelation;
+import org.salesync.record_service.exceptions.ConcurrentUpdateException;
 import org.salesync.record_service.exceptions.ObjectNotFoundException;
 import org.salesync.record_service.mappers.RecordMapper;
 import org.salesync.record_service.mappers.RecordTypePropertyMapper;
@@ -17,10 +19,14 @@ import org.salesync.record_service.repositories.RecordRepository;
 import org.salesync.record_service.repositories.RecordTypePropertyRepository;
 import org.salesync.record_service.repositories.RecordTypeRelationRepository;
 import org.salesync.record_service.repositories.RecordTypeRepository;
+import org.salesync.record_service.utils.SecurityContextHelper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -28,6 +34,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(rollbackFor = Throwable.class)
 public class RecordServiceImpl implements RecordService {
 
     private final RecordRepository recordRepository;
@@ -142,6 +149,20 @@ public class RecordServiceImpl implements RecordService {
         );
         recordTypeProperty.setItemValue(recordTypePropertyDto.getItemValue());
         return recordTypePropertyMapper.entityToDto(recordTypePropertyRepository.save(recordTypeProperty));
+    }
+
+    @Override
+    public void deleteRecordsById(List<UUID> recordIds) {
+        String userContextId = SecurityContextHelper.getContextUserId();
+        recordIds.forEach(recordId -> {
+            Record record = recordRepository.findById(recordId).orElseThrow(
+                    () -> new ConcurrentUpdateException(Message.CONCURRENT_UPDATE)
+            );
+            if (userContextId.equals(record.getUserId().toString())) {
+                throw new AccessDeniedException("You are not allowed to delete this record");
+            }
+            recordRepository.delete(record);
+        });
     }
 
     @Override

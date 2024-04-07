@@ -90,6 +90,7 @@ CREATE TABLE IF NOT EXISTS public.type_property
     label text,
     sequence integer,
     default_value text,
+    version bigint DEFAULT 0,
     CONSTRAINT pk_type_property PRIMARY KEY (type_property_id),
     CONSTRAINT fk_property_type FOREIGN KEY (type_id)
     REFERENCES public.type (type_id) MATCH SIMPLE

@@ -20,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TokenFilter extends OncePerRequestFilter {
     private static final String PERMISSIONS = "permissions";
+    private static final String USER_ID = "userId";
     private final TokenService tokenService;
 
     @Override
@@ -36,11 +37,11 @@ public class TokenFilter extends OncePerRequestFilter {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     return;
                 }
-                List<String> permisstions = tokenService.extractClaim(token, claims -> {
-                    return claims.get(PERMISSIONS, (Class<List<String>>) ((Class) List.class));
-                });
-
-                PreAuthenticatedAuthenticationToken authentication = new PreAuthenticatedAuthenticationToken(null, null,
+                List<String> permisstions = tokenService.extractClaim(token, claims -> claims.get(PERMISSIONS, (Class<List<String>>) ((Class) List.class)));
+                String userId = tokenService.extractClaim(token, claims -> claims.get(USER_ID, String.class));
+                PreAuthenticatedAuthenticationToken authentication = new PreAuthenticatedAuthenticationToken(
+                        userId,
+                        null,
                         permisstions.stream().map(SimpleGrantedAuthority::new).toList());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }

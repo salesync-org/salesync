@@ -23,5 +23,7 @@ public interface RecordService {
 
     RecordTypePropertyDto updateRecordProperty(RecordTypePropertyDto recordTypePropertyDto);
 
+    void deleteRecordsById(List<UUID> recordIds);
+
     ListRecordTypeRelationsDto getListRecordTypeRelationsById(UUID sourceRecordId);
 }

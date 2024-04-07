@@ -3,6 +3,7 @@ package org.salesync.apigateway.config;
 import lombok.RequiredArgsConstructor;
 import org.salesync.apigateway.constants.Service;
 import org.salesync.apigateway.dtos.TokenDto;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -12,6 +13,7 @@ import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -34,18 +36,29 @@ public class AuthenticationFilter implements GatewayFilter {
         return new RestTemplateBuilder();
     }
 
+    @Value("${auth.server.url}")
+    private String authServerUrl;
+    private final String prefixToken = "Bearer ";
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
-        Route route = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
         Map<String, String> pathParams = exchange.getAttribute(ServerWebExchangeUtils.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
         String authHeader = this.getAuthHeader(request);
-        String url = MessageFormat.format("http://localhost:8082/api/v1/{0}/user/validate", pathParams.get("realm"));
+        String validateUserUrlTemplate = "{0}/api/v1/{1}/user/validate";
+        if (pathParams == null || pathParams.get("realm") == null) {
+            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+            return exchange.getResponse().setComplete();
+        }
+        String url = MessageFormat.format(validateUserUrlTemplate, authServerUrl, pathParams.get("realm"));
         TokenDto token = restTemplate().defaultHeader(HttpHeaders.AUTHORIZATION, authHeader).build().getForObject(url, TokenDto.class);
-        String path = request.getURI().getRawPath().replaceFirst("/" + pathParams.get("realm"), "");
-        String _token = "Bearer " + token.getToken();
+        if(token == null || token.getToken() == null) {
+            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+            return exchange.getResponse().setComplete();
+        }
+        String newToken = prefixToken + token.getToken();
         request.mutate()
-                .header(HttpHeaders.AUTHORIZATION, _token)
+                .header(HttpHeaders.AUTHORIZATION, newToken)
                 .build();
         exchange.getAttributes().put(ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR, request.getURI());
 

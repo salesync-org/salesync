@@ -1,13 +1,17 @@
 package org.salesync.authentication.services.register;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
+import org.keycloak.admin.client.resource.KeyResource;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.RoleResource;
 import org.keycloak.admin.client.resource.UserResource;
+import org.keycloak.crypto.KeyUse;
 import org.keycloak.representations.AccessTokenResponse;
 import org.keycloak.representations.idm.*;
 import org.keycloak.representations.userprofile.config.UPAttribute;
@@ -24,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -168,6 +173,42 @@ public class RegisterServiceImpl implements RegisterService {
         return Response.ok().build();
     }
 
+    @Override
+    public VerifyEmailResponseDto verifyEmail(String token) {
+        try {
+            DecodedJWT decodeToken = JWT.decode(token);
+            String keyId = decodeToken.getKeyId();
+            Date expirationDate = decodeToken.getExpiresAt();
+            String realmNameUrl = decodeToken.getClaim("iss").asString();
+            String realmName = realmNameUrl.substring(realmNameUrl.lastIndexOf("/") + 1);
+            RealmResource realmResource = keycloak.realm(realmName);
+            String verificationKey = getVerificationKey(realmResource);
+            if (keyId.equals(verificationKey) && expirationDate.after(new Date())) {
+                String userId = decodeToken.getClaim("sub").asString();
+                UserResource userResource = realmResource.users().get(userId);
+                UserRepresentation userRepresentation = userResource.toRepresentation();
+                userRepresentation.setEmailVerified(true);
+                userResource.update(userRepresentation);
+                VerifyEmailResponseDto responseDto = new VerifyEmailResponseDto();
+                String accessToken = userService.generateVerifyToken(userId, userRepresentation.getUsername(), responseDto.getEmail(), realmName);
+                responseDto.setToken(accessToken);
+                responseDto.setEmail(userRepresentation.getEmail());
+                responseDto.setFirstName(userRepresentation.getFirstName());
+                responseDto.setLastName(userRepresentation.getLastName());
+                responseDto.setUserName(userRepresentation.getUsername());
+                responseDto.setAvatarUrl(userRepresentation.getAttributes().get(UserAttributes.AVATAR).get(0));
+                responseDto.setRealmName(realmName);
+                responseDto.setUserId(userId);
+
+                return responseDto;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return null;
+    }
+
     private String createRealm(String realmName) {
         try {
             realmName = realmName.replaceAll("\\s+", "").toLowerCase();
@@ -306,7 +347,7 @@ public class RegisterServiceImpl implements RegisterService {
         executor.shutdown();
     }
 
-    private boolean addPermissionsToRole(RealmResource realmResource, String roleName, List<String> permissionList) {
+    private void addPermissionsToRole(RealmResource realmResource, String roleName, List<String> permissionList) {
         try {
             RoleResource roleResource = realmResource.roles().get(roleName);
             Set<RoleRepresentation> permissionRoles = new HashSet<>();
@@ -314,14 +355,33 @@ public class RegisterServiceImpl implements RegisterService {
                 permissionRoles.add(realmResource.roles().get(permissionName).toRepresentation());
             }
             if (permissionRoles.isEmpty()) {
-                return false;
+                return;
             }
             roleResource.addComposites(permissionRoles.stream().toList());
-            return true;
         } catch (Exception e) {
             logger.error("Error occurred while fetching permissions");
             e.printStackTrace();
             throw e;
         }
     }
+
+    private String getVerificationKey(RealmResource realmResource) {
+        KeyResource keyResource = realmResource.keys();
+        KeysMetadataRepresentation keysMetadata = keyResource.getKeyMetadata();
+        List<KeysMetadataRepresentation.KeyMetadataRepresentation> keyList = keysMetadata.getKeys();
+        String key = null;
+
+        for (final KeysMetadataRepresentation.KeyMetadataRepresentation keyMetadata : keyList) {
+            if (keyMetadata.getUse() != KeyUse.SIG || !keyMetadata.getAlgorithm().equals("HS512")) {
+                continue;
+            }
+            key = keyMetadata.getKid();
+            if (key != null) {
+                break;
+            }
+        }
+
+        return key;
+    }
+
 }

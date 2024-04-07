@@ -34,7 +34,7 @@ mail:
   user: AKIA3FLDYTVIAYFRK6SH
 
 keystore:
-  location: D:\\DATN\\auth.jks
+  location: D:\\auth.jks
   password: adminadmin
   alias: auth
 

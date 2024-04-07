@@ -2,6 +2,8 @@ package org.salesync.authentication.controllers;
 
 import lombok.AllArgsConstructor;
 import org.salesync.authentication.constants.Routes;
+import org.salesync.authentication.dtos.ResetPasswordDto;
+import org.salesync.authentication.dtos.UserDetailDto;
 import org.salesync.authentication.dtos.UserDto;
 import org.salesync.authentication.dtos.ValidationResponseDto;
 import org.salesync.authentication.services.user.UserService;
@@ -24,7 +26,7 @@ public class UserController {
     }
 
     @GetMapping(Routes.USER_LOAD)
-    ResponseEntity<UserDto> loadUser(
+    ResponseEntity<UserDetailDto> loadUser(
             @RequestHeader("Authorization") String token,
             @PathVariable String realmName
     ) {
@@ -46,5 +48,15 @@ public class UserController {
             @RequestHeader("Authorization") String token
     ) {
         return ResponseEntity.ok(userService.resetSettings(StringUtility.removeBearer(token), realmName));
+    }
+
+    @PostMapping(Routes.USER_RESET_PASSWORD)
+    ResponseEntity<String> resetPassword(
+            @PathVariable String realmName,
+            @RequestHeader("Authorization") String token,
+            @RequestBody ResetPasswordDto resetPasswordDto
+
+            ) {
+        return ResponseEntity.ok(userService.resetPassword(StringUtility.removeBearer(token), realmName, resetPasswordDto));
     }
 }

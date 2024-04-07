@@ -15,10 +15,12 @@ const VerifyEmail = () => {
       try {
         setLoading(true);
         const accessToken = searchParams.get('key');
+        console.log('token' + accessToken);
         if (!accessToken || !companyName) {
           throw new Error('Invalid verification link');
         }
-        const res = await auth.verifyEmail(companyName || '', accessToken);
+        localStorage.setItem('access_token', accessToken);
+        const res = await auth.verifyEmail();
 
         if (res) {
           toast({
@@ -27,8 +29,8 @@ const VerifyEmail = () => {
             duration: 2000
           });
 
-          navigate(`/${companyName}/change-password`);
-          localStorage.setItem('access_token', accessToken);
+          localStorage.setItem('access_token', res.access_token);
+          navigate(`/${companyName}/${res.user_id}/change-password`);
         }
       } catch (error) {
         let message = 'Verification failed. Please try again.';

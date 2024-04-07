@@ -180,7 +180,9 @@ public class RegisterServiceImpl implements RegisterService {
             String keyId = decodeToken.getKeyId();
             Date expirationDate = decodeToken.getExpiresAt();
             String realmNameUrl = decodeToken.getClaim("iss").asString();
+            logger.info(String.format("Starting to verify email in %s...", realmNameUrl));
             String realmName = realmNameUrl.substring(realmNameUrl.lastIndexOf("/") + 1);
+            logger.info(String.format("Realm Name: %s", realmName));
             RealmResource realmResource = keycloak.realm(realmName);
             String verificationKey = getVerificationKey(realmResource);
             if (keyId.equals(verificationKey) && expirationDate.after(new Date())) {

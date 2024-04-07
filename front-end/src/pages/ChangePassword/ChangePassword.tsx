@@ -1,8 +1,10 @@
+import auth from '@/api/auth';
 import { ErrorText, Panel, PrimaryButton, TextInput } from '@/components/ui';
 import { cn } from '@/utils/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import salesyncLogo from 'assets/salesync_logo.png';
 import { useForm } from 'react-hook-form';
+import { useNavigate, useParams } from 'react-router-dom';
 import { z } from 'zod';
 
 const changePasswordSchema = z
@@ -34,9 +36,16 @@ const ChangePassword = () => {
     mode: 'all',
     resolver: zodResolver(changePasswordSchema)
   });
+  const navigate = useNavigate();
+  const { companyName, userId } = useParams();
 
   const onSubmit = async (data: ChangePasswordSchemaType) => {
-    console.log(data);
+    const res = await auth.changePassword(companyName!, userId!, data.password);
+    console.log(res);
+    if (res) {
+      // navigate to login
+      navigate(`/${companyName}/login`);
+    }
   };
 
   return (

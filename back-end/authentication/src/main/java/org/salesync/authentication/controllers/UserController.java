@@ -50,7 +50,7 @@ public class UserController {
         return ResponseEntity.ok(userService.resetSettings(StringUtility.removeBearer(token), realmName));
     }
 
-    @PostMapping(Routes.USER_RESET_PASSWORD)
+    @PutMapping(Routes.USER_RESET_PASSWORD)
     ResponseEntity<String> resetPassword(
             @PathVariable String realmName,
             @RequestHeader("Authorization") String token,

@@ -35,23 +35,17 @@ class Auth {
     return response.data;
   }
 
-  async verifyEmail(companyName: string, accessToken: string) {
-    // const response = await instance.post(`${URL}]/${companyName}/verify-email`, {
-    //   email,
-    //   accessToken
-    // });
+  async verifyEmail() {
+    const response = await instance.get(`${URL}/verify-email`, {
+    });
 
-    // return response.data;
-    const data = { companyName, accessToken };
-
-    console.log(data);
-
-    return data;
+    return response.data;
   }
 
-  async changePassword(companyName: string, password: string) {
-    const response = await instance.post(`${URL}/${companyName}/change-password`, {
-      password
+  async changePassword(companyName: string, userId: string, password: string) {
+    const response = await instance.put(`${URL}/${companyName}/user/password`, {
+      user_id: userId,
+      new_password: password
     });
 
     return response.data;

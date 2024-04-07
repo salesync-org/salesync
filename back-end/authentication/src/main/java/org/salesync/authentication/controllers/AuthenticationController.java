@@ -31,7 +31,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(registerService.login(realmName, loginDTO));
     }
 
-    @PostMapping(Routes.AUTH_VERIFY_EMAIL)
+    @GetMapping(Routes.AUTH_VERIFY_EMAIL)
     ResponseEntity<VerifyEmailResponseDto> verifyEmail(
             @RequestHeader("Authorization") String token
     ) {

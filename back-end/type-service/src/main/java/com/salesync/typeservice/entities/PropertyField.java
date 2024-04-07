@@ -30,6 +30,10 @@ public class PropertyField extends BaseEntity {
     @JsonProperty("is_required")
     private Boolean isRequired;
 
+    @Column(name = "default_value")
+    @JsonProperty("default_value")
+    private String defaultValue;
+
     @JsonProperty("is_key")
     private Boolean isKey;
 

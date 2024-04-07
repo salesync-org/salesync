@@ -6,6 +6,8 @@ public final class Route {
         public static final String TYPE_ID = "/{typeId}";
         public static final String GET_RELATION = "/relations" + TYPE_ID;
         public static final String CREATE_RELATION = "/create-relation";
+
+        public static final String TYPE_DETAILS = "/details/{typeId}";
     }
     public static final class Relation {
         public static final String RELATION_ROUTE = "/relations";

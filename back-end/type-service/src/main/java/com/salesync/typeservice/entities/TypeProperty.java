@@ -20,6 +20,12 @@ import java.util.List;
 public class TypeProperty extends BaseEntity {
     private String name;
     private String label;
+    private Integer sequence;
+
+
+    @JsonProperty("input_type")
+    @Column(name = "default_value")
+    private String defaultValue;
 
 
     @JsonIgnore

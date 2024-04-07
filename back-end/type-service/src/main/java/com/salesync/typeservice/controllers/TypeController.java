@@ -5,6 +5,7 @@ import com.salesync.typeservice.constants.Route;
 import com.salesync.typeservice.dtos.TypeDTO;
 import com.salesync.typeservice.dtos.TypeRelationDTO;
 import com.salesync.typeservice.dtos.TypeRelationResponseDTO;
+import com.salesync.typeservice.entities.Type;
 import com.salesync.typeservice.repositories.TypeRepository;
 import com.salesync.typeservice.services.type.TypeService;
 import jakarta.validation.Valid;
@@ -57,9 +58,9 @@ public class TypeController {
         return ResponseEntity.ok(typeService.updateLabelOfTypeRelation(typeRelationDTO));
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<?> test() {
-        return ResponseEntity.ok(typeRepository.findById(UUID.fromString("11111111-1111-1111-1111-111111111111")));
+    @GetMapping(Route.Type.TYPE_DETAILS)
+    public ResponseEntity<Type> test(@PathVariable UUID typeId){
+        return ResponseEntity.ok(typeService.getTypeDetailsById(typeId));
     }
 
 

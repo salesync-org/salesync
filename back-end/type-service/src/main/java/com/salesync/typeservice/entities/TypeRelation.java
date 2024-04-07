@@ -19,7 +19,6 @@ import java.util.UUID;
 )
 @AttributeOverride(name="id",column = @Column(name="type_relation_id"))
 public class TypeRelation extends BaseEntity  {
-
     @ManyToOne
     @JoinColumn(name = "source_id")
     private Type sourceType;

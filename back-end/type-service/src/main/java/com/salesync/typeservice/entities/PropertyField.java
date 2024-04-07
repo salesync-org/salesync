@@ -21,12 +21,12 @@ import java.util.List;
 
 
 public class PropertyField extends BaseEntity {
-
-
     @JsonProperty("label")
     private String label;
+
     @JsonProperty("item_value")
     private String itemValue;
+
     @JsonProperty("is_required")
     private Boolean isRequired;
 
@@ -37,19 +37,15 @@ public class PropertyField extends BaseEntity {
     @JsonProperty("is_key")
     private Boolean isKey;
 
-
-
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "property_id")
     private Property property;
 
-
     @JsonProperty("field")
     @ManyToOne
     @JoinColumn(name = "field_id")
     private Field field;
-
 
     @OneToMany(mappedBy = "propertyField", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore

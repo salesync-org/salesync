@@ -24,7 +24,6 @@ import java.util.UUID;
 public class TypeController {
 
     private final TypeService typeService;
-    private final TypeRepository typeRepository;
 
     @GetMapping(Route.Type.TYPE_ID)
     public ResponseEntity<TypeDTO> getType(@PathVariable UUID typeId) {

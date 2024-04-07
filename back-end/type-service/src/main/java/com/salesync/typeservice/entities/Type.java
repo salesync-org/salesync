@@ -14,8 +14,6 @@ import java.util.List;
 @Table(name = "type")
 @AttributeOverride(name="id",column = @Column(name="type_id"))
 public class Type extends BaseEntity  {
-
-
     private String name;
 
     @OneToMany(mappedBy = "sourceType", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -28,7 +26,6 @@ public class Type extends BaseEntity  {
 
     @OneToMany(mappedBy = "type", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonProperty("properties")
-
 
     private List<TypeProperty> typeProperties;
 

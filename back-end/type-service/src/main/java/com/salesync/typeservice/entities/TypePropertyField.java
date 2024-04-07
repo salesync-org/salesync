@@ -17,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 @Table(name = "type_property_field")
 @AttributeOverride(name="id",column = @Column(name="type_property_field_id"))
 public class TypePropertyField extends BaseEntity {
-
     @Column(name = "item_value")
     @JsonProperty("item_value")
     private String itemValue;

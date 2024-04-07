@@ -18,7 +18,6 @@ import java.util.List;
 @Entity
 @Table(name = "field")
 @AttributeOverride(name="id",column = @Column(name="field_id"))
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class Field extends BaseEntity {
     @Column(name = "input_type")
     private String inputType;

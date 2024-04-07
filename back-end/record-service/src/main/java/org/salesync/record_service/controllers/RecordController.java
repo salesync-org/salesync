@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(Route.RECORD_ROUTE)
+@RequestMapping("/{realm}" + Route.RECORD_ROUTE)
 @RequiredArgsConstructor
 public class RecordController {
 
@@ -51,5 +51,16 @@ public class RecordController {
     @GetMapping(Route.LIST_RECORD_TYPE_RELATION)
     public ListRecordTypeRelationsDto getListRecordTypeRelationsById(@PathVariable String sourceRecordId) {
         return recordService.getListRecordTypeRelationsById(UUID.fromString(sourceRecordId));
+    }
+
+    @PutMapping(Route.PROPERTY)
+    public ResponseEntity<RecordTypePropertyDto> updateRecordProperty(@RequestBody RecordTypePropertyDto recordTypePropertyDto) {
+        return ResponseEntity.ok(recordService.updateRecordProperty(recordTypePropertyDto));
+    }
+
+    @DeleteMapping
+    public ResponseEntity deleteRecordsById(@RequestBody List<UUID> recordIds) {
+        recordService.deleteRecordsById(recordIds);
+        return ResponseEntity.noContent().build();
     }
 }

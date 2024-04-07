@@ -18,4 +18,9 @@ public final class Route {
         public static final String FIELD_ID = "/{fieldId}";
     }
 
+    public static final class Stage {
+        public static final String STAGE_ROUTE = "/stages";
+        public static final String STAGE_ID = "/{stageId}";
+    }
+
 }

@@ -6,6 +6,7 @@ import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.admin.client.resource.RealmResource;
+import org.keycloak.admin.client.resource.RoleResource;
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.representations.AccessTokenResponse;
 import org.keycloak.representations.idm.*;
@@ -23,7 +24,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
-
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -71,8 +71,24 @@ public class RegisterServiceImpl implements RegisterService {
     }
 
     @Override
-    public Response registerUser(NewUserDto newUserDTO, String realmName) {
+    public Response registerUser(NewUserDto newUserDTO, String realmName, String token) {
         try {
+            if (userService.validate(realmName, token) != null) {
+                return registerUser(newUserDTO, realmName);
+            } else {
+                return Response.status(Response.Status.UNAUTHORIZED).build();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            logger.info("Register User completed.");
+        }
+    }
+
+    private Response registerUser(NewUserDto newUserDTO, String realmName) {
+        try {
+
             logger.info(String.format("Starting Register User in %s...", realmName));
             UserRepresentation user = new UserRepresentation();
             user.setEmail(newUserDTO.getEmail());
@@ -116,7 +132,8 @@ public class RegisterServiceImpl implements RegisterService {
                 .grantType(OAuth2Constants.PASSWORD)
                 .username(logInDTO.getUsername())
                 .password(logInDTO.getPassword())
-                .clientId(AuthenticationClient.ADMIN)
+                .clientId(AuthenticationClient.APP_ADMIN)
+                .clientSecret(AuthenticationClient.APP_ADMIN)
                 .build()) {
 
             logger.info("Logging in Sever URL: " + env.getProperty("keycloak.auth-server-url"));
@@ -162,8 +179,8 @@ public class RegisterServiceImpl implements RegisterService {
             keycloak.realms().create(realmRepresentation);
             logger.info(String.format("Created Realm with name: %s", realmName));
             RealmResource realmResource = keycloak.realm(realmName);
-            createRoles(realmResource, AuthenticationInfo.STANDARD_ROLE);
-            createRoles(realmResource, AuthenticationInfo.ADMIN_ROLE);
+            createDefaultRoles(realmResource);
+            keycloak.realm(realmName).clients().create(getNewClientRepresentation());
             createAttribute(realmResource, UserAttributes.AVATAR, UserAttributes.AVATAR_LABEL);
             createAttribute(realmResource, UserAttributes.JOB_TITLE, UserAttributes.JOB_TITLE_LABEL);
             createAttribute(realmResource, UserAttributes.PHONE, UserAttributes.PHONE_LABEL);
@@ -178,6 +195,20 @@ public class RegisterServiceImpl implements RegisterService {
             logger.info("Finish creating new realm.");
         }
     }
+
+    private ClientRepresentation getNewClientRepresentation() {
+        ClientRepresentation clientRepresentation = new ClientRepresentation();
+        clientRepresentation.setClientId(AuthenticationClient.APP_ADMIN);
+        clientRepresentation.setPublicClient(false);
+        clientRepresentation.setAuthorizationServicesEnabled(false);
+        clientRepresentation.setDirectAccessGrantsEnabled(true);
+        CredentialRepresentation credential = new CredentialRepresentation();
+        credential.setType(CredentialRepresentation.SECRET);
+        credential.setValue(AuthenticationClient.APP_ADMIN_ID);
+        clientRepresentation.setSecret(credential.getValue());
+        return clientRepresentation;
+    }
+
 
     private void addEmailConfiguration(RealmResource realmResource) {
         RealmRepresentation realmRepresentation = realmResource.toRepresentation();
@@ -194,10 +225,38 @@ public class RegisterServiceImpl implements RegisterService {
         realmResource.update(realmRepresentation);
     }
 
-    private void createRoles(RealmResource realmResource, String roleName) {
+    private void createRoleOrPermission(RealmResource realmResource, String roleName) {
         RoleRepresentation roleRepresentation = new RoleRepresentation();
         roleRepresentation.setName(roleName);
+        roleRepresentation.setComposite(true);
         realmResource.roles().create(roleRepresentation);
+    }
+
+    private void createDefaultRoles(RealmResource realmResource) {
+        createRoleOrPermission(realmResource, AuthenticationInfo.STANDARD_ROLE);
+        createRoleOrPermission(realmResource, AuthenticationInfo.ADMIN_ROLE);
+        createRoleOrPermission(realmResource, AuthenticationInfo.READ_OWN_PERMISSION);
+        createRoleOrPermission(realmResource, AuthenticationInfo.READ_ALL_PERMISSION);
+        createRoleOrPermission(realmResource, AuthenticationInfo.EDIT_OWN_PERMISSION);
+        createRoleOrPermission(realmResource, AuthenticationInfo.EDIT_ALL_PERMISSION);
+        createRoleOrPermission(realmResource, AuthenticationInfo.DELETE_OWN_PERMISSION);
+        createRoleOrPermission(realmResource, AuthenticationInfo.DELETE_ALL_PERMISSION);
+        createRoleOrPermission(realmResource, AuthenticationInfo.CREATE_PERMISSION);
+        createRoleOrPermission(realmResource, AuthenticationInfo.ADMIN_SETTINGS_PERMISSION);
+        addPermissionsToRole(realmResource,
+                AuthenticationInfo.ADMIN_ROLE, Arrays.asList(
+                AuthenticationInfo.READ_ALL_PERMISSION,
+                AuthenticationInfo.EDIT_ALL_PERMISSION,
+                AuthenticationInfo.DELETE_ALL_PERMISSION,
+                AuthenticationInfo.CREATE_PERMISSION,
+                AuthenticationInfo.ADMIN_SETTINGS_PERMISSION
+        ));
+        addPermissionsToRole(realmResource,
+                AuthenticationInfo.STANDARD_ROLE, Arrays.asList(
+                AuthenticationInfo.READ_OWN_PERMISSION,
+                AuthenticationInfo.EDIT_OWN_PERMISSION,
+                AuthenticationInfo.DELETE_OWN_PERMISSION
+        ));
     }
 
     private void addRoleToUser(RealmResource realmResource, String roleName, String userId) {
@@ -244,7 +303,25 @@ public class RegisterServiceImpl implements RegisterService {
             // If all attempts fail
             logger.error("Failed to send email after all attempts.");
         });
-
         executor.shutdown();
+    }
+
+    private boolean addPermissionsToRole(RealmResource realmResource, String roleName, List<String> permissionList) {
+        try {
+            RoleResource roleResource = realmResource.roles().get(roleName);
+            Set<RoleRepresentation> permissionRoles = new HashSet<>();
+            for (String permissionName : permissionList) {
+                permissionRoles.add(realmResource.roles().get(permissionName).toRepresentation());
+            }
+            if (permissionRoles.isEmpty()) {
+                return false;
+            }
+            roleResource.addComposites(permissionRoles.stream().toList());
+            return true;
+        } catch (Exception e) {
+            logger.error("Error occurred while fetching permissions");
+            e.printStackTrace();
+            throw e;
+        }
     }
 }

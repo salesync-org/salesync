@@ -21,3 +21,23 @@ spring:
   jackson:
     serialization:
       FAIL_ON_EMPTY_BEANS: false
+
+main-website:
+  address: https://www.salesync.org
+mail:
+  host: email-smtp.ap-southeast-2.amazonaws.com
+  port: 2587
+  from: service@salesync.org
+  starttls: true
+  auth: true
+  password: BJgTrgX3Xqh2nmZQJx0hCsz6+464nOB5iC1vMYTkyy8E
+  user: AKIA3FLDYTVIAYFRK6SH
+
+keystore:
+  location: D:\\DATN\\auth.jks
+  password: adminadmin
+  alias: auth
+
+jwt:
+  expiration:
+    ms: 7776000000

@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(Route.Type.TYPE_ROUTE)
+@RequestMapping("/{realm}" + Route.Type.TYPE_ROUTE)
 @RequiredArgsConstructor
 public class TypeController {
 

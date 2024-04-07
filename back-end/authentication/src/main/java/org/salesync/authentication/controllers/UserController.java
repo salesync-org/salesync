@@ -5,45 +5,46 @@ import org.salesync.authentication.constants.Routes;
 import org.salesync.authentication.dtos.UserDto;
 import org.salesync.authentication.dtos.ValidationResponseDto;
 import org.salesync.authentication.services.user.UserService;
+import org.salesync.authentication.utils.StringUtility;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = Routes.USER)
+@RequestMapping(path = Routes.REALM + Routes.USER)
 @AllArgsConstructor
 public class UserController {
     UserService userService;
 
     @GetMapping(Routes.USER_VALIDATE)
     ResponseEntity<ValidationResponseDto> validate(
-            @RequestHeader String access_token,
+            @RequestHeader("Authorization") String token,
             @PathVariable String realmName
     ) {
-        return ResponseEntity.ok(userService.validate(realmName, access_token));
+        return ResponseEntity.ok(userService.validate(realmName, StringUtility.removeBearer(token)));
     }
 
     @GetMapping(Routes.USER_LOAD)
     ResponseEntity<UserDto> loadUser(
-            @RequestHeader String access_token,
+            @RequestHeader("Authorization") String token,
             @PathVariable String realmName
     ) {
-        return ResponseEntity.ok(userService.validateUser(realmName, access_token));
+        return ResponseEntity.ok(userService.validateUser(realmName, StringUtility.removeBearer(token)));
     }
 
     @PutMapping(Routes.USER_MODIFY)
     ResponseEntity<UserDto> modifyInfo(
             @PathVariable String realmName,
-            @RequestHeader String access_token,
+            @RequestHeader("Authorization") String token,
             @RequestBody UserDto userDto
     ) {
-        return ResponseEntity.ok(userService.modifyInfo(access_token, userDto, realmName));
+        return ResponseEntity.ok(userService.modifyInfo(StringUtility.removeBearer(token), userDto, realmName));
     }
 
     @PostMapping(Routes.USER_MODIFY_RESET)
     ResponseEntity<UserDto> resetSettings(
             @PathVariable String realmName,
-            @RequestHeader String access_token
+            @RequestHeader("Authorization") String token
     ) {
-        return ResponseEntity.ok(userService.resetSettings(access_token, realmName));
+        return ResponseEntity.ok(userService.resetSettings(StringUtility.removeBearer(token), realmName));
     }
 }

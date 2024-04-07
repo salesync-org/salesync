@@ -6,14 +6,17 @@ import org.salesync.record_service.dtos.record_type_relation_dto.ListRecordTypeR
 import org.salesync.record_service.dtos.record_type_relation_dto.RecordTypeRelationDto;
 import org.salesync.record_service.dtos.record_type_relation_dto.RequestRecordTypeRelationDto;
 import org.salesync.record_service.entities.Record;
+import org.salesync.record_service.entities.RecordTypeProperty;
 import org.salesync.record_service.entities.RecordTypeRelation;
 import org.salesync.record_service.exceptions.ObjectNotFoundException;
 import org.salesync.record_service.mappers.RecordMapper;
+import org.salesync.record_service.mappers.RecordTypePropertyMapper;
 import org.salesync.record_service.mappers.RecordTypeRelationMapper;
 import org.salesync.record_service.mappers.RelationItemMapper;
 import org.salesync.record_service.repositories.RecordRepository;
-import org.salesync.record_service.repositories.RecordTypeRepository;
+import org.salesync.record_service.repositories.RecordTypePropertyRepository;
 import org.salesync.record_service.repositories.RecordTypeRelationRepository;
+import org.salesync.record_service.repositories.RecordTypeRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,25 +32,34 @@ public class RecordServiceImpl implements RecordService {
 
     private final RecordRepository recordRepository;
     private final RecordTypeRepository recordTypeRepository;
+    private final RecordTypePropertyRepository recordTypePropertyRepository;
     private final RestTemplate restTemplate;
     private final RecordTypeRelationRepository recordTypeRelationRepository;
     private final RecordMapper recordMapper = RecordMapper.INSTANCE;
     private final RecordTypeRelationMapper recordTypeRelationMapper = RecordTypeRelationMapper.INSTANCE;
-
     private final RelationItemMapper relationItemMapper = RelationItemMapper.INSTANCE;
-
+    private final RecordTypePropertyMapper recordTypePropertyMapper = RecordTypePropertyMapper.INSTANCE;
 
     @Override
     public ListRecordsResponseDto getFilteredRecords(ListRecordsRequestDto requestDto) {
         Pageable pageRequest = PageRequest.of(requestDto.getCurrentPage() - 1, requestDto.getPageSize());
-        Page<Record> page = recordRepository
-                .getFilteredRecord(requestDto.getTypePropertyId(),
-                        requestDto.getTypeId(),
-                        requestDto.getSearchTerm(),
-                        requestDto.getIsAsc(),
-                        pageRequest
-                );
-//        Map typeData = restTemplate.getForObject("http://type-service/api/v1/types/{typeId}", Map.class, typeId);
+        Page<Record> page = null;
+        if (requestDto.getPropertyName() != null) {
+            page = recordRepository
+                    .getFilteredRecord(requestDto.getPropertyName(),
+                            requestDto.getTypeId(),
+                            requestDto.getSearchTerm(),
+                            requestDto.getIsAsc(),
+                            pageRequest
+                    );
+        } else {
+            page = recordRepository
+                    .getFilteredRecordsAndOrderByName(requestDto.getTypeId(),
+                            requestDto.getSearchTerm(),
+                            requestDto.getIsAsc(),
+                            pageRequest
+                    );
+        }
         List<RecordDto> recordDtos = page.getContent().stream()
                 .map(recordMapper::recordToRecordDto)
                 .toList();
@@ -93,7 +105,7 @@ public class RecordServiceImpl implements RecordService {
     public RecordTypeRelationDto createRecordTypeRelation(RequestRecordTypeRelationDto requestRecordTypeRelationDto) {
         System.out.println(requestRecordTypeRelationDto);
 
-        UUID sourceRecordId= requestRecordTypeRelationDto.getSourceRecordId();
+        UUID sourceRecordId = requestRecordTypeRelationDto.getSourceRecordId();
         Record sourceRecord = recordRepository.findById(sourceRecordId).orElseThrow(
                 () -> new ObjectNotFoundException(
                         "Source type",
@@ -115,26 +127,35 @@ public class RecordServiceImpl implements RecordService {
                 .destinationRecord(destinationRecord)
                 .build();
 
-
         return recordTypeRelationMapper.recordTypeRelationToRecordTypeRelationDto(
                 recordTypeRelationRepository.save(recordTypeRelation)
         );
     }
 
     @Override
-    public ListRecordTypeRelationsDto getListRecordTypeRelationsById(UUID sourceRecordId){
+    public RecordTypePropertyDto updateRecordProperty(RecordTypePropertyDto recordTypePropertyDto) {
+        RecordTypeProperty recordTypeProperty = recordTypePropertyRepository.findById(recordTypePropertyDto.getId()).orElseThrow(
+                () -> new ObjectNotFoundException(
+                        "Record type property",
+                        recordTypePropertyDto.getId().toString()
+                )
+        );
+        recordTypeProperty.setItemValue(recordTypePropertyDto.getItemValue());
+        return recordTypePropertyMapper.entityToDto(recordTypePropertyRepository.save(recordTypeProperty));
+    }
+
+    @Override
+    public ListRecordTypeRelationsDto getListRecordTypeRelationsById(UUID sourceRecordId) {
 
         List<RecordTypeRelation> listRecordTypeRelations = recordTypeRelationRepository.findBySourceRecordId(sourceRecordId);
         RecordDto sourceRecordDto;
 
-        if (listRecordTypeRelations.isEmpty()){
+        if (listRecordTypeRelations.isEmpty()) {
             sourceRecordDto = recordMapper.recordToRecordDto(recordRepository.findById(sourceRecordId).orElse(null));
-            if (sourceRecordDto == null)
-            {
+            if (sourceRecordDto == null) {
                 throw new ObjectNotFoundException("Record type relations", sourceRecordId.toString());
             }
-        }
-        else
+        } else
             sourceRecordDto = recordMapper.recordToRecordDto(listRecordTypeRelations.get(0).getSourceRecord());
 
         return ListRecordTypeRelationsDto.builder()

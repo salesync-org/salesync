@@ -1,19 +1,22 @@
-package org.salesync.record_service.dtos;
+package com.salesync.typeservice.dtos;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.salesync.typeservice.annotations.validation.contain_id.ContainId;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
-import java.util.List;
 import java.util.UUID;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Builder
+@Setter
 @Getter
-public class RecordTypePropertyDto {
+public class StageDto {
     private UUID id;
-    private String propertyName;
-    private String PropertyLabel;
-    private String itemValue;
+    private String name;
+    private Integer sequenceNumber;
+    @ContainId
+    private TypeDTO type;
 }

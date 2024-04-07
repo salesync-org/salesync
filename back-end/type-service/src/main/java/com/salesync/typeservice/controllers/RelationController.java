@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(Route.Relation.RELATION_ROUTE)
+@RequestMapping("/{realm}" + Route.Relation.RELATION_ROUTE)
 public class RelationController {
     private final IRelationService relationService;
 

@@ -33,7 +33,6 @@ public class Record extends BaseEntity {
     @JsonIgnore
     private List<RecordTypeRelation> destinationRelationships;
 
-
     @OneToOne(mappedBy = "record")
     private RecordType recordType;
 

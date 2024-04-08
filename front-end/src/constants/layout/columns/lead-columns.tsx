@@ -141,7 +141,7 @@ export const createTableLayout = (companyName: string) => {
       id: 'actions',
       header: '',
       cell: () => (
-        <div className='flex aspect-square w-8 cursor-pointer items-center justify-center rounded-[4px] border'>
+        <div className='flex aspect-square w-8 cursor-pointer items-center justify-center rounded-[4px] border border-button-stroke m-1 dark:border-button-stroke-dark '>
           <Icon name='arrow_drop_down' size='32px' />
         </div>
       )

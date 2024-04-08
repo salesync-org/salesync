@@ -36,7 +36,7 @@ const Popup: React.FC<PopupProps> = ({ isOpen = false, onClose, onClick, childre
   return (
     <>
       {isPopupOpen && (
-        <div ref={popup} className={cn(" bg-panel/80 dark:bg-panel-dark/80 overflow-y-scroll", className)} onClick={handleOnClick} {...restProps}>
+        <div ref={popup} className={cn(" bg-panel/80 dark:bg-panel-dark/80 overflow-y-hidden", className)} onClick={handleOnClick} {...restProps}>
           <div className="">
             {children}
           </div>

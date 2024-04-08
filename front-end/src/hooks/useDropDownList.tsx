@@ -12,9 +12,8 @@ export function useDropDownList({ref, open} : {ref: React.RefObject<HTMLDivEleme
       const windowHeight = window.innerHeight;
       const dropdownRect = dropdownElement.getBoundingClientRect();
       const spaceBelow = windowHeight - dropdownRect.bottom;
-
       // Adjust the condition based on your specific requirements
-      setDropDirection(spaceBelow > 20 * parseFloat(getComputedStyle(document.documentElement).fontSize));
+      setDropDirection(spaceBelow < 10 * parseFloat(getComputedStyle(document.documentElement).fontSize));
     }
   }, [open]);
 

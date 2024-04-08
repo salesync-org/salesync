@@ -5,6 +5,8 @@ import com.salesync.typeservice.constants.Route;
 import com.salesync.typeservice.dtos.TypeDTO;
 import com.salesync.typeservice.dtos.TypeRelationDTO;
 import com.salesync.typeservice.dtos.TypeRelationResponseDTO;
+import com.salesync.typeservice.entities.Type;
+import com.salesync.typeservice.repositories.TypeRepository;
 import com.salesync.typeservice.services.type.TypeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +19,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(Route.Type.TYPE_ROUTE)
+@RequestMapping("/{realm}" + Route.Type.TYPE_ROUTE)
 @RequiredArgsConstructor
 public class TypeController {
 
@@ -53,6 +55,11 @@ public class TypeController {
     @PutMapping
     public ResponseEntity<TypeRelationResponseDTO> updateTypeRelation(@RequestBody TypeRelationDTO typeRelationDTO) {
         return ResponseEntity.ok(typeService.updateLabelOfTypeRelation(typeRelationDTO));
+    }
+
+    @GetMapping(Route.Type.TYPE_DETAILS)
+    public ResponseEntity<Type> test(@PathVariable UUID typeId){
+        return ResponseEntity.ok(typeService.getTypeDetailsById(typeId));
     }
 
 

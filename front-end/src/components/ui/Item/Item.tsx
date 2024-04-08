@@ -40,7 +40,8 @@ const Item: React.FC<ItemProps> = ({
             <div
               className={cn(
                 'flex h-9 w-9 items-center justify-center rounded-full align-middle',
-                'bg-button-background-light dark:bg-button-background-dark'
+                'bg-button-background-light dark:bg-button-background-dark',
+                selected && 'bg-secondary-dark dark:bg-secondary-light text-text-dark dark:text-text-light'
               )}
             >
               {icon}

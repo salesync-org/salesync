@@ -22,11 +22,12 @@ const QuickSetting = () => {
       </Button>
       <nav
         className={cn(
-          'fixed bottom-0 right-0 top-[104px] flex w-[400px] flex-col gap-6 rounded-sm bg-white shadow-2xl transition-all duration-200',
+          'fixed bottom-0 right-0 top-[104px] flex w-[400px] flex-col gap-6 rounded  bg-panel dark:bg-panel-dark shadow-2xl shadow-button-background-dark/10 transition-all duration-200',
+          'border-button-stroke dark:border-button-stroke-dark border-[2px] ',
           isOpen ? 'translate-x-0' : 'translate-x-[100%]'
         )}
       >
-        <div className='flex items-center justify-between border-b px-6 py-3'>
+        <div className='flex items-center justify-between border-b border-button-stroke dark:border-button-stroke-dark  px-6 py-3'>
           <h2 className='text-base font-normal leading-5'>Quick Settings</h2>
           <span title='Close' onClick={() => setIsOpen(false)}>
             <Icon name='close' size='1rem' className='m-auto block cursor-pointer hover:text-primary-color' />
@@ -41,7 +42,7 @@ const QuickSetting = () => {
             <Icon name='open_in_new' />
           </Button>
           <section>
-            <h3 className='mb-2 font-bold leading-8'>Customization</h3>
+            <h3 className='mb-2 leading-8'>Customization</h3>
             <ul>
               <li>
                 <QuickSettingItem icon='edit_document' title='Fields' desc='Create a custom input field.' href='#' />
@@ -63,9 +64,13 @@ const QuickSetting = () => {
                 <QuickSettingItem
                   icon='person_add'
                   title='Users'
-                  onClick={() => {setUserSetting(true)}}
-                  desc='Add and manage users.' href='#' />
-              <UserModal isOpen={isUserSettingOpen} setIsOpen={setUserSetting} />
+                  onClick={() => {
+                    setUserSetting(true);
+                  }}
+                  desc='Add and manage users.'
+                  href='#'
+                />
+                <UserModal isOpen={isUserSettingOpen} setIsOpen={setUserSetting} />
               </li>
               <li>
                 <QuickSettingItem
@@ -116,10 +121,10 @@ const QuickSettingItem = ({
       className='group flex cursor-pointer items-center gap-3 rounded-sm p-2 hover:bg-primary-color/10 hover:shadow-sm'
       onClick={onClick}
     >
-      <Icon name={icon} className='grid h-8 w-8 place-content-center rounded-full bg-blue-800 text-white' />
+      <Icon name={icon} className='grid h-10 w-10 aspect-square place-content-center rounded-full bg-blue-800 text-white' />
       <div>
-        <h3 className='text-sm font-bold leading-5 text-primary-color group-hover:underline'>{title}</h3>
-        <p className='text-xs text-gray-400'>{desc}</p>
+        <h3 className='font-semibold leading-5 text-primary-color group-hover:underline'>{title}</h3>
+        <p className='text-xs dark:text-secondary/70 text-secondary-dark/70'>{desc}</p>
       </div>
     </div>
   );

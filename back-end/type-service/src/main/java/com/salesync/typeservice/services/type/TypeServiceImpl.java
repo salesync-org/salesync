@@ -168,4 +168,13 @@ public class TypeServiceImpl implements TypeService {
         return TypeRelationResponseDTO.builder().sourceTypeRelation(savedTypeRelation).destinationTypeRelation(savedInverseTypeRelation).build();
 
     }
+
+    @Override
+    public Type getTypeDetailsById(UUID typeId) {
+        return typeRepository.findById(typeId)
+                .orElseThrow(() -> new ObjectNotFoundException(
+                        Type.class.getSimpleName(),
+                        typeId.toString()
+                ));
+    }
 }

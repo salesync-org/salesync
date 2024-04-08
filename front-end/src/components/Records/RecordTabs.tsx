@@ -1,7 +1,9 @@
 import Icon from '@/components/ui/Icon/Icon';
+import useAuth from '@/hooks/useAuth';
 import { cn } from '@/utils/utils';
-import { useQueryClient } from 'react-query';
+import { useEffect } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
+import LoadingSpinner from '../ui/Loading/LoadingSpinner';
 
 interface RecordTabsProps {
   tabs: Type[];
@@ -11,7 +13,29 @@ interface RecordTabsProps {
 
 const RecordTabs = ({ tabs = [], name }: RecordTabsProps) => {
   const id = useParams().typeId as string;
-  const queryClient = useQueryClient();
+  const companyName = useParams().companyName as string;
+  const { updateUser, user, isLoading, setUser } = useAuth();
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (user) {
+        updateUser(companyName, user);
+      }
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  }, [companyName, updateUser, user]);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (!user) {
+    return null;
+  }
+
+  const layoutOrders = user.settings.layout_order;
+  const saleLayoutIndex = layoutOrders.findIndex((layoutOrder) => layoutOrder.name === 'Sales');
 
   const handleDragStart = (e: React.DragEvent<HTMLAnchorElement>) => {
     e.currentTarget.classList.add('opacity-0');
@@ -34,7 +58,17 @@ const RecordTabs = ({ tabs = [], name }: RecordTabsProps) => {
       const to = Number(sibling.getAttribute('value'));
       const newTabs = [...tabs];
       newTabs.splice(to, 0, newTabs.splice(from, 1)[0]);
-      queryClient.setQueryData('types', newTabs);
+
+      layoutOrders[saleLayoutIndex].types = newTabs;
+      const updatedUser = {
+        ...user,
+        settings: {
+          ...user.settings,
+          layout_order: layoutOrders
+        }
+      };
+
+      setUser(updatedUser);
     }
   };
 
@@ -49,14 +83,13 @@ const RecordTabs = ({ tabs = [], name }: RecordTabsProps) => {
     localStorage.setItem(name, JSON.stringify(tabs));
   };
 
-  const { companyName = '' } = useParams();
   return (
     <nav className='h-full'>
       <ul className={`${name}-tabs flex`}>
         {tabs.map((tab, index) => {
           return (
             <li
-              key={tab.id}
+              key={tab.type_id}
               className={`-translate-x-[${index * 2}%] relative text-sm leading-5`}
               value={index}
               style={{
@@ -65,7 +98,7 @@ const RecordTabs = ({ tabs = [], name }: RecordTabsProps) => {
               }}
             >
               <NavLink
-                to={`/${companyName}/sales/${tab.id}`}
+                to={`/${companyName}/sales/${tab.type_id}`}
                 data-index={index}
                 draggable
                 onDragStart={handleDragStart}
@@ -75,13 +108,13 @@ const RecordTabs = ({ tabs = [], name }: RecordTabsProps) => {
                 className={({ isActive }) =>
                   cn(
                     'flex cursor-pointer items-center gap-1 truncate border-t-[3px] border-transparent bg-clip-border px-3 py-2 transition-all duration-100 ease-in-out',
-                    isActive && 'bg-secondary/40',
-                    'hover:bg-secondary/30',
+                    isActive && 'bg-secondary/40 dark:bg-secondary-dark/40',
+                    'hover:bg-secondary/30 dark:hover:bg-secondary-dark/30',
                     `${name}-tab`
                   )
                 }
               >
-                {tab.id === id && (
+                {tab.type_id === id && (
                   <span
                     className={cn('absolute left-[-1px] right-[-1px] top-0 h-[3px] animate-to-top bg-primary')}
                   ></span>

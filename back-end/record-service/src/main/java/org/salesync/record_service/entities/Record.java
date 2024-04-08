@@ -33,9 +33,9 @@ public class Record extends BaseEntity {
     @JsonIgnore
     private List<RecordTypeRelation> destinationRelationships;
 
-    @OneToOne(mappedBy = "record")
+    @OneToOne(mappedBy = "record", cascade = CascadeType.ALL)
     private RecordType recordType;
 
-    @OneToOne(mappedBy = "record")
+    @OneToOne(mappedBy = "record", cascade = CascadeType.ALL)
     private RecordStage recordStage;
 }

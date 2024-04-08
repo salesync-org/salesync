@@ -1,5 +1,5 @@
 # Use a lightweight Java base image - adjust the version as needed
-FROM openjdk:17-alpine 
+FROM openjdk:17-alpine
 
 # Create a working directory for your app
 WORKDIR /app

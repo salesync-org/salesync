@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDropDownList } from 'hooks/useDropDownList';
 import { cn } from 'utils/utils';
 import {Popup } from '..';
+import useResize from '@/hooks/useResize';
 
 interface ListProps {
   children: React.ReactNode;
@@ -27,11 +28,13 @@ const List = ({
   const menuRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(open);
   const { shouldDropUp } = useDropDownList({ ref: menuRef, open });
+  const [aboveSize, belowSize] = useResize(menuRef, isOpen);
   // useClickOutside([menuRef], () => setIsOpen(false));
 
   useEffect(() => {
     setIsOpen(open);
   }, [open]);
+
 
   const handleTabKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === 'Enter') {
@@ -61,19 +64,28 @@ const List = ({
     handleOptionClick(event.target as HTMLElement);
   };
 
+  const calculateMaxSize = () => {
+    if (align) {
+      return window.innerHeight - 10;
+    }
+    return shouldDropUp ? Math.max(aboveSize - 30, 0) : Math.max(belowSize - 30, 0);
+  }
+
   return (
     <>
+    <div className='bg-transparent'></div>
       {/* <div ref={menuRef} className={cn(isOpen && 'fixed left-0 right-0 top-0 z-[51] w-[1500px] h-[1500px] bg-blue')} onClick={()=>{setIsOpen(false)}}/> */}
-        <div ref={menuRef}>
+        <div style={{ maxHeight: calculateMaxSize(), overflow: 'auto'}} ref={menuRef} className='bg-transparent'>
           <Popup
+            style={{ maxHeight: calculateMaxSize(),  overflow: 'auto' }}
             className={cn(
-              'absolute z-[50] backdrop-blur-2xl max-h-[400px] overflow-y-auto overflow-x-hidden rounded border-[1px] px-2 transition-all duration-100 ease-in-out',
+              'absolute z-[50] overflow-x-hidden rounded border-[2px] px-2 h-fit transition-all duration-100 ease-in-out',
               align === 'left' && 'left-0',
               align === 'right' && 'right-0',
               divide ? 'divide divide-y-2 *:py-2 divide-button-stroke-light dark:divide-button-stroke-dark' : 'py-2',
               'bg-button-background-light dark:bg-button-background-dark',
               'border-button-stroke-light dark:border-button-stroke-dark',
-              shouldDropUp ? 'top-12 origin-bottom' : 'bottom-12 origin-top',
+              shouldDropUp ? 'origin-center bottom-10' : 'origin-center top-[60px]',
               align &&
                 cn(
                   shouldDropUp

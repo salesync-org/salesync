@@ -21,7 +21,7 @@ const TypeCard = ({ type }: { type: Type }) => {
             <Button
               onClick={async () => {
                 showModal(MODAL_TYPES.CREATE_RECORD_MODAL, {
-                  typeId: type.id
+                  typeId: type.type_id
                 });
               }}
             >
@@ -32,9 +32,11 @@ const TypeCard = ({ type }: { type: Type }) => {
               <DropDownItem title='View Card' value={''} />
             </DropDown>
           </div>
-          <TypeTable type={type}></TypeTable>
+          <div className='mt-3'>
+            <TypeTable type={type}></TypeTable>
+          </div>
         </div>
-        <div className='flex w-full flex-row items-center justify-between border-t border-black'>
+        <div className='flex w-full flex-row items-center justify-between border-t border-input-stroke pt-3 dark:border-input-stroke-dark'>
           <TextButton
             onClick={() => {
               console.log('first');

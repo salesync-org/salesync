@@ -1,46 +1,59 @@
 import auth from '@/api/auth';
-import { useState, createContext, useEffect } from 'react';
+import { useState, createContext, useEffect, Dispatch, useCallback } from 'react';
 
 type AuthContext = {
   user: User | null;
+  setUser: Dispatch<React.SetStateAction<User | null>>;
   isLoading: boolean;
   isAuthenticated: boolean;
   signUp: (signUpInfo: SignUpInfo) => Promise<void>;
   login: ({ companyName, email, password }: { companyName: string; email: string; password: string }) => Promise<void>;
   logout: () => Promise<void>;
-  fetchUser: () => Promise<void>;
+  updateUser: (companyName: string, updatedUser: User) => Promise<void>;
 };
 
 export const AuthContext = createContext<AuthContext | null>(null);
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     const token = localStorage.getItem('access_token');
     return Boolean(token);
   });
 
+  const location = window.location.href;
+  const companyName = location.length > 3 ? location.split('/')[3] : '';
+  console.log('companyName', companyName);
   useEffect(() => {
-    try {
-      setIsLoading(true);
-      const token = localStorage.getItem('access_token');
-      if (!token) {
-        throw new Error('No token found');
-      }
+    const authenticated = async () => {
+      try {
+        setIsLoading(true);
+        const token = localStorage.getItem('access_token');
+        const user = companyName && companyName.length > 0 ? await auth.getUser(companyName) : null;
 
-      setIsAuthenticated(true);
-    } catch (error) {
-      setIsAuthenticated(false);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+        if (!token || !user) {
+          throw new Error('No token found');
+        }
+
+        setUser(user);
+        setIsAuthenticated(true);
+      } catch (error) {
+        setIsAuthenticated(false);
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    authenticated();
+  }, [companyName]);
 
   const signUp = async (signUpInfo: SignUpInfo) => {
     const res: TokenResponse = await auth.signUp(signUpInfo);
     if (res) {
       setIsAuthenticated(true);
+      setUser(res.user);
       localStorage.setItem('access_token', res.access_token);
     }
   };
@@ -49,18 +62,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const res = await auth.login(companyName, email, password);
     if (res) {
       setIsAuthenticated(true);
+      setUser(res.user);
       localStorage.setItem('access_token', res.access_token);
-    }
-  };
-
-  const fetchUser = async () => {
-    try {
-      if (!localStorage.getItem('access_token')) return;
-      if (user) return;
-      const res = await auth.getUser();
-      setUser(res);
-    } catch (error) {
-      console.error(error);
     }
   };
 
@@ -75,7 +78,24 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const value = { user, isLoading, isAuthenticated, login, logout, fetchUser, signUp };
+  const updateUser = useCallback(
+    async (companyName: string, updatedUser: User) => {
+      try {
+        const res = await auth.updateUser(companyName, updatedUser);
+
+        if (res) {
+          setUser(updatedUser);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [setUser]
+  );
+
+  // if (!companyName) return null;
+
+  const value = { user, setUser, isLoading, isAuthenticated, login, logout, signUp, updateUser };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 

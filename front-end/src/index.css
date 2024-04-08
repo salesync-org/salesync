@@ -22,30 +22,41 @@
 
 @layer base {
     h1 {
-        font-size: 1.85em;
+        font-size: 1.85rem;
         font-weight: 650;
         line-height: 1.85rem;
+        color: rgb(15, 23, 42);
+        @apply dark:text-white;
     }
     h2 {
-        font-size: 1.4em;
+        font-size: 1.4rem;
         font-weight: 620;
-        line-height: 1.5rem;
+        line-height: 1.7rem;
+        color: rgb(15, 23, 42);
+        @apply dark:text-white;
     }
     h3 {
+        font-size: 1.1rem;
         font-weight: 600;
         line-height: 1.5rem;
+        color: rgb(15, 23, 42);
+        @apply dark:text-white;
     }
     h4 {
         font-weight: 550;
         line-height: 1.5rem;
+        color: rgb(15, 23, 42);
+        @apply dark:text-white;
     }
     h5 {
         font-size: 0.85rem;
-        font-weight: 500;
-        line-height: 1.5rem;
+        font-weight: 400;
+        line-height: 1.2rem;
+        @apply dark:text-white;
     }
     div, p, span, label, td, th {
         font-size: 1rem;
+        font-weight: 360;
         line-height: 1.5rem;
     }
 }

@@ -1,25 +1,78 @@
 {
-  "layout_order": {
-    "Home": [
-        "Home"
-    ],
-    "Sale": [
-        "Lead",
-        "Contact",
-        "Opportunity",
-        "Account"
-    ],
-    "Service": [
-        "Case",
-        "Contact",
-        "Account"
-    ],
-    "Marketing": [
-        "Campaign",
-        "Lead",
-        "Contact",
-        "Opportunity",
-        "Account"
-    ]
-  }
+  "layout_order": [
+    {
+      "name": "Home",
+      "icon": "home",
+      "types": [
+        {
+          "name": "Home",
+          "type_id": null
+        }
+      ]
+    },
+    {
+        "name": "Sales",
+        "icon": "monitoring",
+        "types": [
+            {
+            "name": "Lead",
+            "type_id": "11111111-1111-1111-1111-111111111111"
+            },
+            {
+            "name": "Contact",
+            "type_id": "22222222-2222-2222-2222-222222222222"
+            },
+            {
+            "name": "Opportunity",
+            "type_id": "33333333-3333-3333-3333-333333333333"
+            },
+            {
+            "name": "Account",
+            "type_id": "44444444-4444-4444-4444-444444444444"
+            }
+        ]
+        },
+        {
+        "name": "Services",
+          "icon": "ecg_heart",
+        "types": [
+            {
+            "name": "Home",
+            "type_id": null
+            }
+        ]
+        },
+        {
+        "name": "Commerce",
+          "icon": "shopping_cart",
+        "types": [
+          {
+            "name": "Lead",
+            "type_id": "11111111-1111-1111-1111-111111111111"
+          },
+          {
+            "name": "Contact",
+            "type_id": "22222222-2222-2222-2222-222222222222"
+          },
+          {
+            "name": "Opportunity",
+            "type_id": "33333333-3333-3333-3333-333333333333"
+          },
+          {
+            "name": "Account",
+            "type_id": "44444444-4444-4444-4444-444444444444"
+          }
+        ]
+    },
+    {
+      "name": "Marketing",
+      "icon": "domain",
+      "types": [
+        {
+          "name": "Home",
+          "type_id": null
+        }
+      ]
+    }
+  ]
 }

@@ -1,10 +1,16 @@
 import salesyncIcon from 'assets/salesync_icon.png';
 
 import { ThemeToggle, UserInfo, Search, QuickSetting } from './index';
+import { cn } from '@/utils/utils';
 
-const Header = () => {
+const Header = ({ className }: { className?: String }) => {
   return (
-    <div className='fixed left-[76px] top-0 z-50 flex h-14 w-[calc(100vw-76px)] flex-grow items-center justify-between border-[1px] border-input-stroke bg-panel pl-3 pr-5 py-1 dark:border-input-stroke-dark  dark:bg-panel-dark'>
+    <div
+      className={cn(
+        'fixed left-[76px] top-0 z-[100] flex h-16 w-[calc(100vw-76px)] flex-grow items-center justify-between border-[1px] border-input-stroke bg-panel py-1 pl-3 pr-5 dark:border-input-stroke-dark  dark:bg-panel-dark',
+        className
+      )}
+    >
       <a className='aspect-square h-10 w-10' href='/cheatsheet'>
         <img src={salesyncIcon} className='' alt='header icon' />
       </a>

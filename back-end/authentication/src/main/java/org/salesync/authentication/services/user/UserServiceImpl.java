@@ -8,12 +8,14 @@ import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.KeyResource;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.RoleResource;
+import org.keycloak.authorization.client.AuthorizationDeniedException;
 import org.keycloak.crypto.KeyUse;
 import org.keycloak.representations.AccessToken;
 import org.keycloak.representations.idm.*;
 import org.salesync.authentication.configurations.KeyStoreConfig;
 import org.salesync.authentication.constants.UserAttributes;
 import org.salesync.authentication.converters.KeyConverter;
+import org.salesync.authentication.dtos.ResetPasswordDto;
 import org.salesync.authentication.dtos.UserDetailDto;
 import org.salesync.authentication.dtos.UserDto;
 import org.salesync.authentication.dtos.ValidationResponseDto;
@@ -38,7 +40,7 @@ public class UserServiceImpl implements UserService {
     private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Override
-    public UserDto validateUser(String realmName, String accessToken) {
+    public UserDetailDto validateUser(String realmName, String accessToken) {
         try {
             RealmResource realmResource = keycloak.realm(realmName);
             PublicKey publicKey = KeyConverter.convertStringToPublicKey(getKey(realmResource));
@@ -48,7 +50,7 @@ public class UserServiceImpl implements UserService {
                     .getToken();
             if (token.isActive()) {
                 String userId = token.getSubject();
-                return loadUser(realmResource, userId);
+                return loadDetailUser(realmResource, userId);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -130,6 +132,25 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    @Override
+    public String resetPassword(String token, String realmName, ResetPasswordDto resetPasswordDto) {
+        try {
+            RealmResource realmResource = keycloak.realm(realmName);
+            if (verifyToken(token)) {
+                String userId = resetPasswordDto.getUserId();
+                CredentialRepresentation credential = new CredentialRepresentation();
+                credential.setType(CredentialRepresentation.PASSWORD);
+                credential.setValue(resetPasswordDto.getNewPassword());
+                realmResource.users().get(userId).resetPassword(credential);
+
+                return "Password Reset Successfully";
+            }
+        } catch (Exception e) {
+            throw new AuthorizationDeniedException(e);
+        }
+        return null;
+    }
+
     private String getKey(RealmResource realmResource) {
         KeyResource keyResource = realmResource.keys();
         KeysMetadataRepresentation keysMetadata = keyResource.getKeyMetadata();
@@ -175,7 +196,6 @@ public class UserServiceImpl implements UserService {
     private UserDetailDto loadDetailUser(RealmResource realmResource, String userId) {
 
         try {
-            UserRepresentation user = realmResource.users().get(userId).toRepresentation();
             UserDto userDto = loadUser(realmResource, userId);
             UserDetailDto userDetailDto = new UserDetailDto();
             userDetailDto.setFirstName(userDto.getFirstName());
@@ -225,5 +245,36 @@ public class UserServiceImpl implements UserService {
                         + Long.parseLong(Objects.requireNonNull(
                                 env.getProperty("jwt.expiration.ms")))))
                         .sign(algorithm);
+    }
+    @Override
+    public String generateVerifyToken(String userId, String userName, String email, String realmName) {
+        Algorithm algorithm = Algorithm.RSA256(
+                (RSAPublicKey) keyStore.loadPublicKey(),
+                (RSAPrivateKey) keyStore.loadPrivateKey());
+        return JWT.create()
+                .withClaim("userId", userId)
+                .withClaim("userName", userName)
+                .withClaim("email", email)
+                .withClaim("realmName", realmName)
+                .withSubject(userName)
+                .withIssuedAt(new Date(System.currentTimeMillis()))
+                .withExpiresAt(new Date(System.currentTimeMillis()
+                        + Long.parseLong(Objects.requireNonNull(
+                        env.getProperty("jwt.expiration.ms")))))
+                .sign(algorithm);
+    }
+
+    private boolean verifyToken(String token) {
+        try {
+            Algorithm algorithm = Algorithm.RSA256(
+                    (RSAPublicKey) keyStore.loadPublicKey(),
+                    (RSAPrivateKey) keyStore.loadPrivateKey());
+            JWT.require(algorithm)
+                    .build()
+                    .verify(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

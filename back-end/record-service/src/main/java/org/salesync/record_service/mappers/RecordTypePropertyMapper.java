@@ -9,6 +9,6 @@ import org.salesync.record_service.entities.RecordTypeProperty;
 public interface RecordTypePropertyMapper {
     RecordTypePropertyMapper INSTANCE = Mappers.getMapper(RecordTypePropertyMapper.class);
 
-    RecordTypeProperty recordPropertyDtoToRecordProperty(RecordTypePropertyDto recordTypePropertyDto);
-    RecordTypePropertyDto recordPropertyToRecordPropertyDto(RecordTypeProperty recordTypeProperty);
+    RecordTypeProperty dtoToEntity(RecordTypePropertyDto recordTypePropertyDto);
+    RecordTypePropertyDto entityToDto(RecordTypeProperty recordTypeProperty);
 }

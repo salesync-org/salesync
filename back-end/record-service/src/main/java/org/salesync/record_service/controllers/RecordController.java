@@ -52,4 +52,15 @@ public class RecordController {
     public ListRecordTypeRelationsDto getListRecordTypeRelationsById(@PathVariable String sourceRecordId) {
         return recordService.getListRecordTypeRelationsById(UUID.fromString(sourceRecordId));
     }
+
+    @PutMapping(Route.PROPERTY)
+    public ResponseEntity<RecordTypePropertyDto> updateRecordProperty(@RequestBody RecordTypePropertyDto recordTypePropertyDto) {
+        return ResponseEntity.ok(recordService.updateRecordProperty(recordTypePropertyDto));
+    }
+
+    @DeleteMapping
+    public ResponseEntity deleteRecordsById(@RequestBody List<UUID> recordIds) {
+        recordService.deleteRecordsById(recordIds);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -14,4 +14,7 @@ public class BaseEntity {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.UUID)
     protected UUID id;
+
+    @Version
+    protected Long version;
 }

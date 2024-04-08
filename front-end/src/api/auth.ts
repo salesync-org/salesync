@@ -34,6 +34,22 @@ class Auth {
 
     return response.data;
   }
+
+  async verifyEmail() {
+    const response = await instance.get(`${URL}/verify-email`, {
+    });
+
+    return response.data;
+  }
+
+  async changePassword(companyName: string, userId: string, password: string) {
+    const response = await instance.put(`${URL}/${companyName}/user/password`, {
+      user_id: userId,
+      new_password: password
+    });
+
+    return response.data;
+  }
 }
 
 const auth = new Auth();

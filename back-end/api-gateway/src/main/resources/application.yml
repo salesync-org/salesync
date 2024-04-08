@@ -12,7 +12,7 @@ spring:
 
 
 server:
-  port: 8082
+  port: 8083
 
 eureka:
   client:
@@ -30,5 +30,7 @@ logging:
     org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator: info
     org.springframework.cloud.gateway: trace
 
-
+auth:
+  server:
+    url: ${AUTH_SERVER_URL}
 

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Button, Icon, Switch, PrimaryButton, Checkbox, RadioGroupInput } from '@/components/ui';
+import { useState, useRef } from 'react';
+import { Button, Icon, PrimaryButton, RadioGroupInput } from '@/components/ui';
 import { cn } from '@/utils/utils';
+import useClickOutside from '@/hooks/useClickOutside';
 
 const SettingActivity = () => {
   const [intent, setIntent] = useState('normal');
@@ -22,8 +23,15 @@ const SettingActivity = () => {
   ];
   const sortActivity = ['Oldest dates first', 'Newest dates first'];
 
+  const settingBoard = useRef<HTMLDivElement>(null);
+
+  useClickOutside([settingBoard], () => {
+    setIntent('normal');
+    setIsOpen(false);
+  });
+
   return (
-    <div>
+    <div ref={settingBoard}>
       <Button
         className='ml-2 p-3'
         onClick={() => {
@@ -44,13 +52,13 @@ const SettingActivity = () => {
       {isOpen && (
         <div
           className={cn(
-            'fixed bottom-5 right-16 flex h-fit w-[470px] flex-col rounded',
+            'fixed bottom-5 right-10 flex h-fit w-[420px] flex-col rounded',
             'bg-white shadow-2xl shadow-button-background-dark/10 dark:bg-panel-dark',
             'border border-button-stroke dark:border-button-stroke-dark ',
             'z-[110]'
           )}
         >
-          <div className='px-7 pt-5 rounded'>
+          <div className='rounded px-7 pt-5'>
             <Button
               onClick={() => {
                 setIntent('normal');
@@ -68,6 +76,7 @@ const SettingActivity = () => {
                 value={dataRangeResult}
                 onValueChange={setDataRangeResult}
                 className='ml-3 mt-1 grid grid-cols-2'
+                size='small'
               ></RadioGroupInput>
             </div>
 
@@ -78,6 +87,7 @@ const SettingActivity = () => {
                 value={activityToShowResult}
                 onValueChange={setActivityToShowResult}
                 className='ml-3 mt-1 grid grid-cols-2'
+                size='small'
               ></RadioGroupInput>
             </div>
 
@@ -92,11 +102,12 @@ const SettingActivity = () => {
                 value={sortActivityResult}
                 onValueChange={setSortActivityResult}
                 className='ml-3 mt-1'
+                size='small'
               ></RadioGroupInput>
             </div>
           </div>
 
-          <div className='flex w-full justify-between border border-button-stroke bg-panel p-4 dark:bg-panel-dark rounded'>
+          <div className='flex w-full justify-between rounded border border-button-stroke bg-panel p-4 dark:bg-panel-dark'>
             <div>
               <Button onClick={() => {}} disabled>
                 Restore Defaults

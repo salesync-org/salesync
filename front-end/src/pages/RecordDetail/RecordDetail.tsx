@@ -1,5 +1,5 @@
 import { Button, ButtonGroup, DropDown, Icon, Item, Panel } from '@/components/ui';
-import { useState } from 'react';
+// import { useState } from 'react';
 // import { useParams } from 'react-router-dom';
 import GroupProperty from '@/components/RecordDetail/GroupProperty';
 import StageSection from '@/components/Stage/StageSection';
@@ -9,7 +9,7 @@ import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
 import RecordActivity from '@/components/RecordDetail/RecordActivity';
 
 const RecordDetail = () => {
-  const [isMenuOpen, setMenuOpen] = useState(false);
+  // const [isMenuOpen, setMenuOpen] = useState(false);
   // const leadId = useParams().leadId;
 
   const dataAbout = [

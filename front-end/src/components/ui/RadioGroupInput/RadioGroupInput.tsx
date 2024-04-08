@@ -6,18 +6,10 @@ interface RadioGroupProps {
   className?: string;
   value?: string;
   onValueChange?: (value: string) => void;
-  inCircleSize?: string;
-  outCircleSize?: string;
+  size?: 'small' | 'medium' | 'big';
 }
 
-const RadioGroupInput: React.FC<RadioGroupProps> = ({
-  labels,
-  className,
-  value,
-  onValueChange,
-  outCircleSize = '18px',
-  inCircleSize = '10px'
-}) => {
+const RadioGroupInput: React.FC<RadioGroupProps> = ({ labels, className, value, onValueChange, size = 'medium' }) => {
   return (
     <RadioGroup.Root
       className={cn('flex flex-col gap-1', className)}
@@ -30,7 +22,9 @@ const RadioGroupInput: React.FC<RadioGroupProps> = ({
         <div className='flex items-center'>
           <RadioGroup.Item
             className={cn(
-              `h-[${outCircleSize}] w-[${outCircleSize}]`,
+              size === 'medium'
+                ? 'h-[20px] w-[20px]'
+                : cn(size === 'small' ? 'h-[16px] w-[16px]' : 'h-[24px] w-[24px]'),
               'rounded-full border border-text bg-panel outline-none',
               'focus:border-primary focus:shadow-[0_0_2px_2px] focus:shadow-blue-200'
             )}
@@ -41,7 +35,9 @@ const RadioGroupInput: React.FC<RadioGroupProps> = ({
               className={cn(
                 'relative flex h-full w-full items-center justify-center',
                 "after:block after:rounded-[50%] after:bg-primary after:content-['']",
-                `after:h-[${inCircleSize}] after:w-[${inCircleSize}]`
+                size === 'medium'
+                  ? 'after:h-[10px] after:w-[10px]'
+                  : cn(size === 'small' ? 'after:h-[8px] after:w-[8px]' : 'after:h-[12px] after:w-[12px]')
               )}
             />
           </RadioGroup.Item>

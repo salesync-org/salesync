@@ -57,6 +57,7 @@ const SignUp = () => {
   const [errorCheck1, setErrorCheck1] = useState(false);
   // check1: acceptAgreement, check2: receiveMarketingCommunications
 
+  console.log(listCountry);
   const {
     handleSubmit,
     register,
@@ -82,6 +83,9 @@ const SignUp = () => {
       const response = await axios.get('https://countriesnow.space/api/v0.1/countries/states');
       const data: Country[] = response.data.data;
       const lsCountry = data.map((item) => item.name);
+      const index = lsCountry.indexOf('Vietnam');
+      lsCountry.splice(index, 1);
+      lsCountry.unshift('Vietnam');
       setListCountry(lsCountry);
     };
 
@@ -337,7 +341,14 @@ const SignUp = () => {
                   {errors.email && <ErrorText text={errors.email.message} />}
 
                   <div className='mt-4 flex'>
-                    <Checkbox className='mt-1' checked={check1} onClick={() => {setCheck1(!check1); setErrorCheck1(false)}}></Checkbox>
+                    <Checkbox
+                      className='mt-1'
+                      checked={check1}
+                      onClick={() => {
+                        setCheck1(!check1);
+                        setErrorCheck1(false);
+                      }}
+                    ></Checkbox>
                     <div className='ml-2'>
                       <span>I agree to the </span>
                       <a href='' className='text-blue-500'>

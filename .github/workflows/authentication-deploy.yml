@@ -2,7 +2,10 @@ name: Authentication Service Deploy
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
+    paths:
+      - back-end/authentication/**
 
 jobs:
   build:
@@ -62,4 +65,4 @@ jobs:
       - name: Delete old container
         run: sudo docker rm -f authentication-container
       - name: Run Docker Image
-        run: sudo docker run -d -p 8082:8082 --name authentication-container ${{secrets.AWS_ECR_ADDRESS}}/authentication:latest
+        run: docker run -d -e KEYSTORE_PATH=/app/keys/auth.jks -v auth:/app/keys -p 8082:8082 --name authentication-container ${{secrets.AWS_ECR_ADDRESS}}/authentication:latest

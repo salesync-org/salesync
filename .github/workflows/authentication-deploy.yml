@@ -43,6 +43,8 @@ jobs:
       run: docker login -u AWS -p $(aws ecr get-login-password --region ap-southeast-2) ${{secrets.AWS_ECR_ADDRESS}} 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
+    - name: Show Directory Contents (Before Build)
+      run: ls -lah 
     - name: Build and push
       uses: docker/build-push-action@v5
       with:

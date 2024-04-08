@@ -28,12 +28,24 @@ jobs:
       with:
         name: authentication-artifact
         path: ./authentication/artifacts
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-southeast-2
+    - name: Get ECR login authorization
+      id: get_login 
+      run: |
+        password=$(aws ecr get-login-password --region ap-southeast-2)
+        echo "::add-mask::${password}"
+        echo "::set-output name=password::${password}"
     - name: Login to ECR
       uses: docker/login-action@v3
       with:
-        registry: ${{secrets.AWS_ECR_ADDRESS}}
+        registry: ${{ secrets.AWS_ECR_ADDRESS }}
         username: AWS
-        password: ${{ secrets.AWS_ECR_PASSWORD }}
+        password: ${{ steps.get_login.outputs.password }} 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
     - name: Build and push

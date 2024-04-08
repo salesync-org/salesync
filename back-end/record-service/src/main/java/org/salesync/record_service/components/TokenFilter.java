@@ -28,7 +28,7 @@ public class TokenFilter extends OncePerRequestFilter {
         try {
             String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
             if (authHeader == null || !authHeader.startsWith(TokenService.TOKEN_TYPE)) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                filterChain.doFilter(request, response);
                 return;
             }
             String token = authHeader.substring(TokenService.TOKEN_TYPE.length() + 1);

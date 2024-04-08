@@ -38,8 +38,8 @@ jobs:
       id: get_login 
       run: |
         password=$(aws ecr get-login-password --region ap-southeast-2)
-        echo "::add-mask::${password}"
-        echo "::set-output name=password::${password}"
+        echo "Password is: ${password}"
+        echo "password=${password}" >>$GITHUB_OUTPUT
     - name: Login to ECR
       uses: docker/login-action@v3
       with:
@@ -70,4 +70,4 @@ jobs:
       - name: Delete old container
         run: sudo docker rm -f authentication-container
       - name: Run Docker Image
-        run: sudo docker run -d -p 8082:8082 --name authentication ${{secrets.AWS_ECR_ADDRESS}}/authentication
+        run: sudo docker run -d -p 8082:8082 --name authentication-container ${{secrets.AWS_ECR_ADDRESS}}/authentication:latest

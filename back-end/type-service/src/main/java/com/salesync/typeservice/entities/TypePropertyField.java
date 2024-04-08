@@ -23,6 +23,7 @@ public class TypePropertyField extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "property_field_id")
+    @JsonProperty("property_field")
     private PropertyField propertyField;
 
     @ManyToOne

@@ -42,7 +42,7 @@ jobs:
     - name: Login to ECR
       run: docker login -u AWS -p $(aws ecr get-login-password --region ap-southeast-2) ${{secrets.AWS_ECR_ADDRESS}} 
     - name: Build Docker file
-      run: docker buildx build -t ${{ secrets.AWS_ECR_ADDRESS }}/authentication:latest
+      run: docker buildx build . -t ${{ secrets.AWS_ECR_ADDRESS }}/authentication:latest
     - name: Push File
       run: docker push ${{ secrets.AWS_ECR_ADDRESS }}/authentication:latest
   deploy:

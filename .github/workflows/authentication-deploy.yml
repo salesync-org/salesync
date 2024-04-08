@@ -37,6 +37,7 @@ jobs:
       with:
         role-to-assume: arn:aws:iam::767397764432:role/GitHubRole
         role-session-name: authentication_role
+        role-skip-session-tagging: true
         aws-region: ap-southeast-2
     - name: Get ECR login authorization
       id: get_login 

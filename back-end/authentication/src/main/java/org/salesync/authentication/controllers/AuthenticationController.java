@@ -4,9 +4,7 @@ import jakarta.ws.rs.core.Response;
 import lombok.AllArgsConstructor;
 import org.keycloak.representations.AccessTokenResponse;
 import org.salesync.authentication.constants.Routes;
-import org.salesync.authentication.dtos.CompanyRegisterDto;
-import org.salesync.authentication.dtos.LogInDto;
-import org.salesync.authentication.dtos.NewUserDto;
+import org.salesync.authentication.dtos.*;
 import org.salesync.authentication.services.register.RegisterService;
 import org.salesync.authentication.utils.StringUtility;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +29,13 @@ public class AuthenticationController {
             @RequestBody LogInDto loginDTO
     ) {
         return ResponseEntity.ok(registerService.login(realmName, loginDTO));
+    }
+
+    @GetMapping(Routes.AUTH_VERIFY_EMAIL)
+    ResponseEntity<VerifyEmailResponseDto> verifyEmail(
+            @RequestHeader("Authorization") String token
+    ) {
+        return ResponseEntity.ok(registerService.verifyEmail(StringUtility.removeBearer(token)));
     }
 
     @PostMapping(Routes.AUTH_LOGOUT)

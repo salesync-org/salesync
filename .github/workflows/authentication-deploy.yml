@@ -49,7 +49,7 @@ jobs:
       run: docker push ${{ secrets.AWS_ECR_ADDRESS }}/authentication:latest
   deploy:
     needs: build
-    runs-on: [authentication-runner]
+    runs-on: [self-hosted, Linux, X64, authentication]
     steps:
       - name: Login to ECR
         uses: docker/login-action@v3

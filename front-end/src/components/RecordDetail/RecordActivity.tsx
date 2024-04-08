@@ -15,6 +15,10 @@ const RecordActivity = () => {
 
   const [showActivity, setShowActivity] = useState(true);
 
+  const [filter, setFilter] = useState(
+    'Filters: Within 2 months • All activities • List email, Email, Logged calls, Events, and Tasks'
+  );
+
   return (
     <div>
       <div className='flex flex-wrap'>
@@ -31,8 +35,8 @@ const RecordActivity = () => {
       </div>
 
       <div className='flex items-center'>
-        <span>Filters: Within 2 months • All activities • Logged calls, Email, Events, List email, and Tasks</span>
-        <SettingActivity />
+        <span>{filter}</span>
+        <SettingActivity onchangeFilter={setFilter} />
       </div>
 
       <div className='flex flex-row-reverse'>

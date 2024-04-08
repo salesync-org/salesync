@@ -27,11 +27,11 @@ const ActionDropDown = ({ actions }: ActionDropDownProps) => {
           setMenuOpen(false);
         }}
         align='right'
-        className='right-[-50%] top-[32px] mt-0'
+        className='right-[-50%] top-[32px] z-[9999] mt-0'
         divide={false}
       >
         {actions.map((action) => (
-          <Item key={action.title} title={action.title} onClick={action.action} />
+          <Item key={action.title} title={action.title} onClick={action.action} className='text-left' />
         ))}
       </DropDownList>
     </Button>

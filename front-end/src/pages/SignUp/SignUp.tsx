@@ -57,7 +57,6 @@ const SignUp = () => {
   const [errorCheck1, setErrorCheck1] = useState(false);
   // check1: acceptAgreement, check2: receiveMarketingCommunications
 
-  console.log(listCountry);
   const {
     handleSubmit,
     register,

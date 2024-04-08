@@ -58,7 +58,7 @@ jobs:
           username: AWS
           password: ${{ secrets.AWS_ECR_PASSWORD }}
       - name: Pull Image from AWS ECR
-        run: sudo docker pull  ${{secrets.AWS_ECR_ADDRESS}}/authentication:latest
+        run: docker pull  ${{secrets.AWS_ECR_ADDRESS}}/authentication:latest
       - name: Delete old container
         run: sudo docker rm -f authentication-container
       - name: Run Docker Image

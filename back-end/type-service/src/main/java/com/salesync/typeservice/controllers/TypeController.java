@@ -58,9 +58,12 @@ public class TypeController {
     }
 
     @GetMapping(Route.Type.TYPE_DETAILS)
-    public ResponseEntity<Type> test(@PathVariable UUID typeId){
+    public ResponseEntity<Type> getTypeDetails(@PathVariable UUID typeId){
         return ResponseEntity.ok(typeService.getTypeDetailsById(typeId));
     }
+
+
+
 
 
 }

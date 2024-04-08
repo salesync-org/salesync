@@ -5,7 +5,7 @@ import com.salesync.typeservice.entities.TypePropertyField;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(uses = {FieldMapper.class})
+@Mapper
 public interface TypePropertyFieldMapper {
     TypePropertyFieldMapper INSTANCE = Mappers.getMapper(TypePropertyFieldMapper.class);
 

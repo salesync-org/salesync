@@ -66,4 +66,14 @@ public class TypeServiceHandler {
                         .build()
         );
     }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<?> handleBadRequestException(BadRequestException ex) {
+        return ResponseEntity.badRequest().body(
+                ResponseErrorDto.builder()
+                        .status(HttpStatus.BAD_REQUEST.value())
+                        .message(ex.getMessage())
+                        .build()
+        );
+    }
 }

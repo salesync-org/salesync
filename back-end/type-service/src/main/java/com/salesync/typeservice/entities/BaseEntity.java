@@ -1,4 +1,5 @@
 package com.salesync.typeservice.entities;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -19,6 +20,8 @@ public class BaseEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     protected UUID id;
 
+
+    @JsonIgnore
     @Version
     protected Long version;
 }

@@ -12,15 +12,16 @@ import org.mapstruct.factory.Mappers;
 public interface TypePropertyMapper {
 
     TypePropertyMapper INSTANCE = Mappers.getMapper(TypePropertyMapper.class);
-    @Mapping(target = "typeId", source = "type.id")
-    @Mapping(target = "propertyId", source = "property.id")
+
+
+
     @Mapping(target = "fields", source = "typePropertyFields")
     TypePropertyDto entityToDto(TypeProperty entity);
 
 
-    @Mapping(target = "type.id", source = "typeId")
-    @Mapping(target = "property.id", source = "propertyId")
+
     @Mapping(target = "typePropertyFields", source = "fields")
+
     TypeProperty dtoToEntity(TypePropertyDto dto);
 
 }

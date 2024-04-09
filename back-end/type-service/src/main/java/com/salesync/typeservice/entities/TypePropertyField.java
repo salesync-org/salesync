@@ -31,7 +31,4 @@ public class TypePropertyField extends BaseEntity {
     @JsonIgnore
     @JoinColumn(name = "type_property_id")
     private TypeProperty typeProperty;
-
-
-
 }

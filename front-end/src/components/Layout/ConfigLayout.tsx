@@ -8,7 +8,7 @@ const ConfigLayout = () => {
       <AsideNav />
       <div className='flex h-dvh flex-grow flex-col'>
         <Header />
-        <div className='mx-auto mt-16 w-full flex-grow pl-[76px]'>
+        <div className='mx-auto mt-14 w-full flex-grow pl-[76px]'>
           <Outlet />
         </div>
       </div>

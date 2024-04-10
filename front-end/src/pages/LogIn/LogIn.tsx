@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import salesyncLogo from 'assets/salesync_logo.png';
 import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { z } from 'zod';
 
 const loginSchema = z.object({
@@ -31,6 +31,7 @@ const LogIn = () => {
     resolver: zodResolver(loginSchema)
   });
 
+  const [searchParams] = useSearchParams();
   const { login } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -43,7 +44,6 @@ const LogIn = () => {
   const signupRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    console.log('Started');
     const adjustSignupRefHeight = () => {
       if (loginRef.current && signupRef.current) {
         const loginHeight = loginRef.current.offsetHeight;
@@ -53,7 +53,6 @@ const LogIn = () => {
     adjustSignupRefHeight();
     window.addEventListener('resize', adjustSignupRefHeight);
     return () => {
-      console.log('Returned');
       window.removeEventListener('resize', adjustSignupRefHeight);
     };
   }, []);
@@ -66,7 +65,7 @@ const LogIn = () => {
         description: 'You have successfully logged in'
       });
 
-      navigate(`/${companyName}/home`);
+      navigate(searchParams.get('redirectUrl') ?? `/${companyName}/home`);
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {

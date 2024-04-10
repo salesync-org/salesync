@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -33,7 +34,8 @@ public class HttpConfig {
     public List<RequestMatcher> permitAllRequestMatchers() {
         List<RequestMatcher> permitAllMatchers = new ArrayList<>();
 
-//        permitAllMatchers.add(new AntPathRequestMatcher(""));
+        permitAllMatchers.add(new AntPathRequestMatcher("/swagger-ui/**"));
+        permitAllMatchers.add(new AntPathRequestMatcher("/api-docs/**"));
         return permitAllMatchers;
     }
 

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Button, Icon, PrimaryButton, RadioGroupInput, Checkbox, ErrorText } from '@/components/ui';
 import { cn } from '@/utils/utils';
 import useClickOutside from '@/hooks/useClickOutside';

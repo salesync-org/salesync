@@ -45,7 +45,7 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({ icon, name, className, 
       <ButtonGroup className='mb-1 mr-1'>
         <Button
           onClick={() => {
-            if (name === 'New Event') {
+            if (name === 'New Event' || name === 'New Task') {
               // init date and time now
               const date = new Date();
               const currentDate = date.toLocaleDateString();
@@ -55,6 +55,7 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({ icon, name, className, 
               if (arrDate[0].length === 1) arrDate[0] = '0' + arrDate[0];
               if (arrDate[1].length === 1) arrDate[1] = '0' + arrDate[1];
               if (arrTime[3] === 'PM' && arrTime[0] !== '12') arrTime[0] = (Number(arrTime[0]) + 12).toString();
+              if (arrTime[3] === 'AM' && arrTime[0] === '12') arrTime[0] = '00';
               const fineTuneCurrentDate = arrDate[2] + '-' + arrDate[0] + '-' + arrDate[1]; //yyyy-mm-dd
               const fineTuneCurrentTime = arrTime[0] + ':' + arrTime[1]; //hh:mm
               setDateStart(fineTuneCurrentDate);
@@ -204,7 +205,7 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({ icon, name, className, 
                 {typeActivity === 'event' && (
                   <>
                     {/* description */}
-                    <TextArea header='Description' className='mb-4' />
+                    <TextArea header='Description' className='mb-5' />
 
                     {/* date time */}
                     <div className='grid grid-cols-2 gap-2'>
@@ -247,22 +248,50 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({ icon, name, className, 
                 )}
 
                 {typeActivity === 'call' && (
-                  <>
-                    <div>call</div>
-                  </>
+                  <div>
+                    {/* Comments */}
+                    <TextArea header='Comments' className='mb-5' />
+                  </div>
                 )}
 
                 {typeActivity === 'task' && (
-                  <>
-                    <div>task</div>
-                  </>
+                  <div className='grid grid-cols-2 gap-3'>
+                    <DateInput
+                      header='Due Date'
+                      type='date'
+                      value={dateStart}
+                      onChange={(e) => setDateStart(e.target.value)}
+                    />
+                    <InputRecordRelative header='* Assigned To' pattern='assign' />
+                  </div>
                 )}
 
                 {/* Name and Relative to */}
-                <div className='grid grid-cols-2 gap-3'>
+                <div className='mt-5 grid grid-cols-2 gap-2'>
                   <InputRecordRelative header='Name' pattern='name' />
                   <InputRecordRelative header='Relative To' pattern='relation' />
                 </div>
+
+                {typeActivity === 'event' && (
+                  <div className='mt-5'>
+                    <div>
+                      <span>Attendees</span>
+                    </div>
+                    <TextButton
+                      text='People'
+                      className='mt-2 border-b-[3px] border-blue-400 px-3 py-1 font-bold text-text hover:border-blue-500 hover:text-text hover:no-underline'
+                      onClick={() => {}}
+                    />
+                    <div className='border-b-[2px]'></div>
+
+                    <div className='mt-3'>
+                      <TextInput placeholder='Search People...' className='w-full' />
+                    </div>
+                    <div className='rounded h-fit border py-1'></div>
+
+                    <div className='h-12'></div>
+                  </div>
+                )}
               </>
             )}
           </form>

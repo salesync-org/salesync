@@ -24,6 +24,8 @@ const ItemType: React.FC<ItemTypeProps> = ({ name, color }) => {
   if (name === 'opportunity') title = 'Opportunities';
   if (name === 'party_consent') title = 'Party Consents';
   if (name === 'product') title = 'Products';
+  if (name === 'people') title = 'People';
+  if (name === 'queue') title = 'Queues';
 
   return (
     <DropDownItem title='' value={name}>

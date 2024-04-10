@@ -2,22 +2,30 @@ import { Button, Icon, Switch, PrimaryButton } from '@/components/ui';
 import { useState } from 'react';
 import ButtonActivity from './ButtonActivity';
 import SettingActivity from './SettingActivity';
+import InforActivity from './InforActivity';
 
 const RecordActivity = () => {
   const [expand, setExpand] = useState(false);
   const [expand2, setExpand2] = useState(false);
   // expand: upcoming and overdue
   // expand2: this month
-  const [expandEmail, setExpandEmail] = useState(false);
-  const [expandEvent, setExpandEvent] = useState(false);
-  const [expandCall, setExpandCall] = useState(false);
-  const [expandTask, setExpandTask] = useState(false);
 
   const [showActivity, setShowActivity] = useState(true);
 
   const [filter, setFilter] = useState(
     'Filters: Within 2 months • All activities • List email, Email, Logged calls, Events, and Tasks'
   );
+
+  const date = new Date() // value test
+  // 
+  const dataActivity = [
+    // only 'event' has 'start' and 'end'
+    {id: '97cbbf51-9c3b-4152-afc5-a9a330bd908b', type: 'event', subject: 'event1', start: date, end: date, description: 'abc'},
+    {id: '7f6691f2-9d67-49f0-a6f9-3505c775040c', type: 'event', subject: 'event2', start: date, end: date, description: 'abc'},
+    {id: '010487d1-6979-4659-966c-d9920d7c6ea4', type: 'call', subject: 'call1', start: date, end: date, description: 'abc'},
+    {id: 'f74ed33e-da98-4e88-9c3c-025465b0415b', type: 'call', subject: 'call2', start: date, end: date, description: 'abc'},
+    {id: '45bfa24c-b7d8-44a7-8e07-88c204c5bc9d', type: 'task', subject: 'task1', start: date, end: date, description: 'abc'},
+  ]
 
   return (
     <div>
@@ -78,207 +86,13 @@ const RecordActivity = () => {
               <div className='item-center flex'>
                 {expand2 && <Icon name='expand_more' size='1' />}
                 {!expand2 && <Icon name='chevron_right' size='1' />}
-                <span className='font-bold'>March • 2024</span>
+                <span className='font-bold'>April • 2024</span>
               </div>
               <span className='font-bold'>This Month</span>
             </Button>
             {expand2 && (
               <>
-                {/* Email */}
-                <div className='my-2'>
-                  <div className='flex justify-between'>
-                    <div className='flex w-16'>
-                      <button onClick={() => setExpandEmail(!expandEmail)}>
-                        {expandEmail && <Icon name='expand_more' size='1' />}
-                        {!expandEmail && <Icon name='chevron_right' size='1' />}
-                      </button>
-                      <Icon name='mail' className='rounded bg-neutral-400 p-0.5 text-white'></Icon>
-                    </div>
-                    <div className='flex w-full justify-between pl-4'>
-                      <a href='' className='text-blue-500'>
-                        Email
-                      </a>
-                      <div className='flex'>
-                        <span>7 th 3</span>
-                        <Button className='ml-2 h-5 w-5'>
-                          <Icon name='arrow_drop_down' size='1'></Icon>
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className='mt-1 table h-full w-full'>
-                    <div className='relative table-cell w-16'>
-                      <div className='absolute right-5 top-0 h-full w-1 bg-neutral-400'></div>
-                    </div>
-                    <div className='table-cell'>
-                      <div className='px-2'>
-                        <div className='px-2'>
-                          <span>You sent an email</span>
-                        </div>
-                        {expandEmail && (
-                          <div>
-                            <div className='w-full rounded border border-zinc-200 px-2'>
-                              <div>
-                                <span>Description</span>
-                              </div>
-                              <div>
-                                <span>abc</span>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Event */}
-                <div className='my-2'>
-                  <div className='flex justify-between'>
-                    <div className='flex w-16'>
-                      <button onClick={() => setExpandEvent(!expandEvent)}>
-                        {expandEvent && <Icon name='expand_more' size='1' />}
-                        {!expandEvent && <Icon name='chevron_right' size='1' />}
-                      </button>
-                      <Icon name='calendar_month' className='rounded bg-purple-400 p-0.5 text-white'></Icon>
-                    </div>
-                    <div className='flex w-full justify-between pl-4'>
-                      <a href='' className='text-blue-500'>
-                        Event
-                      </a>
-                      <div className='flex'>
-                        <span>7 th 3</span>
-                        <Button className='ml-2 h-5 w-5'>
-                          <Icon name='arrow_drop_down' size='1'></Icon>
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className='mt-1 table h-full w-full'>
-                    <div className='relative table-cell w-16'>
-                      <div className='absolute right-5 top-0 h-full w-1 bg-purple-400'></div>
-                    </div>
-                    <div className='table-cell'>
-                      <div className='px-2'>
-                        <div className='px-2'>
-                          <span>You will have a meeting tomorrow</span>
-                        </div>
-                        {expandEvent && (
-                          <div>
-                            <div className='w-full rounded border border-zinc-200 px-2'>
-                              <div>
-                                <span>Description</span>
-                              </div>
-                              <div>
-                                <span>abc</span>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Call */}
-                <div className='my-2'>
-                  <div className='flex justify-between'>
-                    <div className='flex w-16'>
-                      <button onClick={() => setExpandCall(!expandCall)}>
-                        {expandCall && <Icon name='expand_more' size='1' />}
-                        {!expandCall && <Icon name='chevron_right' size='1' />}
-                      </button>
-                      <Icon name='call_log' className='rounded bg-teal-600 p-0.5 text-white'></Icon>
-                    </div>
-                    <div className='flex w-full justify-between pl-4'>
-                      <a href='' className='text-blue-500'>
-                        Call
-                      </a>
-                      <div className='flex'>
-                        <span>7 th 3</span>
-                        <Button className='ml-2 h-5 w-5'>
-                          <Icon name='arrow_drop_down' size='1'></Icon>
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className='mt-1 table h-full w-full'>
-                    <div className='relative table-cell w-16'>
-                      <div className='absolute right-5 top-0 h-full w-1 bg-teal-600'></div>
-                    </div>
-                    <div className='table-cell'>
-                      <div className='px-2'>
-                        <div className='px-2'>
-                          <span>You logged a call</span>
-                        </div>
-                        {expandCall && (
-                          <div>
-                            <div className='w-full rounded border border-zinc-200 px-2'>
-                              <div>
-                                <span>Description</span>
-                              </div>
-                              <div>
-                                <span>abc</span>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Task */}
-                <div className='my-2'>
-                  <div className='flex justify-between'>
-                    <div className='flex w-16'>
-                      <button onClick={() => setExpandTask(!expandTask)}>
-                        {expandTask && <Icon name='expand_more' size='1' />}
-                        {!expandTask && <Icon name='chevron_right' size='1' />}
-                      </button>
-                      <Icon name='checklist' className='rounded bg-green-600 p-0.5 text-white'></Icon>
-                    </div>
-                    <div className='flex w-full justify-between pl-4'>
-                      <a href='' className='text-blue-500'>
-                        Task
-                      </a>
-                      <div className='flex'>
-                        <span>7 th 3</span>
-                        <Button className='ml-2 h-5 w-5'>
-                          <Icon name='arrow_drop_down' size='1'></Icon>
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className='mt-1 table h-full w-full'>
-                    <div className='relative table-cell w-16'>
-                      <div className='absolute right-5 top-0 h-full w-1 bg-green-600'></div>
-                    </div>
-                    <div className='table-cell'>
-                      <div className='px-2'>
-                        <div className='px-2'>
-                          <span>you have a job to do</span>
-                        </div>
-                        {expandTask && (
-                          <div>
-                            <div className='w-full rounded border border-zinc-200 px-2'>
-                              <div>
-                                <span>Description</span>
-                              </div>
-                              <div>
-                                <span>abc</span>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                {dataActivity.map((item)=><InforActivity data={item}/>)}
               </>
             )}
           </div>

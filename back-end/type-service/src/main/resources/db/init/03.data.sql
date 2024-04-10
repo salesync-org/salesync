@@ -90,9 +90,7 @@ INSERT INTO public.property_field(property_field_id,property_id, field_id, label
                                   item_value, default_value,
                                   is_required, is_key) VALUES
 
-    ('11111111-1111-1111-1111-111111111111',get_id('property_id', 'property', 'Text'),
-          get_id('field_id', 'field', 'Text', 'input_type'),
-        'Default Value', null, '', true, true),
+
     (
      '11111111-1111-1111-1111-111111111112'
      ,get_id('property_id', 'property', 'Text'),
@@ -109,10 +107,7 @@ INSERT INTO public.property_field(property_field_id,property_id, field_id, label
         get_id('field_id', 'field', 'Checkbox', 'input_type'),
         'Unique', null, 'false', true, true),
 
-    ('22222222-2222-2222-2222-222222222221',
-     get_id('property_id', 'property', 'TextArea'),
-     get_id('field_id', 'field', 'Text', 'input_type'),
-     'Default Value', null, '', true, true),
+
     (
         '22222222-2222-2222-2222-222222222222'
         ,get_id('property_id', 'property', 'TextArea'),
@@ -129,11 +124,7 @@ INSERT INTO public.property_field(property_field_id,property_id, field_id, label
         get_id('field_id', 'field', 'Checkbox', 'input_type'),
         'Unique', null, 'false', true, true),
 
-    (
-         '33333333-3333-3333-3333-333333333331',
-         get_id('property_id', 'property', 'Number'),
-         get_id('field_id', 'field', 'Text', 'input_type'),
-         'Default Value', null, '', true, true),
+
     (
         '33333333-3333-3333-3333-333333333332'
         ,get_id('property_id', 'property', 'Number'),
@@ -150,17 +141,11 @@ INSERT INTO public.property_field(property_field_id,property_id, field_id, label
         get_id('field_id', 'field', 'Checkbox', 'input_type'),
         'Unique', null, 'false', true, true),
 
-    (
-        '44444444-4444-4444-4444-444444444441',
-        get_id('property_id', 'property', 'Checkbox'),
-        get_id('field_id', 'field', 'Text', 'input_type'),
-        'Default Value', null, 'Unchecked', true, true),
 
-    (
-        '55555555-5555-5555-5555-555555555551',
-        get_id('property_id', 'property', 'URL'),
-        get_id('field_id', 'field', 'Text', 'input_type'),
-        'Default Value', null, '', true, true),
+    --Checkbox
+
+
+
     (
         '55555555-5555-5555-5555-555555555552'
         ,get_id('property_id', 'property', 'URL'),
@@ -168,11 +153,7 @@ INSERT INTO public.property_field(property_field_id,property_id, field_id, label
         'Required', null, 'false', true, false),
 
 
-    (
-        '66666666-6666-6666-6666-666666666661',
-        get_id('property_id', 'property', 'Email'),
-        get_id('field_id', 'field', 'Text', 'input_type'),
-        'Default Value', null, '', true, true),
+
     (
         '66666666-6666-6666-6666-666666666662'
         ,get_id('property_id', 'property', 'Email'),
@@ -185,15 +166,11 @@ INSERT INTO public.property_field(property_field_id,property_id, field_id, label
         'Unique', null, 'false', true, false),
 
    (
-        '77777777-7777-7777-7777-777777777771'
-        ,get_id('property_id', 'property', 'Phone'),
-        get_id('field_id', 'field', 'Checkbox', 'input_type'),
-        'Required', null, 'false', true, false),
-    (
         '77777777-7777-7777-7777-777777777772'
         ,get_id('property_id', 'property', 'Phone'),
         get_id('field_id', 'field', 'Checkbox', 'input_type'),
-        'Default value', null, 'false', true, false),
+        'Required', null, 'false', true, false),
+
 
     (
        '11111111-1111-1111-1111-111111111121'
@@ -252,10 +229,10 @@ INSERT INTO public.property_field(property_field_id,property_id, field_id, label
 --
 
 INSERT INTO public.type_property(type_property_id, property_id, type_id, name, label, default_value, sequence) VALUES
-    ('11111111-1111-1111-1111-111111111111', get_id('property_id', 'property', 'Text'), '11111111-1111-1111-1111-111111111111', 'lead_name', 'Lead Name','No Name', 1),
-    ('22222222-2222-2222-2222-222222222222', get_id('property_id', 'property', 'Text'), '11111111-1111-1111-1111-111111111111', 'Title', 'Title','NoTitle', 2),
-    ('33333333-3333-3333-3333-333333333333',get_id('property_id', 'property', 'Text'), '11111111-1111-1111-1111-111111111111', 'Company', 'Company','NoCompany', 3),
-    ('44444444-4444-4444-4444-444444444444', get_id('property_id', 'property', 'Phone'), '11111111-1111-1111-1111-111111111111', 'Phone', 'Phone','NoPhone', 4)
+    ('11111111-1111-1111-1111-111111111111', get_id('property_id', 'property', 'Text'), '11111111-1111-1111-1111-111111111111', 'Name', 'Lead Name','No Name', 1),
+    ('22222222-2222-2222-2222-222222222222', get_id('property_id', 'property', 'Text'), '11111111-1111-1111-1111-111111111111', 'Title', 'Title','No Title', 2),
+    ('33333333-3333-3333-3333-333333333333',get_id('property_id', 'property', 'Text'), '11111111-1111-1111-1111-111111111111', 'Company', 'Company','No Company', 3),
+    ('44444444-4444-4444-4444-444444444444', get_id('property_id', 'property', 'Phone'), '11111111-1111-1111-1111-111111111111', 'Phone', 'Phone','No Phone', 4)
 --     ('55555555-5555-5555-5555-555555555555', get_id('property_id', 'property', 'Text'), '22222222-2222-2222-2222-222222222222', 'Email', 'Email','NoEmail', 1),
 --     ('66666666-6666-6666-6666-666666666666', get_id('property_id', 'property', 'Text'), '22222222-2222-2222-2222-222222222222', 'Title', 'Title','NoTitle', 2),
 --     ('77777777-7777-7777-7777-777777777777',get_id('property_id', 'property', 'Text'), '22222222-2222-2222-2222-222222222222', 'Company', 'Company','NoCompany', 3),
@@ -277,22 +254,22 @@ INSERT INTO public.type_property_field
     (type_property_id,property_field_id, item_value)
 VALUES
     --text
-    ('11111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111111', 'lead name'),
+
     ('11111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111112', 'false'),
     ('11111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111113', '255'),
     ('11111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111114', 'false'),
 
-    ('22222222-2222-2222-2222-222222222222', '11111111-1111-1111-1111-111111111111', 'lead title'),
+
     ('22222222-2222-2222-2222-222222222222', '11111111-1111-1111-1111-111111111112', 'false'),
     ('22222222-2222-2222-2222-222222222222', '11111111-1111-1111-1111-111111111113', '255'),
     ('22222222-2222-2222-2222-222222222222', '11111111-1111-1111-1111-111111111114', 'false'),
 
-    ('33333333-3333-3333-3333-333333333333', '11111111-1111-1111-1111-111111111111', 'lead company'),
+
     ('33333333-3333-3333-3333-333333333333', '11111111-1111-1111-1111-111111111112', 'false'),
     ('33333333-3333-3333-3333-333333333333', '11111111-1111-1111-1111-111111111113', '255'),
     ('33333333-3333-3333-3333-333333333333', '11111111-1111-1111-1111-111111111114', 'false'),
 
-    ('44444444-4444-4444-4444-444444444444', '77777777-7777-7777-7777-777777777771', 'false'),
-    ('44444444-4444-4444-4444-444444444444', '77777777-7777-7777-7777-777777777772', '0123456789')
+    ('44444444-4444-4444-4444-444444444444', '77777777-7777-7777-7777-777777777772', 'false')
+
 
 ;

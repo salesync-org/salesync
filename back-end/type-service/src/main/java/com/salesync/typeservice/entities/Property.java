@@ -25,6 +25,6 @@ public class Property extends BaseEntity {
     private List<TypeProperty> typeProperties;
 
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
+//    @JsonIgnore
     private List<PropertyField> propertyFields;
 }

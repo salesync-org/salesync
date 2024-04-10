@@ -61,4 +61,4 @@ jobs:
       - name: Delete old container
         run: sudo docker rm -f authentication-container
       - name: Run Docker Image
-        run: sudo docker run -d -e KEYSTORE_PATH=/app/keys/auth.jks -e KEYCLOAK_HOST=${{KEYCLOAK_HOST_URL}} -v /home/ec2-user/auth:/app/keys -p 8082:8082 --name authentication-container ${{secrets.AWS_ECR_ADDRESS}}/authentication:latest
+        run: sudo docker run -d -e KEYSTORE_PATH=/app/keys/auth.jks -e KEYCLOAK_HOST=${{secrets.KEYCLOAK_HOST_URL}} -v /home/ec2-user/auth:/app/keys -p 8082:8082 --name authentication-container ${{secrets.AWS_ECR_ADDRESS}}/authentication:latest

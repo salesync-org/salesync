@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/utils/utils';
-import { Button, Icon, TextButton } from '../ui';
+import { Button, DropDown, Icon, TextButton } from '../ui';
 import { UUID } from 'crypto';
 
 interface InforActivityStruct {
@@ -76,10 +76,125 @@ const InforActivity: React.FC<InforActivityProps> = ({ className, data }) => {
           <TextButton text={data.subject} onClick={() => {}} />
           <div className='flex items-center'>
             {data.type === 'event' && <span className='mr-1'>{`${timeStart} |`}</span>}
-            <span>{`${dateStart}`}</span>
-            <Button className='ml-2 h-8 p-0'>
-              <Icon name='arrow_drop_down' className='m-0 p-0' size='1'></Icon>
-            </Button>
+            <span className='mr-3'>{`${dateStart}`}</span>
+
+            <DropDown
+              defaultValue=''
+              value=''
+              prefixIcon={<Icon name='arrow_drop_down' size='1' className='-m-1 ml-0' />}
+              className='m-0 p-0'
+            >
+              <div className='h-fit'>
+                {data.type === 'event' && (
+                  <>
+                    <Button
+                      className={cn(
+                        'flex w-full justify-start border border-white bg-white hover:border-button-stroke',
+                        'dark:border-button-background-dark dark:hover:border-button-stroke-dark'
+                      )}
+                      onClick={() => {}}
+                    >
+                      <span className='text-nowrap'>New Opportunity</span>
+                    </Button>
+                    <Button
+                      className={cn(
+                        'flex w-full justify-start border border-white bg-white hover:border-button-stroke',
+                        'dark:border-button-background-dark dark:hover:border-button-stroke-dark'
+                      )}
+                      onClick={() => {}}
+                    >
+                      <span className='text-nowrap'>Edit</span>
+                    </Button>
+                    <Button
+                      className={cn(
+                        'flex w-full justify-start border border-white bg-white hover:border-button-stroke',
+                        'dark:border-button-background-dark dark:hover:border-button-stroke-dark'
+                      )}
+                      onClick={() => {}}
+                    >
+                      <span className='text-nowrap'>Delete</span>
+                    </Button>
+                  </>
+                )}
+
+                {data.type !== 'event' && (
+                  <>
+                    <Button
+                      className={cn(
+                        'flex w-full justify-start border border-white bg-white hover:border-button-stroke',
+                        'dark:border-button-background-dark dark:hover:border-button-stroke-dark'
+                      )}
+                      onClick={() => {}}
+                    >
+                      <span className='text-nowrap'>Edit Comments</span>
+                    </Button>
+                    <Button
+                      className={cn(
+                        'flex w-full justify-start border border-white bg-white hover:border-button-stroke',
+                        'dark:border-button-background-dark dark:hover:border-button-stroke-dark'
+                      )}
+                      onClick={() => {}}
+                    >
+                      <span className='text-nowrap'>Change Date</span>
+                    </Button>
+                    <Button
+                      className={cn(
+                        'flex w-full justify-start border border-white bg-white hover:border-button-stroke',
+                        'dark:border-button-background-dark dark:hover:border-button-stroke-dark'
+                      )}
+                      onClick={() => {}}
+                    >
+                      <span className='text-nowrap'>Create Follow-Up Task</span>
+                    </Button>
+                    <Button
+                      className={cn(
+                        'flex w-full justify-start border border-white bg-white hover:border-button-stroke',
+                        'dark:border-button-background-dark dark:hover:border-button-stroke-dark'
+                      )}
+                      onClick={() => {}}
+                    >
+                      <span className='text-nowrap'>Change Status</span>
+                    </Button>
+                    <Button
+                      className={cn(
+                        'flex w-full justify-start border border-white bg-white hover:border-button-stroke',
+                        'dark:border-button-background-dark dark:hover:border-button-stroke-dark'
+                      )}
+                      onClick={() => {}}
+                    >
+                      <span className='text-nowrap'>Change Priority</span>
+                    </Button>
+                    <Button
+                      className={cn(
+                        'flex w-full justify-start border border-white bg-white hover:border-button-stroke',
+                        'dark:border-button-background-dark dark:hover:border-button-stroke-dark'
+                      )}
+                      onClick={() => {}}
+                    >
+                      <span className='text-nowrap'>Edit</span>
+                    </Button>
+                    <Button
+                      className={cn(
+                        'flex w-full justify-start border border-white bg-white hover:border-button-stroke',
+                        'dark:border-button-background-dark dark:hover:border-button-stroke-dark'
+                      )}
+                      onClick={() => {}}
+                    >
+                      <span className='text-nowrap'>Delete</span>
+                    </Button>
+                    <Button
+                      className={cn(
+                        'flex w-full justify-start border border-white bg-white hover:border-button-stroke',
+                        'dark:border-button-background-dark dark:hover:border-button-stroke-dark'
+                      )}
+                      onClick={() => {}}
+                    >
+                      <span className='text-nowrap'>Create Follow-Up Event</span>
+                    </Button>
+                  </>
+                )}
+              </div>
+            </DropDown>
           </div>
         </div>
       </div>

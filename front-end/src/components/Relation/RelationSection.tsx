@@ -7,11 +7,11 @@ const RelationSection = () => {
     console.log('Create new relation');
   };
 
-  const editRecord = (recordId) => {
+  const editRecord = (recordId: string) => {
     console.log('Edit record ', recordId);
   };
 
-  const deleteRecord = (recordId) => {
+  const deleteRecord = (recordId: string) => {
     console.log('Delete record ', recordId);
   };
 

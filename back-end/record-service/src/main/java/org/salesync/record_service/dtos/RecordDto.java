@@ -18,6 +18,7 @@ public class RecordDto {
     private UUID id;
     private String name;
     private UUID userId;
+    TypeDto type;
     @JsonProperty("properties")
     private List<RecordTypePropertyDto> recordProperties;
 }

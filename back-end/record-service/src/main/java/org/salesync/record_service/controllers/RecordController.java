@@ -7,13 +7,10 @@ import org.salesync.record_service.constants.Route;
 import org.salesync.record_service.dtos.record_type_relation_dto.ListRecordTypeRelationsDto;
 import org.salesync.record_service.dtos.record_type_relation_dto.RecordTypeRelationDto;
 import org.salesync.record_service.dtos.record_type_relation_dto.RequestRecordTypeRelationDto;
-import org.salesync.record_service.entities.RecordTypeRelation;
 import org.salesync.record_service.services.record.RecordService;
 import org.springframework.core.env.Environment;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -23,7 +20,6 @@ import java.util.UUID;
 public class RecordController {
 
     private final RecordService recordService;
-    private final Environment environment;
 
     @PostMapping(Route.LIST_RECORD)
     public ResponseEntity<ListRecordsResponseDto> getFilteredRecords(@Valid @RequestBody ListRecordsRequestDto listRecordsRequestDto) {
@@ -47,21 +43,12 @@ public class RecordController {
 
     @PostMapping(Route.RECORD_TYPE_RELATION)
     public RecordTypeRelationDto createRecordTypeRelation(@RequestBody RequestRecordTypeRelationDto requestRecordTypeRelationDto) {
-
-        RestTemplate restTemplate = new RestTemplate();
-        String apiGatewayUrl = environment.getProperty("API_GATEWAY_URL");
-        System.out.println(apiGatewayUrl);
         return recordService.createRecordTypeRelation(requestRecordTypeRelationDto);
     }
 
     @GetMapping(Route.LIST_RECORD_TYPE_RELATION)
-    public ListRecordTypeRelationsDto getListRecordTypeRelationsById(@PathVariable String sourceRecordId, @PathVariable String realm) {
-        RestTemplate restTemplate = new RestTemplate();
-        String apiGatewayUrl = environment.getProperty("API_GATEWAY_URL");
-        System.out.println(apiGatewayUrl);
-        String url = String.format("%s/%s/types/%s", apiGatewayUrl, realm, );
-        restTemplate.postForObject(apiGatewayUrl + "/" " realms", recordTypePropertyDto, RecordTypePropertyDto.class);
-        return recordService.getListRecordTypeRelationsById(UUID.fromString(sourceRecordId));
+    public ListRecordTypeRelationsDto getListRecordTypeRelationsById(@PathVariable String sourceRecordId, @PathVariable String realm, @RequestHeader(name = "Authorization") String authorization) {
+        return recordService.getListRecordTypeRelationsById(UUID.fromString(sourceRecordId),authorization, realm);
     }
 
     @PutMapping(Route.PROPERTY)

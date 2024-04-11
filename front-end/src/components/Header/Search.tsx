@@ -8,15 +8,14 @@ const Search = ({ className }: { className?: string }) => {
     <div
       className={cn(
         'z-40 mx-2 flex h-full w-full items-center justify-center align-middle',
-        isSearchOpen &&
-          'fixed bottom-0 left-0 right-0 top-0 space-x-4 bg-panel-light px-4 py-2 backdrop-blur-lg dark:bg-panel-dark',
+        isSearchOpen && 'fixed inset-0 space-x-4 bg-panel-light px-4 py-2 backdrop-blur-lg dark:bg-panel-dark',
         className
       )}
     >
       <TextInput
         placeholder='Search for anything'
         className={cn(
-          'absolute left-0 right-6 top-3 mx-auto',
+          'absolute left-0 right-6 top-1/2 mx-auto translate-y-[-50%]',
           'sm:visible sm:w-5/12 md:w-1/2',
           isSearchOpen ? 'visible z-50 w-[75%]' : 'invisible'
         )}

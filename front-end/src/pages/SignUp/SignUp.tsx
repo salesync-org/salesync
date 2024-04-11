@@ -343,17 +343,18 @@ const SignUp = () => {
                     <Checkbox
                       className='mt-1'
                       checked={check1}
+                      id='agreePolicy'
                       onClick={() => {
                         setCheck1(!check1);
                         setErrorCheck1(false);
                       }}
                     ></Checkbox>
-                    <div className='ml-2'>
+                    <label htmlFor='agreePolicy' className='ml-2 block'>
                       <span>I agree to the </span>
                       <a href='' className='text-blue-500'>
                         Main Services Agreement.
                       </a>
-                    </div>
+                    </label>
                   </div>
                   {errorCheck1 && (
                     <ErrorText
@@ -362,13 +363,18 @@ const SignUp = () => {
                     />
                   )}
                   <div className='mt-2 flex'>
-                    <Checkbox className='mt-1' checked={check2} onClick={() => setCheck2(!check2)}></Checkbox>
-                    <div className='ml-2'>
+                    <Checkbox
+                      className='mt-1'
+                      id='agreeReceive'
+                      checked={check2}
+                      onClick={() => setCheck2(!check2)}
+                    ></Checkbox>
+                    <label htmlFor='agreeReceive' className='ml-2'>
                       <span>
                         Yes, I would like to receive marketing communications regarding SaleSync products, services, and
                         events. I can unsubscribe at any time.
                       </span>
-                    </div>
+                    </label>
                   </div>
                   <div className='my-5 flex space-x-1'>
                     <h5>

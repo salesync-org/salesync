@@ -121,8 +121,11 @@ const LogIn = () => {
                   {isSubmitting ? 'Logging in...' : 'Log In'}
                 </PrimaryButton>
                 <div className='mt-4 flex items-center'>
-                  <Checkbox></Checkbox>
-                  <p className='ml-2'> Remember me</p>
+                  <Checkbox id='agreeRemember' />
+                  <label htmlFor='agreeRemember' className='ml-2'>
+                    {' '}
+                    Remember me
+                  </label>
                 </div>
                 <div className='mt-4 flex'>
                   <Link to='/forgot-password' className='text-sm text-blue-500'>

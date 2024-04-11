@@ -7,7 +7,7 @@ const Header = ({ className }: { className?: string }) => {
   return (
     <div
       className={cn(
-        'fixed left-[76px] top-0 z-[100] flex h-14 w-[calc(100vw-76px)] flex-grow items-center justify-between border-[1px] border-input-stroke bg-panel py-1 pl-3 pr-5 dark:border-input-stroke-dark  dark:bg-panel-dark',
+        'fixed top-0 z-[100] flex h-16 w-[calc(100vw)] flex-grow items-center justify-between border-[1px] border-input-stroke bg-panel py-4 pl-3 pr-5 dark:border-input-stroke-dark  dark:bg-panel-dark',
         className
       )}
     >

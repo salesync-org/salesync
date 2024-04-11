@@ -3,13 +3,13 @@ import { DropDown, DropDownItem, Modal, ModalFooter, Panel, PrimaryButton, TextI
 import UserTable from '@/components/ui/Table/UserTable';
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 const UserModal = () => {
   const [email, setEmail] = useState('');
   const [profile, setProfile] = useState('');
-  const { companyName = '' } = useParams();
-
+  const { companyName } = useParams();
+  const location = useLocation();
   const {
     hideModal,
     store: { modalType }
@@ -27,10 +27,15 @@ const UserModal = () => {
     };
 
     const token = localStorage.getItem('access_token');
-    createUser(companyName, user, token ? token : '');
-    setEmail('');
-    setProfile('');
+    const companyName = location.pathname.split('/')[1];
+
+    if (companyName && token) {
+      createUser(companyName, user, token ? token : '');
+      setEmail('');
+      setProfile('');
+    }
   };
+
   return (
     <Modal
       isOpen={modalType === MODAL_TYPES.USER_MODAL}

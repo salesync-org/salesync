@@ -81,6 +81,7 @@ const QuickSetting = () => {
                   title='Users'
                   onClick={() => {
                     showModal(MODAL_TYPES.USER_MODAL);
+                    setIsOpen(false);
                   }}
                   desc='Add and manage users.'
                   href='#'

@@ -50,7 +50,7 @@ const Modal = ({ children, title, isOpen, onClose, className, isStatic = true }:
     <>
       {isOpen && (
         <div
-          className='fixed left-0 right-0 top-0 z-50 flex max-h-full w-full items-center justify-center overflow-x-hidden overflow-y-hidden bg-black bg-opacity-50 transition-all dark:bg-gray-900 dark:bg-opacity-50 md:inset-0'
+          className='fixed left-0 right-0 top-0 z-[999] flex max-h-full w-full items-center justify-center overflow-x-hidden overflow-y-hidden bg-black bg-opacity-50 transition-all dark:bg-gray-900 dark:bg-opacity-50 md:inset-0'
           // onClick={handleCloseWhenClickOutside}
         >
           <div ref={ref} className='relative max-h-full w-[1000px] origin-[0_50%] animate-modal' id='modal'>

@@ -1,26 +1,21 @@
 package org.salesync.apigateway.config;
 
 import lombok.RequiredArgsConstructor;
-import org.salesync.apigateway.constants.Service;
 import org.salesync.apigateway.dtos.TokenDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
-import org.springframework.cloud.gateway.route.Route;
 import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.net.URI;
 import java.text.MessageFormat;
 import java.util.Map;
 
@@ -28,8 +23,6 @@ import java.util.Map;
 @Configuration
 @RequiredArgsConstructor
 public class AuthenticationFilter implements GatewayFilter {
-
-    private final WebClient.Builder webClientBuilder;
 
     @Bean
     public RestTemplateBuilder restTemplate() {

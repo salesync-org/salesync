@@ -32,3 +32,4 @@ build/
 
 ### VS Code ###
 .vscode/
+back-end/authentication/artifacts/authentication-0.0.1-SNAPSHOT.jar

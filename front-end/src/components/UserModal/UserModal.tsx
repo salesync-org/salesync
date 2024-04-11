@@ -1,14 +1,28 @@
 import { createUser } from '@/api/users';
-import { DropDown, DropDownItem, Modal, ModalFooter, Panel, PrimaryButton, TextInput } from '@/components/ui';
+import {
+  DropDown,
+  DropDownItem,
+  ErrorText,
+  Modal,
+  ModalFooter,
+  Panel,
+  PrimaryButton,
+  TextInput
+} from '@/components/ui';
 import UserTable from '@/components/ui/Table/UserTable';
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 import { useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const UserModal = () => {
   const [email, setEmail] = useState('');
   const [profile, setProfile] = useState('');
-  const { companyName } = useParams();
+
+  const [errors, setErrors] = useState({
+    email: '',
+    profile: ''
+  });
+
   const location = useLocation();
   const {
     hideModal,
@@ -20,11 +34,21 @@ const UserModal = () => {
     const user: NewUser = {
       email: email,
       role: profile,
-      first_name: '',
-      last_name: '',
-      job_title: '',
-      phone: ''
+      first_name: 'Unknown',
+      last_name: 'Name',
+      job_title: 'None',
+      phone: 'None'
     };
+
+    if (!email) {
+      setErrors((prev) => ({ ...prev, email: 'Email is required' }));
+      return;
+    }
+
+    if (!profile) {
+      setErrors((prev) => ({ ...prev, profile: 'Profile is required' }));
+      return;
+    }
 
     const token = localStorage.getItem('access_token');
     const companyName = location.pathname.split('/')[1];
@@ -53,11 +77,19 @@ const UserModal = () => {
                   setEmail(e.target.value);
                 }}
                 header='Email'
+                isError={!!errors.email}
               ></TextInput>
-              <DropDown value='Choose Profile' onValueChange={(newValue) => setProfile(newValue)} header='Profile'>
+              {errors.email && <ErrorText className='text-sm text-red-500' text={errors.email} />}
+              <DropDown
+                isError={!!errors.profile}
+                value='Choose Profile'
+                onValueChange={(newValue) => setProfile(newValue)}
+                header='Profile'
+              >
                 <DropDownItem title='System Administrator' value='admin-user'></DropDownItem>
                 <DropDownItem title='Standard User' value='standard-user'></DropDownItem>
               </DropDown>
+              {errors.email && <ErrorText className='text-sm text-red-500' text={errors.profile} />}
             </div>
             <PrimaryButton
               className='mt-5'

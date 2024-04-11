@@ -1,6 +1,6 @@
 keycloak:
   realm: master
-  auth-server-url: https://authentication-service.salesync.org
+  auth-server-url: ${KEYCLOAK_HOST}
   ssl-required: true
   resource: admin-cli
   use-resource-role-mappings: true

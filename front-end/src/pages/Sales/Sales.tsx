@@ -5,6 +5,7 @@ import useAuth from '@/hooks/useAuth';
 import { Navigate, useParams } from 'react-router-dom';
 import RecordTabs from '../../components/Records/RecordTabs';
 import ErrorToaster from '../Error/ErrorToaster';
+import NavigationButton from '@/components/NavigationButton/NavigationButton';
 
 const Sales = () => {
   const { user, isLoading } = useAuth();
@@ -30,8 +31,9 @@ const Sales = () => {
 
   return (
     <div className='flex h-full flex-col'>
-      <section className='fixed left-0 right-0 z-50 flex items-center bg-panel px-6 dark:bg-panel-dark'>
-        <h2 className='pr-6 leading-6'>Sales</h2>
+      <section className='fixed left-0 right-0 z-50 flex h-[40px] items-center bg-panel px-6 dark:bg-panel-dark'>
+        <NavigationButton />
+        <h2 className='select-none pl-6 pr-6 leading-6'>Sales</h2>
         <RecordTabs tabs={types} name='salesTabs' />
         <Icon name='edit' className='ml-auto' />
       </section>

@@ -37,8 +37,8 @@ const RecordDetail = () => {
     { name: 'Last Modified By', value: '' }
   ];
 
-  const { recordId = '' } = useParams();
-  const { data: record, isLoading } = useRecord(recordId);
+  const { recordId = '', companyName = '' } = useParams();
+  const { data: record, isLoading } = useRecord(companyName, recordId);
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -47,6 +47,8 @@ const RecordDetail = () => {
   if (!record) {
     return null;
   }
+
+  // console.log(record);
 
   return (
     <div className='flex flex-col'>

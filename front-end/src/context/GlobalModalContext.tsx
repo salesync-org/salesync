@@ -1,13 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, createContext, useContext } from 'react';
 import RecordModal from '@/pages/Home/RecordModal';
+import UserModal from '@/components/UserModal/UserModal';
 
 export const MODAL_TYPES = {
-  CREATE_RECORD_MODAL: 'CREATE_RECORD_MODAL'
+  CREATE_RECORD_MODAL: 'CREATE_RECORD_MODAL',
+  USER_MODAL: 'USER_MODAL'
 };
 
 const MODAL_COMPONENTS: any = {
-  [MODAL_TYPES.CREATE_RECORD_MODAL]: RecordModal
+  [MODAL_TYPES.CREATE_RECORD_MODAL]: RecordModal,
+  [MODAL_TYPES.USER_MODAL]: UserModal
 };
 
 type GlobalModalContext = {

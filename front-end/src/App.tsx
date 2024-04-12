@@ -45,6 +45,9 @@ function App() {
               <Route path='record/:recordId' element={<RecordDetail />} />
               <Route path='setting/' element={<SettingLayout />}>
                 <Route path='personal-information' element={<PersonalInformationSetting />} />
+                <Route path='company-information' element={<PersonalInformationSetting />} />
+                <Route path='profiles' element={<PersonalInformationSetting />} />
+                <Route path='users' element={<PersonalInformationSetting />} />
 
                 {/* Thêm setting routes ở đây */}
               </Route>

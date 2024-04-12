@@ -16,7 +16,7 @@ export const ItemSetting = ({
     <NavLink
       className={({ isActive }) =>
         cn(
-          'px-5 py-3 text-sm font-medium hover:bg-primary-color/10',
+          'select-none px-5 py-3 text-sm font-medium hover:bg-primary-color/10',
           isActive && 'border-l-[3px] border-primary-color bg-primary-color/20 pl-[15px]',
           className,
           isActive && activeClassName

@@ -11,6 +11,8 @@ import com.salesync.typeservice.repositories.StageRepository;
 import com.salesync.typeservice.repositories.TypeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +39,11 @@ public class StageServiceImpl implements StageService {
             return stageMapper.entityToDto(stageRepository.save(stage));
         }
         throw new TypeServiceException("Type is not a stage object");
+    }
+
+    @Override
+    public List<Stage> getStagesByTypeId(UUID typeId) {
+        return stageRepository.findAllByTypeIdOrderBySequenceNumberAsc(typeId);
     }
 
     @Override

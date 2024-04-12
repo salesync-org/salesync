@@ -1,5 +1,7 @@
 package com.salesync.typeservice.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +19,11 @@ import lombok.experimental.SuperBuilder;
 public class Stage extends BaseEntity {
 
     private String name;
+
+    @JsonProperty("sequence_number")
     private Integer sequenceNumber;
+
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "type_id")
     private Type type;

@@ -2,12 +2,10 @@ import { Button, ButtonGroup, DropDownList, Icon, Item, Panel } from '@/componen
 import { useState } from 'react';
 // import { useParams } from 'react-router-dom';
 import GroupProperty from '@/components/RecordDetail/GroupProperty';
-import StageSection from '@/components/Stage/StageSection';
+import RelationSections from '@/components/Relation/RelationSections';
+import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
 import useRecord from '@/hooks/record-service/useRecord';
 import { useParams } from 'react-router-dom';
-import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
-import RelationSection from '@/components/Relation/RelationSection';
-import RelationSections from '@/components/Relation/RelationSections';
 
 const RecordDetail = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);

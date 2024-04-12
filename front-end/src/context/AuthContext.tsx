@@ -1,5 +1,6 @@
 import auth from '@/api/auth';
 import { useState, createContext, useEffect, Dispatch, useCallback } from 'react';
+import { set } from 'react-hook-form';
 
 type AuthContext = {
   user: User | null;
@@ -9,6 +10,7 @@ type AuthContext = {
   signUp: (signUpInfo: SignUpInfo) => Promise<void>;
   login: ({ companyName, email, password }: { companyName: string; email: string; password: string }) => Promise<void>;
   logout: () => Promise<void>;
+  reloadUser: () => Promise<void>;
   updateUser: (companyName: string, updatedUser: User) => Promise<void>;
 };
 
@@ -92,9 +94,14 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     [setUser]
   );
 
+  const reloadUser = async () => {
+    const user = companyName && companyName.length > 0 ? await auth.getUser(companyName) : null;
+    setUser(user);
+  };
+
   // if (!companyName) return null;
 
-  const value = { user, setUser, isLoading, isAuthenticated, login, logout, signUp, updateUser };
+  const value = { user, setUser, isLoading, isAuthenticated, login, logout, signUp, updateUser, reloadUser };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 

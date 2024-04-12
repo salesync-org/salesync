@@ -50,20 +50,27 @@ const Modal = ({ children, title, isOpen, onClose, className, isStatic = true }:
     <>
       {isOpen && (
         <div
-          className='fixed left-0 right-0 top-0 z-[999] flex max-h-full w-full items-center justify-center overflow-x-hidden overflow-y-hidden bg-black bg-opacity-50 transition-all dark:bg-gray-900 dark:bg-opacity-50 md:inset-0'
+          className='fixed bottom-0 left-0 right-0 z-[999] flex h-full w-full items-center justify-center overflow-x-hidden overflow-y-hidden bg-black bg-opacity-50 transition-all dark:bg-gray-900 dark:bg-opacity-50 md:inset-0'
           // onClick={handleCloseWhenClickOutside}
         >
-          <div ref={ref} className='relative max-h-full w-[1000px] origin-[0_50%] animate-modal' id='modal'>
+          <div ref={ref} className='relative left-10 right-10 min-w-[65%] origin-center' id='modal'>
             {/* <!-- Modal content --> */}
-            <div className={cn('relative rounded-lg bg-panel px-3 py-4 shadow dark:bg-panel-dark', className)}>
+            <div
+              className={cn(
+                'relative max-h-[calc(100vh-50px)] rounded-lg bg-panel px-3 py-4 shadow dark:bg-panel-dark',
+                className
+              )}
+            >
               {/* <!-- Modal header --> */}
               <FocusTrap>
-                <div className='flex  items-center p-4 md:p-5'>
+                <div className='flex items-center p-4 md:p-5'>
                   {/* //header */}
-                  <h3 className='absolute right-0 z-10 w-full text-center text-2xl font-bold'>{title}</h3>
+                  <div className='absolute left-10 right-10 z-10 overflow-x-clip'>
+                    <h3 className='text-ellipsis text-nowrap text-center text-2xl font-bold'>{title}</h3>
+                  </div>
                   <button
                     type='button'
-                    className='absolute right-2 z-30 ms-auto inline-flex h-8 w-8 items-center justify-center rounded-sm bg-transparent text-sm transition-all hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white'
+                    className='absolute right-2 z-30 ms-auto inline-flex aspect-square w-8 origin-center items-center justify-center rounded-sm bg-transparent text-sm transition-all duration-100 hover:bg-gray-200 hover:text-gray-900 active:scale-90 dark:hover:bg-gray-600 dark:hover:text-white'
                     data-modal-hide='default-modal'
                     onClick={onClose}
                   >
@@ -85,7 +92,7 @@ const Modal = ({ children, title, isOpen, onClose, className, isStatic = true }:
                   </button>
                 </div>
                 {/* <!-- Modal body --> */}
-                <div className='space-y-4 p-4 md:p-5'>{children}</div>
+                <div className='space-y-4 p-4  md:p-5'>{children}</div>
               </FocusTrap>
             </div>
           </div>

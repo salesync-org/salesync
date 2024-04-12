@@ -7,11 +7,11 @@ import { cn } from '@/utils/utils.ts';
 const Checkbox = React.forwardRef<
   React.ElementRef<typeof CheckboxPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>
->(({ className, ...props }, ref) => (
+>(({ className, checked, ...props }, ref) => (
   <CheckboxPrimitive.Root
     ref={ref}
     className={cn(
-      'focus-visible:ring-ring data-[state=checked]:text-primary-foreground peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:text-primary-color data-[state=checked]:shadow-sm  data-[state=checked]:shadow-primary-color',
+      'focus-visible:ring-ring data-[state=checked]:text-primary-foreground peer flex h-5 w-5 shrink-0 items-center justify-center rounded-sm border-2 border-button-stroke ring-offset-background focus:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-button-stroke-dark ',
       className
     )}
     {...props}

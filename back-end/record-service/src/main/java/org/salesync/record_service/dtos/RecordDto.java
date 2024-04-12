@@ -1,5 +1,6 @@
 package org.salesync.record_service.dtos;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Builder;
@@ -15,7 +16,8 @@ import java.util.UUID;
 @Setter
 public class RecordDto {
     private UUID id;
-    private UUID typeId;
-    private String currentStageId;
-    private List<RecordTypePropertyDto> properties;
+    private String name;
+    private UUID userId;
+    @JsonProperty("properties")
+    private List<RecordTypePropertyDto> recordProperties;
 }

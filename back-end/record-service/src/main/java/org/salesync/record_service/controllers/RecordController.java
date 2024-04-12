@@ -2,27 +2,29 @@ package org.salesync.record_service.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.salesync.record_service.dtos.ListRecordsRequestDto;
-import org.salesync.record_service.dtos.ListRecordsResponseDto;
-import org.salesync.record_service.dtos.RecordDto;
+import org.salesync.record_service.dtos.*;
 import org.salesync.record_service.constants.Route;
-import org.salesync.record_service.dtos.RequestRecordDto;
+import org.salesync.record_service.dtos.record_type_relation_dto.ListRecordTypeRelationsDto;
+import org.salesync.record_service.dtos.record_type_relation_dto.RecordTypeRelationDto;
+import org.salesync.record_service.dtos.record_type_relation_dto.RequestRecordTypeRelationDto;
+import org.salesync.record_service.entities.RecordTypeRelation;
 import org.salesync.record_service.services.record.RecordService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
-@RequestMapping(Route.RECORD_ROUTE)
+@RequestMapping("/{realm}" + Route.RECORD_ROUTE)
 @RequiredArgsConstructor
 public class RecordController {
 
     private final RecordService recordService;
 
     @PostMapping(Route.LIST_RECORD)
-    public ResponseEntity<ListRecordsResponseDto> getRecordsByType(@Valid @RequestBody ListRecordsRequestDto listRecordsRequestDto) {
-        return ResponseEntity.ok(recordService.getAllRecordsWithCondition(listRecordsRequestDto));
+    public ResponseEntity<ListRecordsResponseDto> getFilteredRecords(@Valid @RequestBody ListRecordsRequestDto listRecordsRequestDto) {
+        return ResponseEntity.ok(recordService.getFilteredRecords(listRecordsRequestDto));
     }
 
     @GetMapping(Route.RECORD_ID)
@@ -38,5 +40,27 @@ public class RecordController {
     @PostMapping
     public RecordDto createRecordByType(@RequestBody RequestRecordDto requestRecordDto) {
         return recordService.createRecordByType(requestRecordDto);
+    }
+
+    @PutMapping(Route.RECORD_TYPE_RELATION)
+    public RecordTypeRelationDto createRecordTypeRelation(@RequestBody RequestRecordTypeRelationDto requestRecordTypeRelationDto) {
+
+        return recordService.createRecordTypeRelation(requestRecordTypeRelationDto);
+    }
+
+    @GetMapping(Route.LIST_RECORD_TYPE_RELATION)
+    public ListRecordTypeRelationsDto getListRecordTypeRelationsById(@PathVariable String sourceRecordId) {
+        return recordService.getListRecordTypeRelationsById(UUID.fromString(sourceRecordId));
+    }
+
+    @PutMapping(Route.PROPERTY)
+    public ResponseEntity<RecordTypePropertyDto> updateRecordProperty(@RequestBody RecordTypePropertyDto recordTypePropertyDto) {
+        return ResponseEntity.ok(recordService.updateRecordProperty(recordTypePropertyDto));
+    }
+
+    @DeleteMapping
+    public ResponseEntity deleteRecordsById(@RequestBody List<UUID> recordIds) {
+        recordService.deleteRecordsById(recordIds);
+        return ResponseEntity.noContent().build();
     }
 }

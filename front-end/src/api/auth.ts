@@ -1,11 +1,10 @@
-import { USER_SERVICE_URL } from '@/constants/api';
 import instance from './axiosConfig';
 
-const URL = `${import.meta.env.VITE_AUTHENTICATION_HOST}/api/v1/auth`;
+const URL = `${import.meta.env.VITE_AUTHENTICATION_HOST}/api/v1`;
 
 class Auth {
   async signUp(signUpInfo: SignUpInfo) {
-    const response = await instance.post(`${URL}/realm/create`, signUpInfo);
+    const response = await instance.post(`${URL}/create`, signUpInfo);
     return response.data;
   }
 
@@ -20,11 +19,35 @@ class Auth {
 
   async logOut() {
     const response = await instance.post(`${URL}/logout`);
+
     return response.data;
   }
 
-  async getUser() {
-    const response = await instance.get(`${USER_SERVICE_URL}/me`);
+  async getUser(companyName: string) {
+    const response = await instance.get(`${URL}/${companyName}/user`);
+
+    return response.data;
+  }
+
+  async updateUser(companyName: string, updatedUser: User) {
+    const response = await instance.put(`${URL}/${companyName}/user`, updatedUser);
+
+    return response.data;
+  }
+
+  async verifyEmail() {
+    const response = await instance.get(`${URL}/verify-email`, {
+    });
+
+    return response.data;
+  }
+
+  async changePassword(companyName: string, userId: string, password: string) {
+    const response = await instance.put(`${URL}/${companyName}/user/password`, {
+      user_id: userId,
+      new_password: password
+    });
+
     return response.data;
   }
 }

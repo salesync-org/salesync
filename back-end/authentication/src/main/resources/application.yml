@@ -1,7 +1,7 @@
 keycloak:
   realm: master
-  auth-server-url: http://localhost:9090
-  ssl-required: none
+  auth-server-url: ${KEYCLOAK_HOST}
+  ssl-required: true
   resource: admin-cli
   use-resource-role-mappings: true
   bearer-only: true
@@ -21,3 +21,23 @@ spring:
   jackson:
     serialization:
       FAIL_ON_EMPTY_BEANS: false
+
+main-website:
+  address: https://www.salesync.org
+mail:
+  host: email-smtp.ap-southeast-2.amazonaws.com
+  port: 2587
+  from: service@salesync.org
+  starttls: true
+  auth: true
+  password: BJgTrgX3Xqh2nmZQJx0hCsz6+464nOB5iC1vMYTkyy8E
+  user: AKIA3FLDYTVIAYFRK6SH
+
+keystore:
+  location: ${KEYSTORE_PATH}
+  password: adminadmin
+  alias: auth
+
+jwt:
+  expiration:
+    ms: 7776000000

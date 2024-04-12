@@ -6,12 +6,14 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
+import java.util.UUID;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Builder
 @Getter
 public class RecordTypePropertyDto {
-    private String id;
-    private String recordPropertyLabel;
+    private UUID id;
+    private String propertyName;
+    private String PropertyLabel;
     private String itemValue;
 }

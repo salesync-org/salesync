@@ -18,6 +18,7 @@ interface TextInputProps {
   prefixIconNode?: React.ReactNode;
   paddingLeft?: string;
   postfixIcon?: string;
+  isError?: boolean;
   restProps?: React.HTMLAttributes<HTMLInputElement>;
   isPassword?: boolean;
 }
@@ -33,14 +34,15 @@ const TextInput: React.FC<TextInputProps> = ({
   paddingLeft = 'pl-[55px]',
   postfixIcon,
   isPassword = false,
+  isError = false,
   onChange,
   name = '',
   register = () => ({}),
   ...restProps
 }) => {
   return (
-    <>
-      {showHeader && header && <p className='my-1'>{header}</p>}
+    <div>
+      {showHeader && header && <p className={cn('my-1', isError && 'font-medium text-red-500')}>{header}</p>}
       <div
         className={cn(
           'relative flex h-10 w-64 items-center justify-start align-middle',
@@ -50,6 +52,7 @@ const TextInput: React.FC<TextInputProps> = ({
           'bg-input-background-light dark:bg-input-background-dark ',
           'border-[2px] border-input-stroke-light  dark:border-input-background-dark',
           !disabled && 'dark:hover:bg-button-background-dark',
+          isError && 'border-red-400 ring-1 ring-red-300',
           className
         )}
       >
@@ -57,9 +60,10 @@ const TextInput: React.FC<TextInputProps> = ({
           type={isPassword ? 'password' : 'text'}
           placeholder={placeholder}
           className={cn(
-            'absolute h-full w-full rounded bg-transparent py-2 pr-2 placeholder:text-ellipsis placeholder:text-opacity-50 focus:outline-primary',
+            'absolute h-full w-full rounded bg-transparent py-2 pr-2 placeholder:text-ellipsis placeholder:text-[13px] placeholder:text-opacity-50 focus:outline-primary',
             prefixIcon ? 'pl-10' : cn(prefixIconNode ? paddingLeft : 'pl-4'),
-            postfixIcon ? 'pr-10' : 'pr-2'
+            postfixIcon ? 'pr-10' : 'pr-2',
+            isError && 'placeholder:font-medium placeholder:text-red-500 focus-visible:outline-red-400'
           )}
           value={value}
           disabled={disabled}
@@ -83,7 +87,7 @@ const TextInput: React.FC<TextInputProps> = ({
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

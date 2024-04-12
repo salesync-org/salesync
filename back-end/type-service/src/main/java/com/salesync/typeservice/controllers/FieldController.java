@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(Route.Field.FIELD_ROUTE)
+@RequestMapping("/{realm}" + Route.Field.FIELD_ROUTE)
 @RequiredArgsConstructor
 public class FieldController {
 

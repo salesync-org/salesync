@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Dispatch, useEffect, useRef, useState } from 'react';
 import { Button, Icon, DropDownList } from '@/components/ui';
 import { cn } from '@/utils/utils';
+import { textErrorClassName } from '../ErrorText/ErrorText';
 
 interface DropdownButtonProps {
   value: string;
@@ -12,6 +13,8 @@ interface DropdownButtonProps {
   suffixIcon?: React.ReactNode;
   header?: string;
   showHeader?: boolean;
+  isError?: boolean;
+  setError?: Dispatch<React.SetStateAction<boolean>>;
   disabled?: boolean;
   divide?: boolean;
   maxHeightList?: number;
@@ -28,6 +31,8 @@ const DropDown: React.FC<DropdownButtonProps> = ({
   header,
   prefixIcon = <Icon name='expand_more' />,
   suffixIcon = null,
+  isError = false,
+  setError,
   disabled,
   divide = false,
   showHeader = true,
@@ -76,6 +81,8 @@ const DropDown: React.FC<DropdownButtonProps> = ({
     if (inputNode) {
       console.log('inputNode.value: ', inputNode.value);
       onValueChange(inputNode.value);
+
+      typeof setError === 'function' && setError(false);
     }
   }
 
@@ -85,15 +92,26 @@ const DropDown: React.FC<DropdownButtonProps> = ({
         <Button
           header={header}
           showHeader={showHeader}
-          className={cn(className)}
+          headerClassName={cn(isError && textErrorClassName)}
+          className={cn(isError && 'border-red-400 ring-1 ring-red-300', className)}
           disabled={disabled}
           onClick={() => {
             setIsOpen(!isOpen);
           }}
         >
-          {prefixIcon}
-          <p className='w-fit truncate'>{selectedOption ? selectedOption : value}</p>
-          {suffixIcon}
+          <div
+            className={cn(
+              'flex w-full items-center',
+              isError && textErrorClassName,
+              selectedOption != '' && value != '' && 'gap-4'
+            )}
+          >
+            {prefixIcon}
+            <p className={cn('w-full truncate text-left', isError && textErrorClassName)}>
+              {selectedOption ? selectedOption : value}
+            </p>
+            <span className='ml-auto grid place-content-center'>{suffixIcon}</span>
+          </div>
         </Button>
       </div>
       <DropDownList

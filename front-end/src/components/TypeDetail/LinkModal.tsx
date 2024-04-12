@@ -35,7 +35,6 @@ const LinkModal = ({ isOpen, setIsOpen, currentLink }: LinkModalProp) => {
   const [loading, setLoading] = useState(false);
   const { types = [], isLoading: isTypesLoading } = useType();
 
-
   const { id } = useParams<{ id: string }>() as { id: string };
   const {
     register,
@@ -59,8 +58,8 @@ const LinkModal = ({ isOpen, setIsOpen, currentLink }: LinkModalProp) => {
 
   useEffect(() => {
     if (selectedType && types.length > 0) {
-      const sourceType = types.find((type) => type.id === id);
-      const desType = types.find((type) => type.id === selectedType);
+      const sourceType = types.find((type) => type.type_id === id);
+      const desType = types.find((type) => type.type_id === selectedType);
       if (sourceType && desType) {
         setValue('sourceLabel', sourceType.name);
         setValue('destinationLabel', desType.name);
@@ -121,8 +120,7 @@ const LinkModal = ({ isOpen, setIsOpen, currentLink }: LinkModalProp) => {
     <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title='Create new Type'>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className='grid grid-cols-2 place-content-center gap-3'>
-          <div className='w-full'>
-          </div>
+          <div className='w-full'></div>
           <DropDown
             header='Link to'
             value={isTypesLoading ? 'Loading...' : selectedType}
@@ -131,7 +129,7 @@ const LinkModal = ({ isOpen, setIsOpen, currentLink }: LinkModalProp) => {
             disabled={Boolean(currentLink)}
           >
             {types.map((type) => (
-              <Item key={type.id} title={type.name} value={type.id} />
+              <Item key={type.type_id} title={type.name} value={type.type_id} />
             ))}
           </DropDown>
           <div>

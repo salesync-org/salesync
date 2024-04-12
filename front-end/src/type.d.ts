@@ -10,7 +10,7 @@ type TypeRelation = {
 type Type = {
   icon_url: string?;
   background_color: string?;
-  id: string;
+  type_id: string;
   name: string;
   description?: string;
   fields?: Field[];
@@ -47,13 +47,13 @@ type Field = {
   values?: string[];
 };
 
-type User = {
-  id: string;
-  name: string;
+type NewUser = {
+  first_name: string;
+  last_name: string;
+  job_title: string;
+  phone: string;
   email: string;
-  password: string;
   role: string;
-  avatar_url: string;
 };
 
 type NewUser = {
@@ -82,6 +82,7 @@ type SignUpInfo = {
 };
 
 type TokenResponse = {
+  user: User;
   access_token: string;
   expires_in: number;
   refresh_expires_in: number;
@@ -99,4 +100,27 @@ type TokenResponse = {
 type Stage = {
   id: string;
   name: string;
+};
+
+type User = {
+  first_name: string;
+  last_name: string;
+  job_title: string;
+  phone: string;
+  email: string;
+  user_id: string;
+  user_name: string;
+  avatar_url: string;
+  settings: Settings;
+  roles?: string;
+};
+
+type Settings = {
+  layout_order: LayoutOrder[];
+};
+
+type LayoutOrder = {
+  name: string;
+  icon: string;
+  types: Type[];
 };

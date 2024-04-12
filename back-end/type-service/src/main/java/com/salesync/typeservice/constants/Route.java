@@ -7,6 +7,8 @@ public final class Route {
         public static final String GET_RELATION = "/relations" + TYPE_ID;
         public static final String CREATE_RELATION = "/create-relation";
 
+        public static final String CREATE_PROPERTY = "/create-property";
+
         public static final String TYPE_DETAILS = "/details/{typeId}";
     }
     public static final class Relation {
@@ -16,6 +18,12 @@ public final class Route {
     public static final class Field {
         public static final String FIELD_ROUTE = "/fields";
         public static final String FIELD_ID = "/{fieldId}";
+    }
+
+    public static final class Property {
+        public static final String PROPERTY_ROUTE = "/properties";
+        public static final String PROPERTY_ID = "/{propertyId}";
+        public static final String GET_PROPERTY = PROPERTY_ROUTE+PROPERTY_ID;
     }
 
     public static final class Stage {

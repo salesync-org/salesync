@@ -8,8 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-@Builder
+@SuperBuilder
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -30,7 +31,4 @@ public class TypePropertyField extends BaseEntity {
     @JsonIgnore
     @JoinColumn(name = "type_property_id")
     private TypeProperty typeProperty;
-
-
-
 }

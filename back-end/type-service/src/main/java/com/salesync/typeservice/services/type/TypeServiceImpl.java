@@ -1,23 +1,20 @@
 package com.salesync.typeservice.services.type;
 
-import com.salesync.typeservice.dtos.TypeDTO;
-import com.salesync.typeservice.dtos.TypeRelationDTO;
-import com.salesync.typeservice.dtos.TypeRelationResponseDTO;
-import com.salesync.typeservice.entities.Relation;
-import com.salesync.typeservice.entities.Type;
-import com.salesync.typeservice.entities.TypeRelation;
+import com.salesync.typeservice.dtos.*;
+import com.salesync.typeservice.entities.*;
 import com.salesync.typeservice.exceptions.ObjectNotFoundException;
+import com.salesync.typeservice.exceptions.BadRequestException;
 import com.salesync.typeservice.mapper.RelationMapper;
 import com.salesync.typeservice.mapper.TypeMapper;
 import com.salesync.typeservice.mapper.TypeRelationMapper;
-import com.salesync.typeservice.repositories.RelationRepository;
-import com.salesync.typeservice.repositories.TypeRelationRepository;
-import com.salesync.typeservice.repositories.TypeRepository;
+import com.salesync.typeservice.repositories.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -30,7 +27,15 @@ public class TypeServiceImpl implements TypeService {
 
     private final TypeRelationRepository typeRelationRepository;
 
+    private final TypePropertyFieldRepository typePropertyFieldRepository;
+
     private final RelationRepository relationRepository;
+
+    private final TypePropertyRepository typePropertyRepository;
+
+    private final PropertyFieldRepository propertyFieldRepository;
+
+    private final PropertyRepository propertyRepository;
 
     private final RelationMapper relationMapper = RelationMapper.INSTANCE;
 
@@ -176,5 +181,82 @@ public class TypeServiceImpl implements TypeService {
                         Type.class.getSimpleName(),
                         typeId.toString()
                 ));
+    }
+
+    @Override
+    public TypeProperty createProperty(RequestCreatePropertyDto requestCreatePropertyDto) {
+        Type type = typeRepository.findById(requestCreatePropertyDto.getTypeId())
+                .orElseThrow(() -> new ObjectNotFoundException(
+                        Type.class.getSimpleName(),
+                        requestCreatePropertyDto.getTypeId().toString()
+                ));
+
+        Property property= propertyRepository.findById(requestCreatePropertyDto.getPropertyId())
+                .orElseThrow(() -> new ObjectNotFoundException(
+                        Property.class.getSimpleName(),
+                        requestCreatePropertyDto.getPropertyId().toString()
+                ));
+
+
+        //check có đầy đủ các field của property chưa
+        Set<UUID> propertyFieldSet=
+                property.getPropertyFields().stream()
+                .map(PropertyField::getId)
+                .collect(Collectors.toSet());
+
+        Set<UUID> requestSet = requestCreatePropertyDto.getFields().stream()
+                .map(RequestTypePropertyFieldDto::getPropertyFieldId)
+                .collect(Collectors.toSet());
+
+        System.out.println("propertyFieldSet: "+propertyFieldSet);
+
+        System.out.println("requestSet: "+requestSet);
+
+        System.out.println(requestCreatePropertyDto.toString());
+
+        if (!propertyFieldSet.equals(requestSet)) {
+            throw new BadRequestException(
+                    "Property fields"
+            );
+
+        }
+        TypeProperty typeProperty = TypeProperty.builder()
+                .property(property)
+
+                .type(type)
+                .name(requestCreatePropertyDto.getName())
+                .defaultValue(requestCreatePropertyDto.getDefaultValue())
+                .label(requestCreatePropertyDto.getLabel())
+                .sequence(requestCreatePropertyDto.getSequence())
+                .build();
+
+        TypeProperty savedTypeProperty= typePropertyRepository.save(typeProperty);
+
+        List<TypePropertyField> typePropertyFieldList;
+        typePropertyFieldList = requestCreatePropertyDto.getFields().stream()
+                .map(requestTypePropertyFieldDto -> {
+                    PropertyField propertyField = propertyFieldRepository.findById(requestTypePropertyFieldDto.getPropertyFieldId())
+                            .orElseThrow(() -> new ObjectNotFoundException(
+                                    PropertyField.class.getSimpleName(),
+                                    requestTypePropertyFieldDto.getPropertyFieldId().toString()
+                            ));
+
+                    String requestItemValue=requestTypePropertyFieldDto.getItemValue();
+                    String itemValue = requestItemValue != null &&
+                            !requestItemValue.isEmpty()
+                            ? requestItemValue : propertyField.getDefaultValue();
+
+                    return TypePropertyField.builder()
+                            .propertyField(propertyField)
+                            .itemValue(itemValue)
+                            .typeProperty(savedTypeProperty)
+                            .build();
+                })
+                .collect(Collectors.toList());
+        typePropertyFieldRepository.saveAll(typePropertyFieldList);
+
+        savedTypeProperty.setTypePropertyFields(typePropertyFieldList);
+
+        return savedTypeProperty;
     }
 }

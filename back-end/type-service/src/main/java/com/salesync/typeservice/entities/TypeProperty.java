@@ -7,11 +7,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
 @Data
-@Builder
+@SuperBuilder
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -24,7 +25,7 @@ public class TypeProperty extends BaseEntity {
 
     private Integer sequence;
 
-    @JsonProperty("input_type")
+    @JsonProperty("default_value")
     @Column(name = "default_value")
     private String defaultValue;
 

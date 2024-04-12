@@ -4,6 +4,8 @@ import ConfigLayout from './components/Layout/ConfigLayout';
 import LoadingSpinner from './components/ui/Loading/LoadingSpinner';
 import { Toaster } from './components/ui/toaster';
 import PrivateRoute from './pages/PrivateRoute/PrivateRoute';
+import SettingLayout from './pages/Settings/SettingLayout';
+import PersonalInformationSetting from './pages/Settings/PersonalInformationSetting';
 
 // const LogIn = lazy(() => import('pages/LogIn/LogIn'));
 // const Setting = lazy(() => import('pages/Setting/Setting'));
@@ -41,6 +43,11 @@ function App() {
               <Route path='home' element={<HomeLayout />} />
               <Route path='sales/:typeId' element={<Sales />} />
               <Route path='record/:recordId' element={<RecordDetail />} />
+              <Route path='setting/' element={<SettingLayout />}>
+                <Route path='personal-information' element={<PersonalInformationSetting />} />
+
+                {/* Thêm setting routes ở đây */}
+              </Route>
               <Route path='*' element={<Sales />} />
             </Route>
           </Route>

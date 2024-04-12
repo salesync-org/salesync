@@ -2,7 +2,7 @@ import defaultAvatar from '@/assets/default_avatar.png';
 import { Button, DropDownList, Icon, Item } from '@/components/ui';
 import useAuth from '@/hooks/useAuth';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const UserInfo = () => {
   const { user, logout } = useAuth();
@@ -10,6 +10,7 @@ const UserInfo = () => {
   const [name, setName] = useState('Unknown');
   const [avatar_url, setAvatar] = useState('');
   const navigate = useNavigate();
+  const { companyName = '' } = useParams();
 
   useEffect(() => {
     const updateInfo = async () => {
@@ -65,7 +66,7 @@ const UserInfo = () => {
                 icon={<Icon name='settings' size='2rem' />}
                 title='Settings & Administration'
                 onClick={() => {
-                  navigate('/setting');
+                  navigate(`/${companyName}/setting`);
                 }}
               />
               <Item

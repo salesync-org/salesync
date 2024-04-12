@@ -61,4 +61,9 @@ public class RecordController {
         recordService.deleteRecordsById(recordIds);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping(Route.UPDATE_STAGE)
+    public ResponseEntity<RecordDto> updateStage(@RequestBody RequestUpdateStageDto requestUpdateStageDto) {
+        return ResponseEntity.ok(recordService.updateStage(requestUpdateStageDto));
+    }
 }

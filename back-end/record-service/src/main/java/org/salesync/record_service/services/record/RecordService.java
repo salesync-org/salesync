@@ -26,4 +26,6 @@ public interface RecordService {
     void deleteRecordsById(List<UUID> recordIds);
 
     ListRecordTypeRelationsDto getListRecordTypeRelationsById(UUID sourceRecordId,String token,String realm);
+
+    RecordDto updateStage(RequestUpdateStageDto requestUpdateStageDto);
 }

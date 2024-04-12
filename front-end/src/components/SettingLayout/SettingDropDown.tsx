@@ -16,7 +16,11 @@ export const SettingDropDown = ({ title, items }: { title: string; items: { name
         className='flex cursor-pointer items-center gap-2 px-5 py-3 text-sm hover:bg-primary-color/10'
         onClick={() => setOpen(!open)}
       >
-        {open ? <ChevronDown size={16} fontFamily='700' /> : <ChevronRight size={16} fontFamily='700' />}
+        <ChevronRight
+          size={16}
+          fontFamily='700'
+          style={{ transform: open ? 'rotate(90deg)' : '', transition: 'all ease-out 0.1s' }}
+        />
         <span className='text-sm font-medium'>{title}</span>
       </div>
       {open && (

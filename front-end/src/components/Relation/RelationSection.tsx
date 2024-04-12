@@ -51,7 +51,7 @@ const RelationSection = ({ title, relations }: RelationSectionProps) => {
                 />
               </div>
               <ul>
-                {relation.destination_record.properties.map((property, index) => {
+                {relation.destination_record.properties.map((property) => {
                   return (
                     <li className='grid grid-cols-4'>
                       <h3 className='col-span-2 text-base font-semibold lg:col-span-1'>{property.property_label}: </h3>

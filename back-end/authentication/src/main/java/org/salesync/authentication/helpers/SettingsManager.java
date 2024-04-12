@@ -17,13 +17,12 @@ public class SettingsManager {
     public String loadStringSettingsFromFile() {
     try {
         Resource resource = new ClassPathResource("db/" + SETTINGS_FILE_PATH);
-
-        File file = resource.getFile();
-        InputStream inputStream = new FileInputStream(file);
+        InputStream inputStream = resource.getInputStream();
 
         ObjectMapper mapper = new ObjectMapper();
             return mapper.writeValueAsString(mapper.readTree(inputStream));
         } catch (IOException e) {
+	    e.printStackTrace();
             return "{}";
         }
     }

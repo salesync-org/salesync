@@ -30,7 +30,7 @@ public class TokenFilter extends OncePerRequestFilter {
         try {
             String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
             if (authHeader == null || !authHeader.startsWith(TokenService.TOKEN_TYPE)) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                filterChain.doFilter(request, response);
                 return;
             }
             String token = authHeader.substring(TokenService.TOKEN_TYPE.length() + 1);
@@ -44,7 +44,7 @@ public class TokenFilter extends OncePerRequestFilter {
                     return claims.get(PERMISSIONS, (Class<List<String>>) ((Class) List.class));
                 });
 
-                PreAuthenticatedAuthenticationToken authentication = new PreAuthenticatedAuthenticationToken(null, null,
+                PreAuthenticatedAuthenticationToken authentication = new PreAuthenticatedAuthenticationToken(userId, null,
                         permisstions.stream().map(SimpleGrantedAuthority::new).toList());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }

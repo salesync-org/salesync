@@ -1,7 +1,7 @@
 keycloak:
   realm: master
-  auth-server-url: http://localhost:9090
-  ssl-required: none
+  auth-server-url: ${KEYCLOAK_HOST}
+  ssl-required: true
   resource: admin-cli
   use-resource-role-mappings: true
   bearer-only: true
@@ -34,7 +34,7 @@ mail:
   user: AKIA3FLDYTVIAYFRK6SH
 
 keystore:
-  location: D:\\DATN\\auth.jks
+  location: ${KEYSTORE_PATH}
   password: adminadmin
   alias: auth
 

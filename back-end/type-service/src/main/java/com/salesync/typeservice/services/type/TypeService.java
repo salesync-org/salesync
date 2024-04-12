@@ -1,9 +1,6 @@
 package com.salesync.typeservice.services.type;
 
-import com.salesync.typeservice.dtos.RequestCreatePropertyDto;
-import com.salesync.typeservice.dtos.TypeDTO;
-import com.salesync.typeservice.dtos.TypeRelationDTO;
-import com.salesync.typeservice.dtos.TypeRelationResponseDTO;
+import com.salesync.typeservice.dtos.*;
 import com.salesync.typeservice.entities.Type;
 import com.salesync.typeservice.entities.TypeProperty;
 
@@ -26,4 +23,6 @@ public interface TypeService {
     Type getTypeDetailsById(UUID typeId);
 
     TypeProperty createProperty(RequestCreatePropertyDto requestCreatePropertyDto);
+
+    RelationTypeResponseDto createRelationType(RelationTypeRequestDto relationTypeRequestDto);
 }

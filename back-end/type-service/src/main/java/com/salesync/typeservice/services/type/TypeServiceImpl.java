@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -258,5 +257,49 @@ public class TypeServiceImpl implements TypeService {
         savedTypeProperty.setTypePropertyFields(typePropertyFieldList);
 
         return savedTypeProperty;
+    }
+
+    @Override
+    public RelationTypeResponseDto createRelationType(RelationTypeRequestDto relationTypeRequestDto) {
+        Relation relation = relationRepository.findById(relationTypeRequestDto.getRelationId())
+                .orElseThrow(() -> new ObjectNotFoundException(
+                        Relation.class.getSimpleName(),
+                        relationTypeRequestDto.getRelationId().toString()
+                ));
+        Relation inverseRelation = relation.getInverseRelation();
+        Type sourceType = typeRepository.findById(relationTypeRequestDto.getSourceTypeId())
+                .orElseThrow(() -> new ObjectNotFoundException(
+                        Type.class.getSimpleName(),
+                        relationTypeRequestDto.getSourceTypeId().toString()
+                ));
+        Type destinationType = typeRepository.findById(relationTypeRequestDto.getDestinationTypeId())
+                .orElseThrow(() -> new ObjectNotFoundException(
+                        Type.class.getSimpleName(),
+                        relationTypeRequestDto.getSourceTypeId().toString()
+                ));
+        TypeRelation typeRelation = TypeRelation.builder()
+                .sourceType(sourceType)
+                .destinationType(destinationType)
+                .relation(relation)
+                .sourceTypeLabel(relationTypeRequestDto.getSourceTypeLabel())
+                .destinationLabel(relationTypeRequestDto.getDestinationTypeLabel())
+                .build();
+        TypeRelation inverseTypeRelation = TypeRelation.builder()
+                .sourceType(destinationType)
+                .destinationType(sourceType)
+                .relation(inverseRelation)
+                .sourceTypeLabel(relationTypeRequestDto.getDestinationTypeLabel())
+                .destinationLabel(relationTypeRequestDto.getSourceTypeLabel())
+                .build();
+        TypeRelation savedTypeRelation = typeRelationRepository.save(typeRelation);
+        TypeRelation savedInverseTypeRelation = typeRelationRepository.save(inverseTypeRelation);
+        return RelationTypeResponseDto.builder()
+                .sourceType(typeMapper.typeToTypeDTO(sourceType))
+                .destinationType(typeMapper.typeToTypeDTO(destinationType))
+                .relation(relationMapper.relationToRelationDTO(relation))
+                .inverseRelation(relationMapper.relationToRelationDTO(inverseRelation))
+                .sourceTypeLabel(relationTypeRequestDto.getSourceTypeLabel())
+                .destinationTypeLabel(relationTypeRequestDto.getDestinationTypeLabel())
+                .build();
     }
 }

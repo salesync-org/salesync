@@ -66,7 +66,7 @@ const UserInfo = () => {
                 icon={<Icon name='settings' size='2rem' />}
                 title='Settings & Administration'
                 onClick={() => {
-                  navigate(`/${companyName}/setting`);
+                  navigate(`/${companyName}/setting/personal-information`);
                 }}
               />
               <Item

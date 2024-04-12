@@ -82,6 +82,9 @@ const SignUp = () => {
       const response = await axios.get('https://countriesnow.space/api/v0.1/countries/states');
       const data: Country[] = response.data.data;
       const lsCountry = data.map((item) => item.name);
+      const index = lsCountry.indexOf('Vietnam');
+      lsCountry.splice(index, 1);
+      lsCountry.unshift('Vietnam');
       setListCountry(lsCountry);
     };
 
@@ -337,13 +340,21 @@ const SignUp = () => {
                   {errors.email && <ErrorText text={errors.email.message} />}
 
                   <div className='mt-4 flex'>
-                    <Checkbox className='mt-1' checked={check1} onClick={() => {setCheck1(!check1); setErrorCheck1(false)}}></Checkbox>
-                    <div className='ml-2'>
+                    <Checkbox
+                      className='mt-1'
+                      checked={check1}
+                      id='agreePolicy'
+                      onClick={() => {
+                        setCheck1(!check1);
+                        setErrorCheck1(false);
+                      }}
+                    ></Checkbox>
+                    <label htmlFor='agreePolicy' className='ml-2 block'>
                       <span>I agree to the </span>
                       <a href='' className='text-blue-500'>
                         Main Services Agreement.
                       </a>
-                    </div>
+                    </label>
                   </div>
                   {errorCheck1 && (
                     <ErrorText
@@ -352,13 +363,18 @@ const SignUp = () => {
                     />
                   )}
                   <div className='mt-2 flex'>
-                    <Checkbox className='mt-1' checked={check2} onClick={() => setCheck2(!check2)}></Checkbox>
-                    <div className='ml-2'>
+                    <Checkbox
+                      className='mt-1'
+                      id='agreeReceive'
+                      checked={check2}
+                      onClick={() => setCheck2(!check2)}
+                    ></Checkbox>
+                    <label htmlFor='agreeReceive' className='ml-2'>
                       <span>
                         Yes, I would like to receive marketing communications regarding SaleSync products, services, and
                         events. I can unsubscribe at any time.
                       </span>
-                    </div>
+                    </label>
                   </div>
                   <div className='my-5 flex space-x-1'>
                     <h5>

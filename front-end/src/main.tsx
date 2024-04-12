@@ -21,13 +21,13 @@ enableMocking().then(() => {
   ReactDOM.createRoot(document.getElementById('entry')!).render(
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
-        <GlobalModalProvider>
-          <AuthProvider>
-            <BrowserRouter>
+        <AuthProvider>
+          <BrowserRouter>
+            <GlobalModalProvider>
               <App />
-            </BrowserRouter>
-          </AuthProvider>
-        </GlobalModalProvider>
+            </GlobalModalProvider>
+          </BrowserRouter>
+        </AuthProvider>
       </QueryClientProvider>
     </React.StrictMode>
   );

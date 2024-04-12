@@ -1,13 +1,28 @@
+import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 import { cn } from '@/utils/utils';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Button, Icon } from '../ui';
 import UserModal from '../UserModal/UserModal';
 import { useNavigate } from 'react-router-dom';
 
 const QuickSetting = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isUserSettingOpen, setUserSetting] = useState(false);
+  // const [isUserSettingOpen, setUserSetting] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const { showModal } = useGlobalModalContext();
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location.pathname]);
+
+  let top = 'top-[87px]';
+
+  if (location.pathname.includes('home')) {
+    top = 'top-[49px]';
+  }
 
   return (
     <div>
@@ -23,9 +38,11 @@ const QuickSetting = () => {
         <Icon name='settings' size='1rem' />
       </Button>
       <nav
+        onClick={(e) => e.stopPropagation()}
         className={cn(
-          'fixed bottom-0 right-0 top-[104px] flex w-[400px] flex-col gap-6 rounded  bg-panel shadow-2xl shadow-button-background-dark/10 transition-all duration-200 dark:bg-panel-dark',
+          'fixed bottom-0 right-0 flex w-[400px] flex-col gap-6 rounded  bg-panel shadow-2xl shadow-button-background-dark/10 transition-all duration-200 dark:bg-panel-dark',
           'border-[2px] border-button-stroke dark:border-button-stroke-dark ',
+          top,
           isOpen ? 'translate-x-0' : 'translate-x-[100%]'
         )}
       >
@@ -70,12 +87,12 @@ const QuickSetting = () => {
                   icon='person_add'
                   title='Users'
                   onClick={() => {
-                    setUserSetting(true);
+                    showModal(MODAL_TYPES.USER_MODAL);
+                    setIsOpen(false);
                   }}
                   desc='Add and manage users.'
                   href='#'
                 />
-                <UserModal isOpen={isUserSettingOpen} setIsOpen={setUserSetting} />
               </li>
               <li>
                 <QuickSettingItem
@@ -130,8 +147,13 @@ const QuickSettingItem = ({
         name={icon}
         className='grid aspect-square h-10 w-10 place-content-center rounded-full bg-blue-800 text-white'
       />
+      <Icon
+        name={icon}
+        className='grid aspect-square h-10 w-10 place-content-center rounded-full bg-blue-800 text-white'
+      />
       <div>
         <h3 className='font-semibold leading-5 text-primary-color group-hover:underline'>{title}</h3>
+        <p className='text-xs text-secondary-dark/70 dark:text-secondary/70'>{desc}</p>
         <p className='text-xs text-secondary-dark/70 dark:text-secondary/70'>{desc}</p>
       </div>
     </div>

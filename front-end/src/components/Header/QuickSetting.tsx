@@ -147,13 +147,8 @@ const QuickSettingItem = ({
         name={icon}
         className='grid aspect-square h-10 w-10 place-content-center rounded-full bg-blue-800 text-white'
       />
-      <Icon
-        name={icon}
-        className='grid aspect-square h-10 w-10 place-content-center rounded-full bg-blue-800 text-white'
-      />
       <div>
         <h3 className='font-semibold leading-5 text-primary-color group-hover:underline'>{title}</h3>
-        <p className='text-xs text-secondary-dark/70 dark:text-secondary/70'>{desc}</p>
         <p className='text-xs text-secondary-dark/70 dark:text-secondary/70'>{desc}</p>
       </div>
     </div>

@@ -124,3 +124,29 @@ type LayoutOrder = {
   icon: string;
   types: Type[];
 };
+
+type RelationResponse = {
+  id: string;
+  destination_record: DestinationRecord;
+  type_relation_id: string;
+};
+
+type DestinationRecord = {
+  id: string;
+  name: string;
+  user_id: string;
+  type: RecordType;
+  properties: RecordProperty[];
+};
+
+type RecordProperty = {
+  id: string;
+  property_name: string;
+  item_value: string;
+  property_label: string;
+};
+
+type RecordType = {
+  id: string;
+  name: string;
+};

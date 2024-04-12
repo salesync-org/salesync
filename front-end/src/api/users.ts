@@ -1,6 +1,6 @@
 import instance from './axiosConfig';
 
-const BASE_URL = `${import.meta.env.VITE_AUTHENTICATION_HOST}/api/v1/auth`;
+const BASE_URL = `${import.meta.env.VITE_AUTHENTICATION_HOST}/api/v1`;
 
 // Create a user within a realm
 export const createUser = async (realmId: string, user: NewUser, accessToken: string) => {
@@ -8,7 +8,7 @@ export const createUser = async (realmId: string, user: NewUser, accessToken: st
     const response = await instance.post(`${BASE_URL}/${realmId}/user/create`, user, {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`
       }
     });
     return response.data;
@@ -21,12 +21,16 @@ export const createUser = async (realmId: string, user: NewUser, accessToken: st
 // Reset password for a user
 export const resetPassword = async (userId: string, newPassword: string, accessToken: string) => {
   try {
-    const response = await instance.put(`${BASE_URL}/users/${userId}/reset-password`, { newPassword }, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`
+    const response = await instance.put(
+      `${BASE_URL}/users/${userId}/reset-password`,
+      { newPassword },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`
+        }
       }
-    });
+    );
     return response.data;
   } catch (error) {
     console.error('Error resetting password:', error);

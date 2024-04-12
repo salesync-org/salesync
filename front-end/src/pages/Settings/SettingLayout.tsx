@@ -1,6 +1,7 @@
 import NavigationButton from '@/components/NavigationButton/NavigationButton';
 import { SidebarSetting } from '@/components/SettingLayout/SideBarSetting';
-import { Outlet } from 'react-router-dom';
+import { Building, Settings, User } from 'lucide-react';
+import { Outlet, useLocation } from 'react-router-dom';
 
 export type Setting = {
   name: string;
@@ -17,11 +18,13 @@ const settings = [
     items: [
       {
         name: 'Personal Information',
-        path: 'setting/personal-information'
+        path: 'setting/personal-information',
+        Icon: Settings
       },
       {
         name: 'Change My Password',
-        path: 'setting/change-password'
+        path: 'setting/change-user-password',
+        Icon: Settings
       }
     ]
   },
@@ -30,17 +33,20 @@ const settings = [
     items: [
       {
         name: 'Profiles',
-        path: 'setting/profiles'
+        path: 'setting/profiles',
+        Icon: User
       },
       {
         name: 'Users',
-        path: 'setting/users'
+        path: 'setting/users',
+        Icon: User
       }
     ]
   },
   {
     name: 'Company Information',
-    path: 'setting/company-information'
+    path: 'setting/company-information',
+    Icon: Building
   },
   {
     name: 'Object Manager',
@@ -49,6 +55,30 @@ const settings = [
 ];
 
 const SettingLayout = () => {
+  const location = useLocation();
+  let title = '';
+  let Icon = Settings;
+
+  const header = settings.find((setting) => {
+    if (!setting.path && setting.items) {
+      return setting.items.some((item) => location.pathname.includes(item.path!));
+    }
+    return location.pathname.includes(setting.path!);
+  });
+
+  if (!header) {
+    return null;
+  }
+
+  if (header.items) {
+    const item = header.items.find((item) => location.pathname.includes(item.path!));
+    title = item?.name || '';
+    Icon = item?.Icon || Settings;
+  } else {
+    title = header.name;
+    Icon = header.Icon || Settings;
+  }
+
   return (
     <div>
       <section className='fixed left-0 right-0 z-50 flex h-[40px] items-center bg-panel px-6 dark:bg-panel-dark'>
@@ -58,7 +88,14 @@ const SettingLayout = () => {
       <div className='flex w-full gap-3 px-4 py-[64px]'>
         <SidebarSetting settings={settings} />
         <section className='w-full'>
-          <header className='mb-4 h-[88px] w-full bg-slate-200'></header>
+          <header className='mb-4 h-[88px] w-full rounded-md bg-slate-100'>
+            <div className='flex h-full items-center px-6'>
+              <div className='rounded-md bg-primary-color p-2'>
+                <Icon size={28} color='#fff' />
+              </div>
+              <h2 className='pl-4 text-xl font-semibold'>{title}</h2>
+            </div>
+          </header>
           <Outlet />
         </section>
       </div>

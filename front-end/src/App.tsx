@@ -6,6 +6,8 @@ import { Toaster } from './components/ui/toaster';
 import PrivateRoute from './pages/PrivateRoute/PrivateRoute';
 import SettingLayout from './pages/Settings/SettingLayout';
 import PersonalInformationSetting from './pages/Settings/PersonalInformationSetting';
+import UserSetting from './pages/Settings/UserSetting';
+import ChangePasswordSetting from './pages/Settings/ChangePasswordSetting';
 
 // const LogIn = lazy(() => import('pages/LogIn/LogIn'));
 // const Setting = lazy(() => import('pages/Setting/Setting'));
@@ -46,9 +48,9 @@ function App() {
               <Route path='setting/' element={<SettingLayout />}>
                 <Route path='personal-information' element={<PersonalInformationSetting />} />
                 <Route path='company-information' element={<PersonalInformationSetting />} />
-                <Route path='change-user-password' element={<PersonalInformationSetting />} />
+                <Route path='change-user-password' element={<ChangePasswordSetting />} />
                 <Route path='profiles' element={<PersonalInformationSetting />} />
-                <Route path='users' element={<PersonalInformationSetting />} />
+                <Route path='users' element={<UserSetting />} />
 
                 {/* Thêm setting routes ở đây */}
               </Route>

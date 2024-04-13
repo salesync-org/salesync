@@ -150,3 +150,9 @@ type RecordType = {
   id: string;
   name: string;
 };
+
+type NewPasswordChange = {
+  old_password: string;
+  new_password: string;
+  confirm_password: string;
+};

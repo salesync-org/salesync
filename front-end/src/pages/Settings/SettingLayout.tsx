@@ -90,12 +90,12 @@ const SettingLayout = () => {
           <SidebarSetting settings={settings} />
         </div>
         <section className='w-full'>
-          <header className='mb-4 h-[88px] w-full rounded-md bg-slate-100'>
+          <header className='mb-4 h-[88px] w-full rounded-md bg-panel dark:bg-panel-dark'>
             <div className='flex h-full items-center px-6'>
               <div className='rounded-md bg-primary-color p-2'>
                 <Icon size={28} color='#fff' />
               </div>
-              <h2 className='pl-4 text-xl font-semibold'>{title}</h2>
+              <h1 className='pl-4 text-2xl font-bold'>{title}</h1>
             </div>
           </header>
           <div className='h-[calc(100%-88px-16px)]'>

@@ -60,4 +60,6 @@ export const resetPassword = async (userId: string, newPassword: string, accessT
     console.error('Error resetting password:', error);
     throw error;
   }
+
+
 };

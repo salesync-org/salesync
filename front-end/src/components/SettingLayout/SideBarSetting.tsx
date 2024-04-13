@@ -11,7 +11,7 @@ type SidebarSettingProps = {
 export const SidebarSetting = ({ settings }: SidebarSettingProps) => {
   const { companyName = '' } = useParams();
   return (
-    <Panel className='m-0 h-full w-[284px] bg-white px-0 py-4'>
+    <Panel className='m-0 h-full w-[284px] bg-panel px-0 py-4 dark:bg-panel-dark'>
       <div className='flex flex-col'>
         {settings.map((setting: Setting) => {
           return (

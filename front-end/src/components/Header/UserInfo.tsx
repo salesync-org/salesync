@@ -74,6 +74,7 @@ const UserInfo = () => {
                 icon={<Icon name='logout' size='2rem' />}
                 title='Log out'
                 onClick={() => {
+                  navigate(`/${companyName}/home`);
                   logout();
                 }}
               />

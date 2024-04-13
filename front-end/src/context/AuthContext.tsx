@@ -9,8 +9,18 @@ type AuthContext = {
   isAuthenticated: boolean;
   signUp: (signUpInfo: SignUpInfo) => Promise<void>;
   login: ({ companyName, email, password }: { companyName: string; email: string; password: string }) => Promise<void>;
+  verifyPassword: ({
+    companyName,
+    email,
+    password
+  }: {
+    companyName: string;
+    email: string;
+    password: string;
+  }) => Promise<any>;
   logout: () => Promise<void>;
   reloadUser: () => Promise<void>;
+  changePassword: (companyName: string, password: string) => Promise<void>;
   updateUser: (companyName: string, updatedUser: User) => Promise<void>;
 };
 
@@ -66,6 +76,20 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setUser(res.user);
       localStorage.setItem('access_token', res.access_token);
     }
+    return res;
+  };
+
+  const verifyPassword = async ({
+    companyName,
+    email,
+    password
+  }: {
+    companyName: string;
+    email: string;
+    password: string;
+  }) => {
+    const res = await auth.verifyPassword(companyName, email, password);
+    return res;
   };
 
   const logout = async () => {
@@ -99,9 +123,26 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(user);
   };
 
+  const changePassword = async (companyName: string, password: string) => {
+    const res = await auth.changePassword(companyName, user?.user_id ?? '', password);
+    return res;
+  };
+
   // if (!companyName) return null;
 
-  const value = { user, setUser, isLoading, isAuthenticated, login, logout, signUp, updateUser, reloadUser };
+  const value = {
+    user,
+    setUser,
+    isLoading,
+    isAuthenticated,
+    login,
+    logout,
+    signUp,
+    updateUser,
+    reloadUser,
+    changePassword,
+    verifyPassword
+  };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 

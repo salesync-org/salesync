@@ -14,6 +14,7 @@ const PersonalInfomationSetting = () => {
   const { toast } = useToast();
   const [isUpdating, setUpdatingStatus] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState(`${import.meta.env.VITE_STORAGE_SERVICE_HOST}${user?.avatar_url}-256.jpg`);
   const editableFields = {
     first_name: true,
     last_name: true,
@@ -34,12 +35,15 @@ const PersonalInfomationSetting = () => {
   };
   const handleFileUpload = async (file: File) => {
     if (userLoaded.user_id != undefined) {
-      uploadAvatar(`avatar_${userLoaded.user_id}`, file).then(async (res) => {
+      const timestamp = new Date().getTime();
+      uploadAvatar(`avatar_${userLoaded.user_id}_${timestamp}`, file).then(async (res) => {
         if (res && res.status === 200) {
-          setUserInfo((prev) => ({ ...prev, avatar_url: `avatar_${userLoaded.user_id}` }));
-          console.log('Loaded: ' + userLoaded);
-          updateUser(companyName ?? '', userLoaded as User).then(() => {
+          const newUser = { ...userLoaded, avatar_url: `avatar_${userLoaded.user_id}_${timestamp}` };
+          setUserInfo(newUser);
+          console.log('Loaded: ' + newUser);
+          updateUser(companyName ?? '', newUser as User).then(() => {
             setModalOpen(false);
+            setAvatarUrl(`${import.meta.env.VITE_STORAGE_SERVICE_HOST}${newUser?.avatar_url}-256.jpg`);
             reloadUser();
             toast({
               title: 'Success',
@@ -104,7 +108,7 @@ const PersonalInfomationSetting = () => {
               Profile Picture
             </h2>
             <div className='aspect-square w-64 overflow-clip rounded-full'>
-              <img src={`${import.meta.env.VITE_STORAGE_SERVICE_HOST}${user?.avatar_url}-256.jpg`} />
+              <img src={avatarUrl} />
             </div>
             <div className='dark:panel-dark absolute bottom-1 right-2'>
               <Button

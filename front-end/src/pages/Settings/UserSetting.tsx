@@ -1,24 +1,28 @@
-import { Button, DropDown, DropDownItem, ErrorText, Modal, Panel, PrimaryButton, TextInput } from '@/components/ui';
-import useAuth from '@/hooks/useAuth';
-import { Pencil } from 'lucide-react';
+import { DropDown, DropDownItem, ErrorText, Panel, PrimaryButton, TextInput } from '@/components/ui';
 import { cn } from '@/utils/utils';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import { useToast } from '@/components/ui/use-toast';
-import { createUser, uploadAvatar } from '@/api/users';
+import { createUser } from '@/api/users';
+import { loadRoles } from '@/api/roles';
 import UserTable from '@/components/ui/Table/UserTable';
-import { useGlobalModalContext } from '@/context/GlobalModalContext';
 
 const UserSetting = () => {
+  const { companyName } = useParams();
   const [email, setEmail] = useState('');
+  const [roles, setRoles] = useState<Role[]>([]);
   const [profile, setProfile] = useState('');
-
   const [errors, setErrors] = useState({
     email: '',
     profile: ''
   });
-
   const location = useLocation();
+  useEffect(() => {
+    const getProfiles = async () => {
+      const roles = await loadRoles(companyName ?? '');
+      setRoles(roles);
+    };
+    getProfiles();
+  }, []);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -50,6 +54,13 @@ const UserSetting = () => {
       setProfile('');
     }
   };
+
+  const convertToHyphenFormat = (str: string): string => {
+    const words = str.split('-');
+    const capitalizedWords = words.map((word) => word.charAt(0).toUpperCase() + word.slice(1));
+    return capitalizedWords.join(' ');
+  };
+
   return (
     <Panel className={cn('m-0 grid h-full grid-cols-1 px-4 py-6')}>
       <div className=' overflow-y-scroll'>
@@ -74,8 +85,10 @@ const UserSetting = () => {
                 className='w-full'
                 header='Profile'
               >
-                <DropDownItem title='System Administrator' value='admin-user'></DropDownItem>
-                <DropDownItem title='Standard User' value='standard-user'></DropDownItem>
+                {roles &&
+                  roles.map((role) => (
+                    <DropDownItem title={convertToHyphenFormat(role.role_name)} value={role.role_name}></DropDownItem>
+                  ))}
               </DropDown>
               {errors.email && <ErrorText className='text-sm text-red-500' text={errors.profile} />}
             </div>

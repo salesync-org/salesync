@@ -156,3 +156,16 @@ type NewPasswordChange = {
   new_password: string;
   confirm_password: string;
 };
+
+type Permission = {
+  permission_name: string,
+  permission_id: string,
+  description: string
+}
+
+type Role = {
+  role_name: string,
+  role_id: string,
+  description: string,
+  permissions: Permission[]
+}

@@ -8,6 +8,7 @@ import SettingLayout from './pages/Settings/SettingLayout';
 import PersonalInformationSetting from './pages/Settings/PersonalInformationSetting';
 import UserSetting from './pages/Settings/UserSetting';
 import ChangePasswordSetting from './pages/Settings/ChangePasswordSetting';
+import CompanyInfomationSetting from './pages/Settings/CompanyInformationSetting';
 
 // const LogIn = lazy(() => import('pages/LogIn/LogIn'));
 // const Setting = lazy(() => import('pages/Setting/Setting'));
@@ -47,7 +48,7 @@ function App() {
               <Route path='record/:recordId' element={<RecordDetail />} />
               <Route path='setting/' element={<SettingLayout />}>
                 <Route path='personal-information' element={<PersonalInformationSetting />} />
-                <Route path='company-information' element={<PersonalInformationSetting />} />
+                <Route path='company-information' element={<CompanyInfomationSetting />} />
                 <Route path='change-user-password' element={<ChangePasswordSetting />} />
                 <Route path='profiles' element={<PersonalInformationSetting />} />
                 <Route path='users' element={<UserSetting />} />

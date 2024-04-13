@@ -1,7 +1,7 @@
 import NavigationButton from '@/components/NavigationButton/NavigationButton';
 import { SidebarSetting } from '@/components/SettingLayout/SideBarSetting';
 import { Building, Layers, Settings, User } from 'lucide-react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useParams } from 'react-router-dom';
 
 export type Setting = {
   name: string;
@@ -57,6 +57,8 @@ const settings = [
 
 const SettingLayout = () => {
   const location = useLocation();
+  const { typeId } = useParams();
+
   let title = '';
   let Icon = Settings;
 
@@ -78,6 +80,10 @@ const SettingLayout = () => {
   } else {
     title = header.name;
     Icon = header.Icon || Settings;
+  }
+
+  if (typeId) {
+    title = 'Account';
   }
 
   return (

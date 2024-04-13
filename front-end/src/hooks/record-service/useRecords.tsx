@@ -11,7 +11,8 @@ const useRecords = (typeId: string) => {
     {
       refetchOnWindowFocus: false,
       staleTime: 1000 * 60 * 5,
-      keepPreviousData: true
+      keepPreviousData: true,
+      enabled: !!typeId 
     }
   );
 

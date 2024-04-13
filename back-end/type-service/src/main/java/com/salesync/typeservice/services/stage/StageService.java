@@ -4,4 +4,6 @@ import com.salesync.typeservice.dtos.StageDto;
 
 public interface StageService {
     StageDto createStage(StageDto stageDto);
+
+    StageDto updateStage(StageDto stageDto);
 }

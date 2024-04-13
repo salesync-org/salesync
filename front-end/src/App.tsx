@@ -52,6 +52,7 @@ function App() {
                 <Route path='change-user-password' element={<ChangePasswordSetting />} />
                 <Route path='profiles' element={<PersonalInformationSetting />} />
                 <Route path='users' element={<UserSetting />} />
+                <Route path='object-manager' element={<UserSetting />} />
 
                 {/* Thêm setting routes ở đây */}
               </Route>

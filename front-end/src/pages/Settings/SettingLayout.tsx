@@ -1,6 +1,6 @@
 import NavigationButton from '@/components/NavigationButton/NavigationButton';
 import { SidebarSetting } from '@/components/SettingLayout/SideBarSetting';
-import { Building, Settings, User } from 'lucide-react';
+import { Building, Layers, Settings, User } from 'lucide-react';
 import { Outlet, useLocation } from 'react-router-dom';
 
 export type Setting = {
@@ -50,7 +50,8 @@ const settings = [
   },
   {
     name: 'Object Manager',
-    path: 'object-manager'
+    path: 'setting/object-manager',
+    Icon: Layers
   }
 ];
 

@@ -33,9 +33,4 @@ public class StageController {
     public ResponseEntity updateStage(@Valid @RequestBody StageDto stageDto) {
         return ResponseEntity.ok(stageService.updateStage(stageDto));
     }
-
-    @GetMapping(Route.Stage.GET_STAGE_ID_BY_TYPE_ID_AND_SEQUENCE_NUMBER)
-    public ResponseEntity getStageIdByTypeIdAndSequenceNumber(@PathVariable String typeId, @PathVariable String stageName) {
-        return ResponseEntity.ok(stageService.getStageIdByTypeIdAndSequenceNumber(typeId, stageName));
-    }
 }

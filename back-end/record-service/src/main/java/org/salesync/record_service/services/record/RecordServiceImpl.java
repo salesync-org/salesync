@@ -253,24 +253,10 @@ public class RecordServiceImpl implements RecordService {
         recordEntity.setRecordType(recordType);
         recordTypeRepository.save(recordType);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("Authorization", token);
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-
-        // Get stage id with typeId and sequence = 1
-        ResponseEntity<String> response = restTemplate.exchange(
-                "http://type-service"+"/api/v1/"+realm+"/stages"+"/"+typeId+"/"+createRecordRequestDto.getStageName(),
-                HttpMethod.GET,
-                entity,
-                new ParameterizedTypeReference<String>() {}
-        );
-        String stageId = response.getBody();
-
-        if (stageId != null) {
+        if (createRecordRequestDto.getStageId() != null) {
             RecordStage recordStage = new RecordStage();
             recordStage.setRecord(recordEntity);
-            recordStage.setStageId(UUID.fromString(stageId));
+            recordStage.setStageId(createRecordRequestDto.getStageId());
             recordEntity.setRecordStage(recordStage);
             recordStageRepository.save(recordStage);
         }

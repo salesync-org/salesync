@@ -11,6 +11,4 @@ public interface StageService {
     List<StageDto> getStagesByTypeId(UUID typeId);
 
     StageDto updateStage(StageDto stageDto);
-
-    String getStageIdByTypeIdAndSequenceNumber(String typeId, String stageName);
 }

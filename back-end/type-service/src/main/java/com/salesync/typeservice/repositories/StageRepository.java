@@ -12,7 +12,4 @@ public interface StageRepository extends JpaRepository<Stage, UUID> {
     Optional<Stage> findTopByTypeIdOrderBySequenceNumberDesc(UUID typeId);
     Optional<Stage> findByTypeIdAndSequenceNumber(UUID typeId, Integer sequenceNumber);
     List<Stage> findAllByTypeIdOrderBySequenceNumberAsc(UUID typeId);
-
-    @Query(value = "SELECT stage_id FROM stage WHERE type_id = ?1 and name = ?2", nativeQuery = true)
-    public UUID getStageIdByTypeIdAndSequenceNumber(UUID typeId, String stageName);
 }

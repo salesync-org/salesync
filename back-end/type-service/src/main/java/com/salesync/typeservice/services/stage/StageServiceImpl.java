@@ -91,12 +91,4 @@ public class StageServiceImpl implements StageService {
         }
         return stageMapper.entityToDto(stageRepository.save(sourceStage));
     }
-
-    @Override
-    public String getStageIdByTypeIdAndSequenceNumber(String typeId, String stageName){
-        if (stageRepository.getStageIdByTypeIdAndSequenceNumber(UUID.fromString(typeId), stageName) != null) {
-            return stageRepository.getStageIdByTypeIdAndSequenceNumber(UUID.fromString(typeId), stageName).toString();
-        }
-        return "";
-    }
 }

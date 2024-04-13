@@ -4,11 +4,12 @@ import ConfigLayout from './components/Layout/ConfigLayout';
 import LoadingSpinner from './components/ui/Loading/LoadingSpinner';
 import { Toaster } from './components/ui/toaster';
 import PrivateRoute from './pages/PrivateRoute/PrivateRoute';
-import SettingLayout from './pages/Settings/SettingLayout';
-import PersonalInformationSetting from './pages/Settings/PersonalInformationSetting';
-import UserSetting from './pages/Settings/UserSetting';
-import ChangePasswordSetting from './pages/Settings/ChangePasswordSetting';
-import CompanyInfomationSetting from './pages/Settings/CompanyInformationSetting';
+const SettingLayout = lazy(() => import('./pages/Settings/SettingLayout'));
+const PersonalInformationSetting = lazy(() => import('./pages/Settings/PersonalInformationSetting'));
+const UserSetting = lazy(() => import('./pages/Settings/UserSetting'));
+const ChangePasswordSetting = lazy(() => import('./pages/Settings/ChangePasswordSetting'));
+const CompanyInformationSetting = lazy(() => import('./pages/Settings/CompanyInformationSetting'));
+const PropertyManager = lazy(() => import('./pages/Settings/PropertyManager'));
 
 // const LogIn = lazy(() => import('pages/LogIn/LogIn'));
 // const Setting = lazy(() => import('pages/Setting/Setting'));
@@ -48,11 +49,12 @@ function App() {
               <Route path='record/:recordId' element={<RecordDetail />} />
               <Route path='setting/' element={<SettingLayout />}>
                 <Route path='personal-information' element={<PersonalInformationSetting />} />
-                <Route path='company-information' element={<CompanyInfomationSetting />} />
+                <Route path='company-information' element={<CompanyInformationSetting />} />
                 <Route path='change-user-password' element={<ChangePasswordSetting />} />
                 <Route path='profiles' element={<PersonalInformationSetting />} />
                 <Route path='users' element={<UserSetting />} />
                 <Route path='object-manager' element={<UserSetting />} />
+                <Route path='object-manager/:typeId' element={<PropertyManager />} />
 
                 {/* Thêm setting routes ở đây */}
               </Route>

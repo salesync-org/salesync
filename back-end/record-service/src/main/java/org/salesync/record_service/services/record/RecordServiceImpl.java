@@ -18,10 +18,7 @@ import org.salesync.record_service.mappers.RecordMapper;
 import org.salesync.record_service.mappers.RecordTypePropertyMapper;
 import org.salesync.record_service.mappers.RecordTypeRelationMapper;
 import org.salesync.record_service.mappers.RelationItemMapper;
-import org.salesync.record_service.repositories.RecordRepository;
-import org.salesync.record_service.repositories.RecordTypePropertyRepository;
-import org.salesync.record_service.repositories.RecordTypeRelationRepository;
-import org.salesync.record_service.repositories.RecordTypeRepository;
+import org.salesync.record_service.repositories.*;
 import org.salesync.record_service.utils.SecurityContextHelper;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
@@ -46,6 +43,7 @@ public class RecordServiceImpl implements RecordService {
     private final RecordTypeRepository recordTypeRepository;
     private final RecordTypePropertyRepository recordTypePropertyRepository;
     private final RecordTypeRelationRepository recordTypeRelationRepository;
+    private final RecordStageRepository recordStageRepository;
     private final RecordMapper recordMapper = RecordMapper.INSTANCE;
     private final RecordTypeRelationMapper recordTypeRelationMapper = RecordTypeRelationMapper.INSTANCE;
     private final RelationItemMapper relationItemMapper = RelationItemMapper.INSTANCE;
@@ -252,6 +250,8 @@ public class RecordServiceImpl implements RecordService {
         RecordType recordType = new RecordType();
         recordType.setRecord(recordEntity);
         recordType.setTypeId(UUID.fromString(typeId));
+        recordEntity.setRecordType(recordType);
+        recordTypeRepository.save(recordType);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -271,6 +271,8 @@ public class RecordServiceImpl implements RecordService {
             RecordStage recordStage = new RecordStage();
             recordStage.setRecord(recordEntity);
             recordStage.setStageId(UUID.fromString(stageId));
+            recordEntity.setRecordStage(recordStage);
+            recordStageRepository.save(recordStage);
         }
 
         recordEntity.setRecordProperties(new ArrayList<>());

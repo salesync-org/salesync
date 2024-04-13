@@ -20,19 +20,22 @@ export const formatCurrency = (value: number) => {
 
 export const formatCompanyName = (name: string) => {
   return name.split(' ').join('').toLowerCase();
-}
+};
 
 export const formatRecords = (records: RecordResponse[]) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const formattedRecords: any = new Array(records.length).fill({});
 
   for (let i = 0; i < records.length; i++) {
+    formattedRecords[i]['id'] = records[i].id;
     formattedRecords[i]['Name'] = records[i].name;
 
     for (const property of records[i].properties) {
-      formattedRecords[i][property.record_type_property_label] = property.item_value;
+      formattedRecords[i][property.property_label] = property.item_value;
     }
   }
+
+  console.log({ formattedRecords });
 
   return formattedRecords;
 };

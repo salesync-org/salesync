@@ -1,12 +1,12 @@
-import recordApi from '@/api/record';
+import recordApi, { RecordsFilter } from '@/api/record';
 import { useQuery } from 'react-query';
 
-const useRecords = (typeId: string) => {
-  const key = ['records', typeId];
+const useRecords = (companyName: string, typeId: string, recordFilter: RecordsFilter) => {
+  const key = ['records', typeId, recordFilter];
   const { data, error, isLoading } = useQuery(
     key,
     async () => {
-      return recordApi.getRecords(typeId);
+      return recordApi.getRecords(companyName, typeId, recordFilter);
     },
     {
       refetchOnWindowFocus: false,

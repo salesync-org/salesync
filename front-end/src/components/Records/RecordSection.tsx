@@ -52,7 +52,7 @@ const RecordSection = ({ type }: RecordSectionProps) => {
                 >
                   {button.name}
                 </Button>
-              );
+            );
             })}
         </ButtonGroup>
       </section>

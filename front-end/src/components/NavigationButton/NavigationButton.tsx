@@ -23,6 +23,7 @@ const NavigationButton = () => {
         {layoutOrders.map((layoutOrder) => {
           return (
             <Link
+              key={layoutOrder.name}
               to={`/${companyName}/${layoutOrder.name.toLowerCase()}`}
               className='my-1 flex cursor-pointer items-center gap-4 py-2 transition-all hover:bg-slate-100/80'
             >

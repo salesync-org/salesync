@@ -139,7 +139,7 @@ type RecordResponse = {
 type PropertyResponse = {
   id: string;
   type_property_id: string;
-  record_type_property_label: string;
+  property_label: string;
   item_value: string;
 };
 

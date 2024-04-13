@@ -2,9 +2,24 @@ import axios from './axiosConfig';
 import { TYPE_SERVICE_URL } from '@/constants/api';
 
 const URL = import.meta.env.VITE_GATEWAY_HOST;
+
+export type RecordsFilter = {
+  searchTerm: string;
+  isAsc: boolean | null;
+  propertyName: string | null;
+  currentPage: number;
+  pageSize: number;
+};
 class RecordApi {
-  async getRecords(typeId: string) {
-    const response = await axios.get(`${TYPE_SERVICE_URL}/${typeId}/records`);
+  async getRecords(companyName: string, typeId: string, recordFilter: RecordsFilter) {
+    const response = await axios.post(`${URL}/${companyName}/records/list`, {
+      type_id: typeId,
+      search_term: recordFilter.searchTerm,
+      is_asc: recordFilter.isAsc,
+      property_name: recordFilter.propertyName,
+      current_page: recordFilter.currentPage,
+      page_size: recordFilter.pageSize
+    });
     return response.data;
   }
 

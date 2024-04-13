@@ -8,7 +8,7 @@ import java.util.UUID;
 public interface StageService {
     StageDto createStage(StageDto stageDto);
 
-    List<Stage> getStagesByTypeId(UUID typeId);
+    List<StageDto> getStagesByTypeId(UUID typeId);
 
     StageDto updateStage(StageDto stageDto);
 }

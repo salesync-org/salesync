@@ -8,7 +8,6 @@ import org.salesync.record_service.dtos.record_type_relation_dto.ListRecordTypeR
 import org.salesync.record_service.dtos.record_type_relation_dto.RecordTypeRelationDto;
 import org.salesync.record_service.dtos.record_type_relation_dto.RequestRecordTypeRelationDto;
 import org.salesync.record_service.services.record.RecordService;
-import org.springframework.core.env.Environment;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -57,8 +56,18 @@ public class RecordController {
     }
 
     @DeleteMapping
-    public ResponseEntity deleteRecordsById(@RequestBody List<UUID> recordIds) {
+    public ResponseEntity<RecordDto> deleteRecordsById(@RequestBody List<UUID> recordIds) {
         recordService.deleteRecordsById(recordIds);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping(Route.UPDATE_STAGE)
+    public ResponseEntity<RecordDto> updateStage(@RequestBody RequestUpdateStageDto requestUpdateStageDto) {
+        return ResponseEntity.ok(recordService.updateStage(requestUpdateStageDto));
+    }
+
+    @PostMapping(Route.TYPE_ID + Route.CREATE)
+    public RecordDto createRecordByTypeId(@PathVariable String typeId, @PathVariable String realm, @RequestHeader(name = "Authorization") String authorization, @RequestBody CreateRecordRequestDto createRecordRequestDto) {
+        return recordService.createRecordByTypeId(typeId, realm, authorization, createRecordRequestDto);
     }
 }

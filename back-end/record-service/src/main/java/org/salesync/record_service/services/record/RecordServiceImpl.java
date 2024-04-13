@@ -7,6 +7,7 @@ import org.salesync.record_service.dtos.record_type_relation_dto.ListRecordTypeR
 import org.salesync.record_service.dtos.record_type_relation_dto.RecordTypeRelationDto;
 import org.salesync.record_service.dtos.record_type_relation_dto.RelationItemDto;
 import org.salesync.record_service.dtos.record_type_relation_dto.RequestRecordTypeRelationDto;
+import org.salesync.record_service.entities.*;
 import org.salesync.record_service.entities.Record;
 import org.salesync.record_service.entities.RecordStage;
 import org.salesync.record_service.entities.RecordTypeProperty;
@@ -32,6 +33,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -236,6 +238,55 @@ public class RecordServiceImpl implements RecordService {
         recordStage.setStageId(requestUpdateStageDto.getStageId());
         record.setRecordStage(recordStage);
         return recordMapper.recordToRecordDto(recordRepository.save(record));
+    }
+
+    @Override
+    public RecordDto createRecordByTypeId(String typeId, String realm, String token, CreateRecordRequestDto createRecordRequestDto) {
+        String userContextId = SecurityContextHelper.getContextUserId();
+
+        Record recordEntity = new Record();
+        recordEntity.setUserId(UUID.fromString(userContextId));
+        recordEntity.setName(createRecordRequestDto.getRecordName());
+        recordRepository.saveAndFlush(recordEntity);
+
+        RecordType recordType = new RecordType();
+        recordType.setRecord(recordEntity);
+        recordType.setTypeId(UUID.fromString(typeId));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", token);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        // Get stage id with typeId and sequence = 1
+        ResponseEntity<String> response = restTemplate.exchange(
+                "http://type-service"+"/api/v1/"+realm+"/stages"+"/"+typeId+"/1",
+                HttpMethod.GET,
+                entity,
+                new ParameterizedTypeReference<String>() {}
+        );
+        String stageId = response.getBody();
+
+        if (stageId != null) {
+            RecordStage recordStage = new RecordStage();
+            recordStage.setRecord(recordEntity);
+            recordStage.setStageId(UUID.fromString(stageId));
+        }
+
+        recordEntity.setRecordProperties(new ArrayList<>());
+        for (RecordTypePropertyDto recordTypePropertyDto : createRecordRequestDto.getProperties()) {
+            RecordTypeProperty recordTypeProperty = new RecordTypeProperty();
+            recordTypeProperty.setItemValue(recordTypePropertyDto.getItemValue());
+            recordTypeProperty.setPropertyName(recordTypePropertyDto.getPropertyName());
+            recordTypeProperty.setRecordTypePropertyLabel(recordTypePropertyDto.getPropertyLabel());
+            recordTypeProperty.setRecord(recordEntity);
+
+            recordEntity.getRecordProperties().add(recordTypeProperty);
+
+            recordTypePropertyRepository.save(recordTypeProperty);
+        }
+
+        return recordMapper.recordToRecordDto(recordEntity);
     }
 
     public TypeDto findTypeById(UUID typeId,List<TypeDto> allType)

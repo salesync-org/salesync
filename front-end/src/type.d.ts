@@ -224,3 +224,11 @@ export interface PropertyProperty {
   name: string;
   propertyFields: PropertyField[];
 }
+
+export enum Template {
+  Human = 'Human',
+  Activity = 'Activity',
+  Group = 'Group',
+  StageObject = 'StageObject',
+  Object = 'Object'
+}

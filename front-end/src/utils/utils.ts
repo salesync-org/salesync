@@ -1,4 +1,4 @@
-import { PropertyElement } from '@/type';
+import { RecordResponse } from '@/type';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 

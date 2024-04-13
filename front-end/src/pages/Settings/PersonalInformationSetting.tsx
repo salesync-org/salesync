@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
 import { uploadAvatar } from '@/api/users';
+import LoadingSpinnerSmall from '@/components/ui/Loading/LoadingSpinnerSmall';
 
 const PersonalInfomationSetting = () => {
   const { companyName } = useParams();
@@ -36,6 +37,7 @@ const PersonalInfomationSetting = () => {
   const handleFileUpload = async (file: File) => {
     if (userLoaded.user_id != undefined) {
       const timestamp = new Date().getTime();
+      setUpdatingStatus(true);
       uploadAvatar(`avatar_${userLoaded.user_id}_${timestamp}`, file).then(async (res) => {
         if (res && res.status === 200) {
           const newUser = { ...userLoaded, avatar_url: `avatar_${userLoaded.user_id}_${timestamp}` };
@@ -49,15 +51,14 @@ const PersonalInfomationSetting = () => {
               title: 'Success',
               description: 'Reload to see your avatar take effect.'
             });
+            setUpdatingStatus(false);
           });
         }
       });
     }
-    setUpdatingStatus(false);
   };
 
   const handleOpenFilePicker = () => {
-    setUpdatingStatus(true);
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/*';
@@ -157,11 +158,22 @@ const PersonalInfomationSetting = () => {
             <img src={`${import.meta.env.VITE_STORAGE_SERVICE_HOST}${userLoaded?.avatar_url}-256.jpg`} />
           </div>
           <Button
+            intent='primary'
             onClick={(_) => {
               handleOpenFilePicker();
             }}
+            className='py-5'
           >
-            {isUpdating ? 'Please wait...' : 'Upload a Photo'}
+            {isUpdating ? (
+              <div className='flex items-center justify-center space-x-2'>
+                <div>
+                  <LoadingSpinnerSmall className='h-5 w-5 fill-on-primary' />
+                </div>
+                <p className='font-semibold'> Please wait...</p>
+              </div>
+            ) : (
+              <p className='font-semibold'>Upload a Photo</p>
+            )}
           </Button>
         </div>
       </Modal>

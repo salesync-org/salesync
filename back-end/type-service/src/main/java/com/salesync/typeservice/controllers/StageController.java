@@ -35,7 +35,7 @@ public class StageController {
     }
 
     @GetMapping(Route.Stage.GET_STAGE_ID_BY_TYPE_ID_AND_SEQUENCE_NUMBER)
-    public ResponseEntity getStageIdByTypeIdAndSequenceNumber(@PathVariable String typeId, @PathVariable int sequenceNumber) {
-        return ResponseEntity.ok(stageService.getStageIdByTypeIdAndSequenceNumber(typeId, sequenceNumber));
+    public ResponseEntity getStageIdByTypeIdAndSequenceNumber(@PathVariable String typeId, @PathVariable String stageName) {
+        return ResponseEntity.ok(stageService.getStageIdByTypeIdAndSequenceNumber(typeId, stageName));
     }
 }

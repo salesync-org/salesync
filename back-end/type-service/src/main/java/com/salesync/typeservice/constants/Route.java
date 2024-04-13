@@ -29,7 +29,7 @@ public final class Route {
         public static final String STAGE_ROUTE = "/stages";
         public static final String STAGE_ID = "/{stageId}";
         public static final String GET_STAGES_BY_TYPE_ID = "/{typeId}";
-        public static final String GET_STAGE_ID_BY_TYPE_ID_AND_SEQUENCE_NUMBER = "/{typeId}/{sequenceNumber}";
+        public static final String GET_STAGE_ID_BY_TYPE_ID_AND_SEQUENCE_NUMBER = "/{typeId}/{stageName}";
     }
 
 }

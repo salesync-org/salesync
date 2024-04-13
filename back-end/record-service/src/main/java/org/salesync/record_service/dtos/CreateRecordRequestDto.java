@@ -13,5 +13,6 @@ import java.util.UUID;
 @Getter
 public class CreateRecordRequestDto {
     private String recordName;
+    private String stageName;
     List<RecordTypePropertyDto> properties;
 }

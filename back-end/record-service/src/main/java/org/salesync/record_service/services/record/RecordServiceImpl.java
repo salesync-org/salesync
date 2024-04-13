@@ -260,7 +260,7 @@ public class RecordServiceImpl implements RecordService {
 
         // Get stage id with typeId and sequence = 1
         ResponseEntity<String> response = restTemplate.exchange(
-                "http://type-service"+"/api/v1/"+realm+"/stages"+"/"+typeId+"/1",
+                "http://type-service"+"/api/v1/"+realm+"/stages"+"/"+typeId+"/"+createRecordRequestDto.getStageName(),
                 HttpMethod.GET,
                 entity,
                 new ParameterizedTypeReference<String>() {}

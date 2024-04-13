@@ -35,7 +35,7 @@ const TextInput: React.FC<TextInputProps> = ({
   ...restProps
 }) => {
   return (
-    <>
+    <div>
       {showHeader && header && <p className={cn('my-1', isError && 'font-medium text-red-500')}>{header}</p>}
       <div
         className={cn(
@@ -70,7 +70,7 @@ const TextInput: React.FC<TextInputProps> = ({
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -18,6 +18,8 @@ public class RecordDto {
     private UUID id;
     private String name;
     private UUID userId;
+    private TypeDto type;
+    private UUID currentStageId;
     @JsonProperty("properties")
     private List<RecordTypePropertyDto> recordProperties;
 }

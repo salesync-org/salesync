@@ -13,7 +13,7 @@ import java.util.UUID;
 @Getter
 public class RecordTypePropertyDto {
     private UUID id;
-    private UUID typePropertyId;
-    private String recordTypePropertyLabel;
+    private String propertyName;
+    private String propertyLabel;
     private String itemValue;
 }

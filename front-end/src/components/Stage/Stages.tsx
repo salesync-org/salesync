@@ -1,18 +1,20 @@
 import { useMemo } from 'react';
 import Stage from './Stage';
+import { cn } from '@/utils/utils';
 
 interface StagesProps {
   stages: Stage[];
   currentStage: string;
   stageIdChosen: string;
   setStageIdChosen: (stageId: string) => void;
+  isLoading: boolean;
 }
 
-const Stages = ({ stages, currentStage, stageIdChosen, setStageIdChosen }: StagesProps) => {
+const Stages = ({ stages, currentStage, stageIdChosen, setStageIdChosen, isLoading }: StagesProps) => {
   const findIndex = useMemo(() => stages.findIndex((stage) => stage.id === currentStage), [stages, currentStage]);
 
   return (
-    <ul className='flex items-center gap-[4px]'>
+    <ul className={cn('flex items-center gap-[4px]', isLoading && 'pointer-events-none select-none opacity-80')}>
       {stages.map((stage, index) => (
         <li className='flex-1 text-center' key={stage.id}>
           <Stage

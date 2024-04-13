@@ -37,6 +37,16 @@ public class TypeServiceHandler {
         );
     }
 
+    @ExceptionHandler(TypeServiceException.class)
+    public ResponseEntity<?> handleNotFoundException(TypeServiceException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                ResponseErrorDto.builder()
+                        .status(HttpStatus.NOT_FOUND.value())
+                        .message(ex.getMessage())
+                        .build()
+        );
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException ex) {
         return ResponseEntity.badRequest().body(
@@ -49,6 +59,16 @@ public class TypeServiceHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<?> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
+        return ResponseEntity.badRequest().body(
+                ResponseErrorDto.builder()
+                        .status(HttpStatus.BAD_REQUEST.value())
+                        .message(ex.getMessage())
+                        .build()
+        );
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<?> handleBadRequestException(BadRequestException ex) {
         return ResponseEntity.badRequest().body(
                 ResponseErrorDto.builder()
                         .status(HttpStatus.BAD_REQUEST.value())

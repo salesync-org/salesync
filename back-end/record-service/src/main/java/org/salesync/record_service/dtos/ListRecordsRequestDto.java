@@ -16,7 +16,7 @@ public class ListRecordsRequestDto {
     private String searchTerm;
     @IsRequired
     private UUID typeId;
-    private UUID typePropertyId;
+    private String propertyName;
     private Boolean isAsc;
     private Integer pageSize;
     private Integer currentPage;

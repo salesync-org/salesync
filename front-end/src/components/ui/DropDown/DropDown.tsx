@@ -90,7 +90,13 @@ const DropDown: React.FC<DropdownButtonProps> = ({
             setIsOpen(!isOpen);
           }}
         >
-          <div className={cn('flex w-full items-center gap-4', isError && textErrorClassName)}>
+          <div
+            className={cn(
+              'flex w-full items-center',
+              isError && textErrorClassName,
+              selectedOption != '' && value != '' && 'gap-4'
+            )}
+          >
             {prefixIcon}
             <p className={cn('w-full truncate text-left', isError && textErrorClassName)}>
               {selectedOption ? selectedOption : value}

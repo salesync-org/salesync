@@ -1,16 +1,18 @@
 package com.salesync.typeservice.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
 @Data
-@Builder
+@SuperBuilder
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -18,8 +20,16 @@ import java.util.List;
 @AttributeOverride(name="id",column = @Column(name="type_property_id"))
 public class TypeProperty extends BaseEntity {
     private String name;
+
     private String label;
 
+    private Integer sequence;
+
+    @JsonProperty("default_value")
+    @Column(name = "default_value")
+    private String defaultValue;
+
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "type_id")
     private Type type;
@@ -28,7 +38,7 @@ public class TypeProperty extends BaseEntity {
     @JoinColumn(name = "property_id")
     private Property property;
 
+    @JsonProperty("fields")
     @OneToMany(mappedBy = "typeProperty", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
     private List<TypePropertyField> typePropertyFields;
 }

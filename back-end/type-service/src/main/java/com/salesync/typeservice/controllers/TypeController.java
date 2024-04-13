@@ -1,14 +1,12 @@
 package com.salesync.typeservice.controllers;
 
-
 import com.salesync.typeservice.constants.Route;
-import com.salesync.typeservice.dtos.TypeDTO;
-import com.salesync.typeservice.dtos.TypeRelationDTO;
-import com.salesync.typeservice.dtos.TypeRelationResponseDTO;
+import com.salesync.typeservice.dtos.*;
+import com.salesync.typeservice.entities.Type;
+import com.salesync.typeservice.entities.TypeProperty;
 import com.salesync.typeservice.services.type.TypeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -53,6 +51,21 @@ public class TypeController {
     @PutMapping
     public ResponseEntity<TypeRelationResponseDTO> updateTypeRelation(@RequestBody TypeRelationDTO typeRelationDTO) {
         return ResponseEntity.ok(typeService.updateLabelOfTypeRelation(typeRelationDTO));
+    }
+
+    @GetMapping(Route.Type.TYPE_DETAILS)
+    public ResponseEntity<Type> getTypeDetails(@PathVariable UUID typeId) {
+        return ResponseEntity.ok(typeService.getTypeDetailsById(typeId));
+    }
+
+    @PostMapping(Route.Type.CREATE_PROPERTY)
+    public ResponseEntity<TypeProperty> createProperty(@RequestBody RequestCreatePropertyDto requestCreatePropertyDto) {
+        return ResponseEntity.ok(typeService.createProperty(requestCreatePropertyDto));
+    }
+
+    @PostMapping(Route.Type.CREATE_TYPE_RELATION)
+    public ResponseEntity<RelationTypeResponseDto> createRelationType(@Valid @RequestBody RelationTypeRequestDto request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(typeService.createRelationType(request));
     }
 
 

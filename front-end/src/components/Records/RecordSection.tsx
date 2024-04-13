@@ -32,7 +32,7 @@ const RecordSection = ({ type }: RecordSectionProps) => {
           </div>
           <div>
             <h5 className='leading-[10px]'>{type.name}</h5>
-            <div className='flex cursor-pointer items-center space-x-2 hover:border-b border-transparent border-secondary dark:border-secondary-dark  text-[#080707] hover:border-black dark:text-white hover:text-secondary-dark'>
+            <div className='flex cursor-pointer items-center space-x-2 border-secondary border-transparent text-[#080707] hover:border-b  hover:border-black hover:text-secondary-dark dark:border-secondary-dark dark:text-white'>
               <h1 className='text-[1.3rem]'>All Open {type.name}</h1>
               <Icon name='arrow_drop_down' size='32px' />
             </div>

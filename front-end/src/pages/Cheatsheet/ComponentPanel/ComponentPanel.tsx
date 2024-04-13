@@ -1,4 +1,15 @@
-import {PrimaryButton, Checkbox, Button, Panel, Switch, Icon, TextInput, DropDown, Item, DropDownItem} from '@/components/ui';
+import {
+  PrimaryButton,
+  Checkbox,
+  Button,
+  Panel,
+  Switch,
+  Icon,
+  TextInput,
+  DropDown,
+  Item,
+  DropDownItem
+} from '@/components/ui';
 import ModalPanel from '../ModalPanel/ModalPanel';
 
 function ComponentPanel() {
@@ -53,7 +64,7 @@ function ComponentPanel() {
             <DropDownItem title='Item 3' value='Item 3'></DropDownItem>
             <DropDownItem title='Item 4' value='Item 4'></DropDownItem>
           </DropDown>
-          <DropDown header='With Complex Items' value='Select a value' divide={true}>
+          <DropDown header='5' value='' defaultValue='' className='w-8'>
             <DropDownItem title='Complex' value='Item 1'>
               <Item icon={<Icon name='person' size='1rem' />} title='Complex' subTitle='With Subtitle' href='#' />
             </DropDownItem>
@@ -66,19 +77,19 @@ function ComponentPanel() {
           </DropDown>
         </div>
         <div>
-            <h2 className='mb-4'>Modal</h2>
-            <ModalPanel />
+          <h2 className='mb-4'>Modal</h2>
+          <ModalPanel />
         </div>
         <div>
-            <h2 className='mb-4'>Checkbox</h2>
-            <div className='flex space-x-2 items-center'>
-              <Checkbox></Checkbox>
-              <p>Unchecked</p>
-            </div>
-            <div className='mt-2 flex space-x-2 items-center'>
-              <Checkbox></Checkbox>
-              <p>Checked</p>
-            </div>
+          <h2 className='mb-4'>Checkbox</h2>
+          <div className='flex items-center space-x-2'>
+            <Checkbox></Checkbox>
+            <p>Unchecked</p>
+          </div>
+          <div className='mt-2 flex items-center space-x-2'>
+            <Checkbox></Checkbox>
+            <p>Checked</p>
+          </div>
         </div>
       </div>
     </Panel>

@@ -7,10 +7,7 @@ INSERT INTO public.template (name) VALUES
 
 
 INSERT INTO public.type (name) VALUES
---     ('Lead'),
---     ('Opportunity'),
---     ('Contact'),
---     ('Account'),
+
     ('Task'),
     ('Event'),
     ('Deal'),
@@ -60,87 +57,161 @@ INSERT INTO public.type_relation (type_relation_id, relation_id,
     get_id('template_id', 'type', 'Contact'), 'Contact',
     get_id('template_id', 'type', 'Task'), 'Task');
 
-INSERT INTO public.property (name) VALUES
-    ('Text'),
-    ('Website'),
-    ('EmailAddress'),
-    ('PhoneNumber'),
-    ('Address'),
-    ('Image'),
-    ('Date'),
-    ('DateTime');
+INSERT INTO public.property (property_id,name) VALUES
+    ('11111111-1111-1111-1111-111111111111','Text'),
+    ('11111111-1111-1111-1111-111111111112','TextArea'),
+    ('11111111-1111-1111-1111-111111111113','Number'),
 
-INSERT INTO public.field (input_type, is_multiple_value) VALUES
-    ('TextArea', FALSE),
-    ('Checkbox', FALSE),
-    ('RadioButton', TRUE),
-    ('NumberText', FALSE),
-    ('DateInput', FALSE),
-    ('DropDown', FALSE),
-    ('DateTimeInput', FALSE),
-    ('Label', FALSE);
+    ('11111111-1111-1111-1111-111111111114','Checkbox'),
 
-INSERT INTO public.property_field(property_id, field_id, label,
+    ('22222222-2222-2222-2222-222222222222','URL'),
+    ('33333333-3333-3333-3333-333333333333','Email'),
+    ('44444444-4444-4444-4444-444444444444','Phone'),
+    ('55555555-5555-5555-5555-555555555555','Geolocation'),
+
+    --     ??
+    ('66666666-6666-6666-6666-666666666666','Image'),
+    ('77777777-7777-7777-7777-777777777777','Date'),
+    ('88888888-8888-8888-8888-888888888888','DateTime'),
+    ('99999999-9999-9999-9999-999999999999','PickList');
+
+INSERT INTO public.field (field_id,input_type, is_multiple_value) VALUES
+
+    ('11111111-1111-1111-1111-111111111111', 'TextArea', FALSE),
+    ('22222222-2222-2222-2222-222222222222', 'Checkbox', FALSE),
+    ('33333333-3333-3333-3333-333333333333', 'NumberText', FALSE),
+    ('44444444-4444-4444-4444-444444444444', 'DateInput', FALSE),
+    ('55555555-5555-5555-5555-555555555555', 'DropDown', FALSE),
+    ('66666666-6666-6666-6666-666666666666', 'DateTimeInput', FALSE),
+    ('77777777-7777-7777-7777-777777777777', 'Text', TRUE),
+    ('88888888-8888-8888-8888-888888888888', 'CheckBox', TRUE);
+
+INSERT INTO public.property_field(property_field_id,property_id, field_id, label,
                                   item_value, default_value,
                                   is_required, is_key) VALUES
-    (get_id('property_id', 'property', 'Text'),
-          get_id('field_id', 'field', 'TextArea', 'input_type'),
-        'Default Value', null, '', true, true),
-    (get_id('property_id', 'property', 'Text'),
+
+
+    (
+     '11111111-1111-1111-1111-111111111112'
+     ,get_id('property_id', 'property', 'Text'),
           get_id('field_id', 'field', 'Checkbox', 'input_type'),
-        'Is Required', null, '', true, false),
-    (get_id('property_id', 'property', 'Text'),
+        'Required', null, 'false', true, false),
+    (
+     '11111111-1111-1111-1111-111111111113'
+     ,get_id('property_id', 'property', 'Text'),
           get_id('field_id', 'field', 'NumberText', 'input_type'),
-        'Max Character', '50', '', true, true),
---     text-label for type
-    (get_id('property_id', 'property', 'Text'),
-     get_id('field_id', 'field', 'Label', 'input_type'),
-     'Text Label', null, '', true, true),
-
-
-    (get_id('property_id', 'property', 'Date'),
-        get_id('field_id', 'field', 'DateInput', 'input_type'),
-        'Default Value', null, '1900-01-01', true, true),
-    (get_id('property_id', 'property', 'Date'),
+        'Length', null, '255', true, true),
+    (
+        '11111111-1111-1111-1111-111111111114'
+        ,get_id('property_id', 'property', 'Text'),
         get_id('field_id', 'field', 'Checkbox', 'input_type'),
-        'Is Required', null, '', true, false),
-    (get_id('property_id', 'property', 'Date'),
-        get_id('field_id', 'field', 'DateInput', 'input_type'),
-        'From', null, '1900-01-01', false, false),
-    (get_id('property_id', 'property', 'Date'),
-        get_id('field_id', 'field', 'DateInput', 'input_type'),
-        'To', null, '2100-01-01', false, false),
-    (get_id('property_id', 'property', 'Date'),
-        get_id('field_id', 'field', 'DropDown', 'input_type'),
-        'Date Format', 'DD-MM-YYYY', null, true, false),
-    (get_id('property_id', 'property', 'Date'),
-        get_id('field_id', 'field', 'DropDown', 'input_type'),
-        'Date Format', 'YYYY-MM-DD', null, true, false),
--- type label for date
-    (get_id('property_id', 'property', 'Date'),
-        get_id('field_id', 'field', 'Label', 'input_type'),
-        'Date Label', null, '', true, true);
+        'Unique', null, 'false', true, true),
 
 
-INSERT INTO public.type_property_field(type_id, property_field_id,name,item_value) VALUES
-   (get_id('type_id', 'type', 'Lead'),
-    get_property_field_id('Text', 'TextArea'),'my_address','Nguyen Van Cu'),
-
-   (get_id('type_id', 'type', 'Lead'),
-    get_property_field_id('Text', 'Checkbox'),'my_address','true'),
-
-   (get_id('type_id', 'type', 'Lead'),
-    get_property_field_id('Text', 'NumberText'),'my_address','50'),
-
-
-    (get_id('type_id', 'type', 'Lead'),
-    get_property_field_id('Text', 'Label'),
-     'my_address', 'My Address')
-   ;
-
-
+    (
+        '22222222-2222-2222-2222-222222222222'
+        ,get_id('property_id', 'property', 'TextArea'),
+        get_id('field_id', 'field', 'Checkbox', 'input_type'),
+        'Required', null, 'false', true, false),
+    (
+        '22222222-2222-2222-2222-222222222223'
+        ,get_id('property_id', 'property', 'TextArea'),
+        get_id('field_id', 'field', 'NumberText', 'input_type'),
+        'Length', null, '255', true, true),
+    (
+        '22222222-2222-2222-2222-222222222224'
+        ,get_id('property_id', 'property', 'TextArea'),
+        get_id('field_id', 'field', 'Checkbox', 'input_type'),
+        'Unique', null, 'false', true, true),
 
 
+    (
+        '33333333-3333-3333-3333-333333333332'
+        ,get_id('property_id', 'property', 'Number'),
+        get_id('field_id', 'field', 'Checkbox', 'input_type'),
+        'Required', null, 'false', true, false),
+    (
+        '33333333-3333-3333-3333-333333333333'
+        ,get_id('property_id', 'property', 'Number'),
+        get_id('field_id', 'field', 'NumberText', 'input_type'),
+        'Length', null, '18', true, true),
+    (
+        '33333333-3333-3333-3333-333333333334'
+        ,get_id('property_id', 'property', 'Number'),
+        get_id('field_id', 'field', 'Checkbox', 'input_type'),
+        'Unique', null, 'false', true, true),
+
+
+    --Checkbox
+
+
+
+    (
+        '55555555-5555-5555-5555-555555555552'
+        ,get_id('property_id', 'property', 'URL'),
+        get_id('field_id', 'field', 'Checkbox', 'input_type'),
+        'Required', null, 'false', true, false),
+
+
+
+    (
+        '66666666-6666-6666-6666-666666666662'
+        ,get_id('property_id', 'property', 'Email'),
+        get_id('field_id', 'field', 'Checkbox', 'input_type'),
+        'Required', null, 'false', true, false),
+    (
+        '66666666-6666-6666-6666-666666666663'
+        ,get_id('property_id', 'property', 'Email'),
+        get_id('field_id', 'field', 'Checkbox', 'input_type'),
+        'Unique', null, 'false', true, false),
+
+   (
+        '77777777-7777-7777-7777-777777777772'
+        ,get_id('property_id', 'property', 'Phone'),
+        get_id('field_id', 'field', 'Checkbox', 'input_type'),
+        'Required', null, 'false', true, false),
+
+
+    (
+       '11111111-1111-1111-1111-111111111121'
+        ,get_id('property_id', 'property', 'Date'),
+        get_id('field_id', 'field', 'Checkbox', 'input_type'),
+        'Required', null, 'false', true, false),
+    (
+        '11111111-1111-1111-1111-111111111122'
+        ,get_id('property_id', 'property', 'Date'),
+        get_id('field_id', 'field', 'Checkbox', 'input_type'),
+        'Default value', null, '', true, false),
+
+
+
+    (
+        '11111111-1111-1111-1111-111111111131'
+        ,get_id('property_id', 'property', 'DateTime'),
+        get_id('field_id', 'field', 'Checkbox', 'input_type'),
+        'Required', null, 'false', true, false),
+    (
+        '11111111-1111-1111-1111-111111111132'
+        ,get_id('property_id', 'property', 'DateTime'),
+        get_id('field_id', 'field', 'Checkbox', 'input_type'),
+        'Default value', null, '', true, false),
+
+
+    (
+         '11111111-1111-1111-1111-111111111141',
+        get_id('property_id', 'property', 'PickList'),
+         get_id('field_id', 'field', 'Text', 'input_type'),
+         'Default Value', null, '', true, true),
+    (
+        '11111111-1111-1111-1111-111111111142'
+        ,get_id('property_id', 'property', 'PickList'),
+        get_id('field_id', 'field', 'Checkbox', 'input_type'),
+        'Required', null, 'false', true, false),
+    (
+        '11111111-1111-1111-1111-111111111143'
+        ,get_id('property_id', 'property', 'PickList'),
+        get_id('field_id', 'field', 'Text', 'input_type'),
+        'Values', null, '', true, true);
 
 -- -- CALL assign_template(get_id('template_id', 'template', 'StageObject'), get_id('type_id', 'type', 'Lead'));
 -- CALL assign_template(get_id('template_id', 'template', 'StageObject'), get_id('type_id', 'type', 'Opportunity'));
@@ -157,14 +228,48 @@ INSERT INTO public.type_property_field(type_id, property_field_id,name,item_valu
 -- CALL assign_template(get_id('template_id', 'template', 'Object'), get_id('type_id', 'type', 'Contract'));
 --
 
+INSERT INTO public.type_property(type_property_id, property_id, type_id, name, label, default_value, sequence) VALUES
+    ('11111111-1111-1111-1111-111111111111', get_id('property_id', 'property', 'Text'), '11111111-1111-1111-1111-111111111111', 'Name', 'Lead Name','No Name', 1),
+    ('22222222-2222-2222-2222-222222222222', get_id('property_id', 'property', 'Text'), '11111111-1111-1111-1111-111111111111', 'Title', 'Title','No Title', 2),
+    ('33333333-3333-3333-3333-333333333333',get_id('property_id', 'property', 'Text'), '11111111-1111-1111-1111-111111111111', 'Company', 'Company','No Company', 3),
+    ('44444444-4444-4444-4444-444444444444', get_id('property_id', 'property', 'Phone'), '11111111-1111-1111-1111-111111111111', 'Phone', 'Phone','No Phone', 4)
+--     ('55555555-5555-5555-5555-555555555555', get_id('property_id', 'property', 'Text'), '22222222-2222-2222-2222-222222222222', 'Email', 'Email','NoEmail', 1),
+--     ('66666666-6666-6666-6666-666666666666', get_id('property_id', 'property', 'Text'), '22222222-2222-2222-2222-222222222222', 'Title', 'Title','NoTitle', 2),
+--     ('77777777-7777-7777-7777-777777777777',get_id('property_id', 'property', 'Text'), '22222222-2222-2222-2222-222222222222', 'Company', 'Company','NoCompany', 3),
+--     ('88888888-8888-8888-8888-888888888888', get_id('property_id', 'property', 'Phone'), '22222222-2222-2222-2222-222222222222', 'Phone', 'Phone','NoPhone', 4)
+    ;
 
-INSERT INTO stage (stage_id, name, type_id) VALUES
-    ('11111111-1111-1111-1111-111111111111', 'LeadStage1', get_id('type_id', 'type', 'Lead')),
-    ('22222222-2222-2222-2222-222222222222', 'LeadStage2', get_id('type_id', 'type', 'Lead')),
-    ('33333333-3333-3333-3333-333333333333', 'LeadStage3', get_id('type_id', 'type', 'Lead')),
-    ('44444444-4444-4444-4444-444444444444', 'LeadStage4', get_id('type_id', 'type', 'Lead')),
-    ('55555555-5555-5555-5555-555555555555', 'OpportunityStage1', get_id('type_id', 'type', 'Opportunity')),
-    ('66666666-6666-6666-6666-666666666666', 'OpportunityStage2', get_id('type_id', 'type', 'Opportunity')),
-    ('77777777-7777-7777-7777-777777777777', 'OpportunityStage3', get_id('type_id', 'type', 'Opportunity')),
-    ('88888888-8888-8888-8888-888888888888', 'OpportunityStage4', get_id('type_id', 'type', 'Opportunity'));
+INSERT INTO stage (stage_id, name, type_id, sequence_number) VALUES
+    ('11111111-1111-1111-1111-111111111111', 'LeadStage1', get_id('type_id', 'type', 'Lead'), 1),
+    ('22222222-2222-2222-2222-222222222222', 'LeadStage2', get_id('type_id', 'type', 'Lead'), 2),
+    ('33333333-3333-3333-3333-333333333333', 'LeadStage3', get_id('type_id', 'type', 'Lead'), 3),
+    ('44444444-4444-4444-4444-444444444444', 'LeadStage4', get_id('type_id', 'type', 'Lead'), 4),
+    ('55555555-5555-5555-5555-555555555555', 'OpportunityStage1', get_id('type_id', 'type', 'Opportunity'), 1),
+    ('66666666-6666-6666-6666-666666666666', 'OpportunityStage2', get_id('type_id', 'type', 'Opportunity'), 2),
+    ('77777777-7777-7777-7777-777777777777', 'OpportunityStage3', get_id('type_id', 'type', 'Opportunity'), 3),
+    ('88888888-8888-8888-8888-888888888888', 'OpportunityStage4', get_id('type_id', 'type', 'Opportunity'), 4);
 
+
+INSERT INTO public.type_property_field
+    (type_property_id,property_field_id, item_value)
+VALUES
+    --text
+
+    ('11111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111112', 'false'),
+    ('11111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111113', '255'),
+    ('11111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111114', 'false'),
+
+
+    ('22222222-2222-2222-2222-222222222222', '11111111-1111-1111-1111-111111111112', 'false'),
+    ('22222222-2222-2222-2222-222222222222', '11111111-1111-1111-1111-111111111113', '255'),
+    ('22222222-2222-2222-2222-222222222222', '11111111-1111-1111-1111-111111111114', 'false'),
+
+
+    ('33333333-3333-3333-3333-333333333333', '11111111-1111-1111-1111-111111111112', 'false'),
+    ('33333333-3333-3333-3333-333333333333', '11111111-1111-1111-1111-111111111113', '255'),
+    ('33333333-3333-3333-3333-333333333333', '11111111-1111-1111-1111-111111111114', 'false'),
+
+    ('44444444-4444-4444-4444-444444444444', '77777777-7777-7777-7777-777777777772', 'false')
+
+
+;

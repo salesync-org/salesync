@@ -2,10 +2,12 @@ import { Button, ButtonGroup, DropDownList, Icon, Item, Panel } from '@/componen
 import { useState } from 'react';
 // import { useParams } from 'react-router-dom';
 import GroupProperty from '@/components/RecordDetail/GroupProperty';
-import StageSection from '@/components/Stage/StageSection';
+import RelationSections from '@/components/Relation/RelationSections';
+import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
 import useRecord from '@/hooks/record-service/useRecord';
 import { useParams } from 'react-router-dom';
-import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
+import useStages from '@/hooks/type-service/useStage';
+import StageSection from '@/components/Stage/StageSection';
 
 const RecordDetail = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -36,17 +38,31 @@ const RecordDetail = () => {
     { name: 'Last Modified By', value: '' }
   ];
 
-  const { recordId = '' } = useParams();
-  const { data: record, isLoading } = useRecord(recordId);
+  const { recordId = '', companyName = '' } = useParams();
+  const { data: record, isLoading: isRecordLoading } = useRecord(companyName, recordId);
+  const { data: stages, isLoading: isStagesLoading } = useStages(companyName, record?.source_record?.type.id);
 
-  if (isLoading) {
+  if (isRecordLoading && isStagesLoading) {
     return <LoadingSpinner />;
   }
 
-  if (!record) {
+  if (!record || !stages) {
     return null;
   }
 
+  const mapStages = stages.map((stage: Stage) => {
+    return {
+      id: stage.id,
+      name: stage.name
+    };
+  });
+
+  const currentStage = record.source_record.current_stage_id;
+
+  const newStages = {
+    stages: mapStages,
+    currentStage
+  };
   return (
     <div className='flex flex-col'>
       <Panel className='flex flex-row items-center justify-between p-2'>
@@ -100,23 +116,34 @@ const RecordDetail = () => {
       </Panel>
 
       {/* record contain  */}
-      <div className='grid grid-cols-2 md:grid-cols-4'>
+      <div className='grid grid-cols-4 md:grid-cols-4'>
         <Panel className='col-span-1 mr-0 h-fit p-4'>
           <GroupProperty name='About' data={dataAbout} className='mb-4' />
           <GroupProperty name='Get in Touch' data={dataTouch} className='mb-4' />
           <GroupProperty name='Segment' data={dataSegment} className='mb-4' />
           <GroupProperty name='History' data={dataHistory} />
         </Panel>
-        {Object.keys(record).includes('stage') && (
+
+        <section className='col-span-2'>
+          {stages ? (
+            <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
+              <div className='px-4'>
+                <StageSection stage={newStages} />
+              </div>
+            </Panel>
+          ) : (
+            <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
+              <div></div>
+            </Panel>
+          )}
           <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
-            <div className='px-4'>
-              <StageSection stage={record.stage} />
-            </div>
+            <div></div>
           </Panel>
-        )}
-        <Panel className='col-span-1 h-fit p-4'>
-          <div></div>
-        </Panel>
+        </section>
+
+        <section className='col-span-1'>
+          <RelationSections relations={record.relations} />
+        </section>
       </div>
     </div>
   );

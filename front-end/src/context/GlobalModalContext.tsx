@@ -1,13 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, createContext, useContext } from 'react';
+import UserModal from '@/components/UserModal/UserModal';
 import RecordModal from '@/pages/Home/RecordModal';
+import React, { createContext, useContext, useState } from 'react';
 
 export const MODAL_TYPES = {
-  CREATE_RECORD_MODAL: 'CREATE_RECORD_MODAL'
+  CREATE_RECORD_MODAL: 'CREATE_RECORD_MODAL',
+  USER_MODAL: 'USER_MODAL'
 };
 
 const MODAL_COMPONENTS: any = {
-  [MODAL_TYPES.CREATE_RECORD_MODAL]: RecordModal
+  [MODAL_TYPES.CREATE_RECORD_MODAL]: RecordModal,
+  [MODAL_TYPES.USER_MODAL]: UserModal
 };
 
 type GlobalModalContext = {
@@ -16,13 +19,13 @@ type GlobalModalContext = {
   store: any;
 };
 
-const initalState: GlobalModalContext = {
+const initialState: GlobalModalContext = {
   showModal: () => {},
   hideModal: () => {},
   store: {}
 };
 
-const GlobalModalContext = createContext(initalState);
+const GlobalModalContext = createContext(initialState);
 export const useGlobalModalContext = () => useContext(GlobalModalContext);
 
 export const GlobalModalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {

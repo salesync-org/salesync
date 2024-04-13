@@ -1,23 +1,11 @@
-FROM quay.io/keycloak/keycloak:latest as builder
+# Use a lightweight Java base image - adjust the version as needed
+FROM openjdk:17-alpine
 
-# Enable health and metrics support
-ENV KC_HEALTH_ENABLED=true
-ENV KC_METRICS_ENABLED=true
+# Create a working directory for your app
+WORKDIR /app
 
-# Configure a database vendor
-ENV KC_DB=postgres
+# Copy the JAR file from the 'artifacts' directory (created by your build step)
+COPY artifacts/*.jar authentication.jar
 
-WORKDIR /opt/keycloak
-# for demonstration purposes only, please make sure to use proper certificates in production instead
-RUN keytool -genkeypair -storepass password -storetype PKCS12 -keyalg RSA -keysize 2048 -dname "CN=server" -alias server -ext "SAN:c=DNS:localhost,IP:127.0.0.1" -keystore conf/server.keystore
-RUN /opt/keycloak/bin/kc.sh build
-FROM quay.io/keycloak/keycloak:latest
-COPY --from=builder /opt/keycloak/ /opt/keycloak/
-
-# change these values to point to a running postgres instance
-ENV KC_DB=postgres
-ENV KC_DB_URL=<DBURL>
-ENV KC_DB_USERNAME=<DBUSERNAME>
-ENV KC_DB_PASSWORD=<DBPASSWORD>
-ENV KC_HOSTNAME=localhost
-ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]
+# Define the command to execute when the container starts
+ENTRYPOINT ["java", "-jar", "authentication.jar"]

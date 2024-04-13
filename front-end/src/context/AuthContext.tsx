@@ -24,7 +24,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const location = window.location.href;
   const companyName = location.length > 3 ? location.split('/')[3] : '';
-  console.log('companyName', companyName);
   useEffect(() => {
     const authenticated = async () => {
       try {

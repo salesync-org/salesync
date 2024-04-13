@@ -10,8 +10,12 @@ import com.salesync.typeservice.mapper.StageMapper;
 import com.salesync.typeservice.repositories.StageRepository;
 import com.salesync.typeservice.repositories.TypeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.UUID;
+
+import java.util.Optional;
 import java.util.UUID;
 
 @Service

@@ -25,7 +25,7 @@ public class StageController {
     }
 
     @GetMapping(Route.Stage.GET_STAGES_BY_TYPE_ID)
-    public ResponseEntity<List<Stage>> getStagesByTypeId(@PathVariable UUID typeId) {
+    public ResponseEntity<List<StageDto>> getStagesByTypeId(@PathVariable UUID typeId) {
         return ResponseEntity.ok(stageService.getStagesByTypeId(typeId));
     }
 

@@ -42,8 +42,9 @@ public class StageServiceImpl implements StageService {
     }
 
     @Override
-    public List<Stage> getStagesByTypeId(UUID typeId) {
-        return stageRepository.findAllByTypeIdOrderBySequenceNumberAsc(typeId);
+    public List<StageDto> getStagesByTypeId(UUID typeId) {
+        List<Stage> stageList =stageRepository.findAllByTypeIdOrderBySequenceNumberAsc(typeId);
+        return stageList.stream().map(stageMapper::entityToDto).toList();
     }
 
     @Override

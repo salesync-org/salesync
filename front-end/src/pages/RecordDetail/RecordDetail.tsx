@@ -6,6 +6,8 @@ import RelationSections from '@/components/Relation/RelationSections';
 import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
 import useRecord from '@/hooks/record-service/useRecord';
 import { useParams } from 'react-router-dom';
+import useStages from '@/hooks/type-service/useStage';
+import StageSection from '@/components/Stage/StageSection';
 
 const RecordDetail = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -37,16 +39,30 @@ const RecordDetail = () => {
   ];
 
   const { recordId = '', companyName = '' } = useParams();
-  const { data: record, isLoading } = useRecord(companyName, recordId);
+  const { data: record, isLoading: isRecordLoading } = useRecord(companyName, recordId);
+  const { data: stages, isLoading: isStagesLoading } = useStages(companyName, record?.source_record?.type.id);
 
-  if (isLoading) {
+  if (isRecordLoading && isStagesLoading) {
     return <LoadingSpinner />;
   }
 
-  if (!record) {
+  if (!record || !stages) {
     return null;
   }
 
+  const mapStages = stages.map((stage: Stage) => {
+    return {
+      id: stage.id,
+      name: stage.name
+    };
+  });
+
+  const currentStage = record.source_record.current_stage_id;
+
+  const newStages = {
+    stages: mapStages,
+    currentStage
+  };
   return (
     <div className='flex flex-col'>
       <Panel className='flex flex-row items-center justify-between p-2'>
@@ -109,17 +125,17 @@ const RecordDetail = () => {
         </Panel>
 
         <section className='col-span-2'>
-          {/* {Object.keys(record).includes('stage') ? (
+          {stages ? (
             <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
               <div className='px-4'>
-                <StageSection stage={record.stage} />
+                <StageSection stage={newStages} />
               </div>
             </Panel>
           ) : (
             <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
               <div></div>
             </Panel>
-          )} */}
+          )}
           <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
             <div></div>
           </Panel>

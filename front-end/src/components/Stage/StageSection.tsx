@@ -25,6 +25,7 @@ const lastStages = {
 
 const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) => {
   const [stageIdChosen, setStageIdChosen] = useState(currentStage);
+  const [loading, setLoading] = useState(false);
 
   const { toast } = useToast();
   const { recordId = '' } = useParams();
@@ -43,17 +44,19 @@ const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) =>
     [lastStage.id, lastStage.name, stages]
   );
 
-  const handleUpdateStage = async (recordId: string, stageId: string) => {
-    const res = await recordApi.updateRecordStage(recordId, stageId);
+  const { companyName = '' } = useParams();
+
+  const handleUpdateStage = async (companyName: string, recordId: string, stageId: string) => {
+    const res = await recordApi.updateRecordStage(companyName, recordId, stageId);
 
     if (res) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       queryClient.setQueryData(['record', recordId], (data: any) => {
         return {
           ...data,
-          stage: {
-            ...data.stage,
-            currentStage: stageId
+          source_record: {
+            ...data.source_record,
+            current_stage_id: stageId
           }
         };
       });
@@ -69,7 +72,8 @@ const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) =>
 
   const handleMarkStatusAsCurrent = async () => {
     try {
-      await handleUpdateStage(recordId, stageIdChosen);
+      setLoading(true);
+      await handleUpdateStage(companyName, recordId, stageIdChosen);
     } catch (error) {
       console.error(error);
       toast({
@@ -77,11 +81,14 @@ const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) =>
         description: 'An error occurred while marking status as current',
         variant: 'destructive'
       });
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleMarkStatusAsComplete = async () => {
     try {
+      setLoading(true);
       if (!recordId || !stageIdChosen) return;
       const findIndex = updatedStages.findIndex((stage) => stage.id === stageIdChosen);
 
@@ -91,7 +98,7 @@ const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) =>
 
       const newStage = updatedStages[findIndex + 1];
 
-      await handleUpdateStage(recordId, newStage.id);
+      await handleUpdateStage(companyName, recordId, newStage.id);
     } catch (error) {
       console.error(error);
       toast({
@@ -99,6 +106,8 @@ const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) =>
         description: 'An error occurred while marking status as complete',
         variant: 'destructive'
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -121,6 +130,15 @@ const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) =>
   if (!recordId) return null;
 
   const ActionButton = () => {
+    if (loading) {
+      return (
+        <Button intent='primary' disabled={loading} className='py-0'>
+          <Icon name='check' />
+          <span className='text-xs'>Setting stage...</span>
+        </Button>
+      );
+    }
+
     if (isLastStage) {
       return (
         <Button intent='primary' className='py-0' onClick={handleSelectStatus}>
@@ -150,6 +168,7 @@ const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) =>
   return (
     <>
       <Stages
+        isLoading={loading}
         currentStage={currentStage}
         stages={updatedStages}
         stageIdChosen={stageIdChosen}

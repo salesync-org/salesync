@@ -13,8 +13,11 @@ class RecordApi {
     return response.data;
   }
 
-  async updateRecordStage(recordId: string, stageId: string) {
-    const response = await axios.put(`${TYPE_SERVICE_URL}/record/${recordId}`, { stageId });
+  async updateRecordStage(companyName: string, recordId: string, stageId: string) {
+    const response = await axios.put(`${URL}/${companyName}/records/update-stage`, {
+      record_id: recordId,
+      stage_id: stageId
+    });
     return response.data;
   }
 

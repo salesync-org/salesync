@@ -93,9 +93,9 @@ public class StageServiceImpl implements StageService {
     }
 
     @Override
-    public String getStageIdByTypeIdAndSequenceNumber(String typeId, int sequenceNumber){
-        if (stageRepository.getStageIdByTypeIdAndSequenceNumber(UUID.fromString(typeId), sequenceNumber) != null) {
-            return stageRepository.getStageIdByTypeIdAndSequenceNumber(UUID.fromString(typeId), sequenceNumber).toString();
+    public String getStageIdByTypeIdAndSequenceNumber(String typeId, String stageName){
+        if (stageRepository.getStageIdByTypeIdAndSequenceNumber(UUID.fromString(typeId), stageName) != null) {
+            return stageRepository.getStageIdByTypeIdAndSequenceNumber(UUID.fromString(typeId), stageName).toString();
         }
         return "";
     }

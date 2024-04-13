@@ -1,16 +1,21 @@
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 import { cn } from '@/utils/utils';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Button, Icon } from '../ui';
-import UserModal from '../UserModal/UserModal';
+import { Settings } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import useClickOutside from '@/hooks/useClickOutside';
 
 const QuickSetting = () => {
   const [isOpen, setIsOpen] = useState(false);
   // const [isUserSettingOpen, setUserSetting] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const ref = useRef<HTMLDivElement>(null);
+  useClickOutside([ref], () => {
+    setIsOpen(false);
+  });
 
   const { showModal } = useGlobalModalContext();
 
@@ -25,17 +30,21 @@ const QuickSetting = () => {
   }
 
   return (
-    <div>
+    <div ref={ref}>
       <Button
         title='Quick Settings'
         rounded='icon'
-        className='h-10 w-10'
-        intent='normal'
+        className={cn('h-10 w-10 p-0')}
+        intent={isOpen ? 'primary' : 'normal'}
         onClick={() => {
           setIsOpen(!isOpen);
         }}
       >
-        <Icon name='settings' size='1rem' />
+        {isOpen ? (
+          <Settings className='size-[1.5rem]' fillRule='nonzero' color='white' />
+        ) : (
+          <Settings className='size-[1.5rem]' />
+        )}
       </Button>
       <nav
         onClick={(e) => e.stopPropagation()}

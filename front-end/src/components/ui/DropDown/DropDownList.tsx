@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDropDownList } from 'hooks/useDropDownList';
 import { cn } from 'utils/utils';
-import {Popup } from '..';
+import { Popup } from '..';
 import useResize from '@/hooks/useResize';
 
 interface ListProps {
@@ -34,7 +34,6 @@ const List = ({
   useEffect(() => {
     setIsOpen(open);
   }, [open]);
-
 
   const handleTabKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === 'Enter') {
@@ -69,41 +68,43 @@ const List = ({
       return window.innerHeight - 10;
     }
     return shouldDropUp ? Math.max(aboveSize - 30, 0) : Math.max(belowSize - 30, 0);
-  }
+  };
 
   return (
     <>
-    <div className='bg-transparent'></div>
+      <div className='bg-transparent'></div>
       {/* <div ref={menuRef} className={cn(isOpen && 'fixed left-0 right-0 top-0 z-[51] w-[1500px] h-[1500px] bg-blue')} onClick={()=>{setIsOpen(false)}}/> */}
-        <div style={{ maxHeight: calculateMaxSize(), overflow: 'auto'}} ref={menuRef} className='bg-transparent'>
-          <Popup
-            style={{ maxHeight: calculateMaxSize(),  overflow: 'auto' }}
-            className={cn(
-              'absolute z-[50] overflow-x-hidden rounded border-[2px] px-2 h-fit transition-all duration-100 ease-in-out',
-              align === 'left' && 'left-0',
-              align === 'right' && 'right-0',
-              divide ? 'divide divide-y-2 *:py-2 divide-button-stroke-light dark:divide-button-stroke-dark' : 'py-2',
-              'bg-button-background-light dark:bg-button-background-dark',
-              'border-button-stroke-light dark:border-button-stroke-dark',
-              shouldDropUp ? 'origin-center bottom-10' : 'origin-center top-[60px]',
-              align &&
-                cn(
-                  shouldDropUp
-                    ? cn(align == 'left' ? 'rounded-tl-none' : 'rounded-tr-none')
-                    : cn(align == 'left' ? 'rounded-bl-none' : 'rounded-br-none')
-                    ),
-                    isOpen ? 'scale-100' : 'scale-0 *:hidden',
-              className
-              )}
-              isOpen={isOpen}
-              onClick={handleMenuClick}
-            onClose={() => {onClose?.()}}
-              onKeyDown={handleTabKeyDown}
-              {...restProps}
-              >
-            {children}
-          </Popup>
-        </div>
+      <div style={{ maxHeight: calculateMaxSize(), overflow: 'auto' }} ref={menuRef} className='bg-transparent'>
+        <Popup
+          style={{ maxHeight: calculateMaxSize(), overflow: 'auto' }}
+          className={cn(
+            'absolute z-[50] h-fit overflow-x-hidden rounded border-[2px] px-2 transition-all duration-100 ease-in-out',
+            align === 'left' && 'left-0',
+            align === 'right' && 'right-0',
+            divide ? 'divide divide-y-2 divide-button-stroke-light *:py-2 dark:divide-button-stroke-dark' : 'py-2',
+            'bg-button-background-light dark:bg-button-background-dark',
+            'border-button-stroke-light/60 dark:border-button-stroke-dark/60',
+            shouldDropUp ? 'bottom-10 origin-center' : 'top-[60px] origin-center',
+            align &&
+              cn(
+                shouldDropUp
+                  ? cn(align == 'left' ? 'rounded-tl-none' : 'rounded-tr-none')
+                  : cn(align == 'left' ? 'rounded-bl-none' : 'rounded-br-none')
+              ),
+            isOpen ? 'scale-100' : 'scale-0 *:hidden',
+            className
+          )}
+          isOpen={isOpen}
+          onClick={handleMenuClick}
+          onClose={() => {
+            onClose?.();
+          }}
+          onKeyDown={handleTabKeyDown}
+          {...restProps}
+        >
+          {children}
+        </Popup>
+      </div>
     </>
   );
 };

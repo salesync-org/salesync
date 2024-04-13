@@ -31,7 +31,7 @@ const Item: React.FC<ItemProps> = ({
           className={cn(
             'flex flex-grow cursor-pointer items-center rounded-sm px-2 py-2 align-middle',
             selected && 'bg-secondary-light dark:bg-secondary-dark',
-            'hover:bg-secondary-light dark:hover:bg-secondary-dark',
+            'hover:bg-secondary-light/40 dark:hover:bg-secondary-dark/40',
             'hover:text-link-text-light  dark:hover:text-link-text-dark'
           )}
           {...restProps}
@@ -41,7 +41,7 @@ const Item: React.FC<ItemProps> = ({
               className={cn(
                 'flex h-9 w-9 items-center justify-center rounded-full align-middle',
                 'bg-button-background-light dark:bg-button-background-dark',
-                selected && 'bg-secondary-dark dark:bg-secondary-light text-text-dark dark:text-text-light'
+                selected && 'bg-secondary-dark text-text-dark dark:bg-secondary-light dark:text-text-light'
               )}
             >
               {icon}

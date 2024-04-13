@@ -1,7 +1,8 @@
 import defaultAvatar from '@/assets/default_avatar.png';
-import { Button, DropDownList, Icon, Item } from '@/components/ui';
+import { Button, DropDownList, Item } from '@/components/ui';
 import useAuth from '@/hooks/useAuth';
 import { useEffect, useState } from 'react';
+import { Bell, Settings, LogOut } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const UserInfo = () => {
@@ -35,8 +36,8 @@ const UserInfo = () => {
     <>
       {
         <div className='relative flex w-fit space-x-3 pl-2 align-middle'>
-          <Button rounded='icon' className='h-10 w-10' intent='normal' onClick={() => {}}>
-            <Icon name='notifications' size='1rem' />
+          <Button rounded='icon' className='h-10 w-10 p-0' intent='normal' onClick={() => {}}>
+            <Bell strokeWidth={'2px'} name='notifications' className='size-[1.5rem]' />
           </Button>
           <div>
             <Button
@@ -63,7 +64,7 @@ const UserInfo = () => {
               </div>
               <Item
                 className='py-0'
-                icon={<Icon name='settings' size='2rem' />}
+                icon={<Settings name='settings' size='1.5rem' />}
                 title='Settings & Administration'
                 onClick={() => {
                   navigate(`/${companyName}/setting/personal-information`);
@@ -71,7 +72,7 @@ const UserInfo = () => {
               />
               <Item
                 className='py-0'
-                icon={<Icon name='logout' size='2rem' />}
+                icon={<LogOut name='logout' size='1.5rem' />}
                 title='Log out'
                 onClick={() => {
                   navigate(`/${companyName}/home`);

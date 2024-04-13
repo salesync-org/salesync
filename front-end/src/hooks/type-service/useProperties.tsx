@@ -1,4 +1,5 @@
 import typeApi from '@/api/type';
+import { TypeProperty } from '@/type';
 import { useQuery } from 'react-query';
 
 const useProperties = (companyName: string, typeId: string) => {

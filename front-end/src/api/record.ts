@@ -40,6 +40,11 @@ class RecordApi {
     const response = await axios.get(`${URL}/${companyName}/records/list-record-type-relation/${recordId}`);
     return response.data;
   }
+
+  async getProperties(companyName: string, typeId: string) {
+    const response = await axios.get(`${URL}/${companyName}/types/${typeId}`);
+    return response.data;
+  }
 }
 
 const recordApi = new RecordApi();

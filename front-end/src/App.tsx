@@ -4,7 +4,6 @@ import ConfigLayout from './components/Layout/ConfigLayout';
 import LoadingSpinner from './components/ui/Loading/LoadingSpinner';
 import { Toaster } from './components/ui/toaster';
 import PrivateRoute from './pages/PrivateRoute/PrivateRoute';
-import { formatRecords } from './utils/utils';
 
 // const LogIn = lazy(() => import('pages/LogIn/LogIn'));
 // const Setting = lazy(() => import('pages/Setting/Setting'));

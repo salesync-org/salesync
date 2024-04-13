@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { layoutColumns } from '@/constants/layout/columns/columns';
-import { ColumnDef } from '@tanstack/react-table';
-import { DataTable } from './data-table';
-import useRecords from '@/hooks/record-service/useRecords';
-import LoadingSpinner from '../ui/Loading/LoadingSpinner';
-import ErrorToaster from '@/pages/Error/ErrorToaster';
-import { Link, useParams } from 'react-router-dom';
 import { RecordsFilter } from '@/api/record';
+import useRecords from '@/hooks/record-service/useRecords';
+import useProperties from '@/hooks/type-service/useProperties';
+import ErrorToaster from '@/pages/Error/ErrorToaster';
 import { formatRecords } from '@/utils/utils';
 import { Checkbox } from '@radix-ui/react-checkbox';
+import { ColumnDef } from '@tanstack/react-table';
+import { Link, useParams } from 'react-router-dom';
 import { Icon } from '../ui';
-import useProperties from '@/hooks/type-service/useProperties';
+import LoadingSpinner from '../ui/Loading/LoadingSpinner';
+import { DataTable } from './data-table';
+import { createColumns } from '@/utils/createColumns';
 
 interface RecordTableProps {
   typeId: string;
@@ -30,27 +30,6 @@ const columns: ColumnDef<Column>[] = [
     accessorKey: 'id',
     header: '',
     cell: () => <span></span>
-  },
-  {
-    id: 'select',
-    header: ({ table }) => (
-      <Checkbox
-        className='grid place-content-center rounded-[2px]'
-        checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
-        onCheckedChange={(value: any) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label='Select all'
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        className='grid place-content-center rounded-[2px]'
-        checked={row.getIsSelected()}
-        onCheckedChange={(value: any) => row.toggleSelected(!!value)}
-        aria-label='Select row'
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false
   },
   {
     accessorKey: 'Name',
@@ -156,9 +135,9 @@ const RecordTable = ({ typeId }: RecordTableProps) => {
   if (!recordData && !propertyData) {
     return <ErrorToaster errorMessage='Error loading table ' />;
   }
+  console.log(recordData);
   const tableData = formatRecords(recordData.records);
-
-  console.log({ propertyData });
+  const columns = createColumns(companyName, propertyData!.properties);
 
   return <div className='px-4 py-2'>{<DataTable columns={columns} data={tableData} />}</div>;
 };

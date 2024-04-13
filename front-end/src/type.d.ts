@@ -17,14 +17,14 @@ type Type = {
   links?: Link[];
 };
 
-type TypeProperty = {
-  id: string;
-  label?: string;
-  name: string;
-  type?: string;
-  description?: string;
-  properties?: Property[];
-};
+// type TypeProperty = {
+//   id: string;
+//   label?: string;
+//   name: string;
+//   type?: string;
+//   description?: string;
+//   properties?: Property[];
+// };
 
 type Property = {
   id: string;
@@ -168,3 +168,59 @@ type RecordType = {
   id: string;
   name: string;
 };
+
+type TypeProperty = {
+  id: string;
+  name: string;
+  template: null;
+  properties: PropertyElement[];
+};
+
+type PropertyElement = {
+  id: string;
+  name: string;
+  label: string;
+  sequence: number;
+  property: PropertyProperty;
+  default_value: string;
+  fields: FieldElement[];
+};
+
+type FieldElement = {
+  id: string;
+  item_value: string;
+  property_field: PropertyField;
+};
+
+type PropertyField = {
+  id: string;
+  label: Label;
+  item_value: null;
+  is_required: boolean;
+  default_value: string;
+  is_key: boolean;
+  field: PropertyFieldField;
+};
+
+type PropertyFieldField = {
+  id: string;
+  input_type: InputType;
+  is_multiple_value: boolean;
+};
+
+export enum InputType {
+  Checkbox = 'Checkbox',
+  NumberText = 'NumberText'
+}
+
+export enum Label {
+  Length = 'Length',
+  Required = 'Required',
+  Unique = 'Unique'
+}
+
+export interface PropertyProperty {
+  id: string;
+  name: string;
+  propertyFields: PropertyField[];
+}

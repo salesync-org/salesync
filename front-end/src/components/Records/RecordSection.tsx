@@ -10,7 +10,7 @@ import icon from 'assets/type-icon/lead_icon.png';
 import { useParams } from 'react-router-dom';
 
 interface RecordSectionProps {
-  type: Type | undefined;
+  type: any;
 }
 
 const RecordSection = ({ type }: RecordSectionProps) => {
@@ -52,7 +52,7 @@ const RecordSection = ({ type }: RecordSectionProps) => {
                 >
                   {button.name}
                 </Button>
-            );
+              );
             })}
         </ButtonGroup>
       </section>

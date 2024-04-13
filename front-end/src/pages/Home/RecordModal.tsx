@@ -1,15 +1,18 @@
-import { Modal, TextInput, DropDown, DropDownItem, Panel, ModalFooter, Button, PrimaryButton } from '@/components/ui';
+import { Button, DropDown, DropDownItem, Modal, ModalFooter, Panel, PrimaryButton, TextInput } from '@/components/ui';
 import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 import useProperties from '@/hooks/type-service/useProperties';
+import { useLocation } from 'react-router-dom';
 import ErrorToaster from '../Error/ErrorToaster';
+import { PropertyElement } from '@/type';
 
 const RecordModal = () => {
   const { hideModal, store } = useGlobalModalContext();
   const { modalType, modalProps } = store;
   const { typeId } = modalProps;
-
-  const { typeProperty, isLoading } = useProperties(typeId);
+  const location = useLocation();
+  const companyName = location.pathname.split('/')[1] || '';
+  const { data: typeProperty, isLoading } = useProperties(companyName, typeId);
 
   if (!typeId) {
     return null;
@@ -23,6 +26,8 @@ const RecordModal = () => {
     return <ErrorToaster errorTitle='Error' errorMessage='Failed to fetch properties' />;
   }
 
+  console.log({ typeProperty });
+
   return (
     <Modal
       isOpen={modalType === MODAL_TYPES.CREATE_RECORD_MODAL}
@@ -33,16 +38,15 @@ const RecordModal = () => {
       <form className='-z-1 absolute bottom-2 left-2 right-2 top-20 overflow-x-hidden  pb-32  '>
         <div className='flex w-full flex-col place-content-center gap-2   p-6'>
           {typeProperty ? (
-            typeProperty.properties?.map((property: Property) => {
-              if (property.type === 'text')
-                return <TextInput header={property.name} key={property.id} placeholder={property.name}></TextInput>;
-              else if (property.type === 'dropdown')
+            typeProperty.properties?.map((property: PropertyElement) => {
+              if (property.property.name === 'Text' || property.property.name === 'Phone')
                 return (
-                  <DropDown key={property.id} value='' header={property.name}>
-                    {property.options?.map((value) => {
-                      return <DropDownItem key={value} title={value} value={value}></DropDownItem>;
-                    })}
-                  </DropDown>
+                  <TextInput
+                    className='w-full'
+                    header={property.label}
+                    key={property.id}
+                    placeholder={property.label}
+                  ></TextInput>
                 );
               else return <div></div>;
             })

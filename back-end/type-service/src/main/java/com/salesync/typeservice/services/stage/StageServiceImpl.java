@@ -10,8 +10,12 @@ import com.salesync.typeservice.mapper.StageMapper;
 import com.salesync.typeservice.repositories.StageRepository;
 import com.salesync.typeservice.repositories.TypeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.UUID;
+
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -86,5 +90,13 @@ public class StageServiceImpl implements StageService {
             sourceStage.setSequenceNumber(stageDto.getSequenceNumber());
         }
         return stageMapper.entityToDto(stageRepository.save(sourceStage));
+    }
+
+    @Override
+    public String getStageIdByTypeIdAndSequenceNumber(String typeId, int sequenceNumber){
+        if (stageRepository.getStageIdByTypeIdAndSequenceNumber(UUID.fromString(typeId), sequenceNumber) != null) {
+            return stageRepository.getStageIdByTypeIdAndSequenceNumber(UUID.fromString(typeId), sequenceNumber).toString();
+        }
+        return "";
     }
 }

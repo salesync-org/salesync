@@ -65,4 +65,9 @@ public class RecordController {
     public ResponseEntity<RecordDto> updateStage(@RequestBody RequestUpdateStageDto requestUpdateStageDto) {
         return ResponseEntity.ok(recordService.updateStage(requestUpdateStageDto));
     }
+
+    @PostMapping(Route.TYPE_ID + Route.CREATE)
+    public RecordDto createRecordByTypeId(@PathVariable String typeId, @PathVariable String realm, @RequestHeader(name = "Authorization") String authorization, @RequestBody CreateRecordRequestDto createRecordRequestDto) {
+        return recordService.createRecordByTypeId(typeId, realm, authorization, createRecordRequestDto);
+    }
 }

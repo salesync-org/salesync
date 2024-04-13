@@ -162,6 +162,7 @@ const PersonalInfomationSetting = () => {
             onClick={(_) => {
               handleOpenFilePicker();
             }}
+            disabled={isUpdating}
             className='py-5'
           >
             {isUpdating ? (

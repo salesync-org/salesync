@@ -33,4 +33,10 @@ public class StageController {
     public ResponseEntity updateStage(@Valid @RequestBody StageDto stageDto) {
         return ResponseEntity.ok(stageService.updateStage(stageDto));
     }
+
+    @DeleteMapping(Route.Stage.STAGE_ID)
+    public ResponseEntity deleteStage(@PathVariable UUID stageId) {
+        stageService.deleteStage(stageId);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -11,4 +11,6 @@ public interface StageService {
     List<StageDto> getStagesByTypeId(UUID typeId);
 
     StageDto updateStage(StageDto stageDto);
+
+    void deleteStage(UUID stageId);
 }

@@ -36,14 +36,26 @@ public class TypeServiceImpl implements TypeService {
 
     private final PropertyRepository propertyRepository;
 
+    private final TemplateRepository templateRepository;
+
     private final RelationMapper relationMapper = RelationMapper.INSTANCE;
 
     private final TypeMapper typeMapper = TypeMapper.INSTANCE;
 
     @Override
     public TypeDTO createType(TypeDTO typeDTO) {
+        Template template = templateRepository.findById(typeDTO.getTemplate().getId())
+                .orElseThrow(() -> new ObjectNotFoundException(
+                        Template.class.getSimpleName(),
+                        typeDTO.getTemplate().getId().toString()
+                ));
 
-        Type savedType = typeRepository.save(typeMapper.typeDTOToType(typeDTO));
+        Type savedType = typeRepository.save(
+                Type.builder()
+                        .name(typeDTO.getName())
+                        .template(template)
+                        .build()
+        );
         return typeMapper.typeToTypeDTO(savedType);
 
     }
@@ -170,7 +182,6 @@ public class TypeServiceImpl implements TypeService {
         TypeRelationDTO savedTypeRelation = typeRelationMapper.typeRelationToTypeRelationDTO(typeRelationRepository.save(typeRelation));
         TypeRelationDTO savedInverseTypeRelation = typeRelationMapper.typeRelationToTypeRelationDTO(typeRelationRepository.save(inverseTypeRelation));
         return TypeRelationResponseDTO.builder().sourceTypeRelation(savedTypeRelation).destinationTypeRelation(savedInverseTypeRelation).build();
-
     }
 
     @Override
@@ -206,12 +217,6 @@ public class TypeServiceImpl implements TypeService {
         Set<UUID> requestSet = requestCreatePropertyDto.getFields().stream()
                 .map(RequestTypePropertyFieldDto::getPropertyFieldId)
                 .collect(Collectors.toSet());
-
-        System.out.println("propertyFieldSet: "+propertyFieldSet);
-
-        System.out.println("requestSet: "+requestSet);
-
-        System.out.println(requestCreatePropertyDto.toString());
 
         if (!propertyFieldSet.equals(requestSet)) {
             throw new BadRequestException(

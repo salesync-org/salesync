@@ -26,8 +26,8 @@ public class NotificationServiceImpl implements INotificationService {
     }
 
     @Override
-    public void notifyToUser(String userId, NotificationDto notificationDTO) {
-        simpMessagingTemplate.convertAndSendToUser("abc", "/receiver",NotificationDto.builder().content("test").build());
+    public void notifyToUser(String user, NotificationDto notificationDTO) {
+        simpMessagingTemplate.convertAndSendToUser(user, "/receiver",notificationDTO);
     }
 
     @Override

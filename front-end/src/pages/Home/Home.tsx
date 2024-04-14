@@ -6,7 +6,7 @@ const HomeLayout = () => {
     icon_url: 'https://momentum-enterprise-925.my.salesforce.com/img/icon/t4v35/standard/lead_120.png',
     //tailwind color
     background_color: 'bg-red-500',
-    type_id: 'f4828793-28c2-465b-b783-0c697e41dafb',
+    id: 'f4828793-28c2-465b-b783-0c697e41dafb',
     name: 'Lead',
     description: 'Lead type',
     fields: [
@@ -20,7 +20,7 @@ const HomeLayout = () => {
   const Opportunity: Type = {
     icon_url: 'https://momentum-enterprise-925.my.salesforce.com/img/icon/t4v35/standard/opportunity_120.png',
     background_color: 'bg-green-500',
-    type_id: '9515a156-82c1-49aa-bc6c-824c02f20da5',
+    id: '9515a156-82c1-49aa-bc6c-824c02f20da5',
     name: 'Opportunity',
     description: 'Opportunity type',
     fields: [
@@ -33,7 +33,7 @@ const HomeLayout = () => {
   const Contact: Type = {
     icon_url: 'https://momentum-enterprise-925.my.salesforce.com/img/icon/t4v35/standard/contact_120.png',
     background_color: 'bg-blue-500',
-    type_id: '32a9bf21-19fb-451f-9fcf-3de9b2d6eb88',
+    id: '32a9bf21-19fb-451f-9fcf-3de9b2d6eb88',
     name: 'Contact',
     description: 'Contact type',
     fields: [
@@ -47,7 +47,7 @@ const HomeLayout = () => {
   const Case: Type = {
     icon_url: 'https://momentum-enterprise-925.my.salesforce.com/img/icon/t4v35/standard/case_120.png',
     background_color: 'bg-yellow-500',
-    type_id: '27d0c628-94c2-4650-828f-3c26e61bb692',
+    id: '27d0c628-94c2-4650-828f-3c26e61bb692',
     name: 'Case',
     description: 'Case type',
     fields: [

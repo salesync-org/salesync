@@ -4,6 +4,7 @@ import ConfigLayout from './components/Layout/ConfigLayout';
 import LoadingSpinner from './components/ui/Loading/LoadingSpinner';
 import { Toaster } from './components/ui/toaster';
 import PrivateRoute from './pages/PrivateRoute/PrivateRoute';
+import ObjectManager from './pages/Settings/ObjectManager';
 const SettingLayout = lazy(() => import('./pages/Settings/SettingLayout'));
 const PersonalInformationSetting = lazy(() => import('./pages/Settings/PersonalInformationSetting'));
 const UserSetting = lazy(() => import('./pages/Settings/UserSetting'));
@@ -53,10 +54,8 @@ function App() {
                 <Route path='change-user-password' element={<ChangePasswordSetting />} />
                 <Route path='profiles' element={<PersonalInformationSetting />} />
                 <Route path='users' element={<UserSetting />} />
-                <Route path='object-manager' element={<UserSetting />} />
+                <Route path='object-manager' element={<ObjectManager />} />
                 <Route path='object-manager/:typeId' element={<PropertyManager />} />
-
-                {/* Thêm setting routes ở đây */}
               </Route>
               <Route path='*' element={<Sales />} />
             </Route>

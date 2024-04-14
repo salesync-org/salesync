@@ -58,8 +58,8 @@ const LinkModal = ({ isOpen, setIsOpen, currentLink }: LinkModalProp) => {
 
   useEffect(() => {
     if (selectedType && types.length > 0) {
-      const sourceType = types.find((type) => type.type_id === id);
-      const desType = types.find((type) => type.type_id === selectedType);
+      const sourceType = types.find((type) => type.id === id);
+      const desType = types.find((type) => type.id === selectedType);
       if (sourceType && desType) {
         setValue('sourceLabel', sourceType.name);
         setValue('destinationLabel', desType.name);
@@ -129,7 +129,7 @@ const LinkModal = ({ isOpen, setIsOpen, currentLink }: LinkModalProp) => {
             disabled={Boolean(currentLink)}
           >
             {types.map((type) => (
-              <Item key={type.type_id} title={type.name} value={type.type_id} />
+              <Item key={type.id} title={type.name} value={type.id} />
             ))}
           </DropDown>
           <div>

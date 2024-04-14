@@ -1,5 +1,6 @@
 import NavigationButton from '@/components/NavigationButton/NavigationButton';
 import { SidebarSetting } from '@/components/SettingLayout/SideBarSetting';
+import useType from '@/hooks/type-service/useType';
 import { Building, Layers, Settings, User } from 'lucide-react';
 import { Outlet, useLocation, useParams } from 'react-router-dom';
 
@@ -58,6 +59,7 @@ const settings = [
 const SettingLayout = () => {
   const location = useLocation();
   const { typeId } = useParams();
+  const { types } = useType();
 
   let title = '';
   let Icon = Settings;
@@ -83,7 +85,7 @@ const SettingLayout = () => {
   }
 
   if (typeId) {
-    title = 'Account';
+    title = types?.find((type) => type.id === typeId)?.name || '';
   }
 
   return (

@@ -21,7 +21,7 @@ const TypeCard = ({ type }: { type: Type }) => {
             <Button
               onClick={async () => {
                 showModal(MODAL_TYPES.CREATE_RECORD_MODAL, {
-                  typeId: type.type_id
+                  typeId: type.id
                 });
               }}
             >

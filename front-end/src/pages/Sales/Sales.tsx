@@ -21,9 +21,11 @@ const Sales = () => {
   }
 
   const layoutOrders = user.settings.layout_order;
-  const types: Type[] = layoutOrders.find((layoutOrder) => layoutOrder.name === 'Sales')?.types ?? [];
+  const types: LayoutType[] = layoutOrders.find((layoutOrder) => layoutOrder.name === 'Sales')?.types ?? [];
+  console.log(types);
 
   if (!typeId && types.length > 0) {
+    console.log('navigate to ' + types?.[0].type_id);
     return <Navigate to={`/${companyName}/sales/${types[0].type_id}`} />;
   }
 

@@ -6,7 +6,7 @@ import { NavLink, useParams } from 'react-router-dom';
 import LoadingSpinner from '../ui/Loading/LoadingSpinner';
 
 interface RecordTabsProps {
-  tabs: Type[];
+  tabs: LayoutType[];
   // setTabs: React.Dispatch<React.SetStateAction<{ title: string; href: string }[]>>;
   name: string;
 }

@@ -285,6 +285,36 @@ public class RecordServiceImpl implements RecordService {
         return recordMapper.recordToRecordDto(recordRepository.save(recordEntity));
     }
 
+    @Override
+    public RecordDto updateRecordByRecordId(String recordId, String token, RecordDto updateRecordRequestDto) {
+        Record recordEntity = recordRepository.findById(UUID.fromString(recordId)).orElseThrow(
+                () -> new ObjectNotFoundException(
+                        "Record",
+                        recordId
+                )
+        );
+        recordEntity.setName(updateRecordRequestDto.getName());
+
+        if (updateRecordRequestDto.getCurrentStageId() != null) {
+            RecordStage recordStage = recordStageRepository.findByRecordId(recordEntity.getId());
+            if (recordStage == null) {
+                recordStage = new RecordStage();
+            }
+            recordStage.setStageId(updateRecordRequestDto.getCurrentStageId());
+        } else {
+            recordEntity.setRecordStage(null);
+        }
+
+        for (RecordTypePropertyDto recordTypePropertyDto : updateRecordRequestDto.getRecordProperties()) {
+            RecordTypeProperty recordTypeProperty = recordTypePropertyRepository.findById(recordTypePropertyDto.getId()).orElse(null);
+            recordTypeProperty.setItemValue(recordTypePropertyDto.getItemValue());
+
+            recordEntity.getRecordProperties().add(recordTypeProperty);
+        }
+
+        return recordMapper.recordToRecordDto(recordRepository.save(recordEntity));
+    }
+
     public TypeDto findTypeById(UUID typeId, List<TypeDto> allType) {
         return allType.stream().filter(typeDto -> typeDto.getId().equals(typeId)).findFirst().orElse(null);
     }

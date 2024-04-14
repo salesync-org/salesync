@@ -30,4 +30,6 @@ public interface RecordService {
     RecordDto updateStage(RequestUpdateStageDto requestUpdateStageDto);
 
     RecordDto createRecordByTypeId(String typeId, String token, CreateRecordRequestDto createRecordRequestDto);
+
+    RecordDto updateRecordByRecordId(String recordId, String token, RecordDto updateRecordRequestDto);
 }

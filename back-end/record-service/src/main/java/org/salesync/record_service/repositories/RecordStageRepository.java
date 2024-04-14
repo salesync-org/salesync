@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.UUID;
 
 public interface RecordStageRepository extends JpaRepository<RecordStage, UUID> {
+    RecordStage findByRecordId(UUID recordId);
 }

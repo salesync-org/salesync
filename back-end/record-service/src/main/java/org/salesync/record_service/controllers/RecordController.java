@@ -70,4 +70,9 @@ public class RecordController {
     public ResponseEntity<RecordDto> createRecordByTypeId(@PathVariable String typeId, @RequestHeader(name = "Authorization") String authorization, @RequestBody CreateRecordRequestDto createRecordRequestDto) {
         return ResponseEntity.ok(recordService.createRecordByTypeId(typeId, authorization, createRecordRequestDto));
     }
+
+    @PutMapping(Route.RECORD_ID + Route.UPDATE)
+    public ResponseEntity<RecordDto> updateRecordByRecordId(@PathVariable String recordId, @RequestHeader(name = "Authorization") String authorization, @RequestBody RecordDto updateRecordRequestDto) {
+        return ResponseEntity.ok(recordService.updateRecordByRecordId(recordId, authorization, updateRecordRequestDto));
+    }
 }

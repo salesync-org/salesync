@@ -36,14 +36,26 @@ public class TypeServiceImpl implements TypeService {
 
     private final PropertyRepository propertyRepository;
 
+    private final TemplateRepository templateRepository;
+
     private final RelationMapper relationMapper = RelationMapper.INSTANCE;
 
     private final TypeMapper typeMapper = TypeMapper.INSTANCE;
 
     @Override
     public TypeDTO createType(TypeDTO typeDTO) {
+        Template template = templateRepository.findById(typeDTO.getTemplate().getId())
+                .orElseThrow(() -> new ObjectNotFoundException(
+                        Template.class.getSimpleName(),
+                        typeDTO.getTemplate().getId().toString()
+                ));
 
-        Type savedType = typeRepository.save(typeMapper.typeDTOToType(typeDTO));
+        Type savedType = typeRepository.save(
+                Type.builder()
+                        .name(typeDTO.getName())
+                        .template(template)
+                        .build()
+        );
         return typeMapper.typeToTypeDTO(savedType);
 
     }

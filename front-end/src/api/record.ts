@@ -48,7 +48,7 @@ class RecordApi {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async createRecord(companyName: string, typeId: string, data: any) {
-    const response = await axios.post(`${URL}/${companyName}/records/${typeId}`, data);
+    const response = await axios.post(`${URL}/${companyName}/records/${typeId}/create`, data);
     return response.data;
   }
 }

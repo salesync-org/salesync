@@ -25,15 +25,20 @@ export const formatCompanyName = (name: string) => {
 
 export const formatRecords = (records: RecordResponse[]) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const formattedRecords: any = new Array(records.length).fill({});
+  const formattedRecords: any[] = [];
 
   for (let i = 0; i < records.length; i++) {
-    formattedRecords[i]['id'] = records[i].id;
-    formattedRecords[i]['Name'] = records[i].name;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const formattedRecord: any = {};
+
+    formattedRecord['id'] = records[i].id;
+    formattedRecord['Name'] = records[i].name;
 
     for (const property of records[i].properties) {
-      formattedRecords[i][property.property_label] = property.item_value;
+      formattedRecord[property.property_label] = property.item_value;
     }
+
+    formattedRecords.push(formattedRecord);
   }
 
   return formattedRecords;

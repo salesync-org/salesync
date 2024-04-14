@@ -12,6 +12,8 @@ import com.salesync.typeservice.repositories.TypeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -20,6 +22,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(rollbackFor = Throwable.class)
 public class StageServiceImpl implements StageService {
     private final StageRepository stageRepository;
     private final TypeRepository typeRepository;
@@ -90,5 +93,34 @@ public class StageServiceImpl implements StageService {
             sourceStage.setSequenceNumber(stageDto.getSequenceNumber());
         }
         return stageMapper.entityToDto(stageRepository.save(sourceStage));
+    }
+
+    @Override
+    public void deleteStage(UUID stageId) {
+        Stage stage = stageRepository.findById(stageId).orElseThrow(
+                () -> new ObjectNotFoundException(
+                        Stage.class.getSimpleName(),
+                        stageId.toString()
+                )
+        );
+        Stage firstStage = stageRepository.findTopByTypeIdOrderBySequenceNumberAsc(stage.getType().getId()).orElseThrow(
+                () -> new ObjectNotFoundException(
+                        Stage.class.getSimpleName(),
+                        stageId.toString()
+                )
+        );
+        if (firstStage.getId().equals(stageId)) {
+            throw new TypeServiceException("Cannot delete the first stage");
+        }
+        Stage lastStage = stageRepository.findTopByTypeIdOrderBySequenceNumberDesc(stage.getType().getId()).orElseThrow(
+                () -> new ObjectNotFoundException(
+                        Stage.class.getSimpleName(),
+                        stageId.toString()
+                )
+        );
+        if (lastStage.getId().equals(stageId)) {
+            throw new TypeServiceException("Cannot delete the last stage");
+        }
+        stageRepository.delete(stage);
     }
 }

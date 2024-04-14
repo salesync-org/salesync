@@ -10,7 +10,7 @@ interface ListProps {
   open?: boolean;
   maxHeight?: number;
   maxWidth?: number;
-  isHaveHeader: boolean;
+  isHaveHeader?: boolean;
   align?: 'left' | 'right' | null;
   divide?: boolean;
   onItemClick?: (option: HTMLElement) => void;

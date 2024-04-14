@@ -79,7 +79,7 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({ icon, name, className, 
           prefixIcon={<Icon name='arrow_drop_down' size='1' className='ml-1' />}
           className='m-0 p-0'
           disabled={isDisabledTriangleButton}
-          align={cn(name === 'Email' ? 'left' : 'right')}
+          align='left'
         >
           <div className='h-fit'>
             {name === 'Email' && (

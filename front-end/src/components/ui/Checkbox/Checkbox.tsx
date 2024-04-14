@@ -1,6 +1,5 @@
 import * as React from 'react';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
-import { Check, Minus } from 'lucide-react';
 
 import { cn } from '@/utils/utils.ts';
 
@@ -16,11 +15,26 @@ const Checkbox = React.forwardRef<
     )}
     {...props}
   >
-    <CheckboxPrimitive.Indicator className={cn('flex items-center justify-center text-current')}>
-      {!className?.includes('minus') && <Check className='h-4 w-4' />}
-      {className?.includes('minus') && <Minus className='h-4 w-4' />}
-      {/* insert 'minus' in className to change icon */}
-    </CheckboxPrimitive.Indicator>
+    {checked != 'indeterminate' && (
+      <CheckboxPrimitive.Indicator className={cn('flex h-5 w-5 items-center justify-center text-primary')}>
+        <svg className='grid size-5 place-content-center'>
+          <polyline
+            fill='transparent'
+            strokeWidth='2'
+            strokeLinejoin='round'
+            stroke='currentColor'
+            points='3 8.29 7.1 11.68 14.59 4'
+          />
+        </svg>
+      </CheckboxPrimitive.Indicator>
+    )}
+    {checked == 'indeterminate' && (
+      <div className='flex h-5 w-5 items-center justify-center text-primary'>
+        <svg className='h-5 w-5 px-1'>
+          <line x1='0%' y1='51%' x2='100%' y2='51%' stroke='currentColor' strokeWidth='2' />
+        </svg>
+      </div>
+    )}
   </CheckboxPrimitive.Root>
 ));
 Checkbox.displayName = CheckboxPrimitive.Root.displayName;

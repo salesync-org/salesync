@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/utils/utils';
 import { Button, DropDown, Icon, TextButton } from '../ui';
-import { UUID } from 'crypto';
+// import { UUID } from 'crypto';
 
 interface InforActivityStruct {
-  id: UUID;
+  id: string;
   type: string;
   subject: string;
   start: Date;

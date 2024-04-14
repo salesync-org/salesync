@@ -1,7 +1,6 @@
 import { Button, Icon, Switch, PrimaryButton } from '@/components/ui';
 import { useState } from 'react';
 import ButtonActivity from './ButtonActivity';
-import SettingActivity from './SettingActivity';
 import InforActivity from './InforActivity';
 
 const RecordActivity = () => {
@@ -11,10 +10,6 @@ const RecordActivity = () => {
   // expand2: this month
 
   const [showActivity, setShowActivity] = useState(true);
-
-  const [filter, setFilter] = useState(
-    'Filters: Within 2 months • All activities • List email, Email, Logged calls, Events, and Tasks'
-  );
 
   const date = new Date() // value test
   // 
@@ -40,11 +35,6 @@ const RecordActivity = () => {
         <Icon name='face_2' className='mr-2 text-blue-500 dark:text-link-text-dark'></Icon>
         <span>Only show activities with insights</span>
         <Switch onClick={() => setShowActivity(!showActivity)} checked={false} className='z-10 ml-2'></Switch>
-      </div>
-
-      <div className='flex items-center'>
-        <span>{filter}</span>
-        <SettingActivity onchangeFilter={setFilter} />
       </div>
 
       <div className='flex flex-row-reverse'>

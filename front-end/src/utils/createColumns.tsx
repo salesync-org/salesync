@@ -8,7 +8,7 @@ export const createColumns = (companyName: string, properties: PropertyElement[]
     {
       accessorKey: 'id',
       header: '',
-      cell: () => <span></span>
+      cell: ({ row }: { row: any }) => <span className='select-none text-xs'>{row.index + 1}</span>
     }
   ];
 
@@ -21,15 +21,15 @@ export const createColumns = (companyName: string, properties: PropertyElement[]
             className='flex items-center justify-between'
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
-            <span className=''>Name</span>
+            <span className='text-sm font-medium'>Name</span>
             <Icon name='expand_more' />
           </div>
         ),
         cell: ({ row }: { row: any }) => {
           return (
             <Link
-              to={`/record/${row.getValue('id')}`}
-              className='block w-full items-center align-middle text-blue-500 hover:underline'
+              to={`/${companyName}/record/${row.getValue('id')}`}
+              className='block w-full items-center align-middle text-sm font-semibold text-blue-500 hover:underline'
             >
               {row.getValue('Name')}
             </Link>
@@ -45,12 +45,12 @@ export const createColumns = (companyName: string, properties: PropertyElement[]
           className='flex items-center justify-between'
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          <span className=''>{property.label}</span>
+          <span className='text-sm font-medium'>{property.label}</span>
           <Icon name='expand_more' />
         </div>
       ),
       cell: ({ row }: { row: any }) => {
-        return <span>{row.getValue(property.name)}</span>;
+        return <span className='text-sm'>{row.getValue(property.name)}</span>;
       }
     });
   });

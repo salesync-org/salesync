@@ -4,6 +4,7 @@ import { cn } from '@/utils/utils';
 import { useEffect } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import LoadingSpinner from '../ui/Loading/LoadingSpinner';
+import { LayoutOrder, Type } from '@/type';
 
 interface RecordTabsProps {
   tabs: Type[];
@@ -35,7 +36,7 @@ const RecordTabs = ({ tabs = [], name }: RecordTabsProps) => {
   }
 
   const layoutOrders = user.settings.layout_order;
-  const saleLayoutIndex = layoutOrders.findIndex((layoutOrder) => layoutOrder.name === 'Sales');
+  const saleLayoutIndex = layoutOrders.findIndex((layoutOrder: LayoutOrder) => layoutOrder.name === 'Sales');
 
   const handleDragStart = (e: React.DragEvent<HTMLAnchorElement>) => {
     e.currentTarget.classList.add('opacity-0');

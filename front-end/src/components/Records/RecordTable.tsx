@@ -8,6 +8,7 @@ import { formatRecords } from '@/utils/utils';
 import { useParams } from 'react-router-dom';
 import LoadingSpinner from '../ui/Loading/LoadingSpinner';
 import { DataTable } from './data-table';
+import { Skeleton } from '../ui';
 
 interface RecordTableProps {
   typeId: string;
@@ -30,7 +31,7 @@ const RecordTable = ({ typeId }: RecordTableProps) => {
   // }
 
   if (isRecordLoading || isPropertyLoading) {
-    return <LoadingSpinner />;
+    return <RecordTableSkeleton />;
   }
 
   if (!recordData && !propertyData) {
@@ -42,4 +43,19 @@ const RecordTable = ({ typeId }: RecordTableProps) => {
 
   return <div className='px-4 py-2'>{<DataTable columns={columns} data={tableData} />}</div>;
 };
+
+const RecordTableSkeleton = () => {
+  const height = '20px';
+  const borderRadius = '4px';
+  return (
+    <div className='space-y-1 px-4 py-2'>
+      <Skeleton width='100%' height={height} borderRadius={borderRadius} className='bg-slate-400 dark:bg-slate-200' />
+      <Skeleton width='100%' height={height} borderRadius={borderRadius} className='bg-slate-200 dark:bg-slate-600' />
+      <Skeleton width='100%' height={height} borderRadius={borderRadius} className='bg-slate-200 dark:bg-slate-600' />
+      <Skeleton width='100%' height={height} borderRadius={borderRadius} className='bg-slate-200 dark:bg-slate-600' />
+      <Skeleton width='100%' height={height} borderRadius={borderRadius} className='bg-slate-200 dark:bg-slate-600' />
+    </div>
+  );
+};
+
 export default RecordTable;

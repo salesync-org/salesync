@@ -174,8 +174,8 @@ const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) =>
         stageIdChosen={stageIdChosen}
         setStageIdChosen={setStageIdChosen}
       />
-      <div className='mt-4 flex items-center justify-between text-[13px]'>
-        <h3>Status: {updatedStages.find((stage) => stage.id === currentStage)?.name}</h3>
+      <div className='mt-4 flex items-center justify-between'>
+        <h3 className='text-base'>Status: {updatedStages.find((stage) => stage.id === currentStage)?.name}</h3>
         <ActionButton />
       </div>
     </>

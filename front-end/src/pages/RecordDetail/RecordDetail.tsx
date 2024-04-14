@@ -8,6 +8,7 @@ import useRecord from '@/hooks/record-service/useRecord';
 import { useParams } from 'react-router-dom';
 import useStages from '@/hooks/type-service/useStage';
 import StageSection from '@/components/Stage/StageSection';
+import { Stage } from '@/type';
 
 const RecordDetail = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -42,7 +43,7 @@ const RecordDetail = () => {
   const { data: record, isLoading: isRecordLoading } = useRecord(companyName, recordId);
   const { data: stages, isLoading: isStagesLoading } = useStages(companyName, record?.source_record?.type.id);
 
-  if (isRecordLoading && isStagesLoading) {
+  if (isRecordLoading || isStagesLoading) {
     return <LoadingSpinner />;
   }
 

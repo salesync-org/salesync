@@ -5,12 +5,13 @@ import Icon from '@/components/ui/Icon/Icon';
 import Panel from '@/components/ui/Panel/Panel';
 import TextInput from '@/components/ui/TextInput/TextInput';
 import { tableButtons } from '@/constants/layout/table-buttons';
-import { useGlobalModalContext } from '@/context/GlobalModalContext';
+import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
+import { Type } from '@/type';
 import icon from 'assets/type-icon/lead_icon.png';
 import { useParams } from 'react-router-dom';
 
 interface RecordSectionProps {
-  type: any;
+  type: Type | null;
 }
 
 const RecordSection = ({ type }: RecordSectionProps) => {
@@ -39,21 +40,15 @@ const RecordSection = ({ type }: RecordSectionProps) => {
           </div>
         </div>
         <ButtonGroup>
-          {tableButton &&
-            tableButton.buttons.map((button) => {
-              return (
-                <Button
-                  key={button.name}
-                  intent='normal'
-                  zoom={false}
-                  onClick={() => {
-                    showModal(button.modalName, { typeId });
-                  }}
-                >
-                  {button.name}
-                </Button>
-              );
-            })}
+          <Button
+            intent='normal'
+            zoom={false}
+            onClick={() => {
+              showModal(MODAL_TYPES.CREATE_RECORD_MODAL, { typeId });
+            }}
+          >
+            New
+          </Button>
         </ButtonGroup>
       </section>
       <section className='my-2 flex items-center justify-between'>

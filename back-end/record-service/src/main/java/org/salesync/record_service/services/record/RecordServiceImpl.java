@@ -106,6 +106,11 @@ public class RecordServiceImpl implements RecordService {
         return recordMapper.recordToRecordDto(recordRepository.save(recordEntity));
     }
 
+
+
+
+
+
     @Override
     public RecordDto getRecordById(String recordId) {
         return recordMapper.recordToRecordDto(recordRepository.findById(UUID.fromString(recordId)).orElse(null));

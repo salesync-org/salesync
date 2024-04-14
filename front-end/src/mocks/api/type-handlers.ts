@@ -4,9 +4,16 @@ import { types, relations, typeRelations } from '../db';
 import { properties } from '../db/properties';
 import { records } from '../db/record/records';
 
+const BASE_URL = `${import.meta.env.VITE_API_GATEWAY_HOST}/api/v1`;
+
 export const handlers = [
   http.get(`${TYPE_SERVICE_URL}`, () => {
     return HttpResponse.json(types);
+  }),
+
+  http.get(`${BASE_URL}/types`, async ({ }) => {
+    const typeExample = types;
+    return HttpResponse.json(typeExample);
   }),
 
   http.get(`${TYPE_SERVICE_URL}/:typeId/link`, async ({ request, params }) => {

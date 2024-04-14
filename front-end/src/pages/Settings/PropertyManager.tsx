@@ -16,8 +16,7 @@ const properties = [
   {
     id: '3',
     name: 'Email',
-    description:
-      'Allows users to enter an email address, which is validated to ensure proper format. If this field is specified for a contact or lead, users can choose the address when clicking Send an Email. Note that custom email addresses cannot be used for mass emails.'
+    description: 'Allows users to enter an email address, which is validated to ensure proper format.'
   },
   {
     id: '4',
@@ -48,21 +47,21 @@ const properties = [
 const PropertyManager = () => {
   const { companyName = '' } = useParams();
   return (
-    <Panel className={cn('py-6, m-0 flex h-full flex-col justify-start px-4')}>
+    <Panel className={cn('m-0 flex h-full flex-col justify-start px-4 pb-4 pt-6')}>
       <Table>
         <TableHeader>
           <TableRow className='grid grid-cols-12'>
-            <TableCell className='col-span-4 font-medium md:col-span-6'>Data type</TableCell>
-            <TableCell className='col-span-8 text-left font-medium md:col-span-6'>Description</TableCell>
+            <TableCell className='col-span-4 font-semibold md:col-span-3'>Data type</TableCell>
+            <TableCell className='col-span-8 text-left font-semibold md:col-span-3'>Description</TableCell>
           </TableRow>
         </TableHeader>
         <TableBody>
           {properties.map((property) => {
             return (
               <TableRow key={property.name} className='grid grid-cols-12'>
-                <TableCell className='col-span-4 flex items-center gap-2 md:col-span-6'>
+                <TableCell className='col-span-4 flex items-center gap-2 md:col-span-3'>
                   <input type='radio' name='propertyManager' id={'propertyManager' + property.name} />
-                  <label htmlFor={'propertyManager' + property.name} className='text-sm'>
+                  <label htmlFor={'propertyManager' + property.name} className='font-md'>
                     {property.name}
                   </label>
                 </TableCell>
@@ -72,7 +71,7 @@ const PropertyManager = () => {
           })}
         </TableBody>
       </Table>
-      <div className='mt-auto flex items-center gap-2 self-end'>
+      <div className='my-auto flex items-center gap-2 self-end px-2 py-4'>
         <Link to={`/${companyName}/setting/object-manager`}>
           <Button>Cancel</Button>
         </Link>

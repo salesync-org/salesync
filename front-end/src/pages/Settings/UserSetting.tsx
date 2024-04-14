@@ -18,7 +18,9 @@ const UserSetting = () => {
   const location = useLocation();
   useEffect(() => {
     const getProfiles = async () => {
+      console.log('companyName', companyName);
       const roles = await loadRoles(companyName ?? '');
+      console.log('roles' + roles);
       setRoles(roles);
     };
     getProfiles();

@@ -78,7 +78,7 @@ const List = ({
         <Popup
           style={{ maxHeight: calculateMaxSize(), overflow: 'auto' }}
           className={cn(
-            'absolute z-[50] h-fit overflow-x-hidden rounded border-[2px] px-2 transition-all duration-100 ease-in-out',
+            'absolute z-[50] h-fit overflow-x-hidden rounded-xl border-[2px] px-2 transition-all duration-100 ease-in-out',
             align === 'left' && 'left-0',
             align === 'right' && 'right-0',
             divide ? 'divide divide-y-2 divide-button-stroke-light *:py-2 dark:divide-button-stroke-dark' : 'py-2',

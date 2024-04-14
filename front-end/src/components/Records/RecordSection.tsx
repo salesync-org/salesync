@@ -10,7 +10,7 @@ import icon from 'assets/type-icon/lead_icon.png';
 import { useParams } from 'react-router-dom';
 
 interface RecordSectionProps {
-  type: Type | undefined;
+  type: LayoutType | undefined;
 }
 
 const RecordSection = ({ type }: RecordSectionProps) => {

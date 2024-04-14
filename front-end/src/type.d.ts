@@ -8,14 +8,19 @@ type TypeRelation = {
 };
 
 type Type = {
-  icon_url: string?;
-  background_color: string?;
-  type_id: string;
+  // icon_url: string?;
+  // background_color: string?;
+  id: string;
   name: string;
-  description?: string;
-  fields?: Field[];
-  links?: Link[];
+  template: string;
+  // description?: string;
+  // fields?: Field[];
 };
+
+type LayoutType = {
+  name: string;
+  type_id: string;
+}
 
 type TypeProperty = {
   id: string;
@@ -122,7 +127,7 @@ type Settings = {
 type LayoutOrder = {
   name: string;
   icon: string;
-  types: Type[];
+  types: LayoutType[];
 };
 
 type RelationResponse = {

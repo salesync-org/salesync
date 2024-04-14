@@ -32,7 +32,7 @@ const RecordTable = ({ typeId }: RecordTableProps) => {
   if (!recordData && !propertyData) {
     return <ErrorToaster errorMessage='Error loading table ' />;
   }
-  console.log(recordData);
+
   const tableData = formatRecords(recordData.records);
   const columns = createColumns(companyName, propertyData!.properties);
 

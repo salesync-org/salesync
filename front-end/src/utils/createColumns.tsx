@@ -13,6 +13,10 @@ export const createColumns = (companyName: string, properties: PropertyElement[]
   ];
 
   properties.forEach((property) => {
+    if (!property.name) {
+      return;
+    }
+
     if (property.name === 'Name') {
       columns.push({
         accessorKey: 'Name',

@@ -36,7 +36,5 @@ export const formatRecords = (records: RecordResponse[]) => {
     }
   }
 
-  console.log({ formattedRecords });
-
   return formattedRecords;
 };

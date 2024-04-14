@@ -6,8 +6,14 @@ import { useLocation } from 'react-router-dom';
 import ErrorToaster from '../Error/ErrorToaster';
 import { PropertyElement, Stage } from '@/type';
 import useStages from '@/hooks/type-service/useStage';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useToast } from '@/components/ui/use-toast';
+import recordApi from '@/api/record';
 
 const RecordModal = () => {
+  const [stage, setStage] = useState('');
+  const { handleSubmit, register } = useForm();
   const { hideModal, store } = useGlobalModalContext();
   const { modalType, modalProps } = store;
   const { typeId } = modalProps;
@@ -15,6 +21,7 @@ const RecordModal = () => {
   const companyName = location.pathname.split('/')[1] || '';
   const { data: typeProperty, isLoading: isPropertiesLoading } = useProperties(companyName, typeId);
   const { data: stages, isLoading: isStagesLoading } = useStages(companyName, typeId);
+  const { toast } = useToast();
 
   if (!typeId) {
     return null;
@@ -24,10 +31,46 @@ const RecordModal = () => {
     return <ErrorToaster errorTitle='Error' errorMessage='Failed to fetch properties' />;
   }
 
-  console.log({ typeProperty });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onSubmit = async (data: any) => {
+    try {
+      if (!data['Name']) {
+        throw new Error('Name is required');
+      }
 
-  const template = typeProperty.template || 'Object';
-  console.log({ template, stages });
+      const req = {
+        record_name: data['Name'],
+        properties: typeProperty.properties.map((property) => {
+          return {
+            id: property.id,
+            property_name: property.name,
+            property_label: property.label,
+            item_value: data[property.name]
+          };
+        })
+      };
+
+      console.log(req);
+
+      const res = await recordApi.createRecord(companyName, typeId, req);
+
+      if (res) {
+        toast({
+          title: 'Success',
+          description: 'Create record successfully'
+        });
+        hideModal();
+      }
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: 'Error',
+        description: 'Failed to create record',
+        variant: 'destructive'
+      });
+    }
+  };
+
   return (
     <Modal
       isOpen={modalType === MODAL_TYPES.CREATE_RECORD_MODAL}
@@ -35,10 +78,14 @@ const RecordModal = () => {
       className='h-[600px]'
       title={typeProperty ? `New ${typeProperty.name}` : 'New'}
     >
-      {isPropertiesLoading ? (
+      {isPropertiesLoading || isStagesLoading ? (
         <LoadingSpinner className='mt-10' />
       ) : (
-        <form className='-z-1 absolute bottom-2 left-2 right-2 top-20 overflow-x-hidden  pb-32  '>
+        <form
+          id='create-record-form'
+          onSubmit={handleSubmit(onSubmit)}
+          className='-z-1 absolute bottom-2 left-2 right-2 top-20 overflow-x-hidden  pb-32  '
+        >
           <div className='flex w-full flex-col place-content-center gap-2   p-6'>
             {typeProperty ? (
               typeProperty.properties?.map((property: PropertyElement) => {
@@ -49,6 +96,8 @@ const RecordModal = () => {
                       header={property.label}
                       key={property.id}
                       placeholder={property.label}
+                      register={register}
+                      name={property.name}
                     ></TextInput>
                   );
                 else return <div></div>;
@@ -56,8 +105,8 @@ const RecordModal = () => {
             ) : (
               <div>loading</div>
             )}
-            {stages && (
-              <DropDown value=''>
+            {stages && stages?.length > 0 && (
+              <DropDown header='Status' value={stage} onValueChange={setStage}>
                 {stages.map((stage: Stage) => (
                   <DropDownItem title={stage.name} value={stage.id} key={stage.id}>
                     {stage.name}
@@ -73,7 +122,9 @@ const RecordModal = () => {
           <Button onClick={hideModal}>Cancel</Button>
           <Button onClick={() => {}}>Save & New</Button>
 
-          <PrimaryButton onClick={hideModal}>Save</PrimaryButton>
+          <PrimaryButton form='create-record-form' type='submit'>
+            Save
+          </PrimaryButton>
         </ModalFooter>
       </Panel>
     </Modal>

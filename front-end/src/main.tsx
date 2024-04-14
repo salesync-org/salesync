@@ -13,8 +13,8 @@ async function enableMocking() {
   if (process.env.NODE_ENV !== 'development') {
     return;
   }
-  // const { server } = await import('@/mocks/api/handlers.ts');
-  // return server.start();
+  const { server } = await import('@/mocks/api/handlers.ts');
+  return server.start();
 }
 
 enableMocking().then(() => {

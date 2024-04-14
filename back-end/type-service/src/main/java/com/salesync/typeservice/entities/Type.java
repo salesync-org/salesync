@@ -27,7 +27,6 @@ public class Type extends BaseEntity  {
 
     @OneToMany(mappedBy = "type", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonProperty("properties")
-
     private List<TypeProperty> typeProperties;
 
     @OneToMany(mappedBy = "type", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -37,7 +36,4 @@ public class Type extends BaseEntity  {
     @ManyToOne
     @JoinColumn(name = "template_id")
     private Template template;
-
-
-
 }

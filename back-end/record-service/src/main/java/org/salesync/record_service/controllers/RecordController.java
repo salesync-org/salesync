@@ -67,7 +67,7 @@ public class RecordController {
     }
 
     @PostMapping(Route.TYPE_ID + Route.CREATE)
-    public RecordDto createRecordByTypeId(@PathVariable String typeId, @PathVariable String realm, @RequestHeader(name = "Authorization") String authorization, @RequestBody CreateRecordRequestDto createRecordRequestDto) {
-        return recordService.createRecordByTypeId(typeId, realm, authorization, createRecordRequestDto);
+    public ResponseEntity<RecordDto> createRecordByTypeId(@PathVariable String typeId, @RequestHeader(name = "Authorization") String authorization, @RequestBody CreateRecordRequestDto createRecordRequestDto) {
+        return ResponseEntity.ok(recordService.createRecordByTypeId(typeId, authorization, createRecordRequestDto));
     }
 }

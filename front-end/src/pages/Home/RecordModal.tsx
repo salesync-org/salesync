@@ -4,7 +4,8 @@ import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext
 import useProperties from '@/hooks/type-service/useProperties';
 import { useLocation } from 'react-router-dom';
 import ErrorToaster from '../Error/ErrorToaster';
-import { PropertyElement } from '@/type';
+import { PropertyElement, Stage } from '@/type';
+import useStages from '@/hooks/type-service/useStage';
 
 const RecordModal = () => {
   const { hideModal, store } = useGlobalModalContext();
@@ -12,7 +13,8 @@ const RecordModal = () => {
   const { typeId } = modalProps;
   const location = useLocation();
   const companyName = location.pathname.split('/')[1] || '';
-  const { data: typeProperty, isLoading } = useProperties(companyName, typeId);
+  const { data: typeProperty, isLoading: isPropertiesLoading } = useProperties(companyName, typeId);
+  const { data: stages, isLoading: isStagesLoading } = useStages(companyName, typeId);
 
   if (!typeId) {
     return null;
@@ -24,6 +26,8 @@ const RecordModal = () => {
 
   console.log({ typeProperty });
 
+  const template = typeProperty.template || 'Object';
+  console.log({ template, stages });
   return (
     <Modal
       isOpen={modalType === MODAL_TYPES.CREATE_RECORD_MODAL}
@@ -31,7 +35,7 @@ const RecordModal = () => {
       className='h-[600px]'
       title={typeProperty ? `New ${typeProperty.name}` : 'New'}
     >
-      {isLoading ? (
+      {isPropertiesLoading ? (
         <LoadingSpinner className='mt-10' />
       ) : (
         <form className='-z-1 absolute bottom-2 left-2 right-2 top-20 overflow-x-hidden  pb-32  '>
@@ -51,6 +55,15 @@ const RecordModal = () => {
               })
             ) : (
               <div>loading</div>
+            )}
+            {stages && (
+              <DropDown value=''>
+                {stages.map((stage: Stage) => (
+                  <DropDownItem title={stage.name} value={stage.id} key={stage.id}>
+                    {stage.name}
+                  </DropDownItem>
+                ))}
+              </DropDown>
             )}
           </div>
         </form>

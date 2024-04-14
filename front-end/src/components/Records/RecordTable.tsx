@@ -6,9 +6,8 @@ import ErrorToaster from '@/pages/Error/ErrorToaster';
 import { createColumns } from '@/utils/createColumns';
 import { formatRecords } from '@/utils/utils';
 import { useParams } from 'react-router-dom';
-import LoadingSpinner from '../ui/Loading/LoadingSpinner';
-import { DataTable } from './data-table';
 import { Skeleton } from '../ui';
+import { DataTable } from './data-table';
 
 interface RecordTableProps {
   typeId: string;
@@ -25,10 +24,6 @@ const RecordTable = ({ typeId }: RecordTableProps) => {
   };
   const { data: recordData, isLoading: isRecordLoading } = useRecords(companyName, typeId, recordFilter);
   const { data: propertyData, isLoading: isPropertyLoading } = useProperties(companyName, typeId);
-
-  // if (!columns) {
-  //   return null;
-  // }
 
   if (isRecordLoading || isPropertyLoading) {
     return <RecordTableSkeleton />;

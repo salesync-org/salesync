@@ -172,7 +172,7 @@ type RecordType = {
 type TypeProperty = {
   id: string;
   name: string;
-  template: null;
+  template?: string;
   properties: PropertyElement[];
 };
 

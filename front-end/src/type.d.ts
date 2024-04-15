@@ -17,14 +17,14 @@ type Type = {
   links?: Link[];
 };
 
-type TypeProperty = {
-  id: string;
-  label?: string;
-  name: string;
-  type?: string;
-  description?: string;
-  properties?: Property[];
-};
+// type TypeProperty = {
+//   id: string;
+//   label?: string;
+//   name: string;
+//   type?: string;
+//   description?: string;
+//   properties?: Property[];
+// };
 
 type Property = {
   id: string;
@@ -124,6 +124,24 @@ type LayoutOrder = {
   icon: string;
   types: Type[];
 };
+type RecordsResponse = {
+  records: RecordResponse[];
+  total_size: number;
+  page_size: number;
+  current_page: number;
+};
+type RecordResponse = {
+  id: string;
+  name: string;
+  user_id: string;
+  properties: PropertyResponse[];
+};
+type PropertyResponse = {
+  id: string;
+  type_property_id: string;
+  property_label: string;
+  item_value: string;
+};
 
 type RelationResponse = {
   id: string;
@@ -150,3 +168,67 @@ type RecordType = {
   id: string;
   name: string;
 };
+
+type TypeProperty = {
+  id: string;
+  name: string;
+  template?: string;
+  properties: PropertyElement[];
+};
+
+type PropertyElement = {
+  id: string;
+  name: string;
+  label: string;
+  sequence: number;
+  property: PropertyProperty;
+  default_value: string;
+  fields: FieldElement[];
+};
+
+type FieldElement = {
+  id: string;
+  item_value: string;
+  property_field: PropertyField;
+};
+
+type PropertyField = {
+  id: string;
+  label: Label;
+  item_value: null;
+  is_required: boolean;
+  default_value: string;
+  is_key: boolean;
+  field: PropertyFieldField;
+};
+
+type PropertyFieldField = {
+  id: string;
+  input_type: InputType;
+  is_multiple_value: boolean;
+};
+
+export enum InputType {
+  Checkbox = 'Checkbox',
+  NumberText = 'NumberText'
+}
+
+export enum Label {
+  Length = 'Length',
+  Required = 'Required',
+  Unique = 'Unique'
+}
+
+export interface PropertyProperty {
+  id: string;
+  name: string;
+  propertyFields: PropertyField[];
+}
+
+export enum Template {
+  Human = 'Human',
+  Activity = 'Activity',
+  Group = 'Group',
+  StageObject = 'StageObject',
+  Object = 'Object'
+}

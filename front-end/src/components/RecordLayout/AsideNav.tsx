@@ -3,6 +3,7 @@ import { NavLink, useParams } from 'react-router-dom';
 import Icon from '../ui/Icon/Icon';
 import { useEffect, useState } from 'react';
 import useAuth from '@/hooks/useAuth';
+import { LayoutOrder, Type } from '@/type';
 
 type AsideItem = {
   href: string;
@@ -20,7 +21,7 @@ const AsideNav = () => {
   useEffect(() => {
     const layoutOrders = user?.settings.layout_order;
     if (layoutOrders) {
-      const mapAsideItems = layoutOrders.map((layoutOrder) => {
+      const mapAsideItems = layoutOrders.map((layoutOrder: LayoutOrder) => {
         return {
           ...layoutOrder,
           href: `/${layoutOrder.name.toLowerCase()}`

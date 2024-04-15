@@ -1,8 +1,9 @@
 import { cn } from '@/utils/utils';
 import { Icon } from '../ui';
+import { Stage as StageType } from '@/type';
 
 interface StageProps {
-  stage: Stage;
+  stage: StageType;
   isFirst?: boolean;
   isLast?: boolean;
   isCurrentStage: boolean;
@@ -68,9 +69,7 @@ const Stage = ({
         )}
       >
         <Icon name='check' className={cn('', (!isCompleted || isChosen) && 'hidden', 'group-hover:hidden')} />
-        <span
-          className={cn('text-[13px]', isCompleted && 'hidden transition-all group-hover:block', isChosen && 'block')}
-        >
+        <span className={cn('text-xs', isCompleted && 'hidden transition-all group-hover:block', isChosen && 'block')}>
           {stage.name}
         </span>
       </span>

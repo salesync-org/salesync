@@ -3,6 +3,7 @@ import Icon from '../ui/Icon/Icon';
 import Button from '../ui/Button/Button';
 import { memo } from 'react';
 import Skeleton from '../ui/Skeleton/Skeleton';
+import { Field } from '@/type';
 
 interface ConfigTableProps {
   data: Field[] | undefined;

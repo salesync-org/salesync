@@ -4,6 +4,7 @@ import { cn } from '@/utils/utils';
 import { useEffect } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import LoadingSpinner from '../ui/Loading/LoadingSpinner';
+import { LayoutOrder, Type } from '@/type';
 
 interface RecordTabsProps {
   tabs: Type[];
@@ -35,7 +36,7 @@ const RecordTabs = ({ tabs = [], name }: RecordTabsProps) => {
   }
 
   const layoutOrders = user.settings.layout_order;
-  const saleLayoutIndex = layoutOrders.findIndex((layoutOrder) => layoutOrder.name === 'Sales');
+  const saleLayoutIndex = layoutOrders.findIndex((layoutOrder: LayoutOrder) => layoutOrder.name === 'Sales');
 
   const handleDragStart = (e: React.DragEvent<HTMLAnchorElement>) => {
     e.currentTarget.classList.add('opacity-0');
@@ -90,7 +91,7 @@ const RecordTabs = ({ tabs = [], name }: RecordTabsProps) => {
           return (
             <li
               key={tab.type_id}
-              className={`-translate-x-[${index * 2}%] relative text-sm leading-5`}
+              className={`-translate-x-[${index * 2}%] relative min-h-[40px] text-sm leading-5`}
               value={index}
               style={{
                 transition: 'all 0.3s ease',
@@ -109,7 +110,7 @@ const RecordTabs = ({ tabs = [], name }: RecordTabsProps) => {
                   cn(
                     'flex cursor-pointer items-center gap-1 truncate border-t-[3px] border-transparent bg-clip-border px-3 py-2 transition-all duration-100 ease-in-out',
                     isActive && 'bg-secondary/40 dark:bg-secondary-dark/40',
-                    'hover:bg-secondary/30 dark:hover:bg-secondary-dark/30',
+                    'hover:border-b-2 hover:border-b-primary hover:bg-secondary/30 focus:border-b-0 active:border-b-0 dark:hover:bg-secondary-dark/30',
                     `${name}-tab`
                   )
                 }

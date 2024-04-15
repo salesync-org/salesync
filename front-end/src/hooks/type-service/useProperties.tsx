@@ -1,7 +1,8 @@
-import propertyApi from '@/api/propertyApi';
+import typeApi from '@/api/type';
+import { TypeProperty } from '@/type';
 import { useQuery } from 'react-query';
 
-const useProperties = (typeId: string) => {
+const useProperties = (companyName: string, typeId: string) => {
   const key = ['properties', typeId];
   const { data, error, isLoading } = useQuery<TypeProperty>(
     key,
@@ -10,7 +11,7 @@ const useProperties = (typeId: string) => {
         return;
       }
 
-      return propertyApi.getAllProperties(typeId);
+      return typeApi.getTypeProperties(companyName, typeId);
     },
     {
       refetchOnWindowFocus: false,
@@ -19,6 +20,6 @@ const useProperties = (typeId: string) => {
     }
   );
 
-  return { typeProperty: data, error, isLoading, key };
+  return { data, error, isLoading, key };
 };
 export default useProperties;

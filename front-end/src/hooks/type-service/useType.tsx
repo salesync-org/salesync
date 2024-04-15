@@ -1,4 +1,5 @@
 import typeApi from '@/api/type';
+import { Type } from '@/type';
 import { useQuery } from 'react-query';
 
 const useType = () => {

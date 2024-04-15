@@ -73,7 +73,7 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({ icon, name, className, 
           </div>
         </Button>
 
-        <DropDown
+        {/* <DropDown
           defaultValue=''
           value=''
           prefixIcon={<Icon name='arrow_drop_down' size='1' className='ml-1' />}
@@ -148,7 +148,7 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({ icon, name, className, 
               </>
             )}
           </div>
-        </DropDown>
+        </DropDown> */}
       </ButtonGroup>
 
       <nav

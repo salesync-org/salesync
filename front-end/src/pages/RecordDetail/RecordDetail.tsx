@@ -8,6 +8,7 @@ import useRecord from '@/hooks/record-service/useRecord';
 import { useParams } from 'react-router-dom';
 import useStages from '@/hooks/type-service/useStage';
 import StageSection from '@/components/Stage/StageSection';
+import RecordActivity from '@/components/RecordDetail/RecordActivity';
 
 const RecordDetail = () => {
   // const [isMenuOpen, setMenuOpen] = useState(false);
@@ -48,6 +49,10 @@ const RecordDetail = () => {
 
   if (!record || !stages) {
     return null;
+  }
+  else {
+    console.log('record', record.relations.length)
+    console.log(stages)
   }
 
   const mapStages = stages.map((stage: Stage) => {
@@ -105,7 +110,7 @@ const RecordDetail = () => {
 
       {/* record contain  */}
       <div className='grid grid-cols-2 md:grid-cols-4'>
-        <Panel className='col-span-1 mr-0 h-fit bg-white p-4'>
+        <Panel className='col-span-1 mr-0 h-fit p-4'>
           <GroupProperty name='About' data={dataAbout} className='mb-4' />
           <GroupProperty name='Get in Touch' data={dataTouch} className='mb-4' />
           <GroupProperty name='Segment' data={dataSegment} className='mb-4' />
@@ -125,12 +130,24 @@ const RecordDetail = () => {
             </Panel>
           )}
           <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
-            <div></div>
+            <RecordActivity />
           </Panel>
         </section>
 
         <section className='col-span-1'>
-          <RelationSections relations={record.relations} />
+          {record.relations.length !== 0 && <RelationSections relations={record.relations} />}
+          {record.relations.length === 0 && (
+            <Panel className='col-span-1 h-fit p-4'>
+            <div className='flex items-center'>
+              <div className='mr-2'>
+                <Icon name='merge' className='mr-1 rounded bg-orange-400 p-0.5 text-white'></Icon>
+              </div>
+              <div>
+                <span className='font-bold'>We found no potential duplicates of this {record.source_record.type.name}.</span>
+              </div>
+            </div>
+          </Panel>
+          )}
         </section>
       </div>
     </div>

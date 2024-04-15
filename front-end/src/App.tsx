@@ -10,7 +10,7 @@ const PersonalInformationSetting = lazy(() => import('./pages/Settings/PersonalI
 const UserSetting = lazy(() => import('./pages/Settings/UserSetting'));
 const ChangePasswordSetting = lazy(() => import('./pages/Settings/ChangePasswordSetting'));
 const CompanyInformationSetting = lazy(() => import('./pages/Settings/CompanyInformationSetting'));
-const PropertyManager = lazy(() => import('./pages/Settings/PropertyManager'));
+const PropertySetting = lazy(() => import('./pages/Settings/PropertySetting'));
 
 // const LogIn = lazy(() => import('pages/LogIn/LogIn'));
 // const Setting = lazy(() => import('pages/Setting/Setting'));
@@ -55,7 +55,7 @@ function App() {
                 <Route path='profiles' element={<PersonalInformationSetting />} />
                 <Route path='users' element={<UserSetting />} />
                 <Route path='object-manager' element={<ObjectManager />} />
-                <Route path='object-manager/:typeId' element={<PropertyManager />} />
+                <Route path='object-manager/:typeId' element={<PropertySetting />} />
               </Route>
               <Route path='*' element={<Sales />} />
             </Route>

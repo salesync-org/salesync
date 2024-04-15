@@ -10,7 +10,7 @@ const TypeTable = ({ types }: { types: Type[] }) => {
     <div className='h-full overflow-y-scroll rounded border-2 border-input-stroke-light dark:border-input-stroke-dark'>
       <Table className='h-full'>
         <TableHeader className='max-h-full rounded-sm border-b-2 border-input-stroke-light dark:border-input-stroke-dark'>
-          <TableRow className='left-0 right-0 bg-blue-50 dark:bg-secondary/10'>
+          <TableRow className='left-0 right-0 bg-slate-50 dark:bg-secondary/10'>
             <TableCell className='max-w-28 font-semibold'>Type Name</TableCell>
             <TableCell className='font-semibold'>Template</TableCell>
             <TableCell className='max-w-9 font-semibold'></TableCell>

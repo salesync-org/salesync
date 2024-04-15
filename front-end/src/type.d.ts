@@ -12,7 +12,7 @@ type Type = {
   // background_color: string?;
   id: string;
   name: string;
-  template: string;
+  template: string | null;
   // description?: string;
   // fields?: Field[];
 };
@@ -35,6 +35,21 @@ type Property = {
   id: string;
   label?: string;
   name: string;
+  type: string;
+  options?: string[];
+};
+
+type PropertyField = {
+  id: string;
+  name: string;
+  label: string;
+  value: string
+}
+
+type TypePropertyField = {
+  id: string;
+  name: string;
+  label: string;
   type: string;
   options?: string[];
 };

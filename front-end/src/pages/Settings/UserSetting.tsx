@@ -66,6 +66,9 @@ const UserSetting = () => {
   return (
     <Panel className={cn('m-0 grid h-full grid-cols-1 px-4 py-6')}>
       <div className=' overflow-y-scroll'>
+        <div className='mx-6 flex-grow'>
+          <h2 className='border-b-2 border-button-stroke-light py-4 dark:border-button-stroke-dark'>Add New User</h2>
+        </div>
         <form className='flex w-full flex-col place-content-center gap-2 p-6'>
           <Panel className='flex flex-col items-center bg-gray-100 p-5'>
             <div className='w-1/2'>
@@ -76,6 +79,7 @@ const UserSetting = () => {
                   setEmail(e.target.value);
                 }}
                 header='Email'
+                placeholder='Enter an email address'
                 isError={!!errors.email}
               ></TextInput>
               {errors.email && <ErrorText className='text-sm text-red-500' text={errors.email} />}

@@ -45,6 +45,7 @@ const Item: React.FC<ItemProps> = ({
             'hover:bg-secondary-light/40 dark:hover:bg-secondary-dark/40',
             'hover:text-link-text-light  dark:hover:text-link-text-dark'
           )}
+          onClick={onClick}
           {...restProps}
         >
           {icon && (

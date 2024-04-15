@@ -134,7 +134,7 @@ const List = ({
             divide ? 'divide divide-y-2 divide-button-stroke-light *:py-2 dark:divide-button-stroke-dark' : 'py-2',
             'bg-button-background-light dark:bg-button-background-dark',
             'border-button-stroke-light/60 dark:border-button-stroke-dark/60',
-            shouldDropUp ? 'bottom-10 origin-center' : 'top-[60px] origin-center',
+            shouldDropUp ? 'bottom-[40px] origin-center' : 'top-[40px] origin-center',
             align &&
               cn(
                 shouldDropUp

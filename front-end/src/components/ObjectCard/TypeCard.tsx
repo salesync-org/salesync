@@ -8,7 +8,6 @@ import { DropDown, DropDownItem, TextInput } from '@/components/ui';
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 
 const TypeCard = ({ type }: { type: Type }) => {
-  const colorName = type.background_color;
   const { showModal } = useGlobalModalContext();
 
   return (
@@ -16,8 +15,9 @@ const TypeCard = ({ type }: { type: Type }) => {
       <Panel className='flex min-h-[400px] flex-col items-center justify-between'>
         <div className='w-full'>
           <div className='flex w-full flex-row items-center gap-1 '>
-            <img className={cn('h-8 w-8 rounded-sm ', colorName)} src={type.icon_url ?? ''} alt='type' />
-            <TextInput prefixIcon='search' className='w-full' placeholder={`My ${type.name}`}></TextInput>
+            <div className='flex-grow'>
+              <TextInput prefixIcon='search' className='w-full' placeholder={`My ${type.name}`}></TextInput>
+            </div>
             <Button
               onClick={async () => {
                 showModal(MODAL_TYPES.CREATE_RECORD_MODAL, {
@@ -32,9 +32,7 @@ const TypeCard = ({ type }: { type: Type }) => {
               <DropDownItem title='View Card' value={''} />
             </DropDown>
           </div>
-          <div className='mt-3'>
-            <TypeTable type={type}></TypeTable>
-          </div>
+          <div className='mt-3'>{/* <TypeTable types={type}></TypeTable> */}</div>
         </div>
         <div className='flex w-full flex-row items-center justify-between border-t border-input-stroke pt-3 dark:border-input-stroke-dark'>
           <TextButton

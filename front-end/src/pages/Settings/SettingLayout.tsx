@@ -1,7 +1,8 @@
 import NavigationButton from '@/components/NavigationButton/NavigationButton';
 import { SidebarSetting } from '@/components/SettingLayout/SideBarSetting';
 import useType from '@/hooks/type-service/useType';
-import { Building, Layers, Settings, User } from 'lucide-react';
+import { cn } from '@/utils/utils';
+import { Building, ChevronRight, Layers, Settings, User } from 'lucide-react';
 import { Outlet, useLocation, useParams } from 'react-router-dom';
 
 export type Setting = {
@@ -96,7 +97,15 @@ const SettingLayout = () => {
       </section>
       <div className='mb-2 flex h-full w-full gap-3 px-4 pb-2 pt-[64px]'>
         <div className='h-full'>
-          <SidebarSetting settings={settings} />
+          <div className='absolute bottom-2 left-2 top-32 flex w-2 items-center justify-center rounded-full bg-panel dark:bg-panel md:hidden'></div>
+          <div
+            className={cn(
+              'absolute bottom-2 left-2 top-32 z-50 w-4 overflow-hidden opacity-0 transition-all duration-200 md:h-full',
+              'hover:w-fit hover:opacity-100 md:static md:w-fit md:max-w-full md:overflow-auto md:opacity-100 md:hover:w-fit'
+            )}
+          >
+            <SidebarSetting settings={settings} />
+          </div>
         </div>
         <section className='w-full'>
           <header className='mb-4 h-[88px] w-full rounded-md bg-panel dark:bg-panel-dark'>

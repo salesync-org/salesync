@@ -13,6 +13,8 @@ interface StageSectionProps {
     stages: StageType[];
     currentStage: string;
   };
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  updateRecord: (handleUpdate: Function) => unknown;
 }
 
 const lastStages = {
@@ -24,7 +26,7 @@ const lastStages = {
   }
 };
 
-const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) => {
+const StageSection = ({ stage: { stages, currentStage }, updateRecord }: StageSectionProps) => {
   const [stageIdChosen, setStageIdChosen] = useState(currentStage);
   const [loading, setLoading] = useState(false);
 
@@ -47,8 +49,14 @@ const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) =>
 
   const { companyName = '' } = useParams();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleUpdate = (oldRecord: any) => {
+    const updatedRecord = { ...oldRecord, current_stage_id: stageIdChosen };
+
+    return updatedRecord;
+  };
   const handleUpdateStage = async (companyName: string, recordId: string, stageId: string) => {
-    const res = await recordApi.updateRecordStage(companyName, recordId, stageId);
+    const res = await updateRecord(handleUpdate);
 
     if (res) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

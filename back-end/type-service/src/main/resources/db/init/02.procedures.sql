@@ -30,15 +30,15 @@ BEGIN
         (get_id('property_id', 'property', 'Text'), target_type_id, 'Name'),
         (get_id('property_id', 'property', 'Text'), target_type_id, 'Title'),
         (get_id('property_id', 'property', 'Text'), target_type_id, 'Company'),
-        (get_id('property_id', 'property', 'PhoneNumber'), target_type_id, 'Phone'),
-        (get_id('property_id', 'property', 'EmailAddress'), target_type_id, 'Email');
+        (get_id('property_id', 'property', 'Phone'), target_type_id, 'Phone'),
+        (get_id('property_id', 'property', 'Email'), target_type_id, 'Email');
     END IF;
     IF (SELECT name from public.template WHERE template_id = set_template_id) = 'Group' THEN
         INSERT INTO public.type_property(property_id, type_id, default_value) VALUES
             (get_id('property_id', 'property', 'Text'), target_type_id, 'Name'),
             (get_id('property_id', 'property', 'Text'), target_type_id, 'Description'),
-            (get_id('property_id', 'property', 'PhoneNumber'), target_type_id, 'Phone'),
-            (get_id('property_id', 'property', 'EmailAddress'), target_type_id, 'Email');
+            (get_id('property_id', 'property', 'Phone'), target_type_id, 'Phone'),
+            (get_id('property_id', 'property', 'Email'), target_type_id, 'Email');
     END IF;
 END;
 $$ LANGUAGE plpgsql;

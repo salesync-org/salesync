@@ -3,11 +3,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
 @Data
-@Builder
+@SuperBuilder
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -26,7 +27,6 @@ public class Type extends BaseEntity  {
 
     @OneToMany(mappedBy = "type", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonProperty("properties")
-
     private List<TypeProperty> typeProperties;
 
     @OneToMany(mappedBy = "type", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -36,5 +36,4 @@ public class Type extends BaseEntity  {
     @ManyToOne
     @JoinColumn(name = "template_id")
     private Template template;
-
 }

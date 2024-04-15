@@ -1,6 +1,6 @@
 import { Modal, TextInput, DropDown, DropDownItem, Panel, ModalFooter, Button, PrimaryButton } from '@/components/ui';
 import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
-import { useGlobalModalContext } from '@/context/GlobalModalContext';
+import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 import useProperties from '@/hooks/type-service/useProperties';
 import ErrorToaster from '../Error/ErrorToaster';
 
@@ -25,7 +25,7 @@ const RecordModal = () => {
 
   return (
     <Modal
-      isOpen={Boolean(modalType)}
+      isOpen={modalType === MODAL_TYPES.CREATE_RECORD_MODAL}
       onClose={hideModal}
       className='h-[600px]'
       title={typeProperty ? `New ${typeProperty.name}` : 'New'}

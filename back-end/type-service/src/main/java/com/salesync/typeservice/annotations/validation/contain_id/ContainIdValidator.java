@@ -20,10 +20,11 @@ public class ContainIdValidator implements ConstraintValidator<ContainId, Object
         Class<?> clazz = o.getClass();
         Field field = null;
         try {
-            field = clazz.getField("id");
+            field = clazz.getDeclaredField("id");
             field.setAccessible(true);
             Object fieldValue = field.get(o);
         } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
             return false;
         }
         if (o instanceof String) {

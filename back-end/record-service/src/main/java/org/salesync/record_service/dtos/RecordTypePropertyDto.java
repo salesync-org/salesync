@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Builder;
 import lombok.Getter;
+import org.salesync.record_service.annotations.validation.IsRequired;
 
 import java.util.List;
 import java.util.UUID;
@@ -12,8 +13,9 @@ import java.util.UUID;
 @Builder
 @Getter
 public class RecordTypePropertyDto {
+    @IsRequired
     private UUID id;
     private String propertyName;
-    private String PropertyLabel;
+    private String propertyLabel;
     private String itemValue;
 }

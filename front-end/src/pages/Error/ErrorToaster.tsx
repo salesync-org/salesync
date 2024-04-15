@@ -1,5 +1,5 @@
-import { ToastAction } from '@/components/ui/toast';
-import { useToast } from '@/components/ui/use-toast';
+import { ToastAction } from '@/components/ui/Toast/toast';
+import { useToast } from '@/components/ui/Toast';
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 

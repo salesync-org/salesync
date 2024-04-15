@@ -2,7 +2,7 @@ import { Suspense, lazy } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import ConfigLayout from './components/Layout/ConfigLayout';
 import LoadingSpinner from './components/ui/Loading/LoadingSpinner';
-import { Toaster } from './components/ui/toaster';
+import { Toaster } from './components/ui/Toast';
 import PrivateRoute from './pages/PrivateRoute/PrivateRoute';
 import ObjectManager from './pages/Settings/ObjectManager';
 const SettingLayout = lazy(() => import('./pages/Settings/SettingLayout'));

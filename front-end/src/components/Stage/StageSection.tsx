@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { Button, Icon } from '../ui';
-import { useToast } from '../ui/use-toast';
+import { useToast } from '../ui/Toast';
 import Stages from './Stages';
 
 interface StageSectionProps {

@@ -2,7 +2,7 @@ import { Button, Panel, TextInput } from '@/components/ui';
 import useAuth from '@/hooks/useAuth';
 import { cn } from '@/utils/utils';
 import { useParams } from 'react-router-dom';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/components/ui/Toast';
 import auth from '@/api/auth';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';

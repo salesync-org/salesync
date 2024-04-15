@@ -4,7 +4,7 @@ import { Pencil } from 'lucide-react';
 import { cn } from '@/utils/utils';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/components/ui/Toast';
 import { uploadAvatar } from '@/api/users';
 import LoadingSpinnerSmall from '@/components/ui/Loading/LoadingSpinnerSmall';
 

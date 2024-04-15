@@ -1,44 +1,21 @@
 import { Button, ButtonGroup, DropDown, Icon, Item, Panel } from '@/components/ui';
 // import { useState } from 'react';
 // import { useParams } from 'react-router-dom';
-import GroupProperty from '@/components/RecordDetail/GroupProperty';
+import InputProperty from '@/components/RecordDetail/InputProperty';
 import RelationSections from '@/components/Relation/RelationSections';
+import StageSection from '@/components/Stage/StageSection';
 import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
 import useRecord from '@/hooks/record-service/useRecord';
-import { useParams } from 'react-router-dom';
 import useStages from '@/hooks/type-service/useStage';
-import StageSection from '@/components/Stage/StageSection';
 import RecordActivity from '@/components/RecordDetail/RecordActivity';
 import { Stage } from '@/type';
+import { formatRecords } from '@/utils/utils';
+import { useParams } from 'react-router-dom';
+import recordApi from '@/api/record';
 
 const RecordDetail = () => {
   // const [isMenuOpen, setMenuOpen] = useState(false);
   // const leadId = useParams().leadId;
-
-  const dataAbout = [
-    { name: 'Name', value: 'Nguyễn Quý' },
-    { name: 'Company', value: 'SaleSync' },
-    { name: 'Title', value: 'Inc' },
-    { name: 'Website', value: 'google.com' },
-    { name: 'Description', value: 'Inc' },
-    { name: 'Lead Status', value: 'Nurturing' },
-    { name: 'Lead Owner', value: 'id of user' }
-  ];
-  const dataTouch = [
-    { name: 'Phone', value: '0123456789' },
-    { name: 'Email', value: 'quy@gmail.com' },
-    { name: 'Address', value: 'HCM' }
-  ];
-  const dataSegment = [
-    { name: 'No. of Employees', value: 'Trần Toàn' },
-    { name: 'Annual Revenue', value: 'SaleSync' },
-    { name: 'Lead Source', value: 'Inc' },
-    { name: 'Industry', value: 'google.com' }
-  ];
-  const dataHistory = [
-    { name: 'Created By', value: '' },
-    { name: 'Last Modified By', value: '' }
-  ];
 
   const { recordId = '', companyName = '' } = useParams();
   const { data: record, isLoading: isRecordLoading } = useRecord(companyName, recordId);
@@ -69,6 +46,25 @@ const RecordDetail = () => {
     stages: mapStages,
     currentStage
   };
+
+  const [formattedRecord] = formatRecords([record.source_record]);
+
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  const updateRecord = async (handleUpdate: Function) => {
+    const mapRecord = {
+      id: record.source_record.id,
+      name: record.source_record.name,
+      user_id: record.source_record.user_id,
+      type: record.source_record.type,
+      current_stage_id: currentStage,
+      properties: record.source_record.properties
+    };
+
+    const updatedRecord = handleUpdate(mapRecord);
+    const res = await recordApi.updateRecord(companyName, record.source_record.id, updatedRecord);
+
+    return res;
+  };
   return (
     <div className='flex flex-col'>
       <Panel className='mb-0 flex flex-row items-center justify-between p-2'>
@@ -79,8 +75,8 @@ const RecordDetail = () => {
             alt='icon'
           />
           <div className='flex flex-col'>
-            <div className=''>Lead</div>
-            <div className='text-xl font-bold'>Van Quy Quang</div>
+            <div className=''>{record.source_record.type.name}</div>
+            <div className='text-xl font-bold'>{record.source_record.name}</div>
           </div>
         </div>
         <ButtonGroup>
@@ -112,17 +108,18 @@ const RecordDetail = () => {
       {/* record contain  */}
       <div className='grid grid-cols-2 md:grid-cols-4'>
         <Panel className='col-span-1 mr-0 h-fit p-4'>
-          <GroupProperty name='About' data={dataAbout} className='mb-4' />
-          <GroupProperty name='Get in Touch' data={dataTouch} className='mb-4' />
-          <GroupProperty name='Segment' data={dataSegment} className='mb-4' />
-          <GroupProperty name='History' data={dataHistory} />
+          {formattedRecord &&
+            Object.keys(formattedRecord).map((key) => {
+              if (key === 'id') return null;
+              return <InputProperty name={key} value={formattedRecord[key]} />;
+            })}
         </Panel>
 
         <section className='col-span-2'>
           {stages ? (
             <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
               <div className='px-4'>
-                <StageSection stage={newStages} />
+                <StageSection stage={newStages} updateRecord={updateRecord} />
               </div>
             </Panel>
           ) : (

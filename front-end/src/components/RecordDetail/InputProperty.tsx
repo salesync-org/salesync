@@ -9,9 +9,9 @@ interface InputPropertyProps {
 
 const InputProperty: React.FC<InputPropertyProps> = ({ name, value }) => {
   return (
-    <div className='px-4'>
+    <div className='space-y-1 px-4 py-1'>
       <div>
-        <span className='text-xs'>{name}</span>
+        <span className='text-xs font-medium'>{name}</span>
       </div>
 
       <div className='flex justify-between border-b'>

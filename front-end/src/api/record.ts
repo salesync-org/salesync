@@ -51,6 +51,12 @@ class RecordApi {
     const response = await axios.post(`${URL}/${companyName}/records/${typeId}/create`, data);
     return response.data;
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async updateRecord(companyName: string, recordId: string, data: any) {
+    const response = await axios.put(`${URL}/${companyName}/records/${recordId}/update`, data);
+    return response.data;
+  }
 }
 
 const recordApi = new RecordApi();

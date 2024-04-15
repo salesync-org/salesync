@@ -1,12 +1,14 @@
+import { cn } from '@/utils/utils';
 import React from 'react';
 
 interface SkeletonProps {
   width: string;
   height?: string;
   borderRadius?: string;
+  className?: string;
 }
 
-const Skeleton: React.FC<SkeletonProps> = ({ width, height = '16px', borderRadius = '12px' }) => {
+const Skeleton: React.FC<SkeletonProps> = ({ width, height = '16px', borderRadius = '12px', className }) => {
   return (
     <div
       style={{
@@ -14,7 +16,7 @@ const Skeleton: React.FC<SkeletonProps> = ({ width, height = '16px', borderRadiu
         height,
         borderRadius
       }}
-      className='animate-pulse bg-slate-600'
+      className={cn('animate-pulse bg-slate-600', className)}
     />
   );
 };

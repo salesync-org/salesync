@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
 import Stage from './Stage';
 import { cn } from '@/utils/utils';
+import { Stage as StageType } from '@/type';
 
 interface StagesProps {
-  stages: Stage[];
+  stages: StageType[];
   currentStage: string;
   stageIdChosen: string;
   setStageIdChosen: (stageId: string) => void;

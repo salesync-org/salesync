@@ -6,10 +6,11 @@ import { useParams } from 'react-router-dom';
 import { Button, Icon } from '../ui';
 import { useToast } from '../ui/use-toast';
 import Stages from './Stages';
+import { Stage as StageType } from '@/type';
 
 interface StageSectionProps {
   stage: {
-    stages: Stage[];
+    stages: StageType[];
     currentStage: string;
   };
 }
@@ -174,8 +175,8 @@ const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) =>
         stageIdChosen={stageIdChosen}
         setStageIdChosen={setStageIdChosen}
       />
-      <div className='mt-4 flex items-center justify-between text-[13px]'>
-        <h3>Status: {updatedStages.find((stage) => stage.id === currentStage)?.name}</h3>
+      <div className='mt-4 flex items-center justify-between'>
+        <h3 className='text-base'>Status: {updatedStages.find((stage) => stage.id === currentStage)?.name}</h3>
         <ActionButton />
       </div>
     </>

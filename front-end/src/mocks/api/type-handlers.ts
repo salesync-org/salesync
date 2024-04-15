@@ -1,7 +1,6 @@
 import { http, HttpResponse } from 'msw';
 import { TYPE_SERVICE_URL } from '@/constants/api';
 import { types, relations, typeRelations } from '../db';
-import { properties } from '../db/properties';
 import { records } from '../db/record/records';
 
 export const handlers = [
@@ -47,15 +46,6 @@ export const handlers = [
     return HttpResponse.json({ totalPage, result });
   }),
 
-  http.get(`${TYPE_SERVICE_URL}/:typeId/properties`, async ({ params }) => {
-    const typeId = params.typeId;
-
-    const typeProperty = properties.find((property) => property.id === typeId) || properties[0];
-
-    return HttpResponse.json(typeProperty, {
-      status: 200
-    });
-  }),
   http.get(`${TYPE_SERVICE_URL}/:typeId/records`, async ({ params }) => {
     const typeId = params.typeId;
 

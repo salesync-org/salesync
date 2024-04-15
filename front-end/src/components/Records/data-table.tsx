@@ -1,16 +1,11 @@
-import {
-  SortingState,
-  flexRender,
-  getCoreRowModel,
-  getSortedRowModel,
-  useReactTable
-} from '@tanstack/react-table';
+import { SortingState, flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/DataTable/table';
 import { cn } from '@/utils/utils';
 import { useState } from 'react';
 
-interface DataTableProps<TData, TValue> {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+interface DataTableProps<TData, _TValue> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   columns: any;
   data: TData[];

@@ -5,7 +5,6 @@ import Button from '@/components/ui/Button/Button';
 import Icon from '@/components/ui/Icon/Icon';
 import Panel from '@/components/ui/Panel/Panel';
 import TextInput from '@/components/ui/TextInput/TextInput';
-import { tableButtons } from '@/constants/layout/table-buttons';
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 import { Type } from '@/type';
 import icon from 'assets/type-icon/lead_icon.png';
@@ -13,13 +12,13 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 interface RecordSectionProps {
-  type: Type | null;
+  type: Type | null | undefined;
 }
 
 const RecordSection = ({ type }: RecordSectionProps) => {
   const { showModal } = useGlobalModalContext();
   const { typeId } = useParams();
-  const [recordFilter, setRecordFilter] = useState<RecordsFilter>({
+  const [recordFilter] = useState<RecordsFilter>({
     searchTerm: '',
     isAsc: false,
     propertyName: null,
@@ -30,8 +29,6 @@ const RecordSection = ({ type }: RecordSectionProps) => {
   if (!type || !typeId) {
     return null;
   }
-
-  const tableButton = tableButtons.find((button) => button.name === type.name);
 
   return (
     <Panel className='m-0 h-full overflow-hidden p-4'>

@@ -6,6 +6,7 @@ import TypeTable from '../ui/Table/TypeTable';
 import { Button } from '../ui/Button';
 import { DropDown, DropDownItem, TextInput } from '@/components/ui';
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
+import { Type } from '@/type';
 
 const TypeCard = ({ type }: { type: Type }) => {
   const colorName = type.background_color;

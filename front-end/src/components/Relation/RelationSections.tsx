@@ -1,3 +1,4 @@
+import { RelationResponse } from '@/type';
 import RelationSection from './RelationSection';
 
 type RelationSectionsProp = {

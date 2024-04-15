@@ -1,3 +1,4 @@
+import { SignUpInfo, User } from '@/type';
 import instance from './axiosConfig';
 
 const URL = `${import.meta.env.VITE_AUTHENTICATION_HOST}/api/v1`;

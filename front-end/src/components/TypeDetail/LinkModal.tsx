@@ -13,6 +13,7 @@ import ErrorText from '../ui/ErrorText/ErrorText';
 import { useParams } from 'react-router-dom';
 import linkApi from '@/api/link';
 import { useQueryClient } from 'react-query';
+import { TypeRelation } from '@/type';
 
 const LinkModalSchema = z.object({
   sourceLabel: z.string().min(1, "Can't be empty"),
@@ -30,7 +31,7 @@ interface LinkModalProp {
 const INIT_SELECTED = 'Select a value';
 
 const LinkModal = ({ isOpen, setIsOpen, currentLink }: LinkModalProp) => {
-  const [selectedRelation, _] = useState(INIT_SELECTED);
+  const [selectedRelation] = useState(INIT_SELECTED);
   const [selectedType, setSelectedType] = useState(INIT_SELECTED);
   const [loading, setLoading] = useState(false);
   const { types = [], isLoading: isTypesLoading } = useType();

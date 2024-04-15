@@ -1,3 +1,4 @@
+import { Type } from '@/type';
 import Icon from '../Icon/Icon';
 import { Table, TableHeader, TableRow, TableBody, TableCell } from './Table';
 

@@ -6,10 +6,11 @@ import { useParams } from 'react-router-dom';
 import { Button, Icon } from '../ui';
 import { useToast } from '../ui/use-toast';
 import Stages from './Stages';
+import { Stage as StageType } from '@/type';
 
 interface StageSectionProps {
   stage: {
-    stages: Stage[];
+    stages: StageType[];
     currentStage: string;
   };
 }

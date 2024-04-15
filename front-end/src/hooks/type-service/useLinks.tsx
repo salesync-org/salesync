@@ -1,4 +1,5 @@
 import linkApi from '@/api/link';
+import { TypeRelation } from '@/type';
 import { useQuery } from 'react-query';
 
 const useLink = (typeId: string) => {

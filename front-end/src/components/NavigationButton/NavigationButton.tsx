@@ -3,6 +3,7 @@ import { Grip } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { DropDownList, Icon } from '../ui';
+import { LayoutOrder } from '@/type';
 
 const NavigationButton = () => {
   const [open, setOpen] = useState(false);
@@ -20,7 +21,7 @@ const NavigationButton = () => {
         {open ? <Grip /> : <Grip />}
       </span>
       <DropDownList className='top-[40px] w-[320px] py-3' open={open} onClose={() => setOpen(false)}>
-        {layoutOrders.map((layoutOrder) => {
+        {layoutOrders.map((layoutOrder: LayoutOrder) => {
           return (
             <Link
               key={layoutOrder.name}

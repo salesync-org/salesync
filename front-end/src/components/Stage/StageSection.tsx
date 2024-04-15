@@ -1,12 +1,11 @@
-import recordApi from '@/api/record';
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
+import { Stage as StageType } from '@/type';
 import { useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { Button, Icon } from '../ui';
 import { useToast } from '../ui/use-toast';
 import Stages from './Stages';
-import { Stage as StageType } from '@/type';
 
 interface StageSectionProps {
   stage: {
@@ -55,7 +54,7 @@ const StageSection = ({ stage: { stages, currentStage }, updateRecord }: StageSe
 
     return updatedRecord;
   };
-  const handleUpdateStage = async (companyName: string, recordId: string, stageId: string) => {
+  const handleUpdateStage = async (recordId: string, stageId: string) => {
     const res = await updateRecord(handleUpdate);
 
     if (res) {
@@ -82,7 +81,7 @@ const StageSection = ({ stage: { stages, currentStage }, updateRecord }: StageSe
   const handleMarkStatusAsCurrent = async () => {
     try {
       setLoading(true);
-      await handleUpdateStage(companyName, recordId, stageIdChosen);
+      await handleUpdateStage(recordId, stageIdChosen);
     } catch (error) {
       console.error(error);
       toast({
@@ -107,7 +106,7 @@ const StageSection = ({ stage: { stages, currentStage }, updateRecord }: StageSe
 
       const newStage = updatedStages[findIndex + 1];
 
-      await handleUpdateStage(companyName, recordId, newStage.id);
+      await handleUpdateStage(recordId, newStage.id);
     } catch (error) {
       console.error(error);
       toast({

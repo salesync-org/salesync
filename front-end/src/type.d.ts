@@ -172,14 +172,15 @@ type RecordType = {
 type TypeProperty = {
   id: string;
   name: string;
+  current_stage_id?: string;
   template?: string;
   properties: PropertyElement[];
 };
 
 type PropertyElement = {
   id: string;
-  name: string;
-  label: string;
+  property_name: string;
+  property_label: string;
   sequence: number;
   property: PropertyProperty;
   default_value: string;

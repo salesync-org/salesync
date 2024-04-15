@@ -11,17 +11,12 @@ import { DataTable } from './data-table';
 
 interface RecordTableProps {
   typeId: string;
+  recordFilter: RecordsFilter;
 }
 
-const RecordTable = ({ typeId }: RecordTableProps) => {
+const RecordTable = ({ typeId, recordFilter }: RecordTableProps) => {
   const { companyName = '' } = useParams();
-  const recordFilter: RecordsFilter = {
-    searchTerm: '',
-    isAsc: false,
-    propertyName: null,
-    currentPage: 1,
-    pageSize: 5
-  };
+
   const { data: recordData, isLoading: isRecordLoading } = useRecords(companyName, typeId, recordFilter);
   const { data: propertyData, isLoading: isPropertyLoading } = useProperties(companyName, typeId);
 

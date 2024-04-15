@@ -1,27 +1,55 @@
-import { Button, DropDown, DropDownItem, Modal, ModalFooter, Panel, PrimaryButton, TextInput } from '@/components/ui';
+import {
+  Button,
+  DropDown,
+  DropDownItem,
+  Item,
+  Modal,
+  ModalFooter,
+  Panel,
+  PrimaryButton,
+  TextInput
+} from '@/components/ui';
 import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
+import { useToast } from '@/components/ui/use-toast';
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 import useProperties from '@/hooks/type-service/useProperties';
+import useStages from '@/hooks/type-service/useStage';
+import { PropertyElement, Stage } from '@/type';
+import { Controller, useForm } from 'react-hook-form';
 import { useLocation } from 'react-router-dom';
 import ErrorToaster from '../Error/ErrorToaster';
-import { PropertyElement, Stage } from '@/type';
-import useStages from '@/hooks/type-service/useStage';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useToast } from '@/components/ui/use-toast';
 import recordApi from '@/api/record';
+import { useQueryClient } from 'react-query';
+import { cn } from '@/utils/utils';
+import { useState } from 'react';
 
 const RecordModal = () => {
-  const [stage, setStage] = useState('');
-  const { handleSubmit, register } = useForm();
+  const {
+    handleSubmit,
+    register,
+    control,
+    reset,
+    formState: { isSubmitting }
+  } = useForm();
+  const [isResetForm, setIsResetForm] = useState(false);
   const { hideModal, store } = useGlobalModalContext();
   const { modalType, modalProps } = store;
-  const { typeId } = modalProps;
+  const {
+    typeId,
+    recordFilter = {
+      searchTerm: '',
+      isAsc: false,
+      propertyName: null,
+      currentPage: 1,
+      pageSize: 5
+    }
+  } = modalProps;
   const location = useLocation();
   const companyName = location.pathname.split('/')[1] || '';
   const { data: typeProperty, isLoading: isPropertiesLoading } = useProperties(companyName, typeId);
   const { data: stages, isLoading: isStagesLoading } = useStages(companyName, typeId);
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   if (!typeId) {
     return null;
@@ -34,12 +62,14 @@ const RecordModal = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
     try {
-      if (!data['Name']) {
+      console.log(data);
+      if (!data['Name'] || data['stage'] === '') {
         throw new Error('Name is required');
       }
 
       const req = {
         record_name: data['Name'],
+        stage_id: data.stage,
         properties: typeProperty.properties.map((property) => {
           return {
             id: property.id,
@@ -50,8 +80,6 @@ const RecordModal = () => {
         })
       };
 
-      console.log(req);
-
       const res = await recordApi.createRecord(companyName, typeId, req);
 
       if (res) {
@@ -59,7 +87,15 @@ const RecordModal = () => {
           title: 'Success',
           description: 'Create record successfully'
         });
-        hideModal();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        queryClient.setQueryData(['records', typeId, recordFilter], (oldData: any) => {
+          console.log(oldData);
+          return {
+            ...oldData,
+            records: [res, ...oldData.records]
+          };
+        });
+        isResetForm ? reset() : hideModal();
       }
     } catch (error) {
       console.error(error);
@@ -84,7 +120,10 @@ const RecordModal = () => {
         <form
           id='create-record-form'
           onSubmit={handleSubmit(onSubmit)}
-          className='-z-1 absolute bottom-2 left-2 right-2 top-20 overflow-x-hidden  pb-32  '
+          className={cn(
+            '-z-1 absolute bottom-2 left-2 right-2 top-20 overflow-x-hidden pb-32',
+            isSubmitting && 'pointer-events-none'
+          )}
         >
           <div className='flex w-full flex-col place-content-center gap-2   p-6'>
             {typeProperty ? (
@@ -106,23 +145,40 @@ const RecordModal = () => {
               <div>loading</div>
             )}
             {stages && stages?.length > 0 && (
-              <DropDown header='Status' value={stage} onValueChange={setStage}>
-                {stages.map((stage: Stage) => (
-                  <DropDownItem title={stage.name} value={stage.id} key={stage.id}>
-                    {stage.name}
-                  </DropDownItem>
-                ))}
-              </DropDown>
+              <Controller
+                control={control}
+                name='stage'
+                render={({ field: { onChange, value } }) => (
+                  <DropDown header='Status' value={value} onValueChange={onChange}>
+                    {stages.map((stage: Stage) => (
+                      <DropDownItem title={stage.name} value={stage.id} key={stage.id}>
+                        <Item title={stage.name}></Item>
+                      </DropDownItem>
+                    ))}
+                  </DropDown>
+                )}
+              />
             )}
           </div>
         </form>
       )}
-      <Panel className='absolute bottom-0 left-0 right-0 m-0   -mt-4 flex h-10 items-center justify-center bg-gray-100 bg-opacity-90 px-3  py-10 shadow-inner'>
+      <Panel className='absolute bottom-0 left-0 right-0 m-0 -mt-4 flex h-10 items-center justify-center bg-gray-100 bg-opacity-90 px-3  py-10 shadow-inner'>
         <ModalFooter className='m-0 '>
-          <Button onClick={hideModal}>Cancel</Button>
-          <Button onClick={() => {}}>Save & New</Button>
+          <Button onClick={hideModal} disabled={isStagesLoading}>
+            Cancel
+          </Button>
+          <Button
+            form='create-record-form'
+            type='submit'
+            onClick={() => {
+              setIsResetForm(true);
+            }}
+            disabled={isStagesLoading}
+          >
+            Save & New
+          </Button>
 
-          <PrimaryButton form='create-record-form' type='submit'>
+          <PrimaryButton form='create-record-form' type='submit' disabled={isStagesLoading}>
             Save
           </PrimaryButton>
         </ModalFooter>

@@ -1,3 +1,4 @@
+import { RecordsFilter } from '@/api/record';
 import RecordTable from '@/components/Records/RecordTable';
 import { ButtonGroup, DropDown } from '@/components/ui';
 import Button from '@/components/ui/Button/Button';
@@ -8,6 +9,7 @@ import { tableButtons } from '@/constants/layout/table-buttons';
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 import { Type } from '@/type';
 import icon from 'assets/type-icon/lead_icon.png';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 interface RecordSectionProps {
@@ -17,6 +19,13 @@ interface RecordSectionProps {
 const RecordSection = ({ type }: RecordSectionProps) => {
   const { showModal } = useGlobalModalContext();
   const { typeId } = useParams();
+  const [recordFilter, setRecordFilter] = useState<RecordsFilter>({
+    searchTerm: '',
+    isAsc: false,
+    propertyName: null,
+    currentPage: 1,
+    pageSize: 5
+  });
 
   if (!type || !typeId) {
     return null;
@@ -44,7 +53,7 @@ const RecordSection = ({ type }: RecordSectionProps) => {
             intent='normal'
             zoom={false}
             onClick={() => {
-              showModal(MODAL_TYPES.CREATE_RECORD_MODAL, { typeId });
+              showModal(MODAL_TYPES.CREATE_RECORD_MODAL, { typeId, recordFilter });
             }}
           >
             New
@@ -94,7 +103,7 @@ const RecordSection = ({ type }: RecordSectionProps) => {
         </div>
       </section>
       <div className='-mx-4 mt-4'>
-        <RecordTable typeId={typeId} />
+        <RecordTable typeId={typeId} recordFilter={recordFilter} />
       </div>
     </Panel>
   );

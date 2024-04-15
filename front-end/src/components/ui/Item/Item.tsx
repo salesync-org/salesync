@@ -11,6 +11,8 @@ interface ItemProps extends React.HTMLAttributes<HTMLDivElement> {
   additionalInfo?: string;
   icon?: React.ReactNode;
   selected?: boolean;
+  onKeyDown?: React.DOMAttributes<HTMLDivElement>['onKeyDown'];
+  onClick?: () => void;
   restProps?: React.HTMLAttributes<HTMLDivElement>;
 }
 
@@ -21,11 +23,20 @@ const Item: React.FC<ItemProps> = ({
   subTitle,
   selected = false,
   additionalInfo,
+  onKeyDown,
+  onClick,
   icon,
   ...restProps
 }) => {
   return (
-    <div title={title}>
+    <div
+      title={title}
+      onKeyDown={(e) => {
+        if (onClick && !onKeyDown && e.key === 'Enter') {
+          onClick();
+        }
+      }}
+    >
       <a className={cn(`flex rounded-sm`, className)} href={href} tabIndex={0} title={title}>
         <div
           className={cn(

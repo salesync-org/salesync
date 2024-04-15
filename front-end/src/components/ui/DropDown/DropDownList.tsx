@@ -36,12 +36,64 @@ const List = ({
   }, [open]);
 
   const handleTabKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    console.log('event.key: ', event.key);
     if (event.key === 'Enter') {
-      handleOptionClick(event.target as HTMLElement);
+      const options = menuRef.current?.querySelectorAll('a');
+      if (options) {
+        console.log('href');
+        console.log(options![0].getAttribute('href'));
+        if (
+          options![0].getAttribute('href') !== 'javascript:void(0)' &&
+          options![0].getAttribute('href') !== undefined &&
+          options![0].getAttribute('href') !== null &&
+          options![0].getAttribute('href') !== '#'
+        ) {
+          handleOptionClick(options![0] as HTMLAnchorElement);
+        }
+      }
+    }
+
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      isOpen && setIsOpen(false);
+    }
+
+    if (event.key === 'Tab') {
+      event.preventDefault();
+      const options = menuRef.current?.querySelectorAll('a');
+      if (options && options.length > 0) {
+        const currentIndex = Array.from(options).findIndex((option) => option === document.activeElement);
+        const nextIndex = currentIndex === options.length - 1 ? 0 : currentIndex + 1;
+        options[nextIndex]?.focus();
+      }
+    }
+
+    if (event.key === 'ArrowUp') {
+      // Handle arrow up logic here
+      const options = menuRef.current?.querySelectorAll('a');
+      if (options && options.length > 0) {
+        const currentIndex = Array.from(options).findIndex((option) => option === document.activeElement);
+        const nextIndex = currentIndex === 0 ? options.length - 1 : currentIndex - 1;
+        options[nextIndex]?.focus();
+      }
+    }
+    if (event.key === 'ArrowDown') {
+      const options = menuRef.current?.querySelectorAll('a');
+      if (options && options.length > 0) {
+        const currentIndex = Array.from(options).findIndex((option) => option === document.activeElement);
+        const nextIndex = currentIndex === options.length - 1 ? 0 : currentIndex + 1;
+        options[nextIndex]?.focus();
+      }
     }
   };
 
   const handleOptionClick = (option: HTMLElement) => {
+    if (option instanceof HTMLInputElement) {
+      onItemClick?.(option);
+      setIsOpen(false);
+      return;
+    }
+
     let target = option as HTMLElement;
     while (target) {
       if (target.parentNode instanceof HTMLDivElement) {
@@ -79,8 +131,6 @@ const List = ({
           style={{ maxHeight: calculateMaxSize(), overflow: 'auto' }}
           className={cn(
             'absolute z-[50] h-fit overflow-x-hidden rounded-xl border-[2px] px-2 transition-all duration-100 ease-in-out',
-            align === 'left' && 'left-0',
-            align === 'right' && 'right-0',
             divide ? 'divide divide-y-2 divide-button-stroke-light *:py-2 dark:divide-button-stroke-dark' : 'py-2',
             'bg-button-background-light dark:bg-button-background-dark',
             'border-button-stroke-light/60 dark:border-button-stroke-dark/60',

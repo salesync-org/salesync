@@ -1,4 +1,3 @@
-import axios from 'axios';
 import instance from './axiosConfig';
 // import { S3 } from 'aws-sdk';
 

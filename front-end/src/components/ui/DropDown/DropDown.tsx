@@ -1,6 +1,7 @@
 import React, { Dispatch, useEffect, useRef, useState } from 'react';
 import { Button, Icon, DropDownList } from '@/components/ui';
 import { cn } from '@/utils/utils';
+import { ChevronRight, ChevronDown } from 'lucide-react';
 import { textErrorClassName } from '../ErrorText/ErrorText';
 
 interface DropdownButtonProps {
@@ -26,7 +27,7 @@ const DropDown: React.FC<DropdownButtonProps> = ({
   onValueChange = () => {},
   defaultValue = 'Select a value',
   header,
-  prefixIcon = <Icon name='expand_more' />,
+  prefixIcon,
   suffixIcon = null,
   isError = false,
   setError,
@@ -97,7 +98,13 @@ const DropDown: React.FC<DropdownButtonProps> = ({
               selectedOption != '' && value != '' && 'gap-4'
             )}
           >
-            {prefixIcon}
+            {prefixIcon ?? (
+              <ChevronRight
+                name='expand_more'
+                size={'1rem'}
+                className={cn('origin-center transition-all duration-150', `${isOpen && 'rotate-90'}`)}
+              />
+            )}
             <p className={cn('w-full truncate text-left', isError && textErrorClassName)}>
               {selectedOption ? selectedOption : value}
             </p>

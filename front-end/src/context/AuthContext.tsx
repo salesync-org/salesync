@@ -1,6 +1,5 @@
 import auth from '@/api/auth';
 import { useState, createContext, useEffect, Dispatch, useCallback } from 'react';
-import { set } from 'react-hook-form';
 
 type AuthContext = {
   user: User | null;

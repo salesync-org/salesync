@@ -33,9 +33,6 @@ const ObjectManager = () => {
     return searchParams.get('page') || '1';
   });
 
-  // Save access token to localStorage (for testing purpose only)
-  localStorage.setItem('access_token', SAMPLE_ACCESS_TOKEN);
-
   useEffect(() => {
     // Fetch sample data
     const fetchData = async () => {

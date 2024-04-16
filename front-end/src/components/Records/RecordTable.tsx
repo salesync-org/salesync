@@ -28,14 +28,15 @@ const RecordTable = ({ typeId, recordFilter }: RecordTableProps) => {
     return <ErrorToaster errorMessage='Error loading table ' />;
   }
 
-  const tableData = formatRecords(recordData.records);
-  const columns = createColumns(companyName, propertyData!.properties);
+  const records = recordData.records;
+  const tableData = formatRecords(records);
+  const columns = createColumns(companyName, propertyData!.properties, records);
 
   return <div className='px-4 py-2'>{<DataTable columns={columns} data={tableData} />}</div>;
 };
 
 const RecordTableSkeleton = () => {
-  const height = '20px';
+  const height = '40px';
   const borderRadius = '4px';
   return (
     <div className='space-y-1 px-4 py-2'>

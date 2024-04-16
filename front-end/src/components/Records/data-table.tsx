@@ -31,7 +31,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow
               key={headerGroup.id}
-              className='cursor-pointer bg-background-light transition-all dark:bg-background-dark'
+              className='h-[40px] cursor-pointer bg-background-light transition-all dark:bg-background-dark'
             >
               {headerGroup.headers.map((header, index) => {
                 return (
@@ -55,7 +55,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
-                className='group h-8 transition-all hover:bg-button-background-hover dark:hover:bg-button-background-hover-dark'
+                className='group h-8 h-[40px] transition-all hover:bg-button-background-hover dark:hover:bg-button-background-hover-dark'
                 data-state={row.getIsSelected() && 'selected'}
               >
                 {row.getVisibleCells().map((cell) => (

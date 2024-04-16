@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import recordApi from '@/api/record';
 import { Button, Icon, TextInput } from '@/components/ui';
-import { PropertyElement, TypeProperty } from '@/type';
+import { useToast } from '@/components/ui/use-toast';
 import { Pencil } from 'lucide-react';
+import { ChangeEvent, useState } from 'react';
+import { useQueryClient } from 'react-query';
 import { Link } from 'react-router-dom';
 import { cn } from './utils';
-import { ChangeEvent, useState } from 'react';
-import { useToast } from '@/components/ui/use-toast';
-import recordApi from '@/api/record';
 
 export const createColumns = (companyName: string, properties: any[], records: any[]) => {
   const columns: any = [
@@ -65,6 +65,7 @@ export const createColumns = (companyName: string, properties: any[], records: a
         const [isLoading, setIsLoading] = useState(false);
         const [value, setValue] = useState(row.getValue(property.name));
         const { toast } = useToast();
+        const queryClient = useQueryClient();
 
         const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
           setValue(e.target.value);
@@ -100,6 +101,7 @@ export const createColumns = (companyName: string, properties: any[], records: a
               });
 
               setCurrentValue(value);
+              queryClient.invalidateQueries('record', findRecord.id);
             }
           } catch (error: any) {
             console.error(error);
@@ -118,7 +120,7 @@ export const createColumns = (companyName: string, properties: any[], records: a
               <form onSubmit={handleUpdate} className='relative w-full'>
                 <div className='absolute right-0 z-10 flex h-full'>
                   <Button
-                    className='h-full'
+                    className='h-full select-none'
                     onClick={() => {
                       setIsUpdating(false);
                       setValue(row.getValue(property.name));

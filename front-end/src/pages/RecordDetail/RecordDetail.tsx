@@ -7,10 +7,13 @@ import StageSection from '@/components/Stage/StageSection';
 import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
 import useRecord from '@/hooks/record-service/useRecord';
 import useStages from '@/hooks/type-service/useStage';
-import { Stage } from '@/type';
+import { LayoutOrder, Stage } from '@/type';
 import { formatRecords } from '@/utils/utils';
 import { useParams } from 'react-router-dom';
 import recordApi from '@/api/record';
+import NavigationButton from '@/components/NavigationButton/NavigationButton';
+import useAuth from '@/hooks/useAuth';
+import RecordTabs from '@/components/Records/RecordTabs';
 
 const RecordDetail = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -20,11 +23,13 @@ const RecordDetail = () => {
   const { data: record, isLoading: isRecordLoading } = useRecord(companyName, recordId);
   const { data: stages, isLoading: isStagesLoading } = useStages(companyName, record?.source_record?.type.id);
 
+  const { user } = useAuth();
+
   if (isRecordLoading || isStagesLoading) {
     return <LoadingSpinner />;
   }
 
-  if (!record || !stages) {
+  if (!record || !stages || !user) {
     return null;
   }
 
@@ -60,89 +65,97 @@ const RecordDetail = () => {
 
     return res;
   };
+
+  const types =
+    user.settings.layout_order.find((layoutOrder: LayoutOrder) => layoutOrder.name === 'Sales')?.types ?? [];
   return (
     <div className='flex flex-col'>
-      <Panel className='flex flex-row items-center justify-between p-2'>
-        <div className='flex flex-row items-center'>
-          <img
-            className='mx-2 h-[32px] w-[32px] rounded-sm bg-blue-500'
-            src='https://momentum-enterprise-925.my.salesforce.com/img/icon/t4v35/standard/lead_120.png'
-            alt=''
-          />
-          <div className='flex flex-col'>
-            <div className=''>{record.source_record.type.name}</div>
-            <div className='text-xl font-bold'>{record.source_record.name}</div>
+      <section className='fixed left-0 right-0 z-50 flex h-[40px] items-center bg-panel px-6 dark:bg-panel-dark'>
+        <NavigationButton />
+        <h2 className='select-none pl-6 pr-6 leading-6'>Sales</h2>
+        <RecordTabs tabs={types} name='salesTabs' currentTab={record.source_record.type.name} />
+        <Icon name='edit' className='ml-auto' />
+      </section>
+      <section className='pt-12'>
+        <Panel className='flex flex-row items-center justify-between p-2 '>
+          <div className='flex flex-row items-center'>
+            <img
+              className='mx-2 h-[32px] w-[32px] rounded-sm bg-blue-500'
+              src='https://momentum-enterprise-925.my.salesforce.com/img/icon/t4v35/standard/lead_120.png'
+              alt=''
+            />
+            <div className='flex flex-col'>
+              <div className=''>{record.source_record.type.name}</div>
+              <div className='text-xl font-bold'>{record.source_record.name}</div>
+            </div>
           </div>
-        </div>
-        <ButtonGroup>
-          <Button intent='normal' zoom={false}>
-            Convert
-          </Button>
-          <Button intent='normal' zoom={false}>
-            Change owner
-          </Button>
+          <ButtonGroup>
+            <Button intent='normal' zoom={false}>
+              Convert
+            </Button>
+            <Button intent='normal' zoom={false}>
+              Change owner
+            </Button>
 
-          {/* <div>
-          <DropDownList align={'left'}>
-            <Item title='Delete' value={''} />
-          </DropDownList>
-        </div> */}
+            {/* <div>
+            <DropDownList align={'left'}>
+              <Item title='Delete' value={''} />
+            </DropDownList>
+          </div> */}
 
-          <Button intent='normal' zoom={false}>
-            Edit
-          </Button>
+            <Button intent='normal' zoom={false}>
+              Edit
+            </Button>
 
-          <DropDownList
-            open={isMenuOpen}
-            onClose={() => {
-              setMenuOpen(false);
-            }}
-            align='right'
-            className='right-[.25rem] top-[3rem] mt-0 w-80'
-            divide={false}
-          >
-            <Item title='New Event' />
-            <Item title='Log a Call' />
-            <Item title='New Task' />
-            <Item title='Delete' />
-          </DropDownList>
-          <Button zoom={false} intent='normal' className='p-0' onClick={() => setMenuOpen(true)}>
-            <Icon name='arrow_drop_down' className='text-3xl'></Icon>
-          </Button>
-        </ButtonGroup>
-      </Panel>
-
-      {/* record contain  */}
-      <div className='grid grid-cols-4 md:grid-cols-4'>
-        <Panel className='col-span-1 mr-0 h-fit p-4'>
-          {formattedRecord &&
-            Object.keys(formattedRecord).map((key) => {
-              if (key === 'id') return null;
-              return <InputProperty name={key} value={formattedRecord[key]} />;
-            })}
+            <DropDownList
+              open={isMenuOpen}
+              onClose={() => {
+                setMenuOpen(false);
+              }}
+              align='right'
+              className='right-[.25rem] top-[3rem] mt-0 w-80'
+              divide={false}
+            >
+              <Item title='New Event' />
+              <Item title='Log a Call' />
+              <Item title='New Task' />
+              <Item title='Delete' />
+            </DropDownList>
+            <Button zoom={false} intent='normal' className='p-0' onClick={() => setMenuOpen(true)}>
+              <Icon name='arrow_drop_down' className='text-3xl'></Icon>
+            </Button>
+          </ButtonGroup>
         </Panel>
 
-        <section className='col-span-2'>
-          {stages ? (
-            <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
-              <div className='px-4'>
-                <StageSection stage={newStages} updateRecord={updateRecord} />
-              </div>
-            </Panel>
-          ) : (
-            <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
-              <div></div>
-            </Panel>
-          )}
-          <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
-            <div></div>
+        {/* record contain  */}
+        <div className='grid grid-cols-4 md:grid-cols-4'>
+          <Panel className='col-span-1 mr-0 h-fit p-4'>
+            {formattedRecord &&
+              Object.keys(formattedRecord).map((key) => {
+                if (key === 'id') return null;
+                return <InputProperty name={key} value={formattedRecord[key]} />;
+              })}
           </Panel>
-        </section>
 
-        <section className='col-span-1'>
-          <RelationSections relations={record.relations} />
-        </section>
-      </div>
+          <section className='col-span-2'>
+            {stages && stages.length > 0 ? (
+              <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
+                <div className='px-4'>
+                  <StageSection stage={newStages} updateRecord={updateRecord} />
+                </div>
+              </Panel>
+            ) : (
+              <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
+                <div></div>
+              </Panel>
+            )}
+          </section>
+
+          <section className='col-span-1'>
+            <RelationSections relations={record.relations} />
+          </section>
+        </div>
+      </section>
     </div>
   );
 };

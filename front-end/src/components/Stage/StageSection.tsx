@@ -46,8 +46,6 @@ const StageSection = ({ stage: { stages, currentStage }, updateRecord }: StageSe
     [lastStage.id, lastStage.name, stages]
   );
 
-  const { companyName = '' } = useParams();
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleUpdate = (oldRecord: any) => {
     const updatedRecord = { ...oldRecord, current_stage_id: stageIdChosen };

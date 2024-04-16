@@ -39,11 +39,20 @@ type Property = {
   options?: string[];
 };
 
-type PropertyField = {
+type PropertyResponse = {
   id: string;
   name: string;
+  propertyFields: PropertyField[] | null;
+};
+
+type PropertyField = {
+  id: string;
   label: string;
-  value: string
+  item_value: string | null;
+  is_required: boolean;
+  default_value: string | null;
+  is_key: boolean;
+  field: Field | null;
 }
 
 type TypePropertyField = {
@@ -60,11 +69,9 @@ type Relation = {
 };
 
 type Field = {
-  id: string;
-  name: string;
-  label?: string;
-  defaultValue?: string;
-  values?: string[];
+  id: string,
+  input_type: string,
+  is_multiple_value: boolean
 };
 
 type NewUser = {

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -24,5 +25,10 @@ public class PropertyController {
     @GetMapping(Route.Property.GET_PROPERTY)
     public ResponseEntity<Property> getProperty(@PathVariable UUID propertyId) {
         return ResponseEntity.ok(propertyService.getProperty(propertyId));
+    }
+
+    @GetMapping(Route.Property.PROPERTY_ROUTE)
+    public ResponseEntity<List<Property>> getAllProperties() {
+        return ResponseEntity.ok(propertyService.getAllProperties());
     }
 }

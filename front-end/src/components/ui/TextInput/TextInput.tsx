@@ -62,6 +62,7 @@ const TextInput: React.FC<TextInputProps> = ({
           disabled={disabled}
           onChange={onChange}
           {...register(name)}
+          name={name}
           {...restProps}
         />
         <div className='relative flex h-full items-center justify-start rounded px-4'>

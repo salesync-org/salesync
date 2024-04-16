@@ -57,49 +57,53 @@ const properties: Property[] = [
 ];
 
 type PropertyData = {
-  typeId: string;
-  propertyId: string;
+  type_id: string;
+  property_id: string;
 };
 
 type PropertyManagerProps = PropertyData & {
+  propertyList: PropertyResponse[];
   updateFields: (fields: Partial<PropertyData>) => void;
 };
 
-const PropertyManager = ({ typeId, propertyId, updateFields }: PropertyManagerProps) => {
-  const { companyName = '' } = useParams();
+const PropertyManager = ({ type_id, property_id: propertyId, propertyList, updateFields }: PropertyManagerProps) => {
+  // const { companyName = '' } = useParams();
   return (
-    <Table>
-      <TableHeader>
-        <TableRow className='grid grid-cols-12'>
-          <TableCell className='col-span-4 font-semibold md:col-span-3'>Data type</TableCell>
-          <TableCell className='col-span-8 text-left font-semibold md:col-span-3'>Description</TableCell>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {properties.map((property, index) => {
-          return (
-            <TableRow key={property.name} className='grid grid-cols-12'>
-              <TableCell className='col-span-4 flex items-center gap-2 md:col-span-3'>
-                <input
-                  type='radio'
-                  name='propertyManager'
-                  id={'propertyManager' + property.name}
-                  className='size-5'
-                  onChange={(e) => {
-                    updateFields({ propertyId: property.id });
-                  }}
-                  checked={property.id === propertyId}
-                />
-                <label htmlFor={'propertyManager' + property.name} className='font-md'>
-                  {property.name}
-                </label>
-              </TableCell>
-              <TableCell className='col-span-8 line-clamp-3 text-sm md:col-span-6'>{descriptions[index]}</TableCell>
-            </TableRow>
-          );
-        })}
-      </TableBody>
-    </Table>
+    <>
+      <input value={type_id} name='type_id' className='hidden'></input>
+      <Table>
+        <TableHeader>
+          <TableRow className='grid grid-cols-12'>
+            <TableCell className='col-span-4 font-semibold md:col-span-3'>Data type</TableCell>
+            <TableCell className='col-span-8 text-left font-semibold md:col-span-3'>Description</TableCell>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {propertyList.map((property, index) => {
+            return (
+              <TableRow key={property.name} className='grid grid-cols-12'>
+                <TableCell className='col-span-4 flex items-center gap-2 md:col-span-3'>
+                  <input
+                    type='radio'
+                    name='property_id'
+                    id={'propertyManager' + property.name}
+                    className='size-5'
+                    onChange={(_) => {
+                      updateFields({ property_id: property.id });
+                    }}
+                    checked={property.id === propertyId}
+                  />
+                  <label htmlFor={'propertyManager' + property.name} className='font-md'>
+                    {property.name}
+                  </label>
+                </TableCell>
+                <TableCell className='col-span-8 line-clamp-3 text-sm md:col-span-6'>{descriptions[index]}</TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </>
   );
 };
 export default PropertyManager;

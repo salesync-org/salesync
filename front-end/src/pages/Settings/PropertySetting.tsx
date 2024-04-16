@@ -1,4 +1,4 @@
-import { Button, Panel, TextInput } from '@/components/ui';
+import { Button, Panel } from '@/components/ui';
 import { cn } from '@/utils/utils';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -6,33 +6,40 @@ import { useToast } from '@/components/ui/Toast';
 import PropertyManager from './PropertyManager';
 import { useMultistepForm } from '@/hooks/useMutistepForm';
 import PropertyFieldConfig from './PropertyFieldConfig';
+import useType from '@/hooks/type-service/useType';
+import useProperty from '@/hooks/type-service/useProperty';
 
 type PropertySettingSubmitForm = {
-  typeId: string;
-  propertyId: string;
-  propertyFields: PropertyField[];
+  type_id: string;
+  property_id: string;
+  name: string;
+  label: string;
+  sequence: number;
+  default_value: string;
+  fields?: PropertyField[];
 };
 
 const PropertySetting = () => {
-  const { companyName } = useParams();
+  const { companyName, typeId } = useParams();
+  const { properties } = useProperty(companyName ?? '');
   const [data, setData] = useState<PropertySettingSubmitForm>({
-    typeId: '',
-    propertyId: '',
-    propertyFields: [
-      { id: '1', label: 'Name', name: 'name', value: '' },
-      { id: '2', label: 'DropDownValue', name: 'dropdownvalue', value: '' }
-    ]
+    type_id: typeId ?? '',
+    property_id: '',
+    name: '',
+    label: '',
+    sequence: 1,
+    default_value: ''
   });
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  function updateFields(fields: Partial<PropertySettingSubmitForm>) {
+  function updateFields(updatedFields: Partial<PropertySettingSubmitForm>) {
     setData((prev) => {
-      return { ...prev, ...fields };
+      return { ...prev, ...updatedFields };
     });
   }
   const { currentStepIndex, step, isFirstStep, isLastStep, back, next } = useMultistepForm([
-    <PropertyManager {...data} updateFields={updateFields} />,
+    <PropertyManager propertyList={properties ?? []} {...data} updateFields={updateFields} />,
     <PropertyFieldConfig {...data} updateFields={updateFields} />
   ]);
 
@@ -61,25 +68,30 @@ const PropertySetting = () => {
           </Button>
           <Button
             intent='primary'
+            disabled={!data.property_id}
             onClick={() => {
               if (currentStepIndex === 0) {
-                if (data.propertyId === '1') {
-                  setData({
-                    ...data,
-                    propertyFields: [
-                      { id: '1', label: 'Name', name: 'name', value: '' },
-                      { id: '2', label: 'Checkbox', name: 'checkboxvalue', value: '' }
-                    ]
-                  });
-                } else {
-                  setData({
-                    ...data,
-                    propertyFields: [
-                      { id: '1', label: 'Name', name: 'name', value: '' },
-                      { id: '2', label: 'DropDownValue', name: 'dropdownvalue', value: '' }
-                    ]
-                  });
-                }
+                setData({
+                  ...data,
+                  fields: [...(properties?.find((property) => property.id === data.property_id)?.propertyFields ?? [])]
+                });
+                // if (data.property_id === '1') {
+                //   setData({
+                //     ...data,
+                //     fields: [
+                //       { id: '1', label: 'Name', name: 'name', value: '' },
+                //       { id: '2', label: 'Checkbox', name: 'checkboxvalue', value: '' }
+                //     ]
+                //   });
+                // } else {
+                //   setData({
+                //     ...data,
+                //     fields: [
+                //       { id: '1', label: 'Name', name: 'name', value: '' },
+                //       { id: '2', label: 'DropDownValue', name: 'dropdownvalue', value: '' }
+                //     ]
+                //   });
+                // }
                 next();
               }
             }}

@@ -24,13 +24,6 @@ import { cn } from '@/utils/utils';
 import { useState } from 'react';
 
 const RecordModal = () => {
-  const {
-    handleSubmit,
-    register,
-    control,
-    reset,
-    formState: { isSubmitting }
-  } = useForm();
   const [isResetForm, setIsResetForm] = useState(false);
   const { hideModal, store } = useGlobalModalContext();
   const { modalType, modalProps } = store;
@@ -42,8 +35,19 @@ const RecordModal = () => {
       propertyName: null,
       currentPage: 1,
       pageSize: 5
-    }
+    },
+    currentData = {}
   } = modalProps;
+
+  const {
+    handleSubmit,
+    register,
+    control,
+    reset,
+    formState: { isSubmitting }
+  } = useForm({
+    defaultValues: currentData
+  });
   const location = useLocation();
   const companyName = location.pathname.split('/')[1] || '';
   const { data: typeProperty, isLoading: isPropertiesLoading } = useProperties(companyName, typeId);
@@ -70,7 +74,8 @@ const RecordModal = () => {
       const req = {
         record_name: data['Name'],
         stage_id: data.stage,
-        properties: typeProperty.properties.map((property) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        properties: typeProperty.properties.map((property: any) => {
           return {
             id: property.id,
             property_name: property.name,

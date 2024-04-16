@@ -90,13 +90,6 @@ const RecordDetail = () => {
             </div>
           </div>
           <ButtonGroup>
-            <Button intent='normal' zoom={false}>
-              Convert
-            </Button>
-            <Button intent='normal' zoom={false}>
-              Change owner
-            </Button>
-
             {/* <div>
             <DropDownList align={'left'}>
               <Item title='Delete' value={''} />
@@ -106,7 +99,14 @@ const RecordDetail = () => {
             <Button intent='normal' zoom={false}>
               Edit
             </Button>
-
+            <Button intent='normal' zoom={false}>
+              Delete
+            </Button>
+            {record.source_record.type.name === 'Lead' && (
+              <Button intent='normal' zoom={false}>
+                Convert
+              </Button>
+            )}
             <DropDownList
               open={isMenuOpen}
               onClose={() => {

@@ -23,7 +23,7 @@ const RecordSection = ({ type }: RecordSectionProps) => {
     isAsc: false,
     propertyName: null,
     currentPage: 1,
-    pageSize: 5
+    pageSize: 30
   });
 
   if (!type || !typeId) {
@@ -31,7 +31,7 @@ const RecordSection = ({ type }: RecordSectionProps) => {
   }
 
   return (
-    <Panel className='m-0 h-full overflow-hidden p-4'>
+    <Panel className='m-0 h-[calc(100dvh-160px)] overflow-scroll p-4'>
       <section className='px flex items-center justify-between pt-4'>
         <div className='flex items-center gap-2'>
           <div className='w-fit cursor-pointer overflow-hidden rounded-sm bg-primary-color'>

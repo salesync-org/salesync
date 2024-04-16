@@ -1,3 +1,4 @@
+import recordApi from '@/api/record';
 import {
   Button,
   DropDown,
@@ -14,26 +15,20 @@ import { useToast } from '@/components/ui/use-toast';
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 import useProperties from '@/hooks/type-service/useProperties';
 import useStages from '@/hooks/type-service/useStage';
-import { PropertyElement, Stage } from '@/type';
-import { Controller, useForm } from 'react-hook-form';
-import { useLocation } from 'react-router-dom';
-import ErrorToaster from '../Error/ErrorToaster';
-import recordApi from '@/api/record';
-import { useQueryClient } from 'react-query';
+import { Stage } from '@/type';
 import { cn } from '@/utils/utils';
 import { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { useQueryClient } from 'react-query';
+import { useLocation } from 'react-router-dom';
+import ErrorToaster from '../Error/ErrorToaster';
 
 const RecordModal = () => {
-  const {
-    handleSubmit,
-    register,
-    control,
-    reset,
-    formState: { isSubmitting }
-  } = useForm();
   const [isResetForm, setIsResetForm] = useState(false);
-  const { hideModal, store } = useGlobalModalContext();
-  const { modalType, modalProps } = store;
+  const {
+    hideModal,
+    store: { modalProps, modalType }
+  } = useGlobalModalContext();
   const {
     typeId,
     recordFilter = {
@@ -42,8 +37,20 @@ const RecordModal = () => {
       propertyName: null,
       currentPage: 1,
       pageSize: 5
-    }
+    },
+    currentData = {},
+    currentRecord = {}
   } = modalProps;
+
+  const {
+    handleSubmit,
+    register,
+    control,
+    reset,
+    formState: { isSubmitting }
+  } = useForm({
+    defaultValues: currentData
+  });
   const location = useLocation();
   const companyName = location.pathname.split('/')[1] || '';
   const { data: typeProperty, isLoading: isPropertiesLoading } = useProperties(companyName, typeId);
@@ -51,6 +58,7 @@ const RecordModal = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
+  const isUpdateForm = Object.keys(currentData).length > 0;
   if (!typeId) {
     return null;
   }
@@ -60,42 +68,89 @@ const RecordModal = () => {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleCreateRecord = async (data: any) => {
+    const req = {
+      record_name: data['Name'],
+      stage_id: data.stage,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      properties: typeProperty.properties.map((property: any) => {
+        return {
+          id: property.id,
+          property_name: property.name,
+          property_label: property.label,
+          item_value: data[property.name]
+        };
+      })
+    };
+
+    const res = await recordApi.createRecord(companyName, typeId, req);
+
+    if (res) {
+      toast({
+        title: 'Success',
+        description: 'Create record successfully'
+      });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      queryClient.setQueryData(['records', typeId, recordFilter], (oldData: any) => {
+        return {
+          ...oldData,
+          records: [res, ...oldData.records]
+        };
+      });
+      isResetForm ? reset() : hideModal();
+    }
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleUpdateRecord = async (data: any) => {
+    const newRecord = JSON.parse(JSON.stringify(currentRecord));
+    const updatedRecord = {
+      ...newRecord,
+      current_stage_id: data.stage,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      properties: currentRecord.properties.map((property: any) => {
+        return {
+          id: property.id,
+          property_name: property.property_name,
+          property_label: property.property_label,
+          item_value: data[property.property_name]
+        };
+      })
+    };
+
+    const res = await recordApi.updateRecord(companyName, updatedRecord.id, updatedRecord);
+
+    if (res) {
+      toast({
+        title: 'Success',
+        description: 'Update record successfully'
+      });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      queryClient.setQueryData(['record', updatedRecord.id], (oldData: any) => {
+        return {
+          ...oldData,
+          source_record: {
+            ...oldData.source_record,
+            ...updatedRecord
+          }
+        };
+      });
+
+      hideModal();
+    }
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
     try {
-      console.log(data);
       if (!data['Name'] || data['stage'] === '') {
         throw new Error('Name is required');
       }
 
-      const req = {
-        record_name: data['Name'],
-        stage_id: data.stage,
-        properties: typeProperty.properties.map((property) => {
-          return {
-            id: property.id,
-            property_name: property.name,
-            property_label: property.label,
-            item_value: data[property.name]
-          };
-        })
-      };
-
-      const res = await recordApi.createRecord(companyName, typeId, req);
-
-      if (res) {
-        toast({
-          title: 'Success',
-          description: 'Create record successfully'
-        });
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        queryClient.setQueryData(['records', typeId, recordFilter], (oldData: any) => {
-          console.log(oldData);
-          return {
-            ...oldData,
-            records: [res, ...oldData.records]
-          };
-        });
-        isResetForm ? reset() : hideModal();
+      if (!isUpdateForm) {
+        handleCreateRecord(data);
+      } else {
+        handleUpdateRecord(data);
       }
     } catch (error) {
       console.error(error);
@@ -112,7 +167,7 @@ const RecordModal = () => {
       isOpen={modalType === MODAL_TYPES.CREATE_RECORD_MODAL}
       onClose={hideModal}
       className='h-[600px]'
-      title={typeProperty ? `New ${typeProperty.name}` : 'New'}
+      title={`${isUpdateForm ? 'Update' : 'Create'} ${typeProperty.name}`}
     >
       {isPropertiesLoading || isStagesLoading ? (
         <LoadingSpinner className='mt-10' />
@@ -127,7 +182,8 @@ const RecordModal = () => {
         >
           <div className='flex w-full flex-col place-content-center gap-2   p-6'>
             {typeProperty ? (
-              typeProperty.properties?.map((property: PropertyElement) => {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              typeProperty.properties?.map((property: any) => {
                 if (property.property.name === 'Text' || property.property.name === 'Phone')
                   return (
                     <TextInput
@@ -167,16 +223,18 @@ const RecordModal = () => {
           <Button onClick={hideModal} disabled={isStagesLoading}>
             Cancel
           </Button>
-          <Button
-            form='create-record-form'
-            type='submit'
-            onClick={() => {
-              setIsResetForm(true);
-            }}
-            disabled={isStagesLoading}
-          >
-            Save & New
-          </Button>
+          {!isUpdateForm && (
+            <Button
+              form='create-record-form'
+              type='submit'
+              onClick={() => {
+                setIsResetForm(true);
+              }}
+              disabled={isStagesLoading}
+            >
+              Save & New
+            </Button>
+          )}
 
           <PrimaryButton form='create-record-form' type='submit' disabled={isStagesLoading}>
             Save

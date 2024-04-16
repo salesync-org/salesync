@@ -11,6 +11,7 @@ const useRecords = (companyName: string, typeId: string, recordFilter: RecordsFi
     {
       refetchOnWindowFocus: false,
       staleTime: 1000 * 60 * 5,
+      refetchOnMount: 'always',
       keepPreviousData: true
     }
   );

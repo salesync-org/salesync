@@ -1,18 +1,17 @@
-import recordApi from '@/api/record';
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
-import { useMemo, useState } from 'react';
+import { Stage as StageType } from '@/type';
+import { useEffect, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { Button, Icon } from '../ui';
 import { useToast } from '../ui/use-toast';
 import Stages from './Stages';
-import { Stage as StageType } from '@/type';
 
 interface StageSectionProps {
-  stage: {
-    stages: StageType[];
-    currentStage: string;
-  };
+  stages: StageType[];
+  currentStage: string;
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  updateRecord: (handleUpdate: Function) => unknown;
 }
 
 const lastStages = {
@@ -24,9 +23,13 @@ const lastStages = {
   }
 };
 
-const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) => {
+const StageSection = ({ stages, currentStage, updateRecord }: StageSectionProps) => {
   const [stageIdChosen, setStageIdChosen] = useState(currentStage);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setStageIdChosen(currentStage);
+  }, [currentStage]);
 
   const { toast } = useToast();
   const { recordId = '' } = useParams();
@@ -45,10 +48,14 @@ const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) =>
     [lastStage.id, lastStage.name, stages]
   );
 
-  const { companyName = '' } = useParams();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleUpdate = (oldRecord: any) => {
+    const updatedRecord = { ...oldRecord, current_stage_id: stageIdChosen };
 
-  const handleUpdateStage = async (companyName: string, recordId: string, stageId: string) => {
-    const res = await recordApi.updateRecordStage(companyName, recordId, stageId);
+    return updatedRecord;
+  };
+  const handleUpdateStage = async (recordId: string, stageId: string) => {
+    const res = await updateRecord(handleUpdate);
 
     if (res) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -74,7 +81,7 @@ const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) =>
   const handleMarkStatusAsCurrent = async () => {
     try {
       setLoading(true);
-      await handleUpdateStage(companyName, recordId, stageIdChosen);
+      await handleUpdateStage(recordId, stageIdChosen);
     } catch (error) {
       console.error(error);
       toast({
@@ -99,7 +106,7 @@ const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) =>
 
       const newStage = updatedStages[findIndex + 1];
 
-      await handleUpdateStage(companyName, recordId, newStage.id);
+      await handleUpdateStage(recordId, newStage.id);
     } catch (error) {
       console.error(error);
       toast({

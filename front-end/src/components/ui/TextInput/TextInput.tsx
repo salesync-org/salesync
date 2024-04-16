@@ -5,6 +5,7 @@ import { cn } from 'utils/utils';
 interface TextInputProps {
   value?: string;
   className?: string;
+  inputClassName?: string;
   placeholder?: string;
   disabled?: boolean;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -26,6 +27,7 @@ const TextInput: React.FC<TextInputProps> = ({
   value,
   placeholder,
   className,
+  inputClassName,
   disabled = false,
   header,
   showHeader = true,
@@ -63,7 +65,8 @@ const TextInput: React.FC<TextInputProps> = ({
             'absolute h-full w-full rounded bg-transparent py-2 pr-2 placeholder:text-ellipsis placeholder:text-[13px] placeholder:text-opacity-50 focus:outline-primary',
             prefixIcon ? 'pl-10' : cn(prefixIconNode ? paddingLeft : 'pl-4'),
             postfixIcon ? 'pr-10' : 'pr-2',
-            isError && 'placeholder:font-medium placeholder:text-red-500 focus-visible:outline-red-400'
+            isError && 'placeholder:font-medium placeholder:text-red-500 focus-visible:outline-red-400',
+            inputClassName
           )}
           value={value}
           disabled={disabled}

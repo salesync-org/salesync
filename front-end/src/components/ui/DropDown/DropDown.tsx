@@ -17,6 +17,9 @@ interface DropdownButtonProps {
   setError?: Dispatch<React.SetStateAction<boolean>>;
   disabled?: boolean;
   divide?: boolean;
+  maxHeightList?: number;
+  maxWidthList?: number;
+  align?: 'left' | 'right' | null;
 }
 
 const DropDown: React.FC<DropdownButtonProps> = ({
@@ -32,7 +35,10 @@ const DropDown: React.FC<DropdownButtonProps> = ({
   setError,
   disabled,
   divide = false,
-  showHeader = true
+  showHeader = true,
+  maxHeightList = 0,
+  maxWidthList = 0,
+  align = null,
 }) => {
   // const { isOpen, setIsOpen, shoulDropUp, selectedOption, setSelectedOption, buttonContentRef, buttonRef, menuRef } =
   //   useDropDown();
@@ -40,6 +46,9 @@ const DropDown: React.FC<DropdownButtonProps> = ({
   const listRef = useRef<HTMLDivElement>(null);
   const [selectedOption, setSelectedOption] = useState(defaultValue);
   const [isOpen, setIsOpen] = useState(true);
+  let isHaveHeader;
+  if (header) isHaveHeader = true
+  else isHaveHeader = false
 
   useEffect(() => {
     function findTitleByValue(ref: React.RefObject<HTMLDivElement>, value: string): string | null {
@@ -113,6 +122,10 @@ const DropDown: React.FC<DropdownButtonProps> = ({
         }}
         open={isOpen}
         divide={divide}
+        maxHeight={maxHeightList}
+        maxWidth={maxWidthList}
+        isHaveHeader={isHaveHeader}
+        align={align}
       >
         {children}
       </DropDownList>

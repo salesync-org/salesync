@@ -14,14 +14,15 @@ import recordApi from '@/api/record';
 import NavigationButton from '@/components/NavigationButton/NavigationButton';
 import useAuth from '@/hooks/useAuth';
 import RecordTabs from '@/components/Records/RecordTabs';
+import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 
 const RecordDetail = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
-  // const leadId = useParams().leadId;
 
   const { recordId = '', companyName = '' } = useParams();
   const { data: record, isLoading: isRecordLoading } = useRecord(companyName, recordId);
   const { data: stages, isLoading: isStagesLoading } = useStages(companyName, record?.source_record?.type.id);
+  const { showModal } = useGlobalModalContext();
 
   const { user } = useAuth();
 
@@ -41,11 +42,6 @@ const RecordDetail = () => {
   });
 
   const currentStage = record.source_record.current_stage_id;
-
-  const newStages = {
-    stages: mapStages,
-    currentStage
-  };
 
   const [formattedRecord] = formatRecords([record.source_record]);
 
@@ -68,6 +64,7 @@ const RecordDetail = () => {
 
   const types =
     user.settings.layout_order.find((layoutOrder: LayoutOrder) => layoutOrder.name === 'Sales')?.types ?? [];
+
   return (
     <div className='flex flex-col'>
       <section className='fixed left-0 right-0 z-50 flex h-[40px] items-center bg-panel px-6 dark:bg-panel-dark'>
@@ -90,13 +87,17 @@ const RecordDetail = () => {
             </div>
           </div>
           <ButtonGroup>
-            {/* <div>
-            <DropDownList align={'left'}>
-              <Item title='Delete' value={''} />
-            </DropDownList>
-          </div> */}
-
-            <Button intent='normal' zoom={false}>
+            <Button
+              intent='normal'
+              zoom={false}
+              onClick={() => {
+                showModal(MODAL_TYPES.CREATE_RECORD_MODAL, {
+                  typeId: record.source_record.type.id,
+                  currentData: { ...formattedRecord, stage: currentStage },
+                  currentRecord: record.source_record
+                });
+              }}
+            >
               Edit
             </Button>
             <Button intent='normal' zoom={false}>
@@ -133,7 +134,7 @@ const RecordDetail = () => {
             {formattedRecord &&
               Object.keys(formattedRecord).map((key) => {
                 if (key === 'id') return null;
-                return <InputProperty name={key} value={formattedRecord[key]} />;
+                return <InputProperty key={key} name={key} value={formattedRecord[key]} />;
               })}
           </Panel>
 
@@ -141,7 +142,7 @@ const RecordDetail = () => {
             {stages && stages.length > 0 ? (
               <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
                 <div className='px-4'>
-                  <StageSection stage={newStages} updateRecord={updateRecord} />
+                  <StageSection stages={mapStages} currentStage={currentStage} updateRecord={updateRecord} />
                 </div>
               </Panel>
             ) : (

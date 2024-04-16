@@ -36,8 +36,10 @@ const InputProperty: React.FC<InputPropertyProps> = ({ name, value }) => {
         )}
         {name !== 'Lead Owner' && name !== 'Lead Owner' && name !== 'Lead Owner' && (
           <>
-            <div className='flex justify-start'>
-              <span className='text-sm'>{value}</span>
+            <div className='flex justify-start overflow-hidden'>
+              <span className='truncate text-sm' title={value}>
+                {value}
+              </span>
             </div>
           </>
         )}

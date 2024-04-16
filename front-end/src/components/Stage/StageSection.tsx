@@ -1,6 +1,6 @@
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 import { Stage as StageType } from '@/type';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { Button, Icon } from '../ui';
@@ -8,10 +8,8 @@ import { useToast } from '../ui/use-toast';
 import Stages from './Stages';
 
 interface StageSectionProps {
-  stage: {
-    stages: StageType[];
-    currentStage: string;
-  };
+  stages: StageType[];
+  currentStage: string;
   // eslint-disable-next-line @typescript-eslint/ban-types
   updateRecord: (handleUpdate: Function) => unknown;
 }
@@ -25,9 +23,13 @@ const lastStages = {
   }
 };
 
-const StageSection = ({ stage: { stages, currentStage }, updateRecord }: StageSectionProps) => {
+const StageSection = ({ stages, currentStage, updateRecord }: StageSectionProps) => {
   const [stageIdChosen, setStageIdChosen] = useState(currentStage);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setStageIdChosen(currentStage);
+  }, [currentStage]);
 
   const { toast } = useToast();
   const { recordId = '' } = useParams();

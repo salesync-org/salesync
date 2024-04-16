@@ -40,6 +40,6 @@ export const formatRecords = (records: RecordResponse[]) => {
 
     formattedRecords.push(formattedRecord);
   }
-  console.log({ formattedRecords });
+  
   return formattedRecords;
 };

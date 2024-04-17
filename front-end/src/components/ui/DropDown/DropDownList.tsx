@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDropDownList } from 'hooks/useDropDownList';
 import { cn } from 'utils/utils';
 import { Popup } from '..';
-import { Popup } from '..';
 import useResize from '@/hooks/useResize';
 
 interface ListProps {

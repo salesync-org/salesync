@@ -7,7 +7,9 @@ import PrimaryButton from '@/components/ui/Button/PrimaryButton';
 import '@/constants/api';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import typeApi from '@/api/type';
-import { Table, TableBody, TableCell, TableHeader, TableRow } from '@/components/ui';
+import { Button, Table, TableBody, TableCell, TableHeader, TableRow } from '@/components/ui';
+import { ArrowLeft } from 'lucide-react';
+import { cn } from '@/utils/utils';
 
 const TypePropertyManager = () => {
   // const [typeName, setTypeName] = useState('');
@@ -59,6 +61,17 @@ const TypePropertyManager = () => {
       <Panel className='m-0 h-full'>
         <div className='grid-col-1 grid h-full w-full grid-rows-[48px_1fr]'>
           <div className='mb-10 flex h-fit flex-row justify-between'>
+            <div className='mr-2 h-10 w-10'>
+              <Button
+                rounded
+                className={cn('aspect-ratio h-10 w-10 rounded-full p-0')}
+                onClick={() => {
+                  navigate(`/${companyName}/setting/object-manager`);
+                }}
+              >
+                <ArrowLeft size='1rem' />
+              </Button>
+            </div>
             <div className='flex-grow'>
               <TextInput
                 onChange={(e) => setSearch(e.target.value)}
@@ -69,7 +82,7 @@ const TypePropertyManager = () => {
               />
             </div>
             <PrimaryButton
-              className='mx-2'
+              className='ml-2'
               onClick={() => {
                 navigate(`/${companyName}/setting/object-manager/${typeId}/create`);
               }}

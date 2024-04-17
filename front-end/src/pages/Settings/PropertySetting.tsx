@@ -8,6 +8,7 @@ import { useMultistepForm } from '@/hooks/useMutistepForm';
 import PropertyFieldConfig from './PropertyFieldConfig';
 import useProperty from '@/hooks/type-service/useProperty';
 import typeApi from '@/api/type';
+import LoadingSpinnerSmall from '@/components/ui/Loading/LoadingSpinnerSmall';
 
 type PropertySettingSubmitForm = {
   type_id: string;
@@ -22,6 +23,7 @@ type PropertySettingSubmitForm = {
 const PropertySetting = () => {
   const { companyName, typeId } = useParams();
   const { properties } = useProperty(companyName ?? '');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [data, setData] = useState<PropertySettingSubmitForm>({
     type_id: typeId ?? '',
     property_id: '',
@@ -45,6 +47,7 @@ const PropertySetting = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const groupedPropertyFields = data!.fields!.reduce((acc: Record<string, PropertyField>, field) => {
+      setIsSubmitting(true);
       const label = field.label;
       if (label) {
         if (!acc[label]) {
@@ -71,13 +74,13 @@ const PropertySetting = () => {
         };
       })
     };
-    console.log(submitData);
     await typeApi.createTypeProperty(companyName ?? '', submitData).then((data) => {
       if (data) {
         toast({
           title: 'Success',
           description: `A property of ${submitData.name} has been added successfully`
         });
+        navigate(`/${companyName}/setting/object-manager/${typeId}`);
       } else {
         toast({
           title: 'Unsuccessful',
@@ -85,6 +88,7 @@ const PropertySetting = () => {
           variant: 'destructive'
         });
       }
+      setIsSubmitting(false);
     });
   };
 
@@ -135,7 +139,16 @@ const PropertySetting = () => {
               className={cn(!isLastStep && 'hidden')}
               disabled={!data.property_id}
             >
-              Add Property
+              {isSubmitting ? (
+                <div className='flex items-center justify-center space-x-2'>
+                  <div>
+                    <LoadingSpinnerSmall className='h-5 w-5 fill-on-primary' />
+                  </div>
+                  <p className='font-semibold'> Please wait...</p>
+                </div>
+              ) : (
+                <p className='font-semibold'>Add Type Property</p>
+              )}
             </Button>
           </div>
         </form>

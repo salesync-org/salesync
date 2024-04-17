@@ -10,6 +10,7 @@ import LoadingSpinnerSmall from '@/components/ui/Loading/LoadingSpinnerSmall';
 
 const PersonalInfomationSetting = () => {
   const { companyName } = useParams();
+  const [editAvatarHovered, setEditAvatarHovered] = useState(false);
   const { user, updateUser, reloadUser } = useAuth();
   const [userLoaded, setUserInfo] = useState({ ...user });
   const { toast } = useToast();
@@ -113,18 +114,28 @@ const PersonalInfomationSetting = () => {
             </div>
             <div className='dark:panel-dark absolute bottom-1 right-2'>
               <Button
-                rounded='icon'
+                rounded
+                onMouseEnter={(_) => {
+                  console.log('Hovering');
+                  setEditAvatarHovered(true);
+                }}
+                onMouseLeave={(_) => {
+                  console.log('Stop Hovering');
+                  setEditAvatarHovered(false);
+                }}
                 className={cn(
-                  'h-fit w-fit bg-button-background-light p-2 hover:-translate-y-1',
+                  editAvatarHovered && 'flex space-x-2 hover:w-36',
+                  'h-fit rounded-full bg-button-background-light p-2 hover:-translate-y-1',
                   'border-2 border-button-stroke-light dark:border-button-stroke-dark',
                   'dark:bg-button-background-dark',
-                  'shadow-md shadow-primary-color/10 transition-all duration-100 hover:shadow-lg hover:shadow-primary-color/20'
+                  'shadow-md shadow-primary-color/10 transition-all duration-300 hover:shadow-lg hover:shadow-primary-color/20'
                 )}
                 onClick={() => {
                   setModalOpen(true);
                 }}
               >
-                <Pencil />
+                <Pencil size={editAvatarHovered ? '1rem' : '1.5rem'} />
+                {editAvatarHovered && <p>Edit Avatar</p>}
               </Button>
             </div>
           </div>

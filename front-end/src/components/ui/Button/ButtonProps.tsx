@@ -27,8 +27,8 @@ const buttonVariants = cva(
           'enabled:active:bg-primary-active'
         ),
         link: cn(
-          'text-link enabled:hover:text-link-text dark:enabled:hover:text-link-text-dark',
-          'bg-transparent enabled:hover:bg-secondary dark:enabled:hover:bg-secondary-dark'
+          'text-link enabled:hover:text-link-text dark:enabled:hover:text-link-text-dark dark:border-link-text-dark/20',
+          'bg-transparent enabled:hover:bg-secondary/40 dark:enabled:hover:bg-secondary-dark/40'
         )
       },
       rounded: {

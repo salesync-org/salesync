@@ -11,7 +11,7 @@ import {
   TextInput
 } from '@/components/ui';
 import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/components/ui/Toast';
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 import useProperties from '@/hooks/type-service/useProperties';
 import useStages from '@/hooks/type-service/useStage';
@@ -73,7 +73,7 @@ const RecordModal = () => {
       record_name: data['Name'],
       stage_id: data.stage,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      properties: typeProperty.properties.map((property: any) => {
+      properties: typeProperty.properties!.map((property: any) => {
         return {
           id: property.id,
           property_name: property.name,

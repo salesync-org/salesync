@@ -65,7 +65,7 @@ const ChangePassword = () => {
             <TextInput
               placeholder='Enter your password'
               header='Password'
-              isPassword={true}
+              type='password'
               register={register}
               name='password'
               className='h-12 w-full'
@@ -74,7 +74,7 @@ const ChangePassword = () => {
             {errors.password && <ErrorText text={errors.password.message} className='text-sm' />}
             <TextInput
               placeholder='Confirm your password'
-              isPassword={true}
+              type='password'
               header='Confirm password'
               register={register}
               name='confirmPassword'

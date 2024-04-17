@@ -108,7 +108,7 @@ const LogIn = () => {
                 {errors.username && <ErrorText text={errors.username.message} className='text-sm' />}
                 <TextInput
                   placeholder='Enter password'
-                  isPassword={true}
+                  type='password'
                   header='Password'
                   register={register}
                   name='password'

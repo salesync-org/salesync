@@ -20,8 +20,8 @@ interface TextInputProps {
   paddingLeft?: string;
   postfixIcon?: string;
   isError?: boolean;
+  type?: string;
   restProps?: React.HTMLAttributes<HTMLInputElement>;
-  isPassword?: boolean;
 }
 const TextInput: React.FC<TextInputProps> = ({
   value,
@@ -35,7 +35,7 @@ const TextInput: React.FC<TextInputProps> = ({
   prefixIconNode = null,
   paddingLeft = 'pl-[55px]',
   postfixIcon,
-  isPassword = false,
+  type = 'text',
   isError = false,
   onChange,
   name = '',
@@ -59,7 +59,7 @@ const TextInput: React.FC<TextInputProps> = ({
         )}
       >
         <input
-          type={isPassword ? 'password' : 'text'}
+          type={type}
           placeholder={placeholder}
           className={cn(
             'absolute h-full w-full rounded bg-transparent py-2 pr-2 placeholder:text-ellipsis placeholder:text-[13px] placeholder:text-opacity-50 focus:outline-primary',
@@ -80,7 +80,7 @@ const TextInput: React.FC<TextInputProps> = ({
           </div>
         </div>
 
-        <div className='absolute bottom-0 top-0 -left-3 flex h-full items-center justify-start rounded px-4'>
+        <div className='absolute -left-3 bottom-0 top-0 flex h-full items-center justify-start rounded px-4'>
           {prefixIconNode}
         </div>
 

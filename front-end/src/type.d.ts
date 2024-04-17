@@ -31,6 +31,7 @@ type TypeProperty = {
   properties?: Property[];
 };
 
+
 type Property = {
   id: string;
   label?: string;
@@ -44,6 +45,29 @@ type PropertyResponse = {
   name: string;
   propertyFields: PropertyField[] | null;
 };
+
+
+type TypeDetail = {
+  id: string;
+  name: string;
+  template: string;
+  properties: TypePropertyDetail[];
+};
+
+type TypePropertyDetail =
+  {
+    id: string;
+    name: string;
+    label: string;
+    sequence: 1;
+    property: {
+      id: string;
+      name: string;
+      propertyFields: [];
+    };
+    default_value: string;
+    fields: [];
+  }
 
 type PropertyField = {
   id: string;

@@ -17,6 +17,11 @@ class TypeApi {
     const res = await instance.post(`${BASE_URL}/${companyName}/types/create-property`, data);
     return res.data;
   }
+
+  async loadTypeDetail(companyName: string, typeId: string): Promise<TypeDetail> {
+    const res = await instance.get(`${BASE_URL}/${companyName}/types/details/${typeId}`);
+    return res.data;
+  }
 }
 
 const typeApi = new TypeApi();

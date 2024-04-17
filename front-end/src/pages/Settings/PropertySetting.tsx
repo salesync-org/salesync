@@ -72,19 +72,20 @@ const PropertySetting = () => {
       })
     };
     console.log(submitData);
-    const res = await typeApi.createTypeProperty(companyName ?? '', submitData);
-    if (res) {
-      toast({
-        title: 'Success',
-        description: `A property of ${submitData.name} has been added successfully`
-      });
-    } else {
-      toast({
-        title: 'Unsuccessful',
-        description: `An error has occured while adding a property of ${submitData.name}`,
-        variant: 'destructive'
-      });
-    }
+    await typeApi.createTypeProperty(companyName ?? '', submitData).then((data) => {
+      if (data) {
+        toast({
+          title: 'Success',
+          description: `A property of ${submitData.name} has been added successfully`
+        });
+      } else {
+        toast({
+          title: 'Unsuccessful',
+          description: `An error has occured while adding a property of ${submitData.name}`,
+          variant: 'destructive'
+        });
+      }
+    });
   };
 
   return (
@@ -103,7 +104,7 @@ const PropertySetting = () => {
             <Button
               onClick={() => {
                 if (isFirstStep) {
-                  navigate(`/${companyName}/setting/object-manager`);
+                  navigate(`/${companyName}/setting/object-manager/${typeId}`);
                 } else {
                   back();
                 }

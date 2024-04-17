@@ -5,6 +5,7 @@ import LoadingSpinner from './components/ui/Loading/LoadingSpinner';
 import { Toaster } from './components/ui/Toast';
 import PrivateRoute from './pages/PrivateRoute/PrivateRoute';
 import ObjectManager from './pages/Settings/ObjectManager';
+import TypePropertyManager from './pages/Settings/TypePropertyManager';
 const SettingLayout = lazy(() => import('./pages/Settings/SettingLayout'));
 const PersonalInformationSetting = lazy(() => import('./pages/Settings/PersonalInformationSetting'));
 const UserSetting = lazy(() => import('./pages/Settings/UserSetting'));
@@ -55,7 +56,8 @@ function App() {
                 <Route path='profiles' element={<PersonalInformationSetting />} />
                 <Route path='users' element={<UserSetting />} />
                 <Route path='object-manager' element={<ObjectManager />} />
-                <Route path='object-manager/:typeId' element={<PropertySetting />} />
+                <Route path='object-manager/:typeId' element={<TypePropertyManager />} />
+                <Route path='object-manager/:typeId/create' element={<PropertySetting />} />
               </Route>
               <Route path='*' element={<Sales />} />
             </Route>

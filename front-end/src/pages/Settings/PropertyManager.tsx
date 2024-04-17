@@ -1,15 +1,19 @@
 import { Table, TableHeader, TableRow, TableBody, TableCell } from '@/components/ui';
 
-const descriptions: string[] = [
-  'Allows users to select a True (checked) or False (unchecked) value.',
-  'Allows users to enter a date or pick a date from a popup calendar.',
-  'Allows users to enter an email address, which is validated to ensure proper format.',
-  'Allows users to enter any number. Leading zeros are removed.',
-  'Allows users to enter any phone number. Automatically formats it as a phone number.',
-  'Allows users to select a value from a list you define.',
-  'Allows users to enter any combination of letters and numbers.',
-  'Allows users to enter up to 255 characters on separate lines.'
-];
+const descriptions: { [key: string]: string } = {
+  Text: 'Allows users to enter any combination of letters and numbers.',
+  TextArea: 'Allows users to enter up to 255 characters on separate lines.',
+  Number: 'Allows users to enter any positive number. Leading zeros are removed.',
+  Checkbox: 'Allows users to select a True (checked) or False (unchecked) value.',
+  URL: 'Allows users to enter an  URL.',
+  Email: 'Allows users to enter an email address, which is validated to ensure proper format.',
+  Phone: 'Allows users to enter any phone number. Automatically formats it as a phone number.',
+  Geolocation: 'Allows users to enter a location.',
+  Image: 'Allows users to upload an image.',
+  Date: 'Allows users to enter a date or pick a date from a popup calendar.',
+  DateTime: 'Allows users to enter a date or pick a date and time from a popup calendar.',
+  PickList: 'Allows users to select a value from a list you define.'
+};
 
 type PropertyData = {
   type_id: string;
@@ -34,7 +38,7 @@ const PropertyManager = ({ type_id, property_id: propertyId, propertyList, updat
           </TableRow>
         </TableHeader>
         <TableBody>
-          {propertyList.map((property, index) => {
+          {propertyList.map((property) => {
             return (
               <TableRow key={property.name} className='grid grid-cols-12'>
                 <TableCell className='col-span-4 flex items-center gap-2 md:col-span-3'>
@@ -52,7 +56,9 @@ const PropertyManager = ({ type_id, property_id: propertyId, propertyList, updat
                     {property.name}
                   </label>
                 </TableCell>
-                <TableCell className='col-span-8 line-clamp-3 text-sm md:col-span-6'>{descriptions[index]}</TableCell>
+                <TableCell className='col-span-8 line-clamp-3 text-sm md:col-span-6'>
+                  {descriptions[property.name]}
+                </TableCell>
               </TableRow>
             );
           })}

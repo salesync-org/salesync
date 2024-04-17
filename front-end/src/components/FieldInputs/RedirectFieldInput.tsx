@@ -15,6 +15,7 @@ type RedirectFieldInputProps = {
 
 const inputComponentMap: { [key: string]: React.ComponentType<any> } = {
   Checkbox: CheckboxFieldInput,
+  Text: TextAreaFieldInput,
   TextArea: TextAreaFieldInput,
   NumberText: NumberTextFieldInput,
   DateInput: DateFieldInput,

@@ -6,19 +6,30 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Builder
 @Data
-public class NotificationDto {
+public class MessageDto {
     String id;
-    String title;
-    String content;
-    @JsonProperty("is_read")
-    Boolean isRead;
+
     @JsonProperty("sender_id")
-    String senderId;
+    UUID senderId;
+
+    @JsonProperty("receiver_id")
+    UUID receiverId;
+
+    String title;
+
+    String content;
+
     @JsonProperty("created_at")
     Date createdAt;
-    @JsonProperty("receiver_id")
-    String receiverId;
+
+    @JsonProperty("is_read")
+    Boolean isRead;
+
+    private String url;
+
+    private String action;
 }

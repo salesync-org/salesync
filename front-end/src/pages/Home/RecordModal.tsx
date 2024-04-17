@@ -1,62 +1,244 @@
-import { Modal, TextInput, DropDown, DropDownItem, Panel, ModalFooter, Button, PrimaryButton } from '@/components/ui';
+import recordApi from '@/api/record';
+import {
+  Button,
+  DropDown,
+  DropDownItem,
+  Item,
+  Modal,
+  ModalFooter,
+  Panel,
+  PrimaryButton,
+  TextInput
+} from '@/components/ui';
 import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
+import { useToast } from '@/components/ui/use-toast';
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 import useProperties from '@/hooks/type-service/useProperties';
+import useStages from '@/hooks/type-service/useStage';
+import { Stage } from '@/type';
+import { cn } from '@/utils/utils';
+import { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { useQueryClient } from 'react-query';
+import { useLocation } from 'react-router-dom';
 import ErrorToaster from '../Error/ErrorToaster';
 
 const RecordModal = () => {
-  const { hideModal, store } = useGlobalModalContext();
-  const { modalType, modalProps } = store;
-  const { typeId } = modalProps;
+  const [isResetForm, setIsResetForm] = useState(false);
+  const {
+    hideModal,
+    store: { modalProps, modalType }
+  } = useGlobalModalContext();
+  const {
+    typeId,
+    recordFilter = {
+      searchTerm: '',
+      isAsc: false,
+      propertyName: null,
+      currentPage: 1,
+      pageSize: 5
+    },
+    currentData = {},
+    currentRecord = {}
+  } = modalProps;
 
-  const { typeProperty, isLoading } = useProperties(typeId);
+  const {
+    handleSubmit,
+    register,
+    control,
+    reset,
+    formState: { isSubmitting }
+  } = useForm({
+    defaultValues: currentData
+  });
+  const location = useLocation();
+  const companyName = location.pathname.split('/')[1] || '';
+  const { data: typeProperty, isLoading: isPropertiesLoading } = useProperties(companyName, typeId);
+  const { data: stages, isLoading: isStagesLoading } = useStages(companyName, typeId);
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
 
+  const isUpdateForm = Object.keys(currentData).length > 0;
   if (!typeId) {
     return null;
-  }
-
-  if (isLoading) {
-    return <LoadingSpinner />;
   }
 
   if (!typeProperty) {
     return <ErrorToaster errorTitle='Error' errorMessage='Failed to fetch properties' />;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleCreateRecord = async (data: any) => {
+    const req = {
+      record_name: data['Name'],
+      stage_id: data.stage,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      properties: typeProperty.properties.map((property: any) => {
+        return {
+          id: property.id,
+          property_name: property.name,
+          property_label: property.label,
+          item_value: data[property.name]
+        };
+      })
+    };
+
+    const res = await recordApi.createRecord(companyName, typeId, req);
+
+    if (res) {
+      toast({
+        title: 'Success',
+        description: 'Create record successfully'
+      });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      queryClient.setQueryData(['records', typeId, recordFilter], (oldData: any) => {
+        return {
+          ...oldData,
+          records: [res, ...oldData.records]
+        };
+      });
+      isResetForm ? reset() : hideModal();
+    }
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleUpdateRecord = async (data: any) => {
+    const newRecord = JSON.parse(JSON.stringify(currentRecord));
+    const updatedRecord = {
+      ...newRecord,
+      current_stage_id: data.stage,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      properties: currentRecord.properties.map((property: any) => {
+        return {
+          id: property.id,
+          property_name: property.property_name,
+          property_label: property.property_label,
+          item_value: data[property.property_name]
+        };
+      })
+    };
+
+    const res = await recordApi.updateRecord(companyName, updatedRecord.id, updatedRecord);
+
+    if (res) {
+      toast({
+        title: 'Success',
+        description: 'Update record successfully'
+      });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      queryClient.setQueryData(['record', updatedRecord.id], (oldData: any) => {
+        return {
+          ...oldData,
+          source_record: {
+            ...oldData.source_record,
+            ...updatedRecord
+          }
+        };
+      });
+
+      hideModal();
+    }
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onSubmit = async (data: any) => {
+    try {
+      if (!data['Name'] || data['stage'] === '') {
+        throw new Error('Name is required');
+      }
+
+      if (!isUpdateForm) {
+        handleCreateRecord(data);
+      } else {
+        handleUpdateRecord(data);
+      }
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: 'Error',
+        description: 'Failed to create record',
+        variant: 'destructive'
+      });
+    }
+  };
+
   return (
     <Modal
       isOpen={modalType === MODAL_TYPES.CREATE_RECORD_MODAL}
       onClose={hideModal}
       className='h-[600px]'
-      title={typeProperty ? `New ${typeProperty.name}` : 'New'}
+      title={`${isUpdateForm ? 'Update' : 'Create'} ${typeProperty.name}`}
     >
-      <form className='-z-1 absolute bottom-2 left-2 right-2 top-20 overflow-x-hidden  pb-32  '>
-        <div className='flex w-full flex-col place-content-center gap-2   p-6'>
-          {typeProperty ? (
-            typeProperty.properties?.map((property: Property) => {
-              if (property.type === 'text')
-                return <TextInput header={property.name} key={property.id} placeholder={property.name}></TextInput>;
-              else if (property.type === 'dropdown')
-                return (
-                  <DropDown key={property.id} value='' header={property.name}>
-                    {property.options?.map((value) => {
-                      return <DropDownItem key={value} title={value} value={value}></DropDownItem>;
-                    })}
-                  </DropDown>
-                );
-              else return <div></div>;
-            })
-          ) : (
-            <div>loading</div>
+      {isPropertiesLoading || isStagesLoading ? (
+        <LoadingSpinner className='mt-10' />
+      ) : (
+        <form
+          id='create-record-form'
+          onSubmit={handleSubmit(onSubmit)}
+          className={cn(
+            '-z-1 absolute bottom-2 left-2 right-2 top-20 overflow-x-hidden pb-32',
+            isSubmitting && 'pointer-events-none'
           )}
-        </div>
-      </form>
-      <Panel className='absolute bottom-0 left-0 right-0 m-0   -mt-4 flex h-10 items-center justify-center bg-gray-100 bg-opacity-90 px-3  py-10 shadow-inner'>
+        >
+          <div className='flex w-full flex-col place-content-center gap-2   p-6'>
+            {typeProperty ? (
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              typeProperty.properties?.map((property: any) => {
+                if (property.property.name === 'Text' || property.property.name === 'Phone')
+                  return (
+                    <TextInput
+                      className='w-full'
+                      header={property.label}
+                      key={property.id}
+                      placeholder={property.label}
+                      register={register}
+                      name={property.name}
+                    ></TextInput>
+                  );
+                else return <div></div>;
+              })
+            ) : (
+              <div>loading</div>
+            )}
+            {stages && stages?.length > 0 && (
+              <Controller
+                control={control}
+                name='stage'
+                render={({ field: { onChange, value } }) => (
+                  <DropDown header='Status' value={value} onValueChange={onChange}>
+                    {stages.map((stage: Stage) => (
+                      <DropDownItem title={stage.name} value={stage.id} key={stage.id}>
+                        <Item title={stage.name}></Item>
+                      </DropDownItem>
+                    ))}
+                  </DropDown>
+                )}
+              />
+            )}
+          </div>
+        </form>
+      )}
+      <Panel className='absolute bottom-0 left-0 right-0 m-0 -mt-4 flex h-10 items-center justify-center bg-gray-100 bg-opacity-90 px-3  py-10 shadow-inner'>
         <ModalFooter className='m-0 '>
-          <Button onClick={hideModal}>Cancel</Button>
-          <Button onClick={() => {}}>Save & New</Button>
+          <Button onClick={hideModal} disabled={isStagesLoading}>
+            Cancel
+          </Button>
+          {!isUpdateForm && (
+            <Button
+              form='create-record-form'
+              type='submit'
+              onClick={() => {
+                setIsResetForm(true);
+              }}
+              disabled={isStagesLoading}
+            >
+              Save & New
+            </Button>
+          )}
 
-          <PrimaryButton onClick={hideModal}>Save</PrimaryButton>
+          <PrimaryButton form='create-record-form' type='submit' disabled={isStagesLoading}>
+            Save
+          </PrimaryButton>
         </ModalFooter>
       </Panel>
     </Modal>

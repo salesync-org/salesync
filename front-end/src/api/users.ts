@@ -1,3 +1,4 @@
+import { NewUser } from '@/type';
 import instance from './axiosConfig';
 
 const BASE_URL = `${import.meta.env.VITE_AUTHENTICATION_HOST}/api/v1`;

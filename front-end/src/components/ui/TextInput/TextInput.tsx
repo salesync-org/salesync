@@ -5,6 +5,7 @@ import { cn } from 'utils/utils';
 interface TextInputProps {
   value?: string;
   className?: string;
+  inputClassName?: string;
   placeholder?: string;
   disabled?: boolean;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -15,6 +16,9 @@ interface TextInputProps {
   header?: string;
   showHeader?: boolean;
   prefixIcon?: string;
+  prefixIconNode?: React.ReactNode;
+  paddingLeft?: string;
+  postfixIcon?: string;
   isError?: boolean;
   restProps?: React.HTMLAttributes<HTMLInputElement>;
   isPassword?: boolean;
@@ -23,10 +27,14 @@ const TextInput: React.FC<TextInputProps> = ({
   value,
   placeholder,
   className,
+  inputClassName,
   disabled = false,
   header,
   showHeader = true,
   prefixIcon,
+  prefixIconNode = null,
+  paddingLeft = 'pl-[55px]',
+  postfixIcon,
   isPassword = false,
   isError = false,
   onChange,
@@ -55,8 +63,10 @@ const TextInput: React.FC<TextInputProps> = ({
           placeholder={placeholder}
           className={cn(
             'absolute h-full w-full rounded bg-transparent py-2 pr-2 placeholder:text-ellipsis placeholder:text-[13px] placeholder:text-opacity-50 focus:outline-primary',
-            prefixIcon ? 'pl-10' : 'pl-4',
-            isError && 'placeholder:font-medium placeholder:text-red-500 focus-visible:outline-red-400'
+            prefixIcon ? 'pl-10' : cn(prefixIconNode ? paddingLeft : 'pl-4'),
+            postfixIcon ? 'pr-10' : 'pr-2',
+            isError && 'placeholder:font-medium placeholder:text-red-500 focus-visible:outline-red-400',
+            inputClassName
           )}
           value={value}
           disabled={disabled}
@@ -67,6 +77,16 @@ const TextInput: React.FC<TextInputProps> = ({
         <div className='relative flex h-full items-center justify-start rounded px-4'>
           <div className=' absolute bottom-0 top-0 flex w-4 items-center'>
             {prefixIcon && <Icon className='' name={prefixIcon} />}
+          </div>
+        </div>
+
+        <div className='absolute bottom-0 top-0 -left-3 flex h-full items-center justify-start rounded px-4'>
+          {prefixIconNode}
+        </div>
+
+        <div className='absolute right-3 flex h-full items-center justify-start rounded px-4'>
+          <div className=' absolute bottom-0 top-0 flex w-4 items-center'>
+            {postfixIcon && <Icon className='' name={postfixIcon} />}
           </div>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import fieldApi from '@/api/fieldApi';
+import { Field } from '@/type';
 import { useQuery } from 'react-query';
 
 const useField = (typeId: string) => {

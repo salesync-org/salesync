@@ -1,18 +1,13 @@
-import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-  SortingState,
-  getSortedRowModel
-} from '@tanstack/react-table';
+import { SortingState, flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/DataTable/table';
 import { cn } from '@/utils/utils';
 import { useState } from 'react';
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+interface DataTableProps<TData, _TValue> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  columns: any;
   data: TData[];
 }
 
@@ -30,11 +25,14 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
   });
 
   return (
-    <div className='border-[1px] border-button-stroke dark:border-button-stroke-dark rounded-sm'>
+    <div className='rounded-sm border-[1px] border-button-stroke dark:border-button-stroke-dark'>
       <Table className=''>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id} className='cursor-pointer bg-background-light dark:bg-background-dark transition-all'>
+            <TableRow
+              key={headerGroup.id}
+              className='h-[40px] cursor-pointer bg-background-light transition-all dark:bg-background-dark'
+            >
               {headerGroup.headers.map((header, index) => {
                 return (
                   <TableHead
@@ -57,11 +55,14 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
-                className='group h-8 transition-all hover:bg-button-background-hover dark:hover:bg-button-background-hover-dark'
+                className='group h-8 h-[40px] transition-all hover:bg-button-background-hover dark:hover:bg-button-background-hover-dark'
                 data-state={row.getIsSelected() && 'selected'}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell className='h-8 truncate py-0 leading-5 transition-all hover:bg-secondary-light/40 dark:hover:bg-secondary-dark/40' key={cell.id}>
+                  <TableCell
+                    className='h-8 truncate py-0 leading-5 transition-all hover:bg-secondary-light/40 dark:hover:bg-secondary-dark/40'
+                    key={cell.id}
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Panel } from '../ui';
 import ActionDropDown from '../ui/DropDown/ActionDropDown';
+import { RelationResponse } from '@/type';
 
 type RelationSectionProps = {
   title: string;

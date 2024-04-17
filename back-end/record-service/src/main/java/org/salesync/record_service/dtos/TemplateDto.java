@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -13,6 +14,7 @@ import java.util.UUID;
 @Data
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class TemplateDto {
+
     private UUID id;
     private String name;
 

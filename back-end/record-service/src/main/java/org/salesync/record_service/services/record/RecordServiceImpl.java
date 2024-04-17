@@ -1,6 +1,7 @@
 package org.salesync.record_service.services.record;
 
 import lombok.RequiredArgsConstructor;
+import org.salesync.record_service.components.RabbitMQProducer;
 import org.salesync.record_service.constants.Message;
 import org.salesync.record_service.dtos.*;
 import org.salesync.record_service.dtos.record_type_relation_dto.ListRecordTypeRelationsDto;
@@ -46,6 +47,7 @@ public class RecordServiceImpl implements RecordService {
     private final RelationItemMapper relationItemMapper = RelationItemMapper.INSTANCE;
     private final RecordTypePropertyMapper recordTypePropertyMapper = RecordTypePropertyMapper.INSTANCE;
     private final RestTemplate restTemplate;
+    private final RabbitMQProducer rabbitMQProducer;
 
     @Override
     public ListRecordsResponseDto getFilteredRecords(ListRecordsRequestDto requestDto) {
@@ -239,6 +241,9 @@ public class RecordServiceImpl implements RecordService {
         RecordStage recordStage = record.getRecordStage();
         recordStage.setStageId(requestUpdateStageDto.getStageId());
         record.setRecordStage(recordStage);
+
+        rabbitMQProducer.sendMessage("record","cc");
+
         return recordMapper.recordToRecordDto(recordRepository.save(record));
     }
 

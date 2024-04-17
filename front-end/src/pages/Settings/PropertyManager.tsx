@@ -48,7 +48,7 @@ const PropertyManager = ({ type_id, property_id: propertyId, propertyList, updat
                     }}
                     checked={property.id === propertyId}
                   />
-                  <label htmlFor={'propertyManager' + property.name} className='font-md'>
+                  <label htmlFor={'propertyManager' + property.name} className='font-md w-full'>
                     {property.name}
                   </label>
                 </TableCell>

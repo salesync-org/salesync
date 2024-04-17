@@ -5,6 +5,7 @@ import NumberTextFieldInput from './NumberTextFieldInput';
 import DateFieldInput from './DateFieldInput';
 import { TextInput } from '../ui';
 import DropDownFieldInput from './DropDownFieldInput';
+import RadioButotnFieldInput from './RadioButtonFieldInput';
 
 type RedirectFieldInputProps = {
   propertyFieldList: PropertyField[];
@@ -17,7 +18,8 @@ const inputComponentMap: { [key: string]: React.ComponentType<any> } = {
   TextArea: TextAreaFieldInput,
   NumberText: NumberTextFieldInput,
   DateInput: DateFieldInput,
-  DropDown: DropDownFieldInput
+  DropDown: DropDownFieldInput,
+  RadioButton: RadioButotnFieldInput
 };
 
 const RedirectFieldInput = ({ propertyFieldList, fieldIndex, updateFields, ...restProps }: RedirectFieldInputProps) => {

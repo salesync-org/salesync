@@ -15,12 +15,15 @@ const CheckboxFieldInput = ({ label, name, propertyFields, updateFields }: Check
       <Checkbox
         name={name}
         checked={checkStatus}
+        id={'propertyId' + propertyFields[0]!.id}
         onCheckedChange={() => {
           updateFields([{ ...propertyFields[0]!, default_value: checkStatus ? 'false' : 'true' }]);
           setCheckStatus(!checkStatus);
         }}
       ></Checkbox>
-      <div>{label}</div>
+      <label htmlFor={'propertyId' + propertyFields[0]!.id} className='w-full'>
+        {label}
+      </label>
     </div>
   );
 };

@@ -615,6 +615,33 @@ export const properties: PropertyResponse[] = [
   {
     "id": "88888888-8888-8888-8888-888888888888",
     "name": "DateTime",
-    "propertyFields": []
+    "propertyFields": [
+      {
+        "id": "77777777-7777-7777-7777-777777777777",
+        "label": "Are You Okay",
+        "item_value": "Yes",
+        "is_required": false,
+        "default_value": null,
+        "is_key": false,
+        "field": {
+          "id": "44444444-4444-4444-4444-444444444444",
+          "input_type": "RadioButton",
+          "is_multiple_value": true
+        }
+      },
+      {
+        "id": "88888888-8888-8888-8888-888888888888",
+        "label": "Are You Okay",
+        "item_value": "No",
+        "is_required": true,
+        "default_value": null,
+        "is_key": false,
+        "field": {
+          "id": "55555555-5555-5555-5555-555555555555",
+          "input_type": "RadioButton",
+          "is_multiple_value": true
+        }
+      },
+    ]
   }
 ] 

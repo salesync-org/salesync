@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS public.message
 (
     is_read boolean,
     created_at timestamp(6) without time zone,
-    message_id uuid NOT NULL,
+    message_id uuid NOT NULL DEFAULT gen_random_uuid(),
     receiver_id uuid,
     sender_id uuid,
     action character varying(255) COLLATE pg_catalog."default",

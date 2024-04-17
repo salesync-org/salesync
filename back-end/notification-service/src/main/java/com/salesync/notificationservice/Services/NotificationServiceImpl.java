@@ -9,6 +9,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -37,12 +38,32 @@ public class NotificationServiceImpl implements INotificationService {
     }
 
     @Override
-    public List<?> getNotifications() {
-        return List.of();
+    public List<MessageDto> getUnreadNotificationsByReceiverId(UUID receiverId) {
+        return messageRepository.findAllByReceiverIdAndIsReadEquals(receiverId,false).stream().map(messageMapper::entityToDto).toList();
     }
 
     @Override
-    public String setAllNotificationsAsRead() {
-        return "";
+    public MessageDto setNotificationAsRead(UUID messageId) {
+        Message message = messageRepository.findById(messageId).orElse(null);
+
+        if (message != null) {
+            message.setIsRead(true);
+            return messageMapper.entityToDto(messageRepository.save(message));
+        }
+        return null;
     }
+
+    @Override
+    public List<MessageDto> getNotificationsByReceiverId(UUID receiverId) {
+        return messageRepository.findAllByReceiverId(receiverId).stream().map(messageMapper::entityToDto).toList();
+    }
+
+    @Override
+    public List<MessageDto> setAllNotificationsAsReadByReceiverId(UUID receiverId) {
+        List<Message> messages = messageRepository.findAllByReceiverIdAndIsReadEquals(receiverId, false);
+        messages.forEach(message -> message.setIsRead(true));
+        return messages.stream().map(message -> messageMapper.entityToDto(messageRepository.save(message))).toList();
+    }
+
+
 }

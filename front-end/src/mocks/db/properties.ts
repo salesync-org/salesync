@@ -491,9 +491,9 @@ export const properties: PropertyResponse[] = [
       {
         "id": "33333333-3333-3333-3333-333333333333",
         "label": "Max Character",
-        "item_value": "50",
+        "item_value": null,
         "is_required": true,
-        "default_value": "",
+        "default_value": "50",
         "is_key": true,
         "field": {
           "id": "33333333-3333-3333-3333-333333333333",
@@ -537,7 +537,7 @@ export const properties: PropertyResponse[] = [
         "label": "Default Value",
         "item_value": null,
         "is_required": true,
-        "default_value": "1900-01-01",
+        "default_value": "1900/01/01",
         "is_key": true,
         "field": {
           "id": "44444444-4444-4444-4444-444444444444",
@@ -563,7 +563,7 @@ export const properties: PropertyResponse[] = [
         "label": "From",
         "item_value": null,
         "is_required": false,
-        "default_value": "1900-01-01",
+        "default_value": "1900/01/01",
         "is_key": false,
         "field": {
           "id": "44444444-4444-4444-4444-444444444444",

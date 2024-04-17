@@ -1,6 +1,4 @@
-import { Panel, Table, TableHeader, TableRow, TableBody, TableCell, Button } from '@/components/ui';
-import { cn } from '@/utils/utils';
-import { Link, useParams } from 'react-router-dom';
+import { Table, TableHeader, TableRow, TableBody, TableCell } from '@/components/ui';
 
 const descriptions: string[] = [
   'Allows users to select a True (checked) or False (unchecked) value.',
@@ -11,49 +9,6 @@ const descriptions: string[] = [
   'Allows users to select a value from a list you define.',
   'Allows users to enter any combination of letters and numbers.',
   'Allows users to enter up to 255 characters on separate lines.'
-];
-
-const properties: Property[] = [
-  {
-    id: '1',
-    name: 'Checkbox',
-    type: 'Checkbox'
-  },
-  {
-    id: '2',
-    name: 'Date',
-    type: 'Date'
-  },
-  {
-    id: '3',
-    name: 'Email',
-    type: 'Email'
-  },
-  {
-    id: '4',
-    name: 'Number',
-    type: 'Number'
-  },
-  {
-    id: '5',
-    name: 'Phone',
-    type: 'Phone'
-  },
-  {
-    id: '6',
-    name: 'DropDown',
-    type: 'DropDown'
-  },
-  {
-    id: '7',
-    name: 'Text',
-    type: 'Text'
-  },
-  {
-    id: '8',
-    name: 'Text Area',
-    type: 'TextArea'
-  }
 ];
 
 type PropertyData = {
@@ -70,7 +25,7 @@ const PropertyManager = ({ type_id, property_id: propertyId, propertyList, updat
   // const { companyName = '' } = useParams();
   return (
     <>
-      <input value={type_id} name='type_id' className='hidden'></input>
+      <input value={type_id} name='type_id' readOnly className='hidden'></input>
       <Table>
         <TableHeader>
           <TableRow className='grid grid-cols-12'>
@@ -89,7 +44,7 @@ const PropertyManager = ({ type_id, property_id: propertyId, propertyList, updat
                     id={'propertyManager' + property.name}
                     className='size-5'
                     onChange={(_) => {
-                      updateFields({ property_id: property.id });
+                      updateFields({ ...propertyList, property_id: property.id });
                     }}
                     checked={property.id === propertyId}
                   />

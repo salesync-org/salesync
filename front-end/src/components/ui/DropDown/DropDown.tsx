@@ -1,7 +1,7 @@
 import React, { Dispatch, useEffect, useRef, useState } from 'react';
-import { Button, Icon, DropDownList } from '@/components/ui';
+import { Button, DropDownList } from '@/components/ui';
 import { cn } from '@/utils/utils';
-import { ChevronRight, ChevronDown } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { textErrorClassName } from '../ErrorText/ErrorText';
 
 interface DropdownButtonProps {
@@ -50,7 +50,6 @@ const DropDown: React.FC<DropdownButtonProps> = ({
         for (let i = 0; i < inputElements.length; i++) {
           const inputElement = inputElements[i];
           if (inputElement.getAttribute('value') === value) {
-            console.log('Seems like we got title  = ' + inputElement.getAttribute('title'));
             return inputElement.getAttribute('title');
           }
         }
@@ -67,11 +66,9 @@ const DropDown: React.FC<DropdownButtonProps> = ({
   }, [listRef]);
 
   function handleOptionClick(option: HTMLElement): void {
-    console.log('onItemClick: ', option);
     const inputNode = option as HTMLInputElement;
     setSelectedOption(inputNode.title);
     if (inputNode) {
-      console.log('inputNode.value: ', inputNode.value);
       onValueChange(inputNode.value);
 
       typeof setError === 'function' && setError(false);

@@ -12,6 +12,11 @@ class TypeApi {
     const res = await instance.get(`${BASE_URL}/${companyName}/types/properties`);
     return res.data;
   }
+
+  async createTypeProperty(companyName: string, data: any) {
+    const res = await instance.post(`${BASE_URL}/${companyName}/types/create-property`, data);
+    return res.data;
+  }
 }
 
 const typeApi = new TypeApi();

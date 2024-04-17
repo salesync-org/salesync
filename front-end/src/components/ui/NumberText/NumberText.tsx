@@ -2,7 +2,7 @@ import React, { ChangeEvent, FocusEvent } from 'react';
 import { Icon } from '@/components/ui';
 import { cn } from 'utils/utils';
 
-type TextInputProps = {
+interface NumberTextProps {
   value?: string;
   className?: string;
   placeholder?: string;
@@ -16,28 +16,26 @@ type TextInputProps = {
   showHeader?: boolean;
   prefixIcon?: string;
   isError?: boolean;
-  readOnly?: boolean;
-  defaultValue?: string;
-  isPassword?: boolean;
+  defaultValue?: number;
+  min?: number;
   restProps?: React.HTMLAttributes<HTMLInputElement>;
-};
-const TextInput = ({
+}
+const NumberText: React.FC<NumberTextProps> = ({
   value,
   placeholder,
   className,
   disabled = false,
   header,
   showHeader = true,
+  defaultValue,
+  min,
   prefixIcon,
-  isPassword = false,
   isError = false,
   onChange,
-  defaultValue,
   name = '',
   register = () => ({}),
-  readOnly,
   ...restProps
-}: TextInputProps) => {
+}) => {
   return (
     <div>
       {showHeader && header && <p className={cn('my-1', isError && 'font-medium text-red-500')}>{header}</p>}
@@ -55,19 +53,19 @@ const TextInput = ({
         )}
       >
         <input
-          type={isPassword ? 'password' : 'text'}
+          type='number'
           placeholder={placeholder}
           className={cn(
             'absolute h-full w-full rounded bg-transparent py-2 pr-2 placeholder:text-ellipsis placeholder:text-[13px] placeholder:text-opacity-50 focus:outline-primary',
             prefixIcon ? 'pl-10' : 'pl-4',
             isError && 'placeholder:font-medium placeholder:text-red-500 focus-visible:outline-red-400'
           )}
-          value={value}
           disabled={disabled}
           onChange={onChange}
           {...register(name)}
-          defaultValue={defaultValue}
           name={name}
+          defaultValue={defaultValue}
+          min={min}
           {...restProps}
         />
         <div className='relative flex h-full items-center justify-start rounded px-4'>
@@ -80,4 +78,4 @@ const TextInput = ({
   );
 };
 
-export default TextInput;
+export default NumberText;

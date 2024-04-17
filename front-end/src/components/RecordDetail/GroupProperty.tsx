@@ -5,12 +5,12 @@ import InputProperty from './InputProperty';
 
 interface GroupPropertyProps {
   name?: string;
-  data?: Array<any>;
+  data?: Array<Record<string, string>>;
   className?: string;
   restProps?: React.HTMLAttributes<HTMLInputElement>;
 }
 
-const GroupProperty: React.FC<GroupPropertyProps> = ({ name, className, data}) => {
+const GroupProperty: React.FC<GroupPropertyProps> = ({ name, className, data }) => {
   const [expand, setExpand] = useState(false);
 
   return (

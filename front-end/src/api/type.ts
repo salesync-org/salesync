@@ -1,7 +1,8 @@
 import instance from './axiosConfig';
-
+import axios from './axiosConfig';
 const BASE_URL = `${import.meta.env.VITE_API_GATEWAY_HOST}/api/v1`;
 
+const URL = import.meta.env.VITE_GATEWAY_HOST;
 class TypeApi {
   async getAllTypes(companyName: string) {
     const res = await instance.get(`${BASE_URL}/${companyName}/types`);
@@ -20,6 +21,11 @@ class TypeApi {
 
   async loadTypeDetail(companyName: string, typeId: string): Promise<TypeDetail> {
     const res = await instance.get(`${BASE_URL}/${companyName}/types/details/${typeId}`);
+    return res.data;
+  }
+
+  async getTypeProperties(companyName: string, typeId: string) {
+    const res = await axios.get(`${URL}/${companyName}/types/details/${typeId}`);
     return res.data;
   }
 }

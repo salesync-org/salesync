@@ -1,30 +1,37 @@
+import { RecordsFilter } from '@/api/record';
 import RecordTable from '@/components/Records/RecordTable';
 import { ButtonGroup, DropDown } from '@/components/ui';
 import Button from '@/components/ui/Button/Button';
 import Icon from '@/components/ui/Icon/Icon';
 import Panel from '@/components/ui/Panel/Panel';
 import TextInput from '@/components/ui/TextInput/TextInput';
-import { tableButtons } from '@/constants/layout/table-buttons';
-import { useGlobalModalContext } from '@/context/GlobalModalContext';
+import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
+import { Type } from '@/type';
 import icon from 'assets/type-icon/lead_icon.png';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 interface RecordSectionProps {
-  type: LayoutType | undefined;
+  type: Type | null | undefined;
 }
 
 const RecordSection = ({ type }: RecordSectionProps) => {
   const { showModal } = useGlobalModalContext();
   const { typeId } = useParams();
+  const [recordFilter] = useState<RecordsFilter>({
+    searchTerm: '',
+    isAsc: false,
+    propertyName: null,
+    currentPage: 1,
+    pageSize: 30
+  });
 
   if (!type || !typeId) {
     return null;
   }
 
-  const tableButton = tableButtons.find((button) => button.name === type.name);
-
   return (
-    <Panel className='m-0 h-full overflow-hidden p-4'>
+    <Panel className='m-0 h-[calc(100dvh-160px)] overflow-auto p-4'>
       <section className='px flex items-center justify-between pt-4'>
         <div className='flex items-center gap-2'>
           <div className='w-fit cursor-pointer overflow-hidden rounded-sm bg-primary-color'>
@@ -39,21 +46,15 @@ const RecordSection = ({ type }: RecordSectionProps) => {
           </div>
         </div>
         <ButtonGroup>
-          {tableButton &&
-            tableButton.buttons.map((button) => {
-              return (
-                <Button
-                  key={button.name}
-                  intent='normal'
-                  zoom={false}
-                  onClick={() => {
-                    showModal(button.modalName, { typeId });
-                  }}
-                >
-                  {button.name}
-                </Button>
-              );
-            })}
+          <Button
+            intent='normal'
+            zoom={false}
+            onClick={() => {
+              showModal(MODAL_TYPES.CREATE_RECORD_MODAL, { typeId, recordFilter });
+            }}
+          >
+            New
+          </Button>
         </ButtonGroup>
       </section>
       <section className='my-2 flex items-center justify-between'>
@@ -99,7 +100,7 @@ const RecordSection = ({ type }: RecordSectionProps) => {
         </div>
       </section>
       <div className='-mx-4 mt-4'>
-        <RecordTable typeId={typeId} />
+        <RecordTable typeId={typeId} recordFilter={recordFilter} />
       </div>
     </Panel>
   );

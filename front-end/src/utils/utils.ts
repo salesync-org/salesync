@@ -1,3 +1,4 @@
+import { RecordResponse } from '@/type';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -20,4 +21,25 @@ export const formatCurrency = (value: number) => {
 
 export const formatCompanyName = (name: string) => {
   return name.split(' ').join('').toLowerCase();
-}
+};
+
+export const formatRecords = (records: RecordResponse[]) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const formattedRecords: any[] = [];
+
+  for (let i = 0; i < records.length; i++) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const formattedRecord: any = {};
+
+    formattedRecord['id'] = records[i].id;
+    formattedRecord['Name'] = records[i].name;
+
+    for (const property of records[i].properties) {
+      formattedRecord[property.property_label] = property.item_value;
+    }
+
+    formattedRecords.push(formattedRecord);
+  }
+  
+  return formattedRecords;
+};

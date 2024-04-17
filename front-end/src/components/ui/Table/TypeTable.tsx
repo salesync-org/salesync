@@ -1,3 +1,4 @@
+import { Type } from '@/type';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '../Button';
 import { Table, TableHeader, TableRow, TableBody, TableCell } from './Table';

@@ -20,7 +20,7 @@ type Type = {
 type LayoutType = {
   name: string;
   type_id: string;
-}
+};
 
 type TypeProperty = {
   id: string;
@@ -67,7 +67,7 @@ type TypePropertyDetail =
     };
     default_value: string;
     fields: [];
-  }
+  };
 
 type PropertyField = {
   id: string;
@@ -77,7 +77,7 @@ type PropertyField = {
   default_value: string | null;
   is_key: boolean;
   field: Field | null;
-}
+};
 
 type TypePropertyField = {
   id: string;
@@ -93,9 +93,9 @@ type Relation = {
 };
 
 type Field = {
-  id: string,
-  input_type: string,
-  is_multiple_value: boolean
+  id: string;
+  input_type: string;
+  is_multiple_value: boolean;
 };
 
 type NewUser = {
@@ -175,6 +175,42 @@ type LayoutOrder = {
   icon: string;
   types: LayoutType[];
 };
+type RecordsResponse = {
+  records: RecordResponse[];
+  total_size: number;
+  page_size: number;
+  current_page: number;
+};
+type RecordResponse = {
+  id: string;
+  name: string;
+  user_id: string;
+  properties: PropertyResponse[];
+};
+type PropertyResponse = {
+  id: string;
+  type_property_id: string;
+  property_label: string;
+  item_value: string;
+};
+type RecordsResponse = {
+  records: RecordResponse[];
+  total_size: number;
+  page_size: number;
+  current_page: number;
+};
+type RecordResponse = {
+  id: string;
+  name: string;
+  user_id: string;
+  properties: PropertyResponse[];
+};
+type PropertyResponse = {
+  id: string;
+  type_property_id: string;
+  property_label: string;
+  item_value: string;
+};
 
 type RelationResponse = {
   id: string;
@@ -201,7 +237,6 @@ type RecordType = {
   id: string;
   name: string;
 };
-
 type NewPasswordChange = {
   old_password: string;
   new_password: string;
@@ -209,14 +244,79 @@ type NewPasswordChange = {
 };
 
 type Permission = {
-  permission_name: string,
-  permission_id: string,
-  description: string
-}
+  permission_name: string;
+  permission_id: string;
+  description: string;
+};
 
 type Role = {
-  role_name: string,
-  role_id: string,
-  description: string,
-  permissions: Permission[]
-}
+  role_name: string;
+  role_id: string;
+  description: string;
+  permissions: Permission[];
+};
+
+type TypeProperty = {
+  id: string;
+  name: string;
+  current_stage_id?: string;
+  template?: string;
+  properties: PropertyElement[];
+};
+
+type PropertyElement = {
+  id: string;
+  property_name: string;
+  property_label: string;
+  sequence: number;
+  property: PropertyProperty;
+  default_value: string;
+  fields: FieldElement[];
+};
+
+type FieldElement = {
+  id: string;
+  item_value: string;
+  property_field: PropertyField;
+};
+
+type PropertyField = {
+  id: string;
+  label: Label;
+  item_value: null;
+  is_required: boolean;
+  default_value: string;
+  is_key: boolean;
+  field: PropertyFieldField;
+};
+
+type PropertyFieldField = {
+  id: string;
+  input_type: InputType;
+  is_multiple_value: boolean;
+};
+
+export enum InputType {
+  Checkbox = 'Checkbox',
+  NumberText = 'NumberText'
+};
+
+export enum Label {
+  Length = 'Length',
+  Required = 'Required',
+  Unique = 'Unique'
+};
+
+export interface PropertyProperty {
+  id: string;
+  name: string;
+  propertyFields: PropertyField[];
+};
+
+export enum Template {
+  Human = 'Human',
+  Activity = 'Activity',
+  Group = 'Group',
+  StageObject = 'StageObject',
+  Object = 'Object'
+};

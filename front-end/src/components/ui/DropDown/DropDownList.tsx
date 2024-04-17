@@ -2,12 +2,16 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDropDownList } from 'hooks/useDropDownList';
 import { cn } from 'utils/utils';
 import { Popup } from '..';
+import { Popup } from '..';
 import useResize from '@/hooks/useResize';
 
 interface ListProps {
   children: React.ReactNode;
   className?: string;
   open?: boolean;
+  maxHeight?: number;
+  maxWidth?: number;
+  isHaveHeader?: boolean;
   align?: 'left' | 'right' | null;
   divide?: boolean;
   onItemClick?: (option: HTMLElement) => void;
@@ -17,6 +21,9 @@ interface ListProps {
 
 const List = ({
   children,
+  maxHeight = 0,
+  maxWidth = 0,
+  isHaveHeader = false,
   open = false,
   divide = false,
   className,
@@ -115,20 +122,31 @@ const List = ({
     handleOptionClick(event.target as HTMLElement);
   };
 
-  const calculateMaxSize = () => {
+  const calculateMaxHeight = () => {
+    if (maxHeight > 0) return maxHeight;
     if (align) {
       return window.innerHeight - 10;
     }
     return shouldDropUp ? Math.max(aboveSize - 30, 0) : Math.max(belowSize - 30, 0);
   };
 
+  const calculateMaxWidth = () => {
+    if (maxWidth > 0) return maxWidth;
+    return 'none';
+  };
+
   return (
     <>
       <div className='bg-transparent'></div>
+      <div className='bg-transparent'></div>
       {/* <div ref={menuRef} className={cn(isOpen && 'fixed left-0 right-0 top-0 z-[51] w-[1500px] h-[1500px] bg-blue')} onClick={()=>{setIsOpen(false)}}/> */}
-      <div style={{ maxHeight: calculateMaxSize(), overflow: 'auto' }} ref={menuRef} className='bg-transparent'>
+      <div
+        style={{ maxHeight: calculateMaxHeight(), overflow: 'auto', maxWidth: calculateMaxWidth() }}
+        ref={menuRef}
+        className='bg-transparent'
+      >
         <Popup
-          style={{ maxHeight: calculateMaxSize(), overflow: 'auto' }}
+          style={{ maxHeight: calculateMaxHeight(), overflow: 'auto', maxWidth: calculateMaxWidth() }}
           className={cn(
             'absolute z-[50] h-fit overflow-x-hidden rounded-xl border-[2px] px-2 transition-all duration-100 ease-in-out',
             divide ? 'divide divide-y-2 divide-button-stroke-light *:py-2 dark:divide-button-stroke-dark' : 'py-2',

@@ -1,4 +1,3 @@
-import { Icon } from '@/components/ui';
 import defaultAvatar from '@/assets/default_avatar.png';
 import React from 'react';
 
@@ -9,12 +8,12 @@ interface InputPropertyProps {
 
 const InputProperty: React.FC<InputPropertyProps> = ({ name, value }) => {
   return (
-    <div className='px-4'>
+    <div className='px-4 py-1'>
       <div>
-        <span className='text-xs'>{name}</span>
+        <span className='text-xs font-medium'>{name}</span>
       </div>
 
-      <div className='flex justify-between border-b'>
+      <div className='flex justify-between border-b py-1'>
         {name === 'Lead Owner' && (
           <>
             <div className='flex justify-start '>
@@ -37,15 +36,13 @@ const InputProperty: React.FC<InputPropertyProps> = ({ name, value }) => {
         )}
         {name !== 'Lead Owner' && name !== 'Lead Owner' && name !== 'Lead Owner' && (
           <>
-            <div className='flex justify-start'>
-              <span className='text-sm'>{value}</span>
+            <div className='flex justify-start overflow-hidden'>
+              <span className='truncate text-sm' title={value}>
+                {value}
+              </span>
             </div>
           </>
         )}
-
-        <button>
-          <Icon name='edit' />
-        </button>
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import NavigationButton from '@/components/NavigationButton/NavigationButton';
 import TypeCard from '@/components/ObjectCard/TypeCard';
+import { Type } from '@/type';
 const HomeLayout = () => {
   //lead
   const Lead: Type = {

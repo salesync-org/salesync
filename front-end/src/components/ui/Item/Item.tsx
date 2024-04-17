@@ -11,6 +11,7 @@ interface ItemProps extends React.HTMLAttributes<HTMLDivElement> {
   additionalInfo?: string;
   icon?: React.ReactNode;
   selected?: boolean;
+  wrapTitle?: boolean;
   onKeyDown?: React.DOMAttributes<HTMLDivElement>['onKeyDown'];
   onClick?: () => void;
   restProps?: React.HTMLAttributes<HTMLDivElement>;
@@ -22,6 +23,7 @@ const Item: React.FC<ItemProps> = ({
   title,
   subTitle,
   selected = false,
+  wrapTitle = true,
   additionalInfo,
   onKeyDown,
   onClick,
@@ -62,8 +64,12 @@ const Item: React.FC<ItemProps> = ({
           <div className='mx-2 min-w-32 flex-grow flex-nowrap text-ellipsis pr-4 align-middle'>
             <div>
               <h5 className='select-none text-ellipsis text-nowrap'>{additionalInfo}</h5>
-              {(subTitle || additionalInfo) && <p className='select-none'>{title}</p>}
-              {!subTitle && !additionalInfo && <p className='select-none'>{title}</p>}
+              {(subTitle || additionalInfo) && (
+                <p className={cn('select-none', wrapTitle ? 'text-wrap' : 'text-nowrap')}>{title}</p>
+              )}
+              {!subTitle && !additionalInfo && (
+                <p className={cn('select-none', wrapTitle ? 'text-wrap' : 'text-nowrap')}>{title}</p>
+              )}
               <h5 className='select-none'>{subTitle}</h5>
             </div>
           </div>

@@ -1,53 +1,41 @@
 import { Button, ButtonGroup, DropDownList, Icon, Item, Panel } from '@/components/ui';
 import { useState } from 'react';
 // import { useParams } from 'react-router-dom';
-import GroupProperty from '@/components/RecordDetail/GroupProperty';
+import recordApi from '@/api/record';
+import NavigationButton from '@/components/NavigationButton/NavigationButton';
+import InputProperty from '@/components/RecordDetail/InputProperty';
+import RecordActivity from '@/components/RecordDetail/RecordActivity';
+import RecordTabs from '@/components/Records/RecordTabs';
 import RelationSections from '@/components/Relation/RelationSections';
-import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
-import useRecord from '@/hooks/record-service/useRecord';
-import { useParams } from 'react-router-dom';
-import useStages from '@/hooks/type-service/useStage';
 import StageSection from '@/components/Stage/StageSection';
+import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
+import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
+import useRecord from '@/hooks/record-service/useRecord';
+import useStages from '@/hooks/type-service/useStage';
+import useAuth from '@/hooks/useAuth';
+import { LayoutOrder, Stage } from '@/type';
+import { formatRecords } from '@/utils/utils';
+import { useParams } from 'react-router-dom';
 
 const RecordDetail = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
-  // const leadId = useParams().leadId;
-
-  const dataAbout = [
-    { name: 'Name', value: 'Nguyễn Quý' },
-    { name: 'Company', value: 'SaleSync' },
-    { name: 'Title', value: 'Inc' },
-    { name: 'Website', value: 'google.com' },
-    { name: 'Description', value: 'Inc' },
-    { name: 'Lead Status', value: 'Nurturing' },
-    { name: 'Lead Owner', value: 'id of user' }
-  ];
-  const dataTouch = [
-    { name: 'Phone', value: '0123456789' },
-    { name: 'Email', value: 'quy@gmail.com' },
-    { name: 'Address', value: 'HCM' }
-  ];
-  const dataSegment = [
-    { name: 'No. of Employees', value: 'Trần Toàn' },
-    { name: 'Annual Revenue', value: 'SaleSync' },
-    { name: 'Lead Source', value: 'Inc' },
-    { name: 'Industry', value: 'google.com' }
-  ];
-  const dataHistory = [
-    { name: 'Created By', value: '' },
-    { name: 'Last Modified By', value: '' }
-  ];
 
   const { recordId = '', companyName = '' } = useParams();
   const { data: record, isLoading: isRecordLoading } = useRecord(companyName, recordId);
   const { data: stages, isLoading: isStagesLoading } = useStages(companyName, record?.source_record?.type.id);
+  const { showModal } = useGlobalModalContext();
 
-  if (isRecordLoading && isStagesLoading) {
+  const { user } = useAuth();
+
+  if (isRecordLoading || isStagesLoading) {
     return <LoadingSpinner />;
   }
 
-  if (!record || !stages) {
+  if (!record || !stages || !user) {
     return null;
+  } else {
+    console.log('record', record.relations.length);
+    console.log(stages);
   }
 
   const mapStages = stages.map((stage: Stage) => {
@@ -59,92 +47,136 @@ const RecordDetail = () => {
 
   const currentStage = record.source_record.current_stage_id;
 
-  const newStages = {
-    stages: mapStages,
-    currentStage
+  const [formattedRecord] = formatRecords([record.source_record]);
+
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  const updateRecord = async (handleUpdate: Function) => {
+    const mapRecord = {
+      id: record.source_record.id,
+      name: record.source_record.name,
+      user_id: record.source_record.user_id,
+      type: record.source_record.type,
+      current_stage_id: currentStage,
+      properties: record.source_record.properties
+    };
+
+    const updatedRecord = handleUpdate(mapRecord);
+    const res = await recordApi.updateRecord(companyName, record.source_record.id, updatedRecord);
+
+    return res;
   };
+
+  const types =
+    user.settings.layout_order.find((layoutOrder: LayoutOrder) => layoutOrder.name === 'Sales')?.types ?? [];
+
   return (
     <div className='flex flex-col'>
-      <Panel className='flex flex-row items-center justify-between p-2'>
-        <div className='flex flex-row items-center'>
-          <img
-            className='mx-2 h-[32px] w-[32px] rounded-sm bg-blue-500'
-            src='https://momentum-enterprise-925.my.salesforce.com/img/icon/t4v35/standard/lead_120.png'
-            alt=''
-          />
-          <div className='flex flex-col'>
-            <div className=''>Lead</div>
-            <div className='text-xl font-bold'>Van Quy Quang</div>
+      <section className='fixed left-0 right-0 z-50 flex h-[40px] items-center bg-panel px-6 dark:bg-panel-dark'>
+        <NavigationButton />
+        <h2 className='select-none pl-6 pr-6 leading-6'>Sales</h2>
+        <RecordTabs tabs={types} name='salesTabs' currentTab={record.source_record.type.name} />
+        <Icon name='edit' className='ml-auto' />
+      </section>
+      <section className='pt-12'>
+        <Panel className='flex flex-row items-center justify-between p-2 '>
+          <div className='flex flex-row items-center'>
+            <img
+              className='mx-2 h-[32px] w-[32px] rounded-sm bg-blue-500'
+              src='https://momentum-enterprise-925.my.salesforce.com/img/icon/t4v35/standard/lead_120.png'
+              alt=''
+            />
+            <div className='flex flex-col'>
+              <div className=''>{record.source_record.type.name}</div>
+              <div className='text-xl font-bold'>{record.source_record.name}</div>
+            </div>
           </div>
-        </div>
-        <ButtonGroup>
-          <Button intent='normal' zoom={false}>
-            Convert
-          </Button>
-          <Button intent='normal' zoom={false}>
-            Change owner
-          </Button>
-
-          {/* <div>
-          <DropDownList align={'left'}>
-            <Item title='Delete' value={''} />
-          </DropDownList>
-        </div> */}
-
-          <Button intent='normal' zoom={false}>
-            Edit
-          </Button>
-
-          <DropDownList
-            open={isMenuOpen}
-            onClose={() => {
-              setMenuOpen(false);
-            }}
-            align='right'
-            className='right-[.25rem] top-[3rem] mt-0 w-80'
-            divide={false}
-          >
-            <Item title='New Event' />
-            <Item title='Log a Call' />
-            <Item title='New Task' />
-            <Item title='Delete' />
-          </DropDownList>
-          <Button zoom={false} intent='normal' className='p-0' onClick={() => setMenuOpen(true)}>
-            <Icon name='arrow_drop_down' className='text-3xl'></Icon>
-          </Button>
-        </ButtonGroup>
-      </Panel>
-
-      {/* record contain  */}
-      <div className='grid grid-cols-4 md:grid-cols-4'>
-        <Panel className='col-span-1 mr-0 h-fit p-4'>
-          <GroupProperty name='About' data={dataAbout} className='mb-4' />
-          <GroupProperty name='Get in Touch' data={dataTouch} className='mb-4' />
-          <GroupProperty name='Segment' data={dataSegment} className='mb-4' />
-          <GroupProperty name='History' data={dataHistory} />
+          <ButtonGroup>
+            <Button
+              intent='normal'
+              zoom={false}
+              onClick={() => {
+                showModal(MODAL_TYPES.CREATE_RECORD_MODAL, {
+                  typeId: record.source_record.type.id,
+                  currentData: { ...formattedRecord, stage: currentStage },
+                  currentRecord: record.source_record
+                });
+              }}
+            >
+              Edit
+            </Button>
+            <Button intent='normal' zoom={false}>
+              Delete
+            </Button>
+            {record.source_record.type.name === 'Lead' && (
+              <Button intent='normal' zoom={false}>
+                Convert
+              </Button>
+            )}
+            <DropDownList
+              open={isMenuOpen}
+              onClose={() => {
+                setMenuOpen(false);
+              }}
+              align='right'
+              className='right-[.25rem] top-[3rem] mt-0 w-80'
+              divide={false}
+            >
+              <Item title='New Event' />
+              <Item title='Log a Call' />
+              <Item title='New Task' />
+              <Item title='Delete' />
+            </DropDownList>
+            <Button zoom={false} intent='normal' className='p-0' onClick={() => setMenuOpen(true)}>
+              <Icon name='arrow_drop_down' className='text-3xl'></Icon>
+            </Button>
+          </ButtonGroup>
         </Panel>
 
-        <section className='col-span-2'>
-          {stages ? (
-            <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
-              <div className='px-4'>
-                <StageSection stage={newStages} />
-              </div>
-            </Panel>
-          ) : (
-            <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
-              <div></div>
-            </Panel>
-          )}
-          <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
-            <div></div>
+        {/* record contain  */}
+        <div className='grid grid-cols-4 md:grid-cols-4'>
+          <Panel className='col-span-1 mr-0 h-fit p-4'>
+            {formattedRecord &&
+              Object.keys(formattedRecord).map((key) => {
+                if (key === 'id') return null;
+                return <InputProperty key={key} name={key} value={formattedRecord[key]} />;
+              })}
           </Panel>
-        </section>
+          <section className='col-span-2'>
+            {stages && stages.length > 0 ? (
+              <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
+                <div className='px-4'>
+                  <StageSection stages={mapStages} currentStage={currentStage} updateRecord={updateRecord} />
+                </div>
+              </Panel>
+            ) : (
+              <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
+                <div></div>
+              </Panel>
+            )}
+            <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
+              <RecordActivity />
+            </Panel>
+          </section>
 
-        <section className='col-span-1'>
-          <RelationSections relations={record.relations} />
-        </section>
-      </div>
+          <section className='col-span-1'>
+            {record.relations.length !== 0 && <RelationSections relations={record.relations} />}
+            {record.relations.length === 0 && (
+              <Panel className='col-span-1 h-fit p-4'>
+                <div className='flex items-center'>
+                  <div className='mr-2'>
+                    <Icon name='merge' className='mr-1 rounded bg-orange-400 p-0.5 text-white'></Icon>
+                  </div>
+                  <div>
+                    <span className='font-bold'>
+                      We found no potential duplicates of this {record.source_record.type.name}.
+                    </span>
+                  </div>
+                </div>
+              </Panel>
+            )}
+          </section>
+        </div>
+      </section>
     </div>
   );
 };

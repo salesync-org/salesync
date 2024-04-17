@@ -20,10 +20,4 @@ public class RestApiConfig {
     public WebClient.Builder webClientBuilder() {
         return WebClient.builder();
     }
-
-    @Bean
-    @LoadBalanced
-    public RestTemplateBuilder restTemplateBuilder() {
-        return new RestTemplateBuilder();
-    }
 }

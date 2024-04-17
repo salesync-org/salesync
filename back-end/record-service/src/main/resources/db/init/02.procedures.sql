@@ -19,6 +19,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION get_filtered_records(
+	IN _user_id uuid,
     IN _name text, 
     IN type_id_ref uuid,
 	IN search_term text,
@@ -45,6 +46,7 @@ BEGIN
         r.*
     FROM public.record r
     JOIN temp_record_order tro ON r.record_id = tro.record_id
+	WHERE r.user_id = _user_id
     ORDER BY CASE WHEN is_asc = true THEN tro.sort_order END,
 	CASE WHEN is_asc = false THEN tro.sort_order END DESC;
 
@@ -53,6 +55,7 @@ $$
 LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION get_filtered_records_and_sort_by_name(
+	IN _user_id uuid,
     IN type_id_ref uuid,
 	IN search_term text,
 	IN is_asc boolean DEFAULT true
@@ -68,6 +71,7 @@ RETURN QUERY
 		JOIN public.record_type_property rtp ON rtp.record_id = r.record_id
 		WHERE rt.type_id = type_id_ref AND rtp.item_value LIKE ('%' || search_term || '%')
 	) r2 ON r1.record_id = r2.record_id
+	WHERE r1.user_id = _user_id
 	ORDER BY CASE WHEN is_asc = true THEN r1.name END,
 	CASE WHEN is_asc = false THEN r1.name END DESC;
 END;

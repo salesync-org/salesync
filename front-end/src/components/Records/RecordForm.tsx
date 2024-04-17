@@ -5,15 +5,16 @@ import { DropDown, DropDownItem, Item, TextArea, TextInput } from '../ui';
 import { ScreenLoading } from '../ui/Loading/LoadingSpinner';
 
 type RecordFormProps = {
-  currentData: Record<string, string>;
+  currentData?: Record<string, string>;
   onSubmit: (data: Record<string, string>) => void;
   stages?: Stage[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   typeProperty?: any;
-  formId: string;
+  formId?: string;
+  className?: string;
 };
 
-const RecordForm = ({ currentData = {}, onSubmit, stages, typeProperty, formId }: RecordFormProps) => {
+const RecordForm = ({ currentData = {}, onSubmit, stages, typeProperty, formId = '', className }: RecordFormProps) => {
   const {
     handleSubmit,
     register,
@@ -47,13 +48,10 @@ const RecordForm = ({ currentData = {}, onSubmit, stages, typeProperty, formId }
     <form
       id={formId}
       onSubmit={handleSubmit(onSubmit)}
-      className={cn(
-        '-z-1 absolute bottom-2 left-2 right-2 top-20 overflow-x-hidden pb-32',
-        isSubmitting && 'pointer-events-none opacity-80'
-      )}
+      className={cn('w-full overflow-x-hidden pb-32', isSubmitting && 'pointer-events-none opacity-80', className)}
     >
       {isSubmitting && <ScreenLoading />}
-      <div className='flex w-full flex-col place-content-center gap-2   p-6'>
+      <div className='flex w-full flex-col place-content-center gap-2 px-6 py-2'>
         {typeProperty ? (
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           typeProperty.properties?.map((property: any) => {

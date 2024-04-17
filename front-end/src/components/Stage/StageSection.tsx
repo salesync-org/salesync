@@ -19,7 +19,7 @@ const lastStages = {
     id: '5',
     name: 'Converted',
     title: 'Select Convert Status',
-    modalName: MODAL_TYPES.CREATE_RECORD_MODAL
+    modalName: MODAL_TYPES.CONVERT_MODAL
   }
 };
 

@@ -144,20 +144,22 @@ const RecordModal = () => {
     <Modal
       isOpen={modalType === MODAL_TYPES.CREATE_RECORD_MODAL}
       onClose={hideModal}
-      className='h-[600px]'
+      className='relative h-[600px]'
       title={`${isUpdateForm ? 'Update' : 'Create'} ${typeProperty.name}`}
     >
-      {isPropertiesLoading || isStagesLoading ? (
-        <LoadingSpinner className='mt-10' />
-      ) : (
-        <RecordForm
-          typeProperty={typeProperty}
-          stages={stages}
-          currentData={currentData}
-          formId={formId}
-          onSubmit={onSubmit}
-        />
-      )}
+      <div className='h-[488px] overflow-y-auto'>
+        {isPropertiesLoading || isStagesLoading ? (
+          <LoadingSpinner className='mt-10' />
+        ) : (
+          <RecordForm
+            typeProperty={typeProperty}
+            stages={stages}
+            currentData={currentData}
+            formId={formId}
+            onSubmit={onSubmit}
+          />
+        )}
+      </div>
       <Panel className='absolute bottom-0 left-0 right-0 m-0 -mt-4 flex h-10 items-center justify-center bg-gray-100 bg-opacity-90 px-3  py-10 shadow-inner'>
         <ModalFooter className='m-0 '>
           <Button onClick={hideModal}>Cancel</Button>

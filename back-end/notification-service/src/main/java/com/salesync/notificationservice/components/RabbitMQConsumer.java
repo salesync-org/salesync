@@ -1,6 +1,6 @@
-package com.salesync.notificationservice.Components;
+package com.salesync.notificationservice.components;
 import com.salesync.notificationservice.Services.INotificationService;
-import com.salesync.notificationservice.dtos.NotificationDto;
+import com.salesync.notificationservice.dtos.MessageDto;
 import com.salesync.notificationservice.dtos.TypeDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -17,7 +17,7 @@ public class RabbitMQConsumer {
     @RabbitListener(queues = "record-queue",ackMode = "AUTO")
     public void receiveMessage(TypeDto message)
     {
-        notificationService.notifyToUser("abc", NotificationDto.builder().content(message.getName()).build());
+        notificationService.notifyToUser("abc", MessageDto.builder().content(message.getName()).build());
     }
 }
 

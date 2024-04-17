@@ -125,7 +125,7 @@ const PersonalInfomationSetting = () => {
                 }}
                 className={cn(
                   editAvatarHovered && 'flex space-x-2 hover:w-36',
-                  'h-fit rounded-full bg-button-background-light p-2 hover:-translate-y-1',
+                  'h-13 w-13 rounded-full bg-button-background-light p-2 hover:-translate-y-1',
                   'border-2 border-button-stroke-light dark:border-button-stroke-dark',
                   'dark:bg-button-background-dark',
                   'shadow-md shadow-primary-color/10 transition-all duration-300 hover:shadow-lg hover:shadow-primary-color/20'
@@ -135,7 +135,11 @@ const PersonalInfomationSetting = () => {
                 }}
               >
                 <Pencil size={editAvatarHovered ? '1rem' : '1.5rem'} />
-                {editAvatarHovered && <p>Edit Avatar</p>}
+                {editAvatarHovered && (
+                  <p className={cn('opacity-0 transition-all duration-200', editAvatarHovered && 'opacity-100')}>
+                    Edit Avatar
+                  </p>
+                )}
               </Button>
             </div>
           </div>

@@ -257,9 +257,10 @@ public class RegisterServiceImpl implements RegisterService {
         RealmRepresentation realmRepresentation = realmResource.toRepresentation();
 
         Map<String, String> smtpConfig = new HashMap<>();
-        smtpConfig.put("host", env.getProperty("mail.host"));
+        smtpConfig.put("host", String.format("service.%s.%s", realmRepresentation.getRealm().toLowerCase(), env.getProperty("mail.host")));
         smtpConfig.put("port",  env.getProperty("mail.port"));
         smtpConfig.put("from", env.getProperty("mail.from"));
+        smtpConfig.put("fromDisplayName", String.format("%s Customer Service", realmRepresentation.getRealm()));
         smtpConfig.put("starttls", env.getProperty("mail.starttls"));
         smtpConfig.put("auth", env.getProperty("mail.auth"));
         smtpConfig.put("password",  env.getProperty("mail.password"));

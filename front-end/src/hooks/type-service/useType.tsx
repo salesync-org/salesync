@@ -1,13 +1,15 @@
 import typeApi from '@/api/type';
-import { Type } from '@/type';
+// import { Type } from '@/type';
 import { useQuery } from 'react-query';
+import { useParams } from 'react-router-dom';
 
 const useType = () => {
   const key = ['types'];
+  const { companyName } = useParams();
   const { data, error, isLoading } = useQuery<Type[]>(
     key,
     async () => {
-      return typeApi.getAllTypes();
+      return typeApi.getAllTypes(companyName ?? '');
     },
     {
       refetchOnWindowFocus: false,

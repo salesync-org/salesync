@@ -12,6 +12,8 @@ interface ItemProps extends React.HTMLAttributes<HTMLDivElement> {
   icon?: React.ReactNode;
   selected?: boolean;
   wrapTitle?: boolean;
+  onKeyDown?: React.DOMAttributes<HTMLDivElement>['onKeyDown'];
+  onClick?: () => void;
   restProps?: React.HTMLAttributes<HTMLDivElement>;
 }
 
@@ -23,27 +25,37 @@ const Item: React.FC<ItemProps> = ({
   selected = false,
   wrapTitle = true,
   additionalInfo,
+  onKeyDown,
+  onClick,
   icon,
   ...restProps
 }) => {
   return (
-    <div title={title}>
+    <div
+      title={title}
+      onKeyDown={(e) => {
+        if (onClick && !onKeyDown && e.key === 'Enter') {
+          onClick();
+        }
+      }}
+    >
       <a className={cn(`flex rounded-sm`, className)} href={href} tabIndex={0} title={title}>
         <div
           className={cn(
             'flex flex-grow cursor-pointer items-center rounded-sm px-2 py-2 align-middle',
             selected && 'bg-secondary-light dark:bg-secondary-dark',
-            'hover:bg-secondary-light dark:hover:bg-secondary-dark',
+            'hover:bg-secondary-light/40 dark:hover:bg-secondary-dark/40',
             'hover:text-link-text-light  dark:hover:text-link-text-dark'
           )}
+          onClick={onClick}
           {...restProps}
         >
           {icon && (
             <div
               className={cn(
                 'flex h-9 w-9 items-center justify-center rounded-full align-middle',
-                'bg-transparent dark:bg-transparent',
-                selected && 'bg-secondary-dark text-text-dark dark:bg-secondary-light dark:text-text-light',
+                'bg-button-background-light dark:bg-button-background-dark',
+                selected && 'bg-secondary-dark text-text-dark dark:bg-secondary-light dark:text-text-light'
               )}
             >
               {icon}

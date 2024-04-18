@@ -1,4 +1,5 @@
-import { SignUpInfo, User } from '@/type';
+import axios from 'axios';
+// import { SignUpInfo, User } from '@/type';
 import instance from './axiosConfig';
 
 const URL = `${import.meta.env.VITE_AUTHENTICATION_HOST}/api/v1`;
@@ -16,6 +17,15 @@ class Auth {
     });
 
     return response.data;
+  }
+
+  async verifyPassword(companyName: string, email: string, password: string) {
+    const response = await instance.post(`${URL}/${companyName}/login`, {
+      username: email,
+      password
+    });
+
+    return response; // Return response instead
   }
 
   async logOut() {
@@ -43,10 +53,31 @@ class Auth {
     return response.data;
   }
 
+  async validateUser(companyName: string) {
+    const response = await instance.get(`${URL}/${companyName}/user/validate`, {
+    });
+
+    return response.data;
+  }
+
   async changePassword(companyName: string, userId: string, password: string) {
     const response = await instance.put(`${URL}/${companyName}/user/password`, {
       user_id: userId,
       new_password: password
+    });
+
+    return response.data;
+  }
+
+  async changePasswordWithToken(companyName: string, userId: string, password: string, access_token: string) {
+    const response = await axios.put(`${URL}/${companyName}/user/password`, {
+      user_id: userId,
+      new_password: password
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${access_token}`
+      }
     });
 
     return response.data;

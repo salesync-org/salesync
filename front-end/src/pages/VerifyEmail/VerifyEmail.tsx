@@ -1,6 +1,6 @@
 import auth from '@/api/auth';
 import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/components/ui/Toast';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 

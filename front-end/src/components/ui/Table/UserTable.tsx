@@ -3,7 +3,7 @@ import { Table, TableHeader, TableRow, TableCell, TableBody } from '.';
 const UserTable = () => {
   return (
     <Table>
-      <TableHeader className='bg-gray-100'>
+      <TableHeader className='bg-gray-100 dark:bg-background-dark'>
         <TableRow>
           <TableCell className='font-medium'>Name</TableCell>
           <TableCell className='font-medium'>Email</TableCell>

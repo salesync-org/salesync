@@ -30,7 +30,7 @@ const RecordTable = ({ typeId, recordFilter }: RecordTableProps) => {
 
   const records = recordData.records;
   const tableData = formatRecords(records);
-  const columns = createColumns(companyName, propertyData!.properties, records);
+  const columns = createColumns(companyName, propertyData!.properties!, records);
 
   return <div className='px-4 py-2'>{<DataTable columns={columns} data={tableData} />}</div>;
 };

@@ -1,20 +1,25 @@
-type TypeRelation = {
-  id: string;
-  source_type: Type;
-  source_type_label: string;
-  relation: Relation;
-  destination_type: Type;
-  destination_label: string;
-};
+// type TypeRelation = {
+//   id: string;
+//   source_type: Type;
+//   source_type_label: string;
+//   relation: Relation;
+//   destination_type: Type;
+//   destination_label: string;
+// };
 
 type Type = {
-  icon_url: string?;
-  background_color: string?;
-  type_id: string;
+  // icon_url: string?;
+  // background_color: string?;
+  id: string;
   name: string;
-  description?: string;
-  fields?: Field[];
-  links?: Link[];
+  template: string | null;
+  // description?: string;
+  // fields?: Field[];
+};
+
+type LayoutType = {
+  name: string;
+  type_id: string;
 };
 
 // type TypeProperty = {
@@ -26,25 +31,71 @@ type Type = {
 //   properties?: Property[];
 // };
 
-type Property = {
+
+// type Property = {
+//   id: string;
+//   label?: string;
+//   name: string;
+//   type: string;
+//   options?: string[];
+// };
+
+type PropertyResponse = {
   id: string;
-  label?: string;
   name: string;
+  propertyFields: PropertyField[] | null;
+};
+
+
+type TypeDetail = {
+  id: string;
+  name: string;
+  template: string;
+  properties: TypePropertyDetail[];
+};
+
+type TypePropertyDetail =
+  {
+    id: string;
+    name: string;
+    label: string;
+    sequence: 1;
+    property: {
+      id: string;
+      name: string;
+      propertyFields: [];
+    };
+    default_value: string;
+    fields: [];
+  };
+
+type PropertyField = {
+  id: string;
+  label: string;
+  item_value: string | null;
+  is_required: boolean;
+  default_value: string | null;
+  is_key: boolean;
+  field: Field | null;
+};
+
+type TypePropertyField = {
+  id: string;
+  name: string;
+  label: string;
   type: string;
   options?: string[];
 };
 
-type Relation = {
-  id: string;
-  name: string;
-};
+// type Relation = {
+//   id: string;
+//   name: string;
+// };
 
 type Field = {
   id: string;
-  name: string;
-  label?: string;
-  defaultValue?: string;
-  values?: string[];
+  input_type: string;
+  is_multiple_value: boolean;
 };
 
 type NewUser = {
@@ -56,14 +107,14 @@ type NewUser = {
   role: string;
 };
 
-type NewUser = {
-  first_name: string;
-  last_name: string;
-  job_title: string;
-  phone: string;
-  email: string;
-  role: string;
-};
+// type NewUser = {
+//   first_name: string;
+//   last_name: string;
+//   job_title: string;
+//   phone: string;
+//   email: string;
+//   role: string;
+// };
 
 type AdminInfo = {
   first_name: string;
@@ -122,8 +173,26 @@ type Settings = {
 type LayoutOrder = {
   name: string;
   icon: string;
-  types: Type[];
+  types: LayoutType[];
 };
+// type RecordsResponse = {
+//   records: RecordResponse[];
+//   total_size: number;
+//   page_size: number;
+//   current_page: number;
+// };
+// type RecordResponse = {
+//   id: string;
+//   name: string;
+//   user_id: string;
+//   properties: PropertyResponse[];
+// };
+// type PropertyResponse = {
+//   id: string;
+//   type_property_id: string;
+//   property_label: string;
+//   item_value: string;
+// };
 type RecordsResponse = {
   records: RecordResponse[];
   total_size: number;
@@ -134,13 +203,12 @@ type RecordResponse = {
   id: string;
   name: string;
   user_id: string;
-  properties: PropertyResponse[];
-};
-type PropertyResponse = {
-  id: string;
-  type_property_id: string;
-  property_label: string;
-  item_value: string;
+  properties: {
+    id: string;
+    type_property_id: string;
+    property_label: string;
+    item_value: string;
+  }[];
 };
 
 type RelationResponse = {
@@ -168,6 +236,24 @@ type RecordType = {
   id: string;
   name: string;
 };
+type NewPasswordChange = {
+  old_password: string;
+  new_password: string;
+  confirm_password: string;
+};
+
+type Permission = {
+  permission_name: string;
+  permission_id: string;
+  description: string;
+};
+
+type Role = {
+  role_name: string;
+  role_id: string;
+  description: string;
+  permissions: Permission[];
+};
 
 type TypeProperty = {
   id: string;
@@ -190,17 +276,15 @@ type PropertyElement = {
 type FieldElement = {
   id: string;
   item_value: string;
-  property_field: PropertyField;
-};
-
-type PropertyField = {
-  id: string;
-  label: Label;
-  item_value: null;
-  is_required: boolean;
-  default_value: string;
-  is_key: boolean;
-  field: PropertyFieldField;
+  property_field: {
+    id: string;
+    label: Label;
+    item_value: null;
+    is_required: boolean;
+    default_value: string;
+    is_key: boolean;
+    field: PropertyFieldField;
+  };
 };
 
 type PropertyFieldField = {
@@ -209,24 +293,24 @@ type PropertyFieldField = {
   is_multiple_value: boolean;
 };
 
-export enum InputType {
+declare enum InputType {
   Checkbox = 'Checkbox',
   NumberText = 'NumberText'
 }
 
-export enum Label {
+declare enum Label {
   Length = 'Length',
   Required = 'Required',
   Unique = 'Unique'
 }
 
-export interface PropertyProperty {
+declare interface PropertyProperty {
   id: string;
   name: string;
   propertyFields: PropertyField[];
 }
 
-export enum Template {
+declare enum Template {
   Human = 'Human',
   Activity = 'Activity',
   Group = 'Group',

@@ -1,7 +1,6 @@
-import { Stage } from '@/type';
 import { cn } from '@/utils/utils';
 import { Controller, useForm } from 'react-hook-form';
-import { DropDown, DropDownItem, Item, TextArea, TextInput } from '../ui';
+import { Checkbox, DropDown, DropDownItem, Item, TextArea, TextInput } from '../ui';
 import { ScreenLoading } from '../ui/Loading/LoadingSpinner';
 
 type RecordFormProps = {
@@ -19,9 +18,10 @@ const RecordForm = ({ currentData = {}, onSubmit, stages, typeProperty, formId =
     handleSubmit,
     register,
     control,
-    formState: { isSubmitting }
+    formState: { isSubmitting, errors }
   } = useForm({
-    defaultValues: currentData
+    defaultValues: currentData,
+    mode: 'all'
   });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -35,12 +35,20 @@ const RecordForm = ({ currentData = {}, onSubmit, stages, typeProperty, formId =
       name: property.name
     };
     return {
-      Text: <TextInput {...props}></TextInput>,
-      Phone: <TextInput {...props} type='tel'></TextInput>,
-      Email: <TextInput {...props} type='email'></TextInput>,
-      Number: <TextInput {...props} type='number'></TextInput>,
-      DateTime: <TextInput {...props} type='date'></TextInput>,
-      TextArea: <TextArea {...props} className='h-[100px] w-full'></TextArea>
+      Text: <TextInput {...props} isError={!!errors[property.name]} validation={{ minLength: 1 }}></TextInput>,
+      Phone: <TextInput {...props} type='tel' isError={!!errors[property.name]}></TextInput>,
+      Email: (
+        <TextInput
+          {...props}
+          type='email'
+          isError={!!errors[property.name]}
+          validation={{ pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i }}
+        ></TextInput>
+      ),
+      Number: <TextInput {...props} type='number' isError={!!errors[property.name]}></TextInput>,
+      DateTime: <TextInput {...props} type='datetime-local' isError={!!errors[property.name]}></TextInput>,
+      TextArea: <TextArea {...props} className='h-[100px] w-full'></TextArea>,
+      Checkbox: <Checkbox></Checkbox>
     };
   };
 

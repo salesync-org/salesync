@@ -117,7 +117,7 @@ export const createColumns = (companyName: string, properties: any[], records: a
         return (
           <div>
             {isUpdating ? (
-              <form onSubmit={handleUpdate} className='relative w-full'>
+              <form onSubmit={handleUpdate} className='relative w-full min-w-[250px]'>
                 <div className='absolute right-0 z-10 flex h-full'>
                   <Button
                     className='h-full select-none'

@@ -142,15 +142,11 @@ const RecordDetail = () => {
               })}
           </Panel>
           <section className='col-span-2'>
-            {stages && stages.length > 0 ? (
+            {stages && stages.length > 0 && (
               <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
                 <div className='px-4'>
                   <StageSection stages={mapStages} currentStage={currentStage} updateRecord={updateRecord} />
                 </div>
-              </Panel>
-            ) : (
-              <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
-                <div></div>
               </Panel>
             )}
             <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>

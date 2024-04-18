@@ -18,37 +18,38 @@ const TypeTable = ({ types }: { types: Type[] }) => {
           </TableRow>
         </TableHeader>
         <TableBody className='h-full overflow-y-scroll'>
-          {types?.map((type, index) => {
-            return (
-              <TableRow key={index}>
-                <TableCell className='max-w-28'>
-                  <Button
-                    intent='link'
-                    className='border-none text-secondary-dark underline underline-offset-2 dark:text-secondary'
-                    onClick={() => {
-                      navigate(`/${companyName}/setting/object-manager/${type.id}`);
-                    }}
-                  >
-                    {type.name}
-                  </Button>
-                </TableCell>
-                <TableCell>{typeof type.template == 'string' ? type.template : 'No Template'}</TableCell>
+          {types &&
+            types.map((type, index) => {
+              return (
+                <TableRow key={index}>
+                  <TableCell className='max-w-28'>
+                    <Button
+                      intent='link'
+                      className='border-none text-secondary-dark underline underline-offset-2 dark:text-secondary'
+                      onClick={() => {
+                        navigate(`/${companyName}/setting/object-manager/${type.id}`);
+                      }}
+                    >
+                      {type.name}
+                    </Button>
+                  </TableCell>
+                  <TableCell>{typeof type.template == 'string' ? type.template : 'No Template'}</TableCell>
 
-                <TableCell className='max-w-9'>
-                  <Button
-                    intent={'normal'}
-                    rounded={'icon'}
-                    onClick={() => {
-                      navigate(`/${companyName}/setting/object-manager/${type.id}`);
-                    }}
-                    className='p-0 hover:border-2 hover:border-input-stroke-light dark:hover:border-input-stroke-dark'
-                  >
-                    <ChevronRight name='navigate_next' size={'1.5rem'} />
-                  </Button>
-                </TableCell>
-              </TableRow>
-            );
-          })}
+                  <TableCell className='max-w-9'>
+                    <Button
+                      intent={'normal'}
+                      rounded={'icon'}
+                      onClick={() => {
+                        navigate(`/${companyName}/setting/object-manager/${type.id}`);
+                      }}
+                      className='p-0 hover:border-2 hover:border-input-stroke-light dark:hover:border-input-stroke-dark'
+                    >
+                      <ChevronRight name='navigate_next' size={'1.5rem'} />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
         </TableBody>
       </Table>
     </div>

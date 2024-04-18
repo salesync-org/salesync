@@ -1,6 +1,7 @@
 import React, { ChangeEvent, FocusEvent } from 'react';
 import { Icon } from '@/components/ui';
 import { cn } from 'utils/utils';
+import { RegisterOptions, FieldValues, FieldName } from 'react-hook-form';
 
 type TextInputProps = {
   value?: string;
@@ -19,13 +20,13 @@ type TextInputProps = {
   prefixIconNode?: React.ReactNode;
   paddingLeft?: string;
   postfixIcon?: string;
+  validation?: RegisterOptions<FieldValues, FieldName>;
   isError?: boolean;
   readOnly?: boolean;
   defaultValue?: string;
   isPassword?: boolean;
   type?: string;
   restProps?: React.HTMLAttributes<HTMLInputElement>;
-  isPassword?: boolean;
 };
 const TextInput: React.FC<TextInputProps> = ({
   value,
@@ -40,6 +41,7 @@ const TextInput: React.FC<TextInputProps> = ({
   paddingLeft = 'pl-[55px]',
   postfixIcon,
   type = 'text',
+  validation = {},
   isError = false,
   onChange,
   defaultValue,
@@ -77,7 +79,7 @@ const TextInput: React.FC<TextInputProps> = ({
           value={value}
           disabled={disabled}
           onChange={onChange}
-          {...register(name)}
+          {...register(name, validation)}
           defaultValue={defaultValue}
           name={name}
           {...restProps}

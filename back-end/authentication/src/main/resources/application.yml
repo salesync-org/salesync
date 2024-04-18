@@ -31,7 +31,7 @@ main-website:
 mail:
   host: email-smtp.ap-southeast-2.amazonaws.com
   port: 2587
-  from: @salesync.org
+  from: salesync.org
   starttls: true
   auth: true
   user: ${MAIL_SERVER_USER}

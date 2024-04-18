@@ -10,11 +10,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.nio.file.AccessDeniedException;
+
 @RestControllerAdvice
 public class AuthHandler {
 
     @ExceptionHandler(NotAuthorizedException.class)
     public ResponseEntity<ErrorResponseDto> handleNotAuthorizedException(NotAuthorizedException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                ErrorResponseDto.builder()
+                        .message(e.getMessage())
+                        .status(HttpStatus.UNAUTHORIZED.value())
+                        .build()
+        );
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponseDto> handleAccessDeniedException(NotAuthorizedException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
                 ErrorResponseDto.builder()
                         .message(e.getMessage())

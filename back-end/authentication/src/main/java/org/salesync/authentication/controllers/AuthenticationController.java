@@ -2,6 +2,7 @@ package org.salesync.authentication.controllers;
 
 import jakarta.ws.rs.core.Response;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import org.keycloak.representations.AccessTokenResponse;
 import org.salesync.authentication.constants.Routes;
 import org.salesync.authentication.dtos.*;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
     RegisterService registerService;
 
+    @SneakyThrows
     @PostMapping(Routes.AUTH_COMPANY_CREATE)
     ResponseEntity<AccessTokenResponse> createRealm(
             @RequestBody CompanyRegisterDto companyRegisterDTO
@@ -23,6 +25,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(registerService.registerCompany(companyRegisterDTO));
     }
 
+    @SneakyThrows
     @PostMapping(Routes.AUTH_LOGIN)
     ResponseEntity<AccessTokenResponse> login(
             @PathVariable String realmName,
@@ -45,6 +48,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(registerService.logout(realmName, StringUtility.removeBearer(token)));
     }
 
+    @SneakyThrows
     @PostMapping(Routes.AUTH_USER_CREATE)
     ResponseEntity<Response> createUser(
             @PathVariable String realmName,

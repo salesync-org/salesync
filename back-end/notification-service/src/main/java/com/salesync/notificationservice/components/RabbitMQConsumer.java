@@ -14,7 +14,7 @@ public class RabbitMQConsumer {
     @RabbitListener(queues = "record-queue",ackMode = "AUTO")
     public void receiveMessage(MessageDto message)
     {
-        notificationService.notifyToUser("abc", message);
+        notificationService.notifyToUser(message.getReceiverId().toString(), message);
     }
 }
 

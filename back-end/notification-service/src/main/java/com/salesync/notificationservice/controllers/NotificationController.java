@@ -20,12 +20,6 @@ public class NotificationController {
 
     private final INotificationService notificationService;
 
-    @GetMapping("/send-notification")
-    String sendNotification() {
-        notificationService.notifyToUser("abc", null);
-        return "ok";
-    }
-
     @GetMapping(Route.Notification.GET_NOTIFICATIONS_BY_RECEIVER_ID)
     ResponseEntity<List<MessageDto>> getNotifications(@PathVariable UUID receiverId) {
         return ResponseEntity.ok(notificationService.getNotificationsByReceiverId(receiverId));}

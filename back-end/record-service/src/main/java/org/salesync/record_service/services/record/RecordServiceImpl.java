@@ -17,6 +17,7 @@ import org.salesync.record_service.mappers.RecordTypePropertyMapper;
 import org.salesync.record_service.mappers.RecordTypeRelationMapper;
 import org.salesync.record_service.mappers.RelationItemMapper;
 import org.salesync.record_service.repositories.*;
+import org.salesync.record_service.services.token.TokenService;
 import org.salesync.record_service.utils.SecurityContextHelper;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
@@ -29,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -48,6 +50,7 @@ public class RecordServiceImpl implements RecordService {
     private final RecordTypePropertyMapper recordTypePropertyMapper = RecordTypePropertyMapper.INSTANCE;
     private final RestTemplate restTemplate;
     private final RabbitMQProducer rabbitMQProducer;
+    private final TokenService tokenService;
 
     @Override
     public ListRecordsResponseDto getFilteredRecords(ListRecordsRequestDto requestDto) {
@@ -229,7 +232,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public RecordDto updateStage(RequestUpdateStageDto requestUpdateStageDto) {
+    public RecordDto updateStage(RequestUpdateStageDto requestUpdateStageDto, String token) {
 
         /* TODO: validate stageId */
         Record record = recordRepository.findById(requestUpdateStageDto.getRecordId()).orElseThrow(
@@ -242,7 +245,16 @@ public class RecordServiceImpl implements RecordService {
         recordStage.setStageId(requestUpdateStageDto.getStageId());
         record.setRecordStage(recordStage);
 
-        rabbitMQProducer.sendMessage("record","cc");
+        String userId = tokenService.extractClaim(token.split(" ")[1], claims -> claims.get("userId", String.class));
+        rabbitMQProducer.sendMessage("record",MessageDto.builder()
+                        .content("${"+userId+"} Updated "+ record.getName() +" stage")
+                        .title("Stage Updated")
+                        .createdAt(new Date())
+                        .action("update")
+                        .isRead(false)
+                        .senderId(UUID.fromString(userId))
+                        .receiverId(record.getUserId())
+                .build());
 
         return recordMapper.recordToRecordDto(recordRepository.save(record));
     }

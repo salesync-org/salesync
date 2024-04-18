@@ -22,9 +22,9 @@ public class NotificationServiceImpl implements INotificationService {
 
     @Override
     public MessageDto createNotification(MessageDto messageDto) {
-
-
-        return messageMapper.entityToDto(messageRepository.save(messageMapper.dtoToEntity(messageDto)));
+        Message message = messageMapper.dtoToEntity(messageDto);
+        Message message1=messageRepository.save(message);
+        return messageMapper.entityToDto(message1);
     }
 
     @Override
@@ -35,6 +35,7 @@ public class NotificationServiceImpl implements INotificationService {
     @Override
     public void notifyToUser(String user, MessageDto messageDto) {
         simpMessagingTemplate.convertAndSendToUser(user, "/receiver", messageDto);
+        createNotification(messageDto);
     }
 
     @Override

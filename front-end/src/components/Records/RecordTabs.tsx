@@ -4,10 +4,10 @@ import { cn } from '@/utils/utils';
 import { useEffect } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import LoadingSpinner from '../ui/Loading/LoadingSpinner';
-import { LayoutOrder, Type } from '@/type';
+// import { LayoutOrder, Type } from '@/type';
 
 interface RecordTabsProps {
-  tabs: Type[];
+  tabs: LayoutType[];
   // setTabs: React.Dispatch<React.SetStateAction<{ title: string; href: string }[]>>;
   name: string;
   currentTab?: string;

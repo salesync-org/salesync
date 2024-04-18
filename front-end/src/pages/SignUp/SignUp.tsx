@@ -1,7 +1,7 @@
 import { Button, DropDown, DropDownItem, ErrorText, Panel, PrimaryButton, TextInput } from '@/components/ui';
 import salesyncLogo from 'assets/salesync_logo.png';
 import salesyncIcon from 'assets/salesync_icon.png';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/components/ui/Toast';
 import useAuth from '@/hooks/useAuth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';

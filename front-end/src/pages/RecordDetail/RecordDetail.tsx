@@ -13,7 +13,7 @@ import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext
 import useRecord from '@/hooks/record-service/useRecord';
 import useStages from '@/hooks/type-service/useStage';
 import useAuth from '@/hooks/useAuth';
-import { LayoutOrder, Stage } from '@/type';
+// import { LayoutOrder, Stage } from '@/type';
 import { formatRecords } from '@/utils/utils';
 import { useParams } from 'react-router-dom';
 

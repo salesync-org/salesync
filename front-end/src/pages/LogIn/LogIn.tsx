@@ -1,5 +1,5 @@
 import { Checkbox, ErrorText, Panel, PrimaryButton, TextInput } from '@/components/ui';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/components/ui/Toast';
 import useAuth from '@/hooks/useAuth';
 import { cn } from '@/utils/utils';
 import { zodResolver } from '@hookform/resolvers/zod';

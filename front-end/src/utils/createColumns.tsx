@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import recordApi from '@/api/record';
 import { Button, Icon, TextInput } from '@/components/ui';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/components/ui/Toast';
 import { Pencil } from 'lucide-react';
 import { ChangeEvent, useState } from 'react';
 import { useQueryClient } from 'react-query';

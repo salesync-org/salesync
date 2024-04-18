@@ -6,7 +6,7 @@ import Icon from '@/components/ui/Icon/Icon';
 import Panel from '@/components/ui/Panel/Panel';
 import TextInput from '@/components/ui/TextInput/TextInput';
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
-import { Type } from '@/type';
+// import { Type } from '@/type';
 import icon from 'assets/type-icon/lead_icon.png';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';

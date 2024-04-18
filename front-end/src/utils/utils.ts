@@ -1,4 +1,3 @@
-import { RecordResponse } from '@/type';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -40,6 +39,6 @@ export const formatRecords = (records: RecordResponse[]) => {
 
     formattedRecords.push(formattedRecord);
   }
-  
+
   return formattedRecords;
 };

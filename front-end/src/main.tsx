@@ -10,11 +10,10 @@ import { GlobalModalProvider } from './context/GlobalModalContext.tsx';
 const queryClient = new QueryClient();
 
 async function enableMocking() {
-  if (process.env.NODE_ENV !== 'development') {
-    return;
+  if (process.env.NODE_ENV === 'mock') {
+    const { server } = await import('@/mocks/api/handlers.ts');
+    return server.start();
   }
-  // const { server } = await import('@/mocks/api/handlers.ts');
-  // return server.start();
 }
 
 enableMocking().then(() => {

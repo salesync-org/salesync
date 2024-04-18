@@ -3,7 +3,7 @@ import { NavLink, useParams } from 'react-router-dom';
 import Icon from '../ui/Icon/Icon';
 import { useEffect, useState } from 'react';
 import useAuth from '@/hooks/useAuth';
-import { LayoutOrder, Type } from '@/type';
+// import { LayoutOrder, Type } from '@/type';
 
 type AsideItem = {
   href: string;

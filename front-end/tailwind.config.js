@@ -125,6 +125,9 @@ export default {
         appearing: {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' }
+        },
+        spinner_svv2: {
+          '100%': { transform: 'rotate(360deg)' }
         }
       }
     }

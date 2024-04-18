@@ -2,7 +2,7 @@ import React, { ChangeEvent, FocusEvent } from 'react';
 import { Icon } from '@/components/ui';
 import { cn } from 'utils/utils';
 
-interface TextInputProps {
+type TextInputProps = {
   value?: string;
   className?: string;
   inputClassName?: string;
@@ -20,9 +20,13 @@ interface TextInputProps {
   paddingLeft?: string;
   postfixIcon?: string;
   isError?: boolean;
+  readOnly?: boolean;
+  defaultValue?: string;
+  isPassword?: boolean;
   type?: string;
   restProps?: React.HTMLAttributes<HTMLInputElement>;
-}
+  isPassword?: boolean;
+};
 const TextInput: React.FC<TextInputProps> = ({
   value,
   placeholder,
@@ -38,10 +42,12 @@ const TextInput: React.FC<TextInputProps> = ({
   type = 'text',
   isError = false,
   onChange,
+  defaultValue,
   name = '',
   register = () => ({}),
+  readOnly,
   ...restProps
-}) => {
+}: TextInputProps) => {
   return (
     <div>
       {showHeader && header && <p className={cn('my-1', isError && 'font-medium text-red-500')}>{header}</p>}
@@ -72,7 +78,10 @@ const TextInput: React.FC<TextInputProps> = ({
           disabled={disabled}
           onChange={onChange}
           {...register(name)}
+          defaultValue={defaultValue}
+          name={name}
           {...restProps}
+          readOnly={readOnly}
         />
         <div className='relative flex h-full items-center justify-start rounded px-4'>
           <div className=' absolute bottom-0 top-0 flex w-4 items-center'>

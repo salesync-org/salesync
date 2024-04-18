@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import Stage from './Stage';
 import { cn } from '@/utils/utils';
-import { Stage as StageType } from '@/type';
+// import { Stage as StageType } from '@/type';
 
 interface StagesProps {
   stages: StageType[];

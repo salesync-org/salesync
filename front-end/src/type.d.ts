@@ -1,11 +1,11 @@
-type TypeRelation = {
-  id: string;
-  source_type: Type;
-  source_type_label: string;
-  relation: Relation;
-  destination_type: Type;
-  destination_label: string;
-};
+// type TypeRelation = {
+//   id: string;
+//   source_type: Type;
+//   source_type_label: string;
+//   relation: Relation;
+//   destination_type: Type;
+//   destination_label: string;
+// };
 
 type Type = {
   // icon_url: string?;
@@ -22,23 +22,23 @@ type LayoutType = {
   type_id: string;
 };
 
-type TypeProperty = {
-  id: string;
-  label?: string;
-  name: string;
-  type?: string;
-  description?: string;
-  properties?: Property[];
-};
+// type TypeProperty = {
+//   id: string;
+//   label?: string;
+//   name: string;
+//   type?: string;
+//   description?: string;
+//   properties?: Property[];
+// };
 
 
-type Property = {
-  id: string;
-  label?: string;
-  name: string;
-  type: string;
-  options?: string[];
-};
+// type Property = {
+//   id: string;
+//   label?: string;
+//   name: string;
+//   type: string;
+//   options?: string[];
+// };
 
 type PropertyResponse = {
   id: string;
@@ -87,10 +87,10 @@ type TypePropertyField = {
   options?: string[];
 };
 
-type Relation = {
-  id: string;
-  name: string;
-};
+// type Relation = {
+//   id: string;
+//   name: string;
+// };
 
 type Field = {
   id: string;
@@ -107,14 +107,14 @@ type NewUser = {
   role: string;
 };
 
-type NewUser = {
-  first_name: string;
-  last_name: string;
-  job_title: string;
-  phone: string;
-  email: string;
-  role: string;
-};
+// type NewUser = {
+//   first_name: string;
+//   last_name: string;
+//   job_title: string;
+//   phone: string;
+//   email: string;
+//   role: string;
+// };
 
 type AdminInfo = {
   first_name: string;
@@ -175,6 +175,24 @@ type LayoutOrder = {
   icon: string;
   types: LayoutType[];
 };
+// type RecordsResponse = {
+//   records: RecordResponse[];
+//   total_size: number;
+//   page_size: number;
+//   current_page: number;
+// };
+// type RecordResponse = {
+//   id: string;
+//   name: string;
+//   user_id: string;
+//   properties: PropertyResponse[];
+// };
+// type PropertyResponse = {
+//   id: string;
+//   type_property_id: string;
+//   property_label: string;
+//   item_value: string;
+// };
 type RecordsResponse = {
   records: RecordResponse[];
   total_size: number;
@@ -185,31 +203,12 @@ type RecordResponse = {
   id: string;
   name: string;
   user_id: string;
-  properties: PropertyResponse[];
-};
-type PropertyResponse = {
-  id: string;
-  type_property_id: string;
-  property_label: string;
-  item_value: string;
-};
-type RecordsResponse = {
-  records: RecordResponse[];
-  total_size: number;
-  page_size: number;
-  current_page: number;
-};
-type RecordResponse = {
-  id: string;
-  name: string;
-  user_id: string;
-  properties: PropertyResponse[];
-};
-type PropertyResponse = {
-  id: string;
-  type_property_id: string;
-  property_label: string;
-  item_value: string;
+  properties: {
+    id: string;
+    type_property_id: string;
+    property_label: string;
+    item_value: string;
+  }[];
 };
 
 type RelationResponse = {
@@ -277,17 +276,15 @@ type PropertyElement = {
 type FieldElement = {
   id: string;
   item_value: string;
-  property_field: PropertyField;
-};
-
-type PropertyField = {
-  id: string;
-  label: Label;
-  item_value: null;
-  is_required: boolean;
-  default_value: string;
-  is_key: boolean;
-  field: PropertyFieldField;
+  property_field: {
+    id: string;
+    label: Label;
+    item_value: null;
+    is_required: boolean;
+    default_value: string;
+    is_key: boolean;
+    field: PropertyFieldField;
+  };
 };
 
 type PropertyFieldField = {
@@ -296,27 +293,27 @@ type PropertyFieldField = {
   is_multiple_value: boolean;
 };
 
-export enum InputType {
+declare enum InputType {
   Checkbox = 'Checkbox',
   NumberText = 'NumberText'
-};
+}
 
-export enum Label {
+declare enum Label {
   Length = 'Length',
   Required = 'Required',
   Unique = 'Unique'
-};
+}
 
-export interface PropertyProperty {
+declare interface PropertyProperty {
   id: string;
   name: string;
   propertyFields: PropertyField[];
-};
+}
 
-export enum Template {
+declare enum Template {
   Human = 'Human',
   Activity = 'Activity',
   Group = 'Group',
   StageObject = 'StageObject',
   Object = 'Object'
-};
+}

@@ -6,7 +6,7 @@ import { Navigate, useParams } from 'react-router-dom';
 import RecordTabs from '../../components/Records/RecordTabs';
 import ErrorToaster from '../Error/ErrorToaster';
 import NavigationButton from '@/components/NavigationButton/NavigationButton';
-import { LayoutOrder, Type } from '@/type';
+// import { LayoutOrder, Type } from '@/type';
 
 const Sales = () => {
   const { user, isLoading } = useAuth();

@@ -11,7 +11,7 @@ import {
 } from '@/components/ui';
 import UserTable from '@/components/ui/Table/UserTable';
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
-import { NewUser } from '@/type';
+// import { NewUser } from '@/type';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 

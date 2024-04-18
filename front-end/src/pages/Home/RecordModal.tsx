@@ -15,7 +15,7 @@ import { useToast } from '@/components/ui/Toast';
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 import useProperties from '@/hooks/type-service/useProperties';
 import useStages from '@/hooks/type-service/useStage';
-import { Stage } from '@/type';
+// import { Stage } from '@/type';
 import { cn } from '@/utils/utils';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';

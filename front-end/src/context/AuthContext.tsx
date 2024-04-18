@@ -1,5 +1,5 @@
 import auth from '@/api/auth';
-import { SignUpInfo, TokenResponse, User } from '@/type';
+// import { SignUpInfo, TokenResponse, User } from '@/type';
 import { useState, createContext, useEffect, Dispatch, useCallback } from 'react';
 
 type AuthContext = {

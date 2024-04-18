@@ -4,18 +4,12 @@ CREATE ROLE postgres WITH LOGIN SUPERUSER PASSWORD 'strong_password';
 
 \c salesync_notification_service;
 
-
-
--- Table: public.message
-
--- DROP TABLE IF EXISTS public.message;
-
 CREATE TABLE IF NOT EXISTS public.message
 (
     is_read boolean,
     created_at timestamp(6) without time zone,
     message_id uuid NOT NULL DEFAULT gen_random_uuid(),
-    receiver_id uuid,
+    receiver_id uuid NOT NULL,
     sender_id uuid,
     action character varying(255) COLLATE pg_catalog."default",
     content character varying(255) COLLATE pg_catalog."default",

@@ -232,7 +232,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public RecordDto updateStage(RequestUpdateStageDto requestUpdateStageDto, String token) {
+    public RecordDto updateStage(RequestUpdateStageDto requestUpdateStageDto, String token,String realm) {
 
         /* TODO: validate stageId */
         Record record = recordRepository.findById(requestUpdateStageDto.getRecordId()).orElseThrow(
@@ -252,6 +252,7 @@ public class RecordServiceImpl implements RecordService {
                         .createdAt(new Date())
                         .action("update")
                         .isRead(false)
+                        .url("/"+realm+"/record/"+record.getId())
                         .senderId(UUID.fromString(userId))
                         .receiverId(record.getUserId())
                 .build());

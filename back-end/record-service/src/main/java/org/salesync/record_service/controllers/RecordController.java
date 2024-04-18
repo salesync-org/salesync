@@ -63,8 +63,8 @@ public class RecordController {
 
     @PutMapping(Route.UPDATE_STAGE)
     public ResponseEntity<RecordDto> updateStage(@RequestBody RequestUpdateStageDto requestUpdateStageDto,
-                                                 @RequestHeader(name = "Authorization") String authorization) {
-        return ResponseEntity.ok(recordService.updateStage(requestUpdateStageDto, authorization));
+                                                 @RequestHeader(name = "Authorization") String authorization, @PathVariable String realm) {
+        return ResponseEntity.ok(recordService.updateStage(requestUpdateStageDto, authorization, realm));
     }
 
     @PostMapping(Route.TYPE_ID + Route.CREATE)

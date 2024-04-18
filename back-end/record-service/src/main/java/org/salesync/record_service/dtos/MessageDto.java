@@ -1,5 +1,4 @@
-package com.salesync.notificationservice.dtos;
-
+package org.salesync.record_service.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
@@ -14,6 +13,7 @@ import java.util.UUID;
 public class MessageDto implements Serializable {
 
     private static final long serialVersionUID = -2408414599486046563L;
+
     UUID id;
 
     @JsonProperty("sender_id")

@@ -1,9 +1,6 @@
 package com.salesync.notificationservice.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
@@ -18,6 +15,7 @@ import java.util.UUID;
 public class Message {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "message_id")
     private UUID id;
 

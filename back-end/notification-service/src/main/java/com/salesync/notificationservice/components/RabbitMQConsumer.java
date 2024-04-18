@@ -11,13 +11,10 @@ import org.springframework.stereotype.Component;
 public class RabbitMQConsumer {
 
     private final INotificationService notificationService;
-
-
-
     @RabbitListener(queues = "record-queue",ackMode = "AUTO")
-    public void receiveMessage(TypeDto message)
+    public void receiveMessage(MessageDto message)
     {
-        notificationService.notifyToUser("abc", MessageDto.builder().content(message.getName()).build());
+        notificationService.notifyToUser("abc", message);
     }
 }
 

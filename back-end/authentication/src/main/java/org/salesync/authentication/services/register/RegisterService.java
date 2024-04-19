@@ -1,6 +1,7 @@
 package org.salesync.authentication.services.register;
 
 import jakarta.ws.rs.core.Response;
+import org.hibernate.sql.Update;
 import org.keycloak.representations.AccessTokenResponse;
 import org.salesync.authentication.dtos.*;
 
@@ -14,4 +15,7 @@ public interface RegisterService {
     Response logout(String realmName, String token);
 
     VerifyEmailResponseDto verifyEmail(String token);
+
+    UpdateCompanyInfoDto updateCompany(String realmName, UpdateCompanyInfoDto updateCompanyInfoDto, String accessToken) throws AccessDeniedException;
+    CompanyInfoDto getCompanyInfo(String companyName, String accessToken) throws AccessDeniedException;
 }

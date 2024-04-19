@@ -26,7 +26,7 @@ public class AuthHandler {
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ErrorResponseDto> handleAccessDeniedException(NotAuthorizedException e) {
+    public ResponseEntity<ErrorResponseDto> handleAccessDeniedException(AccessDeniedException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
                 ErrorResponseDto.builder()
                         .message(e.getMessage())

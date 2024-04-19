@@ -11,26 +11,43 @@ import org.salesync.authentication.utils.StringUtility;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
+
 @RestController
 @RequestMapping(path = Routes.AUTH)
 @AllArgsConstructor
 public class AuthenticationController {
     RegisterService registerService;
 
-    @SneakyThrows
     @PostMapping(Routes.AUTH_COMPANY_CREATE)
     ResponseEntity<AccessTokenResponse> createRealm(
             @RequestBody CompanyRegisterDto companyRegisterDTO
-    ) {
+    ) throws AccessDeniedException {
         return ResponseEntity.ok(registerService.registerCompany(companyRegisterDTO));
     }
 
-    @SneakyThrows
+    @PutMapping(Routes.AUTH_REALM_INFO)
+    ResponseEntity<UpdateCompanyInfoDto> updateRealmInfo(
+            @RequestHeader("Authorization") String token,
+            @PathVariable String realmName,
+            @RequestBody UpdateCompanyInfoDto updateCompanyInfoDto
+    ) throws Exception {
+        return ResponseEntity.ok(registerService.updateCompany(realmName, updateCompanyInfoDto, StringUtility.removeBearer(token)));
+    }
+
+    @GetMapping(Routes.AUTH_REALM_INFO)
+    ResponseEntity<CompanyInfoDto> getRealmInfo(
+            @RequestHeader("Authorization") String token,
+            @PathVariable String realmName
+    ) throws AccessDeniedException {
+        return ResponseEntity.ok(registerService.getCompanyInfo(realmName, StringUtility.removeBearer(token)));
+    }
+
     @PostMapping(Routes.AUTH_LOGIN)
     ResponseEntity<AccessTokenResponse> login(
             @PathVariable String realmName,
             @RequestBody LogInDto loginDTO
-    ) {
+    ) throws AccessDeniedException {
         return ResponseEntity.ok(registerService.login(realmName, loginDTO));
     }
 
@@ -48,13 +65,12 @@ public class AuthenticationController {
         return ResponseEntity.ok(registerService.logout(realmName, StringUtility.removeBearer(token)));
     }
 
-    @SneakyThrows
     @PostMapping(Routes.AUTH_USER_CREATE)
     ResponseEntity<Response> createUser(
             @PathVariable String realmName,
             @RequestHeader("Authorization") String token,
             @RequestBody NewUserDto newUserDTO
-            ) {
+            ) throws AccessDeniedException {
         return ResponseEntity.ok(registerService.registerUser(newUserDTO, realmName, StringUtility.removeBearer(token)));
     }
 

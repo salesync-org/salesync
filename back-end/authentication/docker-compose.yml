@@ -4,8 +4,10 @@ services:
     image: 'postgres:latest'
     environment:
       - 'POSTGRES_DB=salesync_authentication'
-      - 'POSTGRES_PASSWORD=admin'
-      - 'POSTGRES_USER=admin'
+      - 'POSTGRES_PASSWORD=authentication'
+      - 'POSTGRES_USER=authentication'
+    volumes:
+      - ./src/main/resources/db/init:/docker-entrypoint-initdb.d
     ports:
       - '12345:5432'
   keycloak:

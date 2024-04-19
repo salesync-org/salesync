@@ -17,6 +17,7 @@ public final class Routes {
     public static final String AUTH_LOGIN = "/{realmName}/login";
     public static final String AUTH_LOGOUT = "/{realmName}/logout";
     public static final String AUTH_USER_CREATE = "/{realmName}/user/create";
+    public static final String AUTH_REALM_INFO = "/{realmName}/info";
     public static final String ROLE = "/";
     public static final String REALM_ROLES = "/{realmName}/roles";
     public static final String REALM_ROLE = "/{realmName}/role/{roleName}";

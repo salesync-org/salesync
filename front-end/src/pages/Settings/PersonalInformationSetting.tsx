@@ -16,7 +16,9 @@ const PersonalInfomationSetting = () => {
   const { toast } = useToast();
   const [isUpdating, setUpdatingStatus] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const [avatarUrl, setAvatarUrl] = useState(`${import.meta.env.VITE_STORAGE_SERVICE_HOST}${user?.avatar_url}-256.jpg`);
+  const [avatarUrl, setAvatarUrl] = useState(
+    `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/avatars/${user?.avatar_url}-256.jpg`
+  );
   const editableFields = {
     first_name: true,
     last_name: true,
@@ -37,22 +39,23 @@ const PersonalInfomationSetting = () => {
   };
   const handleFileUpload = async (file: File) => {
     if (userLoaded.user_id != undefined) {
-      const timestamp = new Date().getTime();
       setUpdatingStatus(true);
-      uploadAvatar(`avatar_${userLoaded.user_id}_${timestamp}`, file).then(async (res) => {
+      uploadAvatar(`avatar_${userLoaded.user_id}`, file).then(async (res) => {
         if (res && res.status === 200) {
-          const newUser = { ...userLoaded, avatar_url: `avatar_${userLoaded.user_id}_${timestamp}` };
+          const newUser = { ...userLoaded, avatar_url: `avatar_${userLoaded.user_id}` };
           setUserInfo(newUser);
           console.log('Loaded: ' + newUser);
-          updateUser(companyName ?? '', newUser as User).then(() => {
+          await updateUser(companyName ?? '', newUser as User).then(() => {
             setModalOpen(false);
-            setAvatarUrl(`${import.meta.env.VITE_STORAGE_SERVICE_HOST}${newUser?.avatar_url}-256.jpg`);
-            reloadUser();
             toast({
               title: 'Success',
               description: 'Reload to see your avatar take effect.'
             });
             setUpdatingStatus(false);
+            setTimeout(() => {
+              reloadUser();
+              setAvatarUrl(`${import.meta.env.VITE_STORAGE_SERVICE_HOST}/avatars/${user?.avatar_url}-256.jpg`);
+            }, 2000);
           });
         }
       });
@@ -110,7 +113,7 @@ const PersonalInfomationSetting = () => {
               Profile Picture
             </h2>
             <div className='aspect-square w-64 overflow-clip rounded-full'>
-              <img src={avatarUrl} />
+              <img src={`${avatarUrl}?lastmod=${new Date().getTime().toString()}`} />
             </div>
             <div className='dark:panel-dark absolute bottom-1 right-2'>
               <Button
@@ -149,14 +152,25 @@ const PersonalInfomationSetting = () => {
             intent='primary'
             className='w-full'
             onClick={async () => {
+              setUpdatingStatus(true);
               await updateUser(companyName ?? '', userLoaded as User);
+              setUpdatingStatus(false);
               toast({
                 title: 'Success',
                 description: 'Your information has been updated successfully!'
               });
             }}
           >
-            Save Changes
+            {isUpdating ? (
+              <div className='flex items-center justify-center space-x-2'>
+                <div>
+                  <LoadingSpinnerSmall className='h-5 w-5 fill-on-primary' />
+                </div>
+                <p className='font-semibold'> Please wait...</p>
+              </div>
+            ) : (
+              <p className='font-semibold'>Save Changes</p>
+            )}
           </Button>
         </div>
       </Panel>
@@ -170,7 +184,7 @@ const PersonalInfomationSetting = () => {
       >
         <div className='flex w-full flex-col justify-center space-y-5 py-2'>
           <div className='mx-auto aspect-square w-64 overflow-clip rounded-full'>
-            <img src={`${import.meta.env.VITE_STORAGE_SERVICE_HOST}${userLoaded?.avatar_url}-256.jpg`} />
+            <img src={`${avatarUrl}?lastmod=${new Date().getTime().toString()}`} />
           </div>
           <Button
             intent='primary'
@@ -188,7 +202,7 @@ const PersonalInfomationSetting = () => {
                 <p className='font-semibold'> Please wait...</p>
               </div>
             ) : (
-              <p className='font-semibold'>Upload a Photo</p>
+              <p className='font-semibold'>Upload</p>
             )}
           </Button>
         </div>

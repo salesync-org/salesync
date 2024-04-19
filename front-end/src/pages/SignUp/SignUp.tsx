@@ -149,7 +149,7 @@ const SignUp = () => {
           role: 'admin-user'
         },
         noEmployees: data.noEmployees,
-        company_name: data.company,
+        company_name: data.company.toLocaleLowerCase(),
         country_region: country
       });
       toast({

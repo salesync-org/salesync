@@ -7,12 +7,12 @@ const UserTable = () => {
         <TableRow>
           <TableCell className='font-medium'>Name</TableCell>
           <TableCell className='font-medium'>Email</TableCell>
-          <TableCell className='font-medium'>Status</TableCell>
+          <TableCell className='font-medium'>Role</TableCell>
           <TableCell className='font-medium'></TableCell>
         </TableRow>
       </TableHeader>
       <TableBody>
-        <TableRow>
+        {/* <TableRow>
           <TableCell>John Doe</TableCell>
           <TableCell>thang@gmail</TableCell>
           <TableCell>Active</TableCell>
@@ -23,7 +23,7 @@ const UserTable = () => {
           <TableCell>thang@gmail</TableCell>
           <TableCell>Active</TableCell>
           <TableCell className='text-end'>Deactive</TableCell>
-        </TableRow>
+        </TableRow> */}
       </TableBody>
     </Table>
   );

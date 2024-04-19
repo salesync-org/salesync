@@ -19,11 +19,12 @@ const UserInfo = () => {
         setName('Unknown');
         setAvatar(defaultAvatar);
       } else {
-        const { first_name, last_name, avatar_url } = user;
-        setName(`${first_name} ${last_name}`);
+        setName(`${user.first_name} ${user.last_name}`);
         // const availability = await isImageShowableHead(avatar_url);
         if (avatar_url) {
-          setAvatar(`${import.meta.env.VITE_STORAGE_SERVICE_HOST}${avatar_url}-48.jpg`);
+          setAvatar(
+            `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/avatars/${user.avatar_url}-48.jpg?lastMod=${new Date().getTime()}`
+          );
         } else {
           setAvatar(defaultAvatar);
         }

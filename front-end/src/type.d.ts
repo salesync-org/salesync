@@ -317,3 +317,12 @@ declare enum Template {
   StageObject = 'StageObject',
   Object = 'Object'
 }
+
+type CompanyInfo = {
+  "company_id": string,
+  "name": string,
+  "avatar_url": string,
+  "address": string,
+  "phone": string,
+  "tax_code": string
+}

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import recordApi from '@/api/record';
 import { useGlobalModalContext } from '@/context/GlobalModalContext';
 import useProperties from '@/hooks/type-service/useProperties';
 import useType from '@/hooks/type-service/useType';
@@ -10,7 +11,6 @@ import RecordForm from '../Records/RecordForm';
 import { Button, Modal, ModalFooter, PrimaryButton, TextInput } from '../ui';
 import LoadingSpinner from '../ui/Loading/LoadingSpinner';
 import { useToast } from '../ui/Toast';
-import recordApi from '@/api/record';
 
 const TYPE_FORM_ID = {
   CONTACT: 'contactForm',
@@ -24,12 +24,23 @@ type CheckStateStatus = {
   opportunityCheckStatus: Status;
   accountCheckStatus: Status;
 };
+
+const ids = {
+  Contact: '',
+  Opportunity: '',
+  Account: ''
+};
+
 const ConvertModal = () => {
   const [checkStatus, setCheckStatus] = useState<CheckStateStatus>({
     contactCheckStatus: 'create',
     opportunityCheckStatus: 'create',
     accountCheckStatus: 'create'
   });
+  const [contact, setContact] = useState<TypeProperty | null>(null);
+  const [opportunity, setOpportunity] = useState<TypeProperty | null>(null);
+  const [account, setAccount] = useState<TypeProperty | null>(null);
+
   const { hideModal } = useGlobalModalContext();
   const { companyName = '' } = useParams();
 
@@ -71,12 +82,14 @@ const ConvertModal = () => {
     }
 
     if (checkStatus.opportunityCheckStatus === 'create') {
-      await submitForm(TYPE_FORM_ID.OPPORTUNITY);
+      submitForm(TYPE_FORM_ID.OPPORTUNITY);
     }
 
     if (checkStatus.accountCheckStatus === 'create') {
       await submitForm(TYPE_FORM_ID.ACCOUNT);
     }
+
+    console.log({ ids });
   };
 
   return (
@@ -92,18 +105,21 @@ const ConvertModal = () => {
           formId={TYPE_FORM_ID.CONTACT}
           check={checkStatus.contactCheckStatus}
           onCheckStatus={handleCheckStatus('contactCheckStatus')}
+          setRecord={setContact}
         />
         <ConvertSection
           typeProperties={opportunityProperties}
           formId={TYPE_FORM_ID.OPPORTUNITY}
           check={checkStatus.opportunityCheckStatus}
           onCheckStatus={handleCheckStatus('opportunityCheckStatus')}
+          setRecord={setOpportunity}
         />
         <ConvertSection
           typeProperties={accountProperties}
           formId={TYPE_FORM_ID.ACCOUNT}
           check={checkStatus.accountCheckStatus}
           onCheckStatus={handleCheckStatus('accountCheckStatus')}
+          setRecord={setAccount}
         />
       </div>
       <ModalFooter className='absolute bottom-0 left-0 right-0 m-0 flex h-10 w-full items-center justify-center bg-gray-100 bg-opacity-90 px-3 py-10 shadow-inner'>
@@ -116,7 +132,7 @@ const ConvertModal = () => {
   );
 };
 
-const ConvertSection = ({ typeProperties, formId, check, onCheckStatus }: any) => {
+const ConvertSection = ({ typeProperties, formId, check, onCheckStatus, setRecord }: any) => {
   const [isExpand, setIsExpand] = useState(false);
   const { toast } = useToast();
   const { companyName = '' } = useParams();
@@ -144,6 +160,9 @@ const ConvertSection = ({ typeProperties, formId, check, onCheckStatus }: any) =
           title: 'Success',
           description: 'Create record successfully'
         });
+
+        setRecord(res);
+        ids[typeProperties.name as keyof typeof ids] = res.id;
       }
     } catch (error) {
       console.error(error);

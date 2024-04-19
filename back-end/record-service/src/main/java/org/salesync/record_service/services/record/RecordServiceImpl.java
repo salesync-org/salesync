@@ -119,8 +119,6 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public RecordTypeRelationDto createRecordTypeRelation(RequestRecordTypeRelationDto requestRecordTypeRelationDto) {
-        System.out.println(requestRecordTypeRelationDto);
-
         UUID sourceRecordId = requestRecordTypeRelationDto.getSourceRecordId();
         Record sourceRecord = recordRepository.findById(sourceRecordId).orElseThrow(
                 () -> new ObjectNotFoundException(
@@ -167,11 +165,12 @@ public class RecordServiceImpl implements RecordService {
             Record record = recordRepository.findById(recordId).orElseThrow(
                     () -> new ConcurrentUpdateException(Message.CONCURRENT_UPDATE)
             );
-            if (userContextId.equals(record.getUserId().toString())) {
+            if (!userContextId.equals(record.getUserId().toString())) {
                 throw new AccessDeniedException("You are not allowed to delete this record");
             }
             recordRepository.delete(record);
         });
+
     }
 
     @Override
@@ -232,7 +231,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public RecordDto updateStage(RequestUpdateStageDto requestUpdateStageDto, String token,String realm) {
+    public RecordDto updateStage(RequestUpdateStageDto requestUpdateStageDto, String token, String realm) {
 
         /* TODO: validate stageId */
         Record record = recordRepository.findById(requestUpdateStageDto.getRecordId()).orElseThrow(
@@ -246,15 +245,15 @@ public class RecordServiceImpl implements RecordService {
         record.setRecordStage(recordStage);
 
         String userId = tokenService.extractClaim(token.split(" ")[1], claims -> claims.get("userId", String.class));
-        rabbitMQProducer.sendMessage("record",MessageDto.builder()
-                        .content("${"+userId+"} Updated "+ record.getName() +" stage")
-                        .title("Stage Updated")
-                        .createdAt(new Date())
-                        .action("update")
-                        .isRead(false)
-                        .url("/"+realm+"/record/"+record.getId())
-                        .senderId(UUID.fromString(userId))
-                        .receiverId(record.getUserId())
+        rabbitMQProducer.sendMessage("record", MessageDto.builder()
+                .content("${" + userId + "} Updated " + record.getName() + " stage")
+                .title("Stage Updated")
+                .createdAt(new Date())
+                .action("update")
+                .isRead(false)
+                .url("/" + realm + "/record/" + record.getId())
+                .senderId(UUID.fromString(userId))
+                .receiverId(record.getUserId())
                 .build());
 
         return recordMapper.recordToRecordDto(recordRepository.save(record));

@@ -26,6 +26,7 @@ import org.salesync.authentication.entities.Company;
 import org.salesync.authentication.helpers.SettingsManager;
 import org.salesync.authentication.repositories.CompanyRepository;
 import org.salesync.authentication.services.user.UserService;
+import org.salesync.authentication.utils.StringUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -319,7 +320,7 @@ public class RegisterServiceImpl implements RegisterService {
         smtpConfig.put("host", env.getProperty("mail.host"));
         smtpConfig.put("port",  env.getProperty("mail.port"));
         smtpConfig.put("from", String.format("service.%s@%s", realmRepresentation.getRealm().toLowerCase(), env.getProperty("mail.from")));
-        smtpConfig.put("fromDisplayName", String.format("%s Customer Service", realmRepresentation.getRealm()));
+        smtpConfig.put("fromDisplayName", String.format("%s Customer Service", StringUtility.capFirstChar(realmRepresentation.getRealm())));
         smtpConfig.put("starttls", env.getProperty("mail.starttls"));
         smtpConfig.put("auth", env.getProperty("mail.auth"));
         smtpConfig.put("password",  env.getProperty("mail.password"));

@@ -23,7 +23,7 @@ const RecordSection = ({ type }: RecordSectionProps) => {
     isAsc: false,
     propertyName: null,
     currentPage: 1,
-    pageSize: 30
+    pageSize: 300
   });
 
   if (!type || !typeId) {

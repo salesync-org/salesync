@@ -42,3 +42,9 @@ export const formatRecords = (records: RecordResponse[]) => {
 
   return formattedRecords;
 };
+
+export const getCompanyName = (index?: number) => {
+  const url = window.location.pathname;
+  const urlParts = url.split('/');
+  return urlParts[index ?? 1];
+};

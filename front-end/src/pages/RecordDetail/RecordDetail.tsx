@@ -33,9 +33,6 @@ const RecordDetail = () => {
 
   if (!record || !stages || !user) {
     return null;
-  } else {
-    console.log('record', record.relations.length);
-    console.log(stages);
   }
 
   const mapStages = stages.map((stage: Stage) => {

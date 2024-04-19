@@ -35,10 +35,18 @@ const RecordForm = ({ currentData = {}, onSubmit, stages, typeProperty, formId =
       name: property.name
     };
     return {
-      Text: <TextInput {...props} isError={!!errors[property.name]} validation={{ minLength: 1 }}></TextInput>,
-      Phone: <TextInput {...props} type='tel' isError={!!errors[property.name]}></TextInput>,
+      Text: (
+        <TextInput
+          defaultValue='relation'
+          {...props}
+          isError={!!errors[property.name]}
+          validation={{ minLength: 1 }}
+        ></TextInput>
+      ),
+      Phone: <TextInput defaultValue='relation' {...props} type='tel' isError={!!errors[property.name]}></TextInput>,
       Email: (
         <TextInput
+          defaultValue='relation@gmail.com'
           {...props}
           type='email'
           isError={!!errors[property.name]}

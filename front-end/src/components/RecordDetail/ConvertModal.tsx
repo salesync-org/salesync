@@ -1,16 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import recordApi from '@/api/record';
-import { useGlobalModalContext } from '@/context/GlobalModalContext';
+import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 import useProperties from '@/hooks/type-service/useProperties';
 import useType from '@/hooks/type-service/useType';
-import { cn } from '@/utils/utils';
+import { cn, getCompanyName } from '@/utils/utils';
 import { ChevronRight } from 'lucide-react';
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 import RecordForm from '../Records/RecordForm';
 import { Button, Modal, ModalFooter, PrimaryButton, TextInput } from '../ui';
 import LoadingSpinner from '../ui/Loading/LoadingSpinner';
 import { useToast } from '../ui/Toast';
+import { useQueryClient } from 'react-query';
 
 const TYPE_FORM_ID = {
   CONTACT: 'contactForm',
@@ -37,12 +38,50 @@ const ConvertModal = () => {
     opportunityCheckStatus: 'create',
     accountCheckStatus: 'create'
   });
-  const [contact, setContact] = useState<TypeProperty | null>(null);
-  const [opportunity, setOpportunity] = useState<TypeProperty | null>(null);
-  const [account, setAccount] = useState<TypeProperty | null>(null);
+  const [contact, setContact] = useState<RecordProperty | null>(null);
+  const [opportunity, setOpportunity] = useState<RecordProperty | null>(null);
+  const [account, setAccount] = useState<RecordProperty | null>(null);
+  const [convertClicked, setConvertClicked] = useState(true);
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+  const companyName = getCompanyName();
+  const {
+    hideModal,
+    store: { modalType }
+  } = useGlobalModalContext();
 
-  const { hideModal } = useGlobalModalContext();
-  const { companyName = '' } = useParams();
+  useEffect(() => {
+    const handleRevert = async () => {
+      if (convertClicked && contact && opportunity && account) {
+        try {
+          const relation1 = recordApi.createRelation(companyName, contact.id, opportunity.id);
+          const relation2 = recordApi.createRelation(companyName, contact.id, account.id);
+          const relation3 = recordApi.createRelation(companyName, opportunity.id, account.id);
+          const res = await Promise.all([relation1, relation2, relation3]);
+          if (res) {
+            toast({
+              title: 'Success',
+              description: 'Convert successfully'
+            });
+            queryClient.invalidateQueries(['record']);
+            window.location.href = `${companyName}/record/${contact.id}`
+            hideModal();
+          }
+        } catch (error: any) {
+          console.error(error);
+          toast({
+            title: 'Error',
+            description: error?.message ?? 'Failed to convert',
+            variant: 'destructive'
+          });
+        } finally {
+          setConvertClicked(false);
+        }
+      }
+    };
+
+    handleRevert();
+  }, [account, companyName, contact, convertClicked, hideModal, opportunity, queryClient, toast]);
 
   const { types = [], isLoading: isTypesLoading } = useType();
 
@@ -72,29 +111,36 @@ const ConvertModal = () => {
   };
 
   const handleConvert = async () => {
-    const submitForm = async (formId: string) => {
-      const form = document.getElementById(formId) as HTMLFormElement;
-      form?.requestSubmit();
-    };
+    try {
+      const submitForm = async (formId: string) => {
+        const form = document.getElementById(formId) as HTMLFormElement;
+        form?.requestSubmit();
+      };
 
-    if (checkStatus.contactCheckStatus === 'create') {
-      await submitForm(TYPE_FORM_ID.CONTACT);
+      if (checkStatus.contactCheckStatus === 'create') {
+        await submitForm(TYPE_FORM_ID.CONTACT);
+      }
+
+      if (checkStatus.opportunityCheckStatus === 'create') {
+        await submitForm(TYPE_FORM_ID.OPPORTUNITY);
+      }
+
+      if (checkStatus.accountCheckStatus === 'create') {
+        await submitForm(TYPE_FORM_ID.ACCOUNT);
+      }
+    } catch (error: any) {
+      console.error(error);
+      toast({
+        title: 'Error',
+        description: error?.message ?? 'Failed to convert',
+        variant: 'destructive'
+      });
     }
-
-    if (checkStatus.opportunityCheckStatus === 'create') {
-      submitForm(TYPE_FORM_ID.OPPORTUNITY);
-    }
-
-    if (checkStatus.accountCheckStatus === 'create') {
-      await submitForm(TYPE_FORM_ID.ACCOUNT);
-    }
-
-    console.log({ ids });
   };
 
   return (
     <Modal
-      isOpen={false}
+      isOpen={modalType === MODAL_TYPES.CONVERT_MODAL}
       onClose={hideModal}
       className='mx-auto h-[600px] w-[1024px] max-w-[calc(100vw-12px)] overflow-y-hidden'
       title='Convert Lead'
@@ -135,7 +181,7 @@ const ConvertModal = () => {
 const ConvertSection = ({ typeProperties, formId, check, onCheckStatus, setRecord }: any) => {
   const [isExpand, setIsExpand] = useState(false);
   const { toast } = useToast();
-  const { companyName = '' } = useParams();
+  const companyName = getCompanyName();
 
   const onSubmit = async (data: any) => {
     try {

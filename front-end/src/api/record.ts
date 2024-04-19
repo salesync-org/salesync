@@ -57,6 +57,20 @@ class RecordApi {
     const response = await axios.put(`${URL}/${companyName}/records/${recordId}/update`, data);
     return response.data;
   }
+
+  async deleteRecord(companyName: string, recordId: string) {
+    const response = await axios.delete(`${URL}/${companyName}/records/${recordId}`);
+    return response.data;
+  }
+
+  async createRelation(companyName: string, sourceRecordId: string, targetRecordId: string) {
+    const response = await axios.post(`${URL}/${companyName}/records/create-record-type-relation`, {
+      source_record_id: sourceRecordId,
+      destination_record_id: targetRecordId,
+      type_relation_id: sourceRecordId
+    });
+    return response.data;
+  }
 }
 
 const recordApi = new RecordApi();

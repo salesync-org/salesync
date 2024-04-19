@@ -31,7 +31,6 @@ type LayoutType = {
 //   properties?: Property[];
 // };
 
-
 // type Property = {
 //   id: string;
 //   label?: string;
@@ -46,7 +45,6 @@ type PropertyResponse = {
   propertyFields: PropertyField[] | null;
 };
 
-
 type TypeDetail = {
   id: string;
   name: string;
@@ -54,20 +52,19 @@ type TypeDetail = {
   properties: TypePropertyDetail[];
 };
 
-type TypePropertyDetail =
-  {
+type TypePropertyDetail = {
+  id: string;
+  name: string;
+  label: string;
+  sequence: 1;
+  property: {
     id: string;
     name: string;
-    label: string;
-    sequence: 1;
-    property: {
-      id: string;
-      name: string;
-      propertyFields: [];
-    };
-    default_value: string;
-    fields: [];
+    propertyFields: [];
   };
+  default_value: string;
+  fields: [];
+};
 
 type PropertyField = {
   id: string;
@@ -317,3 +314,19 @@ declare enum Template {
   StageObject = 'StageObject',
   Object = 'Object'
 }
+
+type RecordProperty = {
+  id: string;
+  name: string;
+  user_id: string;
+  type?: Type;
+  current_stage_id?: string;
+  properties: Property[];
+};
+
+type Property = {
+  id: string;
+  property_name: string;
+  property_label: string;
+  item_value: string;
+};

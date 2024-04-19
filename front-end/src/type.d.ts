@@ -315,16 +315,16 @@ declare enum Template {
   Object = 'Object'
 }
 
-type RecordProperty = {
+type RecordPropertyResponse = {
   id: string;
   name: string;
   user_id: string;
   type?: Type;
   current_stage_id?: string;
-  properties: Property[];
+  properties: PropertyResponse[];
 };
 
-type Property = {
+type PropertyResponse = {
   id: string;
   property_name: string;
   property_label: string;

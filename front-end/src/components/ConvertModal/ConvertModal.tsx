@@ -3,15 +3,14 @@ import recordApi from '@/api/record';
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 import useProperties from '@/hooks/type-service/useProperties';
 import useType from '@/hooks/type-service/useType';
-import { cn, getCompanyName } from '@/utils/utils';
-import { ChevronRight } from 'lucide-react';
+import { getCompanyName } from '@/utils/utils';
 import { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
-import RecordForm from '../Records/RecordForm';
-import { Button, Modal, ModalFooter, PrimaryButton, TextInput } from '../ui';
+import { useQueryClient } from 'react-query';
+import { Button, Modal, ModalFooter, PrimaryButton } from '../ui';
 import LoadingSpinner from '../ui/Loading/LoadingSpinner';
 import { useToast } from '../ui/Toast';
-import { useQueryClient } from 'react-query';
+import { ConvertSection } from './ConvertSection';
+import LoadingSpinnerSmall from '../ui/Loading/LoadingSpinnerSmall';
 
 const TYPE_FORM_ID = {
   CONTACT: 'contactForm',
@@ -26,22 +25,17 @@ type CheckStateStatus = {
   accountCheckStatus: Status;
 };
 
-const ids = {
-  Contact: '',
-  Opportunity: '',
-  Account: ''
-};
-
 const ConvertModal = () => {
   const [checkStatus, setCheckStatus] = useState<CheckStateStatus>({
     contactCheckStatus: 'create',
     opportunityCheckStatus: 'create',
     accountCheckStatus: 'create'
   });
-  const [contact, setContact] = useState<RecordProperty | null>(null);
-  const [opportunity, setOpportunity] = useState<RecordProperty | null>(null);
-  const [account, setAccount] = useState<RecordProperty | null>(null);
-  const [convertClicked, setConvertClicked] = useState(true);
+  const [contact, setContact] = useState<RecordPropertyResponse | null>(null);
+  const [opportunity, setOpportunity] = useState<RecordPropertyResponse | null>(null);
+  const [account, setAccount] = useState<RecordPropertyResponse | null>(null);
+  const [convertClicked, setConvertClicked] = useState(false);
+  const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const companyName = getCompanyName();
@@ -52,8 +46,14 @@ const ConvertModal = () => {
 
   useEffect(() => {
     const handleRevert = async () => {
+      const contact = localStorage.getItem('Contact') ? JSON.parse(localStorage.getItem('Contact')!) : null;
+      const opportunity = localStorage.getItem('Opportunity') ? JSON.parse(localStorage.getItem('Opportunity')!) : null;
+      const account = localStorage.getItem('Account') ? JSON.parse(localStorage.getItem('Account')!) : null;
+
+      console.log({ contact, opportunity, account, convertClicked });
       if (convertClicked && contact && opportunity && account) {
         try {
+          setLoading(true);
           const relation1 = recordApi.createRelation(companyName, contact.id, opportunity.id);
           const relation2 = recordApi.createRelation(companyName, contact.id, account.id);
           const relation3 = recordApi.createRelation(companyName, opportunity.id, account.id);
@@ -64,7 +64,7 @@ const ConvertModal = () => {
               description: 'Convert successfully'
             });
             queryClient.invalidateQueries(['record']);
-            window.location.href = `${companyName}/record/${contact.id}`
+            window.location.href = `/${companyName}/record/${contact.id}`;
             hideModal();
           }
         } catch (error: any) {
@@ -76,6 +76,10 @@ const ConvertModal = () => {
           });
         } finally {
           setConvertClicked(false);
+          setLoading(false);
+          localStorage.removeItem('Contact');
+          localStorage.removeItem('Opportunity');
+          localStorage.removeItem('Account');
         }
       }
     };
@@ -112,6 +116,8 @@ const ConvertModal = () => {
 
   const handleConvert = async () => {
     try {
+      setLoading(true);
+      setConvertClicked(true);
       const submitForm = async (formId: string) => {
         const form = document.getElementById(formId) as HTMLFormElement;
         form?.requestSubmit();
@@ -135,6 +141,8 @@ const ConvertModal = () => {
         description: error?.message ?? 'Failed to convert',
         variant: 'destructive'
       });
+      setConvertClicked(false);
+      setLoading(false);
     }
   };
 
@@ -152,6 +160,7 @@ const ConvertModal = () => {
           check={checkStatus.contactCheckStatus}
           onCheckStatus={handleCheckStatus('contactCheckStatus')}
           setRecord={setContact}
+          record={contact}
         />
         <ConvertSection
           typeProperties={opportunityProperties}
@@ -159,6 +168,7 @@ const ConvertModal = () => {
           check={checkStatus.opportunityCheckStatus}
           onCheckStatus={handleCheckStatus('opportunityCheckStatus')}
           setRecord={setOpportunity}
+          record={opportunity}
         />
         <ConvertSection
           typeProperties={accountProperties}
@@ -166,111 +176,28 @@ const ConvertModal = () => {
           check={checkStatus.accountCheckStatus}
           onCheckStatus={handleCheckStatus('accountCheckStatus')}
           setRecord={setAccount}
+          record={account}
         />
       </div>
       <ModalFooter className='absolute bottom-0 left-0 right-0 m-0 flex h-10 w-full items-center justify-center bg-gray-100 bg-opacity-90 px-3 py-10 shadow-inner'>
-        <Button onClick={hideModal}>Cancel</Button>
-        <PrimaryButton type='submit' onClick={handleConvert}>
-          Convert
+        <Button disabled={loading} onClick={hideModal}>
+          Cancel
+        </Button>
+        <PrimaryButton disabled={loading} type='submit' onClick={handleConvert}>
+          {loading ? (
+            <div className='flex items-center justify-center space-x-2'>
+              <div>
+                <LoadingSpinnerSmall className='h-5 w-5 fill-on-primary' />
+              </div>
+              <p className='font-semibold'>Converting...</p>
+            </div>
+          ) : (
+            <p className='font-semibold'>Convert</p>
+          )}
         </PrimaryButton>
       </ModalFooter>
     </Modal>
   );
 };
 
-const ConvertSection = ({ typeProperties, formId, check, onCheckStatus, setRecord }: any) => {
-  const [isExpand, setIsExpand] = useState(false);
-  const { toast } = useToast();
-  const companyName = getCompanyName();
-
-  const onSubmit = async (data: any) => {
-    try {
-      const req = {
-        record_name: data['Name'],
-        stage_id: data.stage,
-        properties: typeProperties.properties!.map((property: any) => {
-          return {
-            id: property.id,
-            property_name: property.name,
-            property_label: property.label,
-            item_value: data[property.name]
-          };
-        })
-      };
-
-      const typeId = typeProperties.id;
-      const res = await recordApi.createRecord(companyName, typeId, req);
-
-      if (res) {
-        toast({
-          title: 'Success',
-          description: 'Create record successfully'
-        });
-
-        setRecord(res);
-        ids[typeProperties.name as keyof typeof ids] = res.id;
-      }
-    } catch (error) {
-      console.error(error);
-      toast({
-        title: 'Error',
-        description: 'Failed to create record',
-        variant: 'destructive'
-      });
-    }
-  };
-
-  return (
-    <div className='grid w-full grid-cols-2 rounded-md bg-slate-100 p-4'>
-      <section className='col-span-1 grid grid-cols-12 border-r'>
-        <div className='col-span-3 -mt-1 flex cursor-pointer gap-2' onClick={() => setIsExpand(!isExpand)}>
-          <ChevronRight
-            size={20}
-            style={{ transform: isExpand ? 'rotate(90deg)' : '', transition: 'all 0.25s ease-in' }}
-          />
-          <h2 className='text-base font-medium'>{typeProperties.name}</h2>
-        </div>
-        <section className='col-span-9 flex w-full flex-col gap-2'>
-          <div className='flex items-center gap-2'>
-            <input
-              id={typeProperties.name}
-              type='radio'
-              checked={check === 'create'}
-              onChange={onCheckStatus('create')}
-            />
-            <label htmlFor={typeProperties.name} className='text-sm font-medium'>
-              Create new
-            </label>
-          </div>
-          <div
-            className={cn(
-              'h-[320px] w-full overflow-y-auto transition-all duration-[0.25s] ease-in',
-              !isExpand && 'h-0 overflow-hidden'
-            )}
-          >
-            <RecordForm formId={formId} typeProperty={typeProperties} onSubmit={onSubmit} className='pb-4' />
-          </div>
-        </section>
-      </section>
-      <section className='col-span-1 w-full px-8'>
-        <section className='col-span-4 flex w-full flex-col gap-2'>
-          <div className='flex items-center gap-2'>
-            <input
-              id={typeProperties.name}
-              type='radio'
-              checked={check === 'chooseExisting'}
-              onChange={onCheckStatus('chooseExisting')}
-            />
-            <label htmlFor={typeProperties.name} className='text-sm font-medium'>
-              Choose Existing
-            </label>
-          </div>
-          <div>
-            <TextInput className='w-full' postfixIcon='search' />
-          </div>
-        </section>
-      </section>
-    </div>
-  );
-};
 export default ConvertModal;

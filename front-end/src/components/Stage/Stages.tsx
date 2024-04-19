@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import Stage from './Stage';
 import { cn } from '@/utils/utils';
 import { Stage as StageType } from '@/type';
-import ConvertModal from '../RecordDetail/ConvertModal';
+import ConvertModal from '../ConvertModal/ConvertModal';
 
 interface StagesProps {
   stages: StageType[];
@@ -32,7 +32,7 @@ const Stages = ({ stages, currentStage, stageIdChosen, setStageIdChosen, isLoadi
           </li>
         ))}
       </ul>
-      <ConvertModal ></ConvertModal>
+      <ConvertModal></ConvertModal>
     </>
   );
 };

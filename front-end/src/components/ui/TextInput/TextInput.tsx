@@ -11,6 +11,7 @@ type TextInputProps = {
   disabled?: boolean;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   onFocus?: (e: FocusEvent<HTMLInputElement>) => void;
+  onBlur?: (e: FocusEvent<HTMLInputElement>) => void;
   name?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   register?: any;
@@ -25,6 +26,7 @@ type TextInputProps = {
   readOnly?: boolean;
   defaultValue?: string;
   isPassword?: boolean;
+  list?: string;
   type?: string;
   restProps?: React.HTMLAttributes<HTMLInputElement>;
 };
@@ -44,8 +46,10 @@ const TextInput: React.FC<TextInputProps> = ({
   validation = {},
   isError = false,
   onChange,
+  onBlur,
   defaultValue,
   name = '',
+  list = '',
   register = () => ({}),
   readOnly,
   ...restProps
@@ -68,6 +72,7 @@ const TextInput: React.FC<TextInputProps> = ({
       >
         <input
           type={type}
+          list={list}
           placeholder={placeholder}
           className={cn(
             'absolute h-full w-full rounded bg-transparent py-2 pr-2 placeholder:text-ellipsis placeholder:text-[13px] placeholder:text-opacity-50 focus:outline-primary',
@@ -79,6 +84,7 @@ const TextInput: React.FC<TextInputProps> = ({
           value={value}
           disabled={disabled}
           onChange={onChange}
+          onBlur={onBlur}
           {...register(name, validation)}
           defaultValue={defaultValue}
           name={name}

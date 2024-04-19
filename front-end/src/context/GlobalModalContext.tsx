@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import ConvertModal from '@/components/RecordDetail/ConvertModal';
+import ConvertModal from '@/components/ConvertModal/ConvertModal';
 import UserModal from '@/components/UserModal/UserModal';
 import RecordModal from '@/pages/Home/RecordModal';
 import React, { createContext, useContext, useState } from 'react';

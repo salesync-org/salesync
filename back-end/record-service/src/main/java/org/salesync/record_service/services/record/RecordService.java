@@ -27,7 +27,7 @@ public interface RecordService {
 
     ListRecordTypeRelationsDto getListRecordTypeRelationsById(UUID sourceRecordId,String token,String realm);
 
-    RecordDto updateStage(RequestUpdateStageDto requestUpdateStageDto);
+    RecordDto updateStage(RequestUpdateStageDto requestUpdateStageDto,String token, String realm);
 
     RecordDto createRecordByTypeId(String typeId, String token, CreateRecordRequestDto createRecordRequestDto);
 

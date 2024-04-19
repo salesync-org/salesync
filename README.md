@@ -32,10 +32,14 @@
   - AUTH_SERVER_URL: URL của Authentication Service. Ví dụ: http://localhost: 8082
 - Authentication Service:
   - KEYSTORE_PATH: Đường dẫn tới file "auth.jks". Ví dụ: D:\\\DATN\\\auth.jks
-- Record/Type service:
+- Record/Type/Notification service:
   - DB_NAME=
   - DB_HOST=
   - DB_PORT=
   - DB_USER=
   - DB_PASSWORD=
   - TOKEN_PUBLIC_KEY=
+  - RABBITMQ_HOST=
+  - RABBITMQ_PORT=
+  - RABBITMQ_USER=
+  - RABBITMQ_PASSWORD=

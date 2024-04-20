@@ -25,7 +25,7 @@ const UserTable = ({ users }: { users: SimpleUser[] }) => {
                     role !== `default-roles-${companyName}` && (
                       <span
                         key={index}
-                        className='text-nowrap rounded-full border-[1px] border-primary px-4 py-2 text-[.9rem] text-primary'
+                        className='text-nowrap rounded-full border-[1px] border-primary px-4 py-2 text-[.9rem] text-primary dark:border-secondary dark:text-secondary'
                       >
                         {role}
                       </span>

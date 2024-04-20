@@ -92,7 +92,7 @@ const Modal = ({ children, title, isOpen, onClose, className, isStatic = true }:
                   </button>
                 </div>
                 {/* <!-- Modal body --> */}
-                <div className='space-y-4 p-4  md:p-5'>{children}</div>
+                <div className='h-full space-y-4  p-4 md:p-5'>{children}</div>
               </FocusTrap>
             </div>
           </div>

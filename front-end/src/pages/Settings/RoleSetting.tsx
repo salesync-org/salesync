@@ -6,47 +6,56 @@ import Button from '@/components/ui/Button/Button';
 import Icon from '@/components/ui/Icon/Icon';
 import PrimaryButton from '@/components/ui/Button/PrimaryButton';
 import Modal, { ModalFooter } from '@/components/ui/Modal/Modal';
-import DropDown from '@/components/ui/DropDown/DropDown';
-import Item from '@/components/ui/Item/Item';
 import '@/constants/api';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
+import { Table, TableBody, TableCell, TableHeader, TableRow } from '@/components/ui/Table';
 import useAuth from '@/hooks/useAuth';
 import { getUsers } from '@/api/users';
 import { AvatarGroup, TextArea } from '@/components/ui';
-import { Pencil } from 'lucide-react';
+import { UserPlus } from 'lucide-react';
+import ToggleButton from '@/components/ui/ToggleButton/ToggleButton';
+import { createRole } from '@/api/roles';
+import { useToast } from '@/components/ui/Toast';
+import AssignRoleToUserModal from './AssignRoleToUserModal';
 
 const RoleSetting = () => {
   //Pop up modal to create new type
   const [isRoleModalOpen, setRoleModal] = useState<Role | null>(null);
-  //Type name in the input field
-  const [typeName, setTypeName] = useState('');
+  const [isAssignModalOpen, setAssignModalOpen] = useState<Role | null>(null);
   const { companyName } = useParams();
 
-  const { getRoles } = useAuth();
+  const { getRoles, getPermissions } = useAuth();
   const [roles, setRoles] = useState<Role[]>([]);
+  const [permissions, setPermissions] = useState<{ permission: Permission; isSelected: boolean }[]>([]);
   const [users, setUsers] = useState<SimpleUser[]>([]);
   const [roleSearchResult, setRoleSearchResult] = useState<Role[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
+  const { toast } = useToast();
   const [search, setSearch] = useState(() => {
     return searchParams.get('search') || '';
   });
   const debouncedSearch = useDebounce(search, 500);
+  const loadUsers = async () => {
+    const newUsers = await getUsers(companyName ?? '');
+    setUsers(newUsers);
+  };
 
   useEffect(() => {
     const fetchRoles = async () => {
       const result = await getRoles(companyName ?? '');
-      console.log('result');
-      console.log(result);
       setRoles(result || []);
     };
-    const loadUsers = async () => {
-      const newUsers = await getUsers(companyName ?? '');
-      setUsers(newUsers);
+    const fetchPermission = async () => {
+      const result = await getPermissions(companyName ?? '');
+      const permissionSet = result?.map((permission) => {
+        return { permission: permission, isSelected: false };
+      });
+      setPermissions(permissionSet ?? []);
     };
     fetchRoles();
+    fetchPermission();
     loadUsers();
-  }, [companyName, getRoles]);
+  }, [companyName, getRoles, getPermissions]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -74,29 +83,42 @@ const RoleSetting = () => {
     }
   }, [debouncedSearch, searchParams, setSearchParams]);
 
-  //create Type sample data and add to types
-  const handleCreateType = async () => {
-    try {
-      // const res = await typeApi.createType({ typeName: typeName, template: 'Account' });
-      // if (res) {
-      //   console.log('Create Type successfully');
-      //   setTypes([res, ...(types || [])]);
-      //   setTypeSearchResult([res, ...(types || [])]);
-      //   return res;
-      // }
-    } catch (error) {
-      console.error('Create Type failed', error);
-    }
+  const resetPermissions = () => {
+    setPermissions(
+      permissions.map((permission) => {
+        return { ...permission, isSelected: false };
+      })
+    );
   };
 
   //Handle submit when creating new type
-  const handleSubmit = () => {
-    if (!typeName) {
-      return;
+  const handleSubmit = async () => {
+    if (isRoleModalOpen) {
+      const selectedPermissions = permissions
+        .filter((permission) => permission.isSelected)
+        .map((permission) => permission.permission);
+      const newRole: Role = {
+        role_id: '',
+        role_name: isRoleModalOpen.role_name,
+        description: isRoleModalOpen.description,
+        permissions: selectedPermissions
+      };
+      const result = await createRole(companyName ?? '', newRole);
+      if (result) {
+        setRoleModal(null);
+        resetPermissions();
+        setRoles([...roles, result]);
+        toast({
+          title: 'Success',
+          description: 'Role created successfully'
+        });
+      } else {
+        toast({
+          title: 'Error',
+          description: 'Failed to create role. Role name is duplicated'
+        });
+      }
     }
-    setRoleModal(null);
-    handleCreateType();
-    setTypeName('');
   };
 
   return (
@@ -124,7 +146,7 @@ const RoleSetting = () => {
               <p>Create</p>
             </PrimaryButton>
           </div>
-          <div className='h-full min-h-full overflow-scroll'>
+          <div className='h-full min-h-full overflow-y-scroll'>
             <div className='h-full overflow-y-scroll rounded border-2 border-input-stroke-light dark:border-input-stroke-dark'>
               <Table className='h-full'>
                 <TableHeader className='max-h-full rounded-sm border-b-2 border-input-stroke-light dark:border-input-stroke-dark'>
@@ -142,7 +164,9 @@ const RoleSetting = () => {
                         <TableRow key={role.role_id}>
                           <TableCell>
                             <div className='w-fit'>
-                              <div className='my-2'>{role.role_name}</div>
+                              <div className='my-2 text-[1.2rem] font-semibold text-primary-bold dark:text-secondary-light'>
+                                {role.role_name}
+                              </div>
                               <div className=' flex w-fit flex-wrap space-x-2'>
                                 {role.permissions &&
                                   role.permissions.map((permission) => (
@@ -166,12 +190,13 @@ const RoleSetting = () => {
                           <TableCell>
                             <Button
                               rounded
-                              className='h-10 w-10 rounded-full p-0'
+                              className='flex w-40 rounded-full p-0 px-4'
                               onClick={() => {
-                                setRoleModal(role);
+                                setAssignModalOpen(role);
                               }}
                             >
-                              <Pencil size='1rem'></Pencil>
+                              <UserPlus size='1rem' />
+                              <p>Assign Users</p>
                             </Button>
                           </TableCell>
                         </TableRow>
@@ -188,8 +213,9 @@ const RoleSetting = () => {
         isOpen={!!isRoleModalOpen}
         onClose={() => {
           setRoleModal(null);
+          resetPermissions();
         }}
-        className='h-[400px]'
+        className='mx-auto h-[400px] w-2/3'
         title={isRoleModalOpen?.role_id ? 'Edit Role' : 'Create New Role'}
       >
         <form>
@@ -200,29 +226,81 @@ const RoleSetting = () => {
                 <div className='w-full border-b-2 border-button-stroke-light py-4 dark:border-button-stroke-dark'></div>
               </div>
               <TextInput
-                onChange={(e) => setTypeName(e.target.value)}
                 header='Role Name'
                 className='w-full'
+                onChange={(e) => {
+                  if (isRoleModalOpen) {
+                    isRoleModalOpen.role_name = e.target.value;
+                  }
+                }}
                 defaultValue={isRoleModalOpen?.role_name}
-                readOnly
-                disabled
+                readOnly={isRoleModalOpen?.role_id ? true : false}
+                disabled={isRoleModalOpen?.role_id ? true : false}
                 placeholder='Enter a name for the role'
               />
-              <TextArea header='Description' className='w-full' placeholder='Enter a description for the role' />
+              <TextArea
+                header='Description'
+                className='w-full'
+                onChange={(e) => {
+                  if (isRoleModalOpen) {
+                    isRoleModalOpen.description = e.target.value;
+                  }
+                }}
+                placeholder='Enter a description for the role'
+              />
             </div>
             <div className='col-span-2 flex flex-col gap-5'>
               <div className='flex items-baseline'>
                 <h3 className='min-w-[100px]'>Permissions</h3>
                 <div className='w-full border-b-2 border-button-stroke-light py-4 dark:border-button-stroke-dark'></div>
               </div>
+              <div className='flex flex-wrap space-x-2'>
+                {permissions &&
+                  permissions.map((permission) => (
+                    <div key={permission.permission.permission_id}>
+                      <ToggleButton
+                        className='my-2 w-full'
+                        onToggle={() => {
+                          setPermissions(
+                            permissions.map((p) => {
+                              if (p.permission.permission_id === permission.permission.permission_id) {
+                                return { ...p, isSelected: !p.isSelected };
+                              }
+                              return p;
+                            })
+                          );
+                        }}
+                        isToggled={permission.isSelected}
+                      >
+                        {permission.permission.permission_name}
+                      </ToggleButton>
+                    </div>
+                  ))}
+              </div>
             </div>
           </div>
           <ModalFooter className='mt-8'>
-            <Button onClick={() => setRoleModal(null)}>Cancel</Button>
-            <PrimaryButton onClick={() => handleSubmit()}>Save</PrimaryButton>
+            <Button
+              onClick={() => {
+                setRoleModal(null);
+                resetPermissions();
+              }}
+            >
+              Cancel
+            </Button>
+            <PrimaryButton onClick={() => handleSubmit()}>{isRoleModalOpen?.role_id ? 'Save' : 'Create'}</PrimaryButton>
           </ModalFooter>
         </form>
       </Modal>
+      <AssignRoleToUserModal
+        isOpen={isAssignModalOpen != null}
+        onClose={() => {
+          setAssignModalOpen(null);
+          loadUsers();
+        }}
+        role={isAssignModalOpen ?? { role_id: '', role_name: '', description: '', permissions: [] }}
+        users={users}
+      />
     </div>
   );
 };

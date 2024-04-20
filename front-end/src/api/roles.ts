@@ -23,3 +23,23 @@ export const loadPermimssions = async (realmId: string) => {
     throw error;
   }
 };
+
+export const createRole = async (realmId: string, role: Role) => {
+  try {
+    const response = await instance.post(`${BASE_URL}/${realmId}/roles`, role);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating role:', error);
+    throw error;
+  }
+};
+
+export const assignRole = async (realmId: string, roleName: string, userId: string) => {
+  try {
+    const response = await instance.put(`${BASE_URL}/${realmId}/role/assign`, { user_id: userId, role_name: roleName });
+    return response.data;
+  } catch (error) {
+    console.error('Error assigning role:', error);
+    throw error;
+  }
+}

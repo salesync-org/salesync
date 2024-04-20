@@ -1,3 +1,4 @@
+import { CircleOff } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 type AvatarGroupProps = {
@@ -12,20 +13,20 @@ const AvatarGroup = ({ users, maxAvatars }: AvatarGroupProps) => {
     if (users.length > maxAvatars) {
       setShowMoreAvatars(users.length - maxAvatars);
     }
-    console.log('users');
-    console.log(users);
   }, [users, maxAvatars]);
 
   return (
     <div className='flex items-center -space-x-2'>
-      {users.map((user, index) => (
-        <img
-          key={index}
-          src={`${avatarLink}${user.avatar_url}-48.jpg`}
-          className='h-10 w-10 rounded-full border-2 border-white dark:border-gray-800'
-          alt='avatar'
-        />
-      ))}
+      {users.length == 0 && <CircleOff size='1.5rem' />}
+      {users &&
+        users.map((user, index) => (
+          <img
+            key={index}
+            src={`${avatarLink}${user.avatar_url}-48.jpg`}
+            className='h-10 w-10 rounded-full border-2 border-white dark:border-gray-800'
+            alt='avatar'
+          />
+        ))}
       {showMoreAvatars !== 0 && (
         <div className='flex h-10 w-10 items-center justify-center rounded-full border-2 border-input-stroke-light bg-button-background/20 backdrop-blur-lg dark:border-input-stroke-dark dark:bg-button-background-dark/20'>
           <span className='mr-1 text-sm font-semibold'>+{showMoreAvatars}</span>

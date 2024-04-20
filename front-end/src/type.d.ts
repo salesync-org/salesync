@@ -31,7 +31,6 @@ type LayoutType = {
 //   properties?: Property[];
 // };
 
-
 // type Property = {
 //   id: string;
 //   label?: string;
@@ -46,7 +45,6 @@ type PropertyResponse = {
   propertyFields: PropertyField[] | null;
 };
 
-
 type TypeDetail = {
   id: string;
   name: string;
@@ -54,20 +52,19 @@ type TypeDetail = {
   properties: TypePropertyDetail[];
 };
 
-type TypePropertyDetail =
-  {
+type TypePropertyDetail = {
+  id: string;
+  name: string;
+  label: string;
+  sequence: 1;
+  property: {
     id: string;
     name: string;
-    label: string;
-    sequence: 1;
-    property: {
-      id: string;
-      name: string;
-      propertyFields: [];
-    };
-    default_value: string;
-    fields: [];
+    propertyFields: [];
   };
+  default_value: string;
+  fields: [];
+};
 
 type PropertyField = {
   id: string;
@@ -115,7 +112,7 @@ type SimpleUser = {
   user_name: string;
   avartar_url: string;
   roles: string[];
-}
+};
 
 // type NewUser = {
 //   first_name: string;
@@ -329,10 +326,26 @@ declare enum Template {
 }
 
 type CompanyInfo = {
-  "company_id": string,
-  "name": string,
-  "avatar_url": string,
-  "address": string,
-  "phone": string,
-  "tax_code": string
-}
+  company_id: string;
+  name: string;
+  avatar_url: string;
+  address: string;
+  phone: string;
+  tax_code: string;
+};
+
+type RecordPropertyResponse = {
+  id: string;
+  name: string;
+  user_id: string;
+  type?: Type;
+  current_stage_id?: string;
+  properties: PropertyResponse[];
+};
+
+type PropertyResponse = {
+  id: string;
+  property_name: string;
+  property_label: string;
+  item_value: string;
+};

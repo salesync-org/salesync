@@ -3,60 +3,87 @@
 @tailwind utilities;
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  transition: all 0.1s ease-in-out;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #b8b8b8;
+  border-radius: 40px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #8a8787;
 }
 
 :root {
-    @apply antialiased;
-    font-synthesis: none;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  @apply antialiased;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .dark {
-    color-scheme: dark;
+  color-scheme: dark;
 }
 
 @layer base {
-    h1 {
-        font-size: 1.85rem;
-        font-weight: 650;
-        line-height: 1.85rem;
-        color: rgb(15, 23, 42);
-        @apply dark:text-white;
-    }
-    h2 {
-        font-size: 1.4rem;
-        font-weight: 620;
-        line-height: 1.7rem;
-        color: rgb(15, 23, 42);
-        @apply dark:text-white;
-    }
-    h3 {
-        font-size: 1.1rem;
-        font-weight: 600;
-        line-height: 1.5rem;
-        color: rgb(15, 23, 42);
-        @apply dark:text-white;
-    }
-    h4 {
-        font-weight: 550;
-        line-height: 1.5rem;
-        color: rgb(15, 23, 42);
-        @apply dark:text-white;
-    }
-    h5 {
-        font-size: 0.85rem;
-        font-weight: 400;
-        line-height: 1.2rem;
-        @apply dark:text-white;
-    }
-    div, p, span, label, td, th {
-        font-size: 1rem;
-        font-weight: 360;
-        line-height: 1.5rem;
-    }
+  h1 {
+    font-size: 1.85rem;
+    font-weight: 650;
+    line-height: 1.85rem;
+    color: rgb(15, 23, 42);
+    @apply dark:text-white;
+  }
+  h2 {
+    font-size: 1.4rem;
+    font-weight: 620;
+    line-height: 1.7rem;
+    color: rgb(15, 23, 42);
+    @apply dark:text-white;
+  }
+  h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.5rem;
+    color: rgb(15, 23, 42);
+    @apply dark:text-white;
+  }
+  h4 {
+    font-weight: 550;
+    line-height: 1.5rem;
+    color: rgb(15, 23, 42);
+    @apply dark:text-white;
+  }
+  h5 {
+    font-size: 0.85rem;
+    font-weight: 400;
+    line-height: 1.2rem;
+    @apply dark:text-white;
+  }
+  div,
+  p,
+  span,
+  label,
+  td,
+  th {
+    font-size: 1rem;
+    font-weight: 360;
+    line-height: 1.5rem;
+  }
 }

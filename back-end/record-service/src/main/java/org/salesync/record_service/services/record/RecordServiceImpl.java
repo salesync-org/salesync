@@ -141,6 +141,14 @@ public class RecordServiceImpl implements RecordService {
                 .destinationRecord(destinationRecord)
                 .build();
 
+        RecordTypeRelation inverseRelation = RecordTypeRelation.builder()
+                .typeRelationId(requestRecordTypeRelationDto.getTypeRelationId())
+                .sourceRecord(destinationRecord)
+                .destinationRecord(sourceRecord)
+                .build();
+
+        recordTypeRelationRepository.save(inverseRelation);
+
         return recordTypeRelationMapper.recordTypeRelationToRecordTypeRelationDto(
                 recordTypeRelationRepository.save(recordTypeRelation)
         );

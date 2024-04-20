@@ -10,25 +10,85 @@ const RecordActivity = () => {
   // expand2: this month
 
   const [showActivity, setShowActivity] = useState(true);
+  const [isButtonActivity, setIsButtonActivity] = useState(false);
 
-  const date = new Date() // value test
-  // 
+  const date = new Date(); // value test
+  //
   const dataActivity = [
     // only 'event' has 'start' and 'end'
-    {id: '97cbbf51-9c3b-4152-afc5-a9a330bd908b', type: 'event', subject: 'event1', start: date, end: date, description: 'abc'},
-    {id: '7f6691f2-9d67-49f0-a6f9-3505c775040c', type: 'event', subject: 'event2', start: date, end: date, description: 'abc'},
-    {id: '010487d1-6979-4659-966c-d9920d7c6ea4', type: 'call', subject: 'call1', start: date, end: date, description: 'abc'},
-    {id: 'f74ed33e-da98-4e88-9c3c-025465b0415b', type: 'call', subject: 'call2', start: date, end: date, description: 'abc'},
-    {id: '45bfa24c-b7d8-44a7-8e07-88c204c5bc9d', type: 'task', subject: 'task1', start: date, end: date, description: 'abc'},
-  ]
+    {
+      id: '97cbbf51-9c3b-4152-afc5-a9a330bd908b',
+      type: 'event',
+      subject: 'event1',
+      start: date,
+      end: date,
+      description: 'abc'
+    },
+    {
+      id: '7f6691f2-9d67-49f0-a6f9-3505c775040c',
+      type: 'event',
+      subject: 'event2',
+      start: date,
+      end: date,
+      description: 'abc'
+    },
+    {
+      id: '010487d1-6979-4659-966c-d9920d7c6ea4',
+      type: 'call',
+      subject: 'call1',
+      start: date,
+      end: date,
+      description: 'abc'
+    },
+    {
+      id: 'f74ed33e-da98-4e88-9c3c-025465b0415b',
+      type: 'call',
+      subject: 'call2',
+      start: date,
+      end: date,
+      description: 'abc'
+    },
+    {
+      id: '45bfa24c-b7d8-44a7-8e07-88c204c5bc9d',
+      type: 'task',
+      subject: 'task1',
+      start: date,
+      end: date,
+      description: 'abc'
+    }
+  ];
 
   return (
     <div>
       <div className='flex flex-wrap'>
-        <ButtonActivity name='Email' icon='mail' color='bg-neutral-400' />
-        <ButtonActivity name='New Event' icon='calendar_month' color='bg-purple-400' />
-        <ButtonActivity name='Log a Call' icon='call_log' color='bg-teal-600' />
-        <ButtonActivity name='New Task' icon='checklist' color='bg-green-400' />
+        <ButtonActivity
+          name='Email'
+          icon='mail'
+          color='bg-neutral-400'
+          disabled={isButtonActivity}
+          setDisabled={setIsButtonActivity}
+        />
+        <ButtonActivity
+          name='New Event'
+          icon='calendar_month'
+          color='bg-purple-400'
+          disabled={isButtonActivity}
+          setDisabled={setIsButtonActivity}
+        />
+        <ButtonActivity
+          name='Log a Call'
+          icon='call_log'
+          color='bg-teal-600'
+          disabled={isButtonActivity}
+          setDisabled={setIsButtonActivity}
+        />
+        <ButtonActivity
+          name='New Task'
+          icon='checklist'
+          color='bg-green-400'
+          disabled={isButtonActivity}
+          setDisabled={setIsButtonActivity}
+        />
       </div>
 
       <div className='bg z-[10] my-4 flex w-fit rounded px-3'>
@@ -82,19 +142,14 @@ const RecordActivity = () => {
             </Button>
             {expand2 && (
               <>
-                {dataActivity.map((item)=><InforActivity data={item}/>)}
+                {dataActivity.map((item) => (
+                  <InforActivity data={item} />
+                ))}
               </>
             )}
           </div>
         </>
       )}
-
-      <Button className='flex w-full items-center justify-start' onClick={() => {}} disabled>
-        <Icon name='info'></Icon>
-        <div>
-          <span>To change what's shown, try changing your filters.</span>
-        </div>
-      </Button>
 
       <PrimaryButton className='mx-auto mb-12 mt-4' onClick={() => {}}>
         <span>Show All Activities</span>

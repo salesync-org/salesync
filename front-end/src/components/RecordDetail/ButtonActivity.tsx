@@ -18,9 +18,11 @@ interface ButtonActivityProps {
   icon: string;
   color?: string;
   className?: string;
+  disabled?: boolean;
+  setDisabled?: (disabled: boolean) => void;
 }
 
-const ButtonActivity: React.FC<ButtonActivityProps> = ({ icon, name, className, color = 'bg-neutral-400' }) => {
+const ButtonActivity: React.FC<ButtonActivityProps> = ({ icon, name, className, color = 'bg-neutral-400', disabled = false, setDisabled }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [subject, setSubject] = useState('');
 
@@ -64,8 +66,10 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({ icon, name, className, 
               setTimeEnd(fineTuneCurrentTime);
             }
             setIsOpen(true);
+            setDisabled && setDisabled(true);
           }}
           title={name}
+          disabled={disabled} // disable button
         >
           <div className='flex items-center'>
             <Icon name={icon} className={cn('mr-1 rounded p-0.5 text-white', color, className)}></Icon>
@@ -78,7 +82,7 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({ icon, name, className, 
           value=''
           prefixIcon={<Icon name='arrow_drop_down' size='1' className='ml-1' />}
           className='m-0 p-0'
-          disabled={isDisabledTriangleButton}
+          disabled={disabled === true ? disabled : isDisabledTriangleButton}
           align='left'
         >
           <div className='h-fit'>
@@ -182,6 +186,7 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({ icon, name, className, 
               onClick={() => {
                 setIsOpen(false);
                 setTypeActivity(setType());
+                setDisabled && setDisabled(false);
               }}
             >
               <Icon name='close' size='1rem' className='m-auto block cursor-pointer hover:text-primary-color' />

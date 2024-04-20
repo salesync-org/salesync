@@ -19,4 +19,12 @@ const LoadingSpinner = ({ className }: LoadingSpinnerProps) => {
   );
 };
 
+export const ScreenLoading = () => {
+  return (
+    <div className='pointer-events-auto fixed inset-0 z-[99999] flex items-center justify-center bg-white bg-opacity-5'>
+      <LoadingSpinner />
+    </div>
+  );
+};
+
 export default LoadingSpinner;

@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 import Stage from './Stage';
 import { cn } from '@/utils/utils';
-// import { Stage as StageType } from '@/type';
+import { Stage as StageType } from '@/type';
+import ConvertModal from '../ConvertModal/ConvertModal';
 
 interface StagesProps {
   stages: StageType[];
@@ -15,21 +16,24 @@ const Stages = ({ stages, currentStage, stageIdChosen, setStageIdChosen, isLoadi
   const findIndex = useMemo(() => stages.findIndex((stage) => stage.id === currentStage), [stages, currentStage]);
 
   return (
-    <ul className={cn('flex items-center gap-[4px]', isLoading && 'pointer-events-none select-none opacity-80')}>
-      {stages.map((stage, index) => (
-        <li className='flex-1 text-center' key={stage.id}>
-          <Stage
-            stage={stage}
-            isFirst={index === 0}
-            isLast={index === stages.length - 1}
-            isCurrentStage={currentStage === stage.id}
-            setStageIdChosen={setStageIdChosen}
-            stageIdChosen={stageIdChosen}
-            isCompleted={findIndex > index}
-          />
-        </li>
-      ))}
-    </ul>
+    <>
+      <ul className={cn('flex items-center gap-[4px]', isLoading && 'pointer-events-none select-none opacity-80')}>
+        {stages.map((stage, index) => (
+          <li className='flex-1 text-center' key={stage.id}>
+            <Stage
+              stage={stage}
+              isFirst={index === 0}
+              isLast={index === stages.length - 1}
+              isCurrentStage={currentStage === stage.id}
+              setStageIdChosen={setStageIdChosen}
+              stageIdChosen={stageIdChosen}
+              isCompleted={findIndex > index}
+            />
+          </li>
+        ))}
+      </ul>
+      <ConvertModal></ConvertModal>
+    </>
   );
 };
 export default Stages;

@@ -2,12 +2,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import recordApi from '@/api/record';
 import { Button, Icon, TextInput } from '@/components/ui';
-import { useToast } from '@/components/ui/Toast';
-import { Pencil } from 'lucide-react';
+import { Pencil, X } from 'lucide-react';
 import { ChangeEvent, useState } from 'react';
-import { useQueryClient } from 'react-query';
 import { Link } from 'react-router-dom';
 import { cn } from './utils';
+import { useToast } from '@/components/ui/Toast';
+import { useQueryClient } from 'react-query';
 
 export const createColumns = (companyName: string, properties: any[], records: any[]) => {
   const columns: any = [
@@ -18,7 +18,7 @@ export const createColumns = (companyName: string, properties: any[], records: a
     }
   ];
 
-  properties.forEach((property) => {
+  properties.forEach((property, index) => {
     if (!property.name) {
       return;
     }
@@ -49,7 +49,7 @@ export const createColumns = (companyName: string, properties: any[], records: a
       return;
     }
     columns.push({
-      accessorKey: property.name,
+      accessorKey: `${index}_${property.name}`,
       header: ({ column }: { column: any }) => (
         <div
           className='flex items-center justify-between'
@@ -117,7 +117,7 @@ export const createColumns = (companyName: string, properties: any[], records: a
         return (
           <div>
             {isUpdating ? (
-              <form onSubmit={handleUpdate} className='relative w-full'>
+              <form onSubmit={handleUpdate} className='relative w-full min-w-[250px]'>
                 <div className='absolute right-0 z-10 flex h-full'>
                   <Button
                     className='h-full select-none'
@@ -163,6 +163,44 @@ export const createColumns = (companyName: string, properties: any[], records: a
         );
       }
     });
+  });
+
+  columns.push({
+    accessorKey: 'actions',
+    header: '',
+    cell: ({ row }: { row: any }) => {
+      const { toast } = useToast();
+      const queryClient = useQueryClient();
+      const deleteRecord = async (recordId: string, recordName: string) => {
+        if (window.confirm(`Are you sure you want to delete the record: ${recordName}?`)) {
+          try {
+            const res = await recordApi.deleteRecord(companyName, [recordId]);
+            console.log(res);
+            toast({
+              title: 'Success',
+              description: 'Record deleted successfully'
+            });
+            queryClient.invalidateQueries('records');
+          } catch (error) {
+            console.error(error);
+            toast({
+              title: 'Error',
+              description: 'Failed to delete record',
+              variant: 'destructive'
+            });
+          }
+        }
+      };
+      return (
+        <div className='flex items-center justify-center space-x-2'>
+          <X
+            className='cursor-pointer rounded-lg border-red-700 p-1 text-xs text-red-400 transition-all duration-300 hover:bg-red-700 hover:text-white'
+            size={32}
+            onClick={() => deleteRecord(row.getValue('id'), row.getValue('Name'))}
+          />
+        </div>
+      );
+    }
   });
 
   return columns;

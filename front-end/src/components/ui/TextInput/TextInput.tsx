@@ -1,6 +1,7 @@
 import React, { ChangeEvent, FocusEvent } from 'react';
 import { Icon } from '@/components/ui';
 import { cn } from 'utils/utils';
+import { RegisterOptions, FieldValues, FieldName } from 'react-hook-form';
 
 type TextInputProps = {
   value?: string;
@@ -10,6 +11,7 @@ type TextInputProps = {
   disabled?: boolean;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   onFocus?: (e: FocusEvent<HTMLInputElement>) => void;
+  onBlur?: (e: FocusEvent<HTMLInputElement>) => void;
   name?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   register?: any;
@@ -19,13 +21,16 @@ type TextInputProps = {
   prefixIconNode?: React.ReactNode;
   paddingLeft?: string;
   postfixIcon?: string;
+  validation?: RegisterOptions<FieldValues, FieldName>;
   isError?: boolean;
   readOnly?: boolean;
   defaultValue?: string;
   isPassword?: boolean;
+  list?: string;
+  type?: string;
   restProps?: React.HTMLAttributes<HTMLInputElement>;
 };
-const TextInput = ({
+const TextInput: React.FC<TextInputProps> = ({
   value,
   placeholder,
   className,
@@ -37,11 +42,14 @@ const TextInput = ({
   prefixIconNode = null,
   paddingLeft = 'pl-[55px]',
   postfixIcon,
-  isPassword = false,
+  type = 'text',
+  validation = {},
   isError = false,
   onChange,
+  onBlur,
   defaultValue,
   name = '',
+  list = '',
   register = () => ({}),
   readOnly,
   ...restProps
@@ -63,7 +71,8 @@ const TextInput = ({
         )}
       >
         <input
-          type={isPassword ? 'password' : 'text'}
+          type={type}
+          list={list}
           placeholder={placeholder}
           className={cn(
             'absolute h-full w-full rounded bg-transparent py-2 pr-2 placeholder:text-ellipsis placeholder:text-[13px] placeholder:text-opacity-50 focus:outline-primary',
@@ -75,10 +84,12 @@ const TextInput = ({
           value={value}
           disabled={disabled}
           onChange={onChange}
-          {...register(name)}
+          onBlur={onBlur}
+          {...register(name, validation)}
           defaultValue={defaultValue}
           name={name}
           {...restProps}
+          readOnly={readOnly}
         />
         <div className='relative flex h-full items-center justify-start rounded px-4'>
           <div className=' absolute bottom-0 top-0 flex w-4 items-center'>
@@ -86,7 +97,7 @@ const TextInput = ({
           </div>
         </div>
 
-        <div className='absolute bottom-0 top-0 -left-3 flex h-full items-center justify-start rounded px-4'>
+        <div className='absolute -left-3 bottom-0 top-0 flex h-full items-center justify-start rounded px-4'>
           {prefixIconNode}
         </div>
 

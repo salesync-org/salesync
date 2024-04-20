@@ -3,7 +3,7 @@ import typeApi from '@/api/type';
 
 import { useQuery } from 'react-query';
 
-const useProperties = (companyName: string, typeId: string) => {
+const useProperties = (companyName: string, typeId: string | undefined) => {
   const key = ['properties', typeId];
   const { data, error, isLoading } = useQuery<TypeProperty>(
     key,
@@ -17,7 +17,8 @@ const useProperties = (companyName: string, typeId: string) => {
     {
       refetchOnWindowFocus: false,
       staleTime: 1000 * 60 * 5,
-      keepPreviousData: true
+      keepPreviousData: true,
+      enabled: !!typeId
     }
   );
 

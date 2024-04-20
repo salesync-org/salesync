@@ -309,14 +309,18 @@ public class TypeServiceImpl implements TypeService {
     }
 
     @Override
-    public TypeProperty deleteProperty(UUID typePropId) {
+    public String deleteProperty(UUID typePropId) {
         TypeProperty typeProperty = typePropertyRepository.findById(typePropId)
                 .orElseThrow(() -> new ObjectNotFoundException(
                         TypeProperty.class.getSimpleName(),
                         typePropId.toString()
                 ));
 
-        typePropertyRepository.delete(typeProperty);
-        return typeProperty;
+        try {
+            typePropertyRepository.deleteById(typePropId);
+            return "Property deleted successfully";
+        } catch (ObjectNotFoundException e) {
+            return "Fail to delete property";
+        }
     }
 }

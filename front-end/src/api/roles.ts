@@ -13,3 +13,13 @@ export const loadRoles = async (realmId: string) => {
     throw error;
   }
 };
+
+export const loadPermimssions = async (realmId: string) => {
+  try {
+    const response = await instance.get(`${BASE_URL}/${realmId}/permissions`);
+    return response.data;
+  } catch (error) {
+    console.error('Error getting permissions:', error);
+    throw error;
+  }
+};

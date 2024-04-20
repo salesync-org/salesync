@@ -1,4 +1,4 @@
-import { Button, Modal, Panel, TextInput } from '@/components/ui';
+import { Button, Panel, TextInput } from '@/components/ui';
 import useAuth from '@/hooks/useAuth';
 import { Pencil } from 'lucide-react';
 import { cn } from '@/utils/utils';
@@ -15,15 +15,16 @@ const PersonalInfomationSetting = () => {
   const [userLoaded, setUserInfo] = useState({ ...user });
   const { toast } = useToast();
   const [isUpdating, setUpdatingStatus] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [avatarUrl, setAvatarUrl] = useState(`${import.meta.env.VITE_STORAGE_SERVICE_HOST}${user?.avatar_url}-256.jpg`);
+  const [avatarUrl, setAvatarUrl] = useState(
+    `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/avatars/${user?.avatar_url}-256.jpg`
+  );
   const editableFields = {
     first_name: true,
     last_name: true,
     job_title: true,
     phone: true,
     email: true,
-    user_id: false,
+    user_id: null,
     user_name: false,
     avatar_url: null,
     settings: null,
@@ -37,22 +38,22 @@ const PersonalInfomationSetting = () => {
   };
   const handleFileUpload = async (file: File) => {
     if (userLoaded.user_id != undefined) {
-      const timestamp = new Date().getTime();
       setUpdatingStatus(true);
-      uploadAvatar(`avatar_${userLoaded.user_id}_${timestamp}`, file).then(async (res) => {
+      uploadAvatar(`avatar_${userLoaded.user_id}`, file).then(async (res) => {
         if (res && res.status === 200) {
-          const newUser = { ...userLoaded, avatar_url: `avatar_${userLoaded.user_id}_${timestamp}` };
+          const newUser = { ...userLoaded, avatar_url: `avatar_${userLoaded.user_id}` };
           setUserInfo(newUser);
           console.log('Loaded: ' + newUser);
-          updateUser(companyName ?? '', newUser as User).then(() => {
-            setModalOpen(false);
-            setAvatarUrl(`${import.meta.env.VITE_STORAGE_SERVICE_HOST}${newUser?.avatar_url}-256.jpg`);
-            reloadUser();
+          await updateUser(companyName ?? '', newUser as User).then(() => {
             toast({
               title: 'Success',
               description: 'Reload to see your avatar take effect.'
             });
             setUpdatingStatus(false);
+            setTimeout(() => {
+              reloadUser();
+              setAvatarUrl(`${import.meta.env.VITE_STORAGE_SERVICE_HOST}/avatars/${user?.avatar_url}-256.jpg`);
+            }, 2000);
           });
         }
       });
@@ -110,7 +111,7 @@ const PersonalInfomationSetting = () => {
               Profile Picture
             </h2>
             <div className='aspect-square w-64 overflow-clip rounded-full'>
-              <img src={avatarUrl} />
+              <img src={`${avatarUrl}?lastmod=${new Date().getTime().toString()}`} />
             </div>
             <div className='dark:panel-dark absolute bottom-1 right-2'>
               <Button
@@ -131,7 +132,7 @@ const PersonalInfomationSetting = () => {
                   'shadow-md shadow-primary-color/10 transition-all duration-300 hover:shadow-lg hover:shadow-primary-color/20'
                 )}
                 onClick={() => {
-                  setModalOpen(true);
+                  handleOpenFilePicker();
                 }}
               >
                 <Pencil size={editAvatarHovered ? '1rem' : '1.5rem'} />
@@ -149,36 +150,14 @@ const PersonalInfomationSetting = () => {
             intent='primary'
             className='w-full'
             onClick={async () => {
+              setUpdatingStatus(true);
               await updateUser(companyName ?? '', userLoaded as User);
+              setUpdatingStatus(false);
               toast({
                 title: 'Success',
                 description: 'Your information has been updated successfully!'
               });
             }}
-          >
-            Save Changes
-          </Button>
-        </div>
-      </Panel>
-      <Modal
-        isOpen={modalOpen}
-        className='mx-auto w-[60%] min-w-[600px]'
-        title='Change Your Profile Picture'
-        onClose={() => {
-          setModalOpen(false);
-        }}
-      >
-        <div className='flex w-full flex-col justify-center space-y-5 py-2'>
-          <div className='mx-auto aspect-square w-64 overflow-clip rounded-full'>
-            <img src={`${import.meta.env.VITE_STORAGE_SERVICE_HOST}${userLoaded?.avatar_url}-256.jpg`} />
-          </div>
-          <Button
-            intent='primary'
-            onClick={(_) => {
-              handleOpenFilePicker();
-            }}
-            disabled={isUpdating}
-            className='py-5'
           >
             {isUpdating ? (
               <div className='flex items-center justify-center space-x-2'>
@@ -188,11 +167,11 @@ const PersonalInfomationSetting = () => {
                 <p className='font-semibold'> Please wait...</p>
               </div>
             ) : (
-              <p className='font-semibold'>Upload a Photo</p>
+              <p className='font-semibold'>Save Changes</p>
             )}
           </Button>
         </div>
-      </Modal>
+      </Panel>
     </>
   );
 };

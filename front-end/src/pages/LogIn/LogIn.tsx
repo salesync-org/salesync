@@ -4,12 +4,13 @@ import useAuth from '@/hooks/useAuth';
 import { cn } from '@/utils/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import salesyncLogo from 'assets/salesync_logo.png';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { z } from 'zod';
 
 const loginSchema = z.object({
+  alias: z.string().min(1, 'Invalid company alias'),
   username: z.string().email('Invalid email'),
   password: z.string().min(3, 'Password must be at least 3 characters')
 });
@@ -17,6 +18,12 @@ const loginSchema = z.object({
 type LoginSchemaType = z.infer<typeof loginSchema>;
 
 const LogIn = () => {
+  const [searchParams] = useSearchParams();
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const { companyName = '' } = useParams();
+  const checkListIconLink = 'https://salesync.s3.ap-southeast-2.amazonaws.com/system/checklist_icon.svg';
   const {
     register,
     handleSubmit,
@@ -24,19 +31,13 @@ const LogIn = () => {
     formState: { errors, isSubmitting }
   } = useForm<LoginSchemaType>({
     defaultValues: {
+      alias: companyName ?? '',
       username: '',
       password: ''
     },
     mode: 'all',
     resolver: zodResolver(loginSchema)
   });
-
-  const [searchParams] = useSearchParams();
-  const { login } = useAuth();
-  const navigate = useNavigate();
-  const { toast } = useToast();
-  const { companyName = '' } = useParams();
-  const checkListIconLink = 'https://salesync.s3.ap-southeast-2.amazonaws.com/system/checklist_icon.svg';
 
   // const errorText = `Please check your username and password. If you still can't log in, contact your Salesforce administrator.`;
 
@@ -59,13 +60,13 @@ const LogIn = () => {
 
   const onSubmit = async (data: LoginSchemaType) => {
     try {
-      await login({ companyName, email: data.username, password: data.password });
+      await login({ companyName: data.alias, email: data.username, password: data.password });
       toast({
         title: 'Success',
         description: 'You have successfully logged in'
       });
 
-      navigate(searchParams.get('redirectUrl') ?? `/${companyName}/home`);
+      navigate(searchParams.get('redirectUrl') ?? `/${data.alias}/home`);
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -96,7 +97,19 @@ const LogIn = () => {
             </div>
             <Panel className='mx-auto mb-20 flex w-fit justify-center px-2 py-2'>
               <form onSubmit={handleSubmit(onSubmit)} className='h-auto w-96 rounded-sm p-5'>
-                {/* {error && <ErrorText text={errorText} className='text-sm' />} */}
+                <div className='flex space-x-2'>
+                  <p className={cn('my-1', errors.alias && 'font-medium text-red-500', companyName !== '' && 'hidden')}>
+                    Company Alias
+                  </p>
+                </div>
+                <TextInput
+                  placeholder='Enter your company alias'
+                  className={cn('h-12 w-full', companyName !== '' && 'hidden')}
+                  isError={!!errors.alias}
+                  name='alias'
+                  register={register}
+                />
+                {errors.alias && <ErrorText text={errors.alias.message} className='text-sm' />}
                 <TextInput
                   placeholder='Enter your username'
                   header='Username'

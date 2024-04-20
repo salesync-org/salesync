@@ -9,21 +9,23 @@ import Modal, { ModalFooter } from '@/components/ui/Modal/Modal';
 import DropDown from '@/components/ui/DropDown/DropDown';
 import Item from '@/components/ui/Item/Item';
 import '@/constants/api';
-import { SAMPLE_ACCESS_TOKEN } from '@/constants/api';
-import { useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import Pagination from '@/components/ui/Pagination/Pagination';
 import TypeTable from '@/components/ui/Table/TypeTable';
 import useType from '@/hooks/type-service/useType';
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/ui/Table';
+import useAuth from '@/hooks/useAuth';
 
-const ObjectManager = () => {
+const RoleSetting = () => {
   //Pop up modal to create new type
   const [isTypeModelOpen, setIsTypeModelOpen] = useState(false);
   //Type name in the input field
   const [typeName, setTypeName] = useState('');
-  //List of types
-  const { types } = useType();
-  //List of types after search
-  const [typeSearchResult, setTypeSearchResult] = useState<Type[]>([]);
+  const { companyName } = useParams();
+
+  const { getRoles } = useAuth();
+  const [roles, setRoles] = useState<Role[]>([]);
+  const [roleSearchResult, setRoleSearchResult] = useState<Role[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [search, setSearch] = useState(() => {
     return searchParams.get('search') || '';
@@ -34,21 +36,29 @@ const ObjectManager = () => {
   });
 
   useEffect(() => {
-    // Fetch sample data
-    const fetchData = async () => {
-      setTypeSearchResult(types ?? []);
+    const fetchRoles = async () => {
+      const result = await getRoles(companyName ?? '');
+      console.log('result');
+      console.log(result);
+      setRoles(result || []);
     };
+    fetchRoles();
+  }, [companyName, getRoles]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      setRoleSearchResult(roles);
+    };
     fetchData();
-  }, [types]);
+  }, [roles]);
 
   //Search for types
   useEffect(() => {
     const handleSearch = () => {
       const searchResult =
-        types &&
-        types.filter((item) => {
-          return Object.values(item).join('').toLowerCase().includes(debouncedSearch.toLowerCase());
+        roles &&
+        roles.filter((role) => {
+          return Object.values(role).join('').toLowerCase().includes(debouncedSearch.toLowerCase());
         });
 
       return searchResult;
@@ -57,7 +67,7 @@ const ObjectManager = () => {
     if (debouncedSearch || debouncedSearch === '') {
       searchParams.set('search', debouncedSearch);
       setSearchParams(searchParams);
-      setTypeSearchResult(handleSearch() as Type[]);
+      setRoleSearchResult(handleSearch() as Role[]);
     }
   }, [debouncedSearch, searchParams, setSearchParams]);
 
@@ -86,12 +96,6 @@ const ObjectManager = () => {
     setTypeName('');
   };
 
-  //Handle page change
-  const handleOnPageChange = (page: number) => {
-    searchParams.set('page', page.toString());
-    setSearchParams(searchParams);
-    setPage(page.toString());
-  };
   return (
     <div className='h-full w-full'>
       <Panel className='m-0 h-full'>
@@ -118,11 +122,21 @@ const ObjectManager = () => {
             </PrimaryButton>
           </div>
           <div className='h-full min-h-full overflow-scroll'>
-            <TypeTable types={typeSearchResult}></TypeTable>
-          </div>
-
-          <div className='hidden'>
-            <Pagination totalPages={15} currentPage={+page} onPageChange={handleOnPageChange} />
+            <Table>
+              <TableHead>
+                <TableCell className='font-semibold'>Role Name</TableCell>
+              </TableHead>
+              <TableBody>
+                {roleSearchResult.map(
+                  (role) =>
+                    role.role_name !== `default-roles-${companyName}` && (
+                      <TableRow key={role.role_id}>
+                        <TableCell>{role.role_name}</TableCell>
+                      </TableRow>
+                    )
+                )}
+              </TableBody>
+            </Table>
           </div>
         </div>
       </Panel>
@@ -164,4 +178,4 @@ const ObjectManager = () => {
   );
 };
 
-export default ObjectManager;
+export default RoleSetting;

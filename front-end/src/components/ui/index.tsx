@@ -7,6 +7,7 @@ export { Icon } from './Icon';
 export { Item } from './Item';
 export { Modal, ModalFooter } from './Modal';
 export { Pagination } from './Pagination';
+export { AvatarGroup } from './AvatarGroup';
 export { Panel } from './Panel';
 export { Checkbox } from './Checkbox';
 export { Popup } from './Popup';

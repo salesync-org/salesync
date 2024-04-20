@@ -110,7 +110,7 @@ type SimpleUser = {
   email: string;
   user_id: string;
   user_name: string;
-  avartar_url: string;
+  avatar_url: string;
   roles: string[];
 };
 

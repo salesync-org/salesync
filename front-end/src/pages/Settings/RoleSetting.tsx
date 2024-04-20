@@ -10,30 +10,28 @@ import DropDown from '@/components/ui/DropDown/DropDown';
 import Item from '@/components/ui/Item/Item';
 import '@/constants/api';
 import { useParams, useSearchParams } from 'react-router-dom';
-import Pagination from '@/components/ui/Pagination/Pagination';
-import TypeTable from '@/components/ui/Table/TypeTable';
-import useType from '@/hooks/type-service/useType';
-import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/ui/Table';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import useAuth from '@/hooks/useAuth';
+import { getUsers } from '@/api/users';
+import { AvatarGroup, TextArea } from '@/components/ui';
+import { Pencil } from 'lucide-react';
 
 const RoleSetting = () => {
   //Pop up modal to create new type
-  const [isTypeModelOpen, setIsTypeModelOpen] = useState(false);
+  const [isRoleModalOpen, setRoleModal] = useState<Role | null>(null);
   //Type name in the input field
   const [typeName, setTypeName] = useState('');
   const { companyName } = useParams();
 
   const { getRoles } = useAuth();
   const [roles, setRoles] = useState<Role[]>([]);
+  const [users, setUsers] = useState<SimpleUser[]>([]);
   const [roleSearchResult, setRoleSearchResult] = useState<Role[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [search, setSearch] = useState(() => {
     return searchParams.get('search') || '';
   });
   const debouncedSearch = useDebounce(search, 500);
-  const [page, setPage] = useState(() => {
-    return searchParams.get('page') || '1';
-  });
 
   useEffect(() => {
     const fetchRoles = async () => {
@@ -42,7 +40,12 @@ const RoleSetting = () => {
       console.log(result);
       setRoles(result || []);
     };
+    const loadUsers = async () => {
+      const newUsers = await getUsers(companyName ?? '');
+      setUsers(newUsers);
+    };
     fetchRoles();
+    loadUsers();
   }, [companyName, getRoles]);
 
   useEffect(() => {
@@ -91,7 +94,7 @@ const RoleSetting = () => {
     if (!typeName) {
       return;
     }
-    setIsTypeModelOpen(false);
+    setRoleModal(null);
     handleCreateType();
     setTypeName('');
   };
@@ -106,14 +109,14 @@ const RoleSetting = () => {
                 onChange={(e) => setSearch(e.target.value)}
                 className='w-full'
                 value={search}
-                placeholder='Search for types'
+                placeholder='Search for roles'
                 prefixIcon='search'
               />
             </div>
             <PrimaryButton
               className='ml-2'
               onClick={() => {
-                setIsTypeModelOpen(true);
+                setRoleModal({} as Role);
               }}
               showHeader={true}
             >
@@ -122,54 +125,100 @@ const RoleSetting = () => {
             </PrimaryButton>
           </div>
           <div className='h-full min-h-full overflow-scroll'>
-            <Table>
-              <TableHead>
-                <TableCell className='font-semibold'>Role Name</TableCell>
-              </TableHead>
-              <TableBody>
-                {roleSearchResult.map(
-                  (role) =>
-                    role.role_name !== `default-roles-${companyName}` && (
-                      <TableRow key={role.role_id}>
-                        <TableCell>{role.role_name}</TableCell>
-                      </TableRow>
-                    )
-                )}
-              </TableBody>
-            </Table>
+            <div className='h-full overflow-y-scroll rounded border-2 border-input-stroke-light dark:border-input-stroke-dark'>
+              <Table className='h-full'>
+                <TableHeader className='max-h-full rounded-sm border-b-2 border-input-stroke-light dark:border-input-stroke-dark'>
+                  <TableRow>
+                    <TableCell className='font-semibold'>Role Name</TableCell>
+                    <TableCell className='font-semibold'>Description</TableCell>
+                    <TableCell className='font-semibold'>Users</TableCell>
+                    <TableCell className='font-semibold'></TableCell>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {roleSearchResult.map(
+                    (role) =>
+                      role.role_name !== `default-roles-${companyName}` && (
+                        <TableRow key={role.role_id}>
+                          <TableCell>
+                            <div className='w-fit'>
+                              <div className='my-2'>{role.role_name}</div>
+                              <div className=' flex w-fit flex-wrap space-x-2'>
+                                {role.permissions &&
+                                  role.permissions.map((permission) => (
+                                    <div
+                                      key={permission.permission_id}
+                                      className='my-2 mr-1 w-fit text-ellipsis text-nowrap rounded-full bg-gray-200 px-3 py-1 text-xs dark:bg-slate-600'
+                                    >
+                                      {permission.permission_name}
+                                    </div>
+                                  ))}
+                              </div>
+                            </div>
+                          </TableCell>
+                          <TableCell>{role.description ?? 'No Description'}</TableCell>
+                          <TableCell>
+                            <AvatarGroup
+                              maxAvatars={3}
+                              users={users.filter((user) => user.roles.includes(role.role_name))}
+                            ></AvatarGroup>
+                          </TableCell>
+                          <TableCell>
+                            <Button
+                              rounded
+                              className='h-10 w-10 rounded-full p-0'
+                              onClick={() => {
+                                setRoleModal(role);
+                              }}
+                            >
+                              <Pencil size='1rem'></Pencil>
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      )
+                  )}
+                </TableBody>
+              </Table>
+            </div>
           </div>
         </div>
       </Panel>
 
       <Modal
-        isOpen={isTypeModelOpen}
+        isOpen={!!isRoleModalOpen}
         onClose={() => {
-          setIsTypeModelOpen(false);
+          setRoleModal(null);
         }}
-        title='Create new Type'
+        className='h-[400px]'
+        title={isRoleModalOpen?.role_id ? 'Edit Role' : 'Create New Role'}
       >
         <form>
-          <div className='grid grid-cols-5 place-content-center gap-3'>
-            <div className='col-span-3 flex flex-col gap-2'>
+          <div className='grid grid-cols-5 place-content-center gap-10'>
+            <div className='col-span-3 flex flex-col gap-2 '>
+              <div className='mb-2 flex items-baseline'>
+                <h3 className='min-w-[100px]'>Role Details</h3>
+                <div className='w-full border-b-2 border-button-stroke-light py-4 dark:border-button-stroke-dark'></div>
+              </div>
               <TextInput
                 onChange={(e) => setTypeName(e.target.value)}
-                header='Type Name'
+                header='Role Name'
                 className='w-full'
-                value={typeName}
-                placeholder='Search for something'
+                defaultValue={isRoleModalOpen?.role_name}
+                readOnly
+                disabled
+                placeholder='Enter a name for the role'
               />
+              <TextArea header='Description' className='w-full' placeholder='Enter a description for the role' />
             </div>
-            <div className='col-span-2 flex flex-col gap-2'>
-              <DropDown header='Template' value='Select a value'>
-                <Item title='Account' />
-                <Item title='Contact' />
-                <Item title='Lead' />
-                <Item title='Opportunity' />
-              </DropDown>
+            <div className='col-span-2 flex flex-col gap-5'>
+              <div className='flex items-baseline'>
+                <h3 className='min-w-[100px]'>Permissions</h3>
+                <div className='w-full border-b-2 border-button-stroke-light py-4 dark:border-button-stroke-dark'></div>
+              </div>
             </div>
           </div>
           <ModalFooter className='mt-8'>
-            <Button onClick={() => setIsTypeModelOpen(false)}>Cancel</Button>
+            <Button onClick={() => setRoleModal(null)}>Cancel</Button>
             <PrimaryButton onClick={() => handleSubmit()}>Save</PrimaryButton>
           </ModalFooter>
         </form>

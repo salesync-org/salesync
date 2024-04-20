@@ -18,6 +18,9 @@ const Header = ({ className }: { className?: string }) => {
           src={`${import.meta.env.VITE_STORAGE_SERVICE_HOST}/companies/${company?.avatar_url === 'default' ? 'default.svg' : company?.avatar_url}?lastmod=${new Date().getTime().toString()}`}
           className=''
           alt='header icon'
+          onError={(e) => {
+            e.currentTarget.src = salesyncIcon;
+          }}
         />
       </a>
       <Search className='align-middle' />

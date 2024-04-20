@@ -8,17 +8,16 @@ import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.KeyResource;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.RoleResource;
+import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.authorization.client.AuthorizationDeniedException;
 import org.keycloak.crypto.KeyUse;
 import org.keycloak.representations.AccessToken;
 import org.keycloak.representations.idm.*;
 import org.salesync.authentication.configurations.KeyStoreConfig;
+import org.salesync.authentication.constants.AuthenticationInfo;
 import org.salesync.authentication.constants.UserAttributes;
 import org.salesync.authentication.converters.KeyConverter;
-import org.salesync.authentication.dtos.ResetPasswordDto;
-import org.salesync.authentication.dtos.UserDetailDto;
-import org.salesync.authentication.dtos.UserDto;
-import org.salesync.authentication.dtos.ValidationResponseDto;
+import org.salesync.authentication.dtos.*;
 import org.salesync.authentication.helpers.SettingsManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +25,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.security.PublicKey;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
     private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Override
-    public UserDetailDto validateUser(String realmName, String accessToken) {
+    public UserDetailDto validateUser(String realmName, String accessToken) throws AccessDeniedException {
         try {
             RealmResource realmResource = keycloak.realm(realmName);
             PublicKey publicKey = KeyConverter.convertStringToPublicKey(getKey(realmResource));
@@ -53,13 +53,13 @@ public class UserServiceImpl implements UserService {
                 return loadDetailUser(realmResource, userId);
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new AccessDeniedException(e.getMessage());
         }
         return null;
     }
 
     @Override
-    public UserDto modifyInfo(String accessToken, UserDto userDto, String realmName) {
+    public UserDto modifyInfo(String accessToken, UserDto userDto, String realmName) throws AccessDeniedException {
         try {
             RealmResource realmResource = keycloak.realm(realmName);
             PublicKey publicKey = KeyConverter.convertStringToPublicKey(getKey(realmResource));
@@ -82,13 +82,13 @@ public class UserServiceImpl implements UserService {
                 return loadUser(realmResource, userId);
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new AccessDeniedException(e.getMessage());
         }
         return null;
     }
 
     @Override
-    public UserDto resetSettings(String accessToken, String realmName) {
+    public UserDto resetSettings(String accessToken, String realmName) throws AccessDeniedException {
         try {
             RealmResource realmResource = keycloak.realm(realmName);
             PublicKey publicKey = KeyConverter.convertStringToPublicKey(getKey(realmResource));
@@ -106,13 +106,13 @@ public class UserServiceImpl implements UserService {
                 return loadUser(realmResource, userId);
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new AccessDeniedException(e.getMessage());
         }
         return null;
     }
 
     @Override
-    public ValidationResponseDto validate(String realmName, String accessToken) {
+    public ValidationResponseDto validate(String realmName, String accessToken) throws AccessDeniedException {
         try {
             RealmResource realmResource = keycloak.realm(realmName);
             PublicKey publicKey = KeyConverter.convertStringToPublicKey(getKey(realmResource));
@@ -127,7 +127,7 @@ public class UserServiceImpl implements UserService {
                 return response;
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new AccessDeniedException(e.getMessage());
         }
         return null;
     }
@@ -151,7 +151,8 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-    private String getKey(RealmResource realmResource) {
+    @Override
+    public String getKey(RealmResource realmResource) {
         KeyResource keyResource = realmResource.keys();
         KeysMetadataRepresentation keysMetadata = keyResource.getKeyMetadata();
         List<KeysMetadataRepresentation.KeyMetadataRepresentation> keyList = keysMetadata.getKeys();
@@ -213,8 +214,8 @@ public class UserServiceImpl implements UserService {
             logger.info("Loading " + roleMappings.size() + " Roles For User: " + userDto.getUserName() + " with userId: " + userDto.getUserId());
             for (RoleRepresentation roleRepresentation : roleMappings) {
                 String roleName = roleRepresentation.getName();
+                roles.add(roleName);
                 if (roleRepresentation.isComposite()) {
-                    roles.add(roleName);
                     RoleResource roleResource = realmResource.roles().get(roleName);
                     Set<RoleRepresentation> rolePermissions = roleResource.getRoleComposites();
                     for (RoleRepresentation rolePermission : rolePermissions) {
@@ -264,6 +265,55 @@ public class UserServiceImpl implements UserService {
                 .sign(algorithm);
     }
 
+    @Override
+    public List<SimpleUserDto> getUsers(String realmName, String accessToken) throws AccessDeniedException {
+        try {
+            RealmResource realmResource = keycloak.realm(realmName);
+            PublicKey publicKey = KeyConverter.convertStringToPublicKey(getKey(realmResource));
+            AccessToken token = TokenVerifier.create(accessToken, AccessToken.class)
+                    .publicKey(publicKey)
+                    .verify()
+                    .getToken();
+            logger.info("Getting Users");
+            if (!token.isActive()) {
+                throw new AccessDeniedException("Token is not active");
+            }
+            if (isUserInRole(realmResource, token.getSubject(), AuthenticationInfo.ADMIN_SETTINGS_PERMISSION)) {
+                UsersResource usersResource = realmResource.users();
+                List<SimpleUserDto> users = new ArrayList<>();
+                List<UserRepresentation> userRepresentations = usersResource.list();
+                for (UserRepresentation user : userRepresentations) {
+                    SimpleUserDto simpleUserDto = new SimpleUserDto();
+                    simpleUserDto.setLastName(user.getLastName());
+                    simpleUserDto.setFirstName(user.getFirstName());
+                    simpleUserDto.setEmail(user.getEmail());
+                    simpleUserDto.setUserId(user.getId());
+                    simpleUserDto.setUserName(user.getUsername());
+                    simpleUserDto.setAvatarUrl(user.getAttributes().get(UserAttributes.AVATAR).get(0));
+                    simpleUserDto.setRoles(getUserRoles(realmResource, user.getId()));
+                    users.add(simpleUserDto);
+                }
+                return users;
+            }
+            logger.info("The current user doesn't have the required permissions to get users. Needing role: " + AuthenticationInfo.ADMIN_SETTINGS_PERMISSION);
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new AccessDeniedException(e.getMessage());
+        }
+    }
+
+    @Override
+    public SimpleUserDto getUser(String realmName, String userId) throws AccessDeniedException {
+        try {
+            RealmResource realmResource = keycloak.realm(realmName);
+            return loadSimpleUser(realmResource, userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new AccessDeniedException(e.getMessage());
+        }
+    }
+
     private boolean verifyToken(String token) {
         try {
             Algorithm algorithm = Algorithm.RSA256(
@@ -276,5 +326,55 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    private SimpleUserDto loadSimpleUser(RealmResource realmResource, String userId) {
+
+        try {
+            SimpleUserDto simpleUserDto = new SimpleUserDto();
+            UserRepresentation user = realmResource.users().get(userId).toRepresentation();
+            Map<String, List<String>> attributes = user.getAttributes();
+            simpleUserDto.setLastName(user.getLastName());
+            simpleUserDto.setFirstName(user.getFirstName());
+            simpleUserDto.setEmail(user.getEmail());
+            simpleUserDto.setUserId(user.getId());
+            simpleUserDto.setUserName(user.getUsername());
+            simpleUserDto.setAvatarUrl(user.getAttributes().get(UserAttributes.AVATAR).get(0));
+            simpleUserDto.setRoles(getUserRoles(realmResource, user.getId()));
+            return simpleUserDto;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @Override
+    public boolean isUserInRole(RealmResource realmResource,
+                                 String userId,
+                                 String roleName) {
+        logger.info("Checking if user is in role: " + roleName + " with userId: " + userId);
+        List<RoleRepresentation> roleMappings = realmResource.users().get(userId).roles().realmLevel().listAll();
+        for (RoleRepresentation roleRepresentation : roleMappings) {
+            RoleResource roleResource = realmResource.roles().get(roleRepresentation.getName());
+            Set<RoleRepresentation> rolePermissions = roleResource.getRoleComposites();
+            for (RoleRepresentation rolePermission : rolePermissions) {
+                if (rolePermission.getName().equals(roleName)) {
+                    return true;
+                }
+            }
+            if (roleRepresentation.getName().equals(roleName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private List<String> getUserRoles(RealmResource realmResource, String userId) {
+        List<RoleRepresentation> roleMappings = realmResource.users().get(userId).roles().realmLevel().listAll();
+        List<String> roles = new ArrayList<>();
+        for (RoleRepresentation roleRepresentation : roleMappings) {
+            roles.add(roleRepresentation.getName());
+        }
+        return roles;
     }
 }

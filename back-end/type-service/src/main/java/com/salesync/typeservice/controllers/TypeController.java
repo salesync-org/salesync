@@ -69,7 +69,7 @@ public class TypeController {
     }
 
     @DeleteMapping(Route.Type.DELETE_PROPERTY)
-    public ResponseEntity<TypeProperty> deleteProperty(@PathVariable UUID typePropId) {
+    public ResponseEntity<String> deleteProperty(@PathVariable UUID typePropId) {
         return ResponseEntity.ok(typeService.deleteProperty(typePropId));
     }
 

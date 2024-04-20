@@ -1,10 +1,9 @@
-import { TYPE_SERVICE_URL } from '@/constants/api';
 import axios from './axiosConfig';
 
 const URL = import.meta.env.VITE_GATEWAY_HOST;
 class TypeApi {
-  async getAllTypes() {
-    const res = await axios.get(TYPE_SERVICE_URL);
+  async getAllTypes(companyName: string) {
+    const res = await axios.get(`${URL}/${companyName}/types`);
     return res.data;
   }
 

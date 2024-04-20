@@ -11,7 +11,15 @@ import {
   TextButton
 } from '@/components/ui';
 import { cn } from 'utils/utils';
-import InputRecordRelative from './InputRecordRelative';
+// import InputRecordRelative from './InputRecordRelative';
+import LoadingSpinner from '../ui/Loading/LoadingSpinner';
+import useType from '@/hooks/type-service/useType';
+import useProperties from '@/hooks/type-service/useProperties';
+import { useLocation } from 'react-router-dom';
+import recordApi from '@/api/record';
+import { useToast } from '@/components/ui/use-toast';
+// import ErrorToaster from '@/pages/Error/ErrorToaster';
+import { useForm } from 'react-hook-form';
 
 interface ButtonActivityProps {
   name: 'Email' | 'New Event' | 'Log a Call' | 'New Task';
@@ -22,49 +30,89 @@ interface ButtonActivityProps {
   setDisabled?: (disabled: boolean) => void;
 }
 
-const ButtonActivity: React.FC<ButtonActivityProps> = ({ icon, name, className, color = 'bg-neutral-400', disabled = false, setDisabled }) => {
+const ButtonActivity: React.FC<ButtonActivityProps> = ({
+  icon,
+  name,
+  className,
+  color = 'bg-neutral-400',
+  disabled = false,
+  setDisabled
+}) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [subject, setSubject] = useState('');
-
-  const [dateStart, setDateStart] = useState('');
-  const [dateEnd, setDateEnd] = useState('');
-  const [timeStart, setTimeStart] = useState('');
-  const [timeEnd, setTimeEnd] = useState('');
-
+  
   const setType = () => {
-    if (name === 'Email') return 'email';
-    if (name === 'New Event') return 'event';
-    if (name === 'Log a Call') return 'call';
-    if (name === 'New Task') return 'task';
+    if (name === 'Email') return 'Email';
+    if (name === 'New Event') return 'Event';
+    if (name === 'Log a Call') return 'Call';
+    if (name === 'New Task') return 'Task';
   };
-  const [typeActivity, setTypeActivity] = useState(setType()); // email, event, call, task
+  const [typeActivity, setTypeActivity] = useState(setType()); // Email, Event, Call, Task
 
   let isDisabledTriangleButton = false;
   if (name === 'New Task') isDisabledTriangleButton = true;
+
+  const { handleSubmit, register } = useForm({
+    // defaultValues: data
+  });
+
+  const { toast } = useToast();
+  const location = useLocation();
+  const companyName = location.pathname.split('/')[1] || '';
+  const { types: types } = useType(companyName);
+  const typeId = types?.find((type) => type.name === setType())?.id;
+  const { data: typeProperty, isLoading: isPropertiesLoading } = useProperties(companyName, typeId!);
+
+  if (!typeId) {
+    return null;
+  }
+
+  const handleCreateRecord = async (data: any) => {
+    const req = {
+      record_name: data['Subject'],
+      stage_id: null,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      properties: typeProperty?.properties.map((property: any) => {
+        return {
+          id: property.id,
+          property_name: property.name,
+          property_label: property.label,
+          item_value: data[property.name]
+        };
+      })
+    };
+
+    const res = await recordApi.createRecord(companyName, typeId!, req);
+
+    if (res) {
+      toast({
+        title: 'Success',
+        description: 'Create record activity successfully'
+      });
+    }
+  };
+
+  const onSubmit = async (data: any) => {
+    console.log("data", data)
+    try {
+      if (!data['Subject']) {
+        throw new Error('Subject is required');
+      }
+      handleCreateRecord(data);
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: 'Error',
+        description: 'Failed to create record',
+        variant: 'destructive'
+      });
+    }
+  };
 
   return (
     <div>
       <ButtonGroup className='mb-1 mr-1'>
         <Button
           onClick={() => {
-            if (name === 'New Event' || name === 'New Task') {
-              // init date and time now
-              const date = new Date();
-              const currentDate = date.toLocaleDateString();
-              const currentTime = date.toLocaleTimeString();
-              const arrDate = currentDate.split('/');
-              const arrTime = currentTime.split(/[/:\s]/);
-              if (arrDate[0].length === 1) arrDate[0] = '0' + arrDate[0];
-              if (arrDate[1].length === 1) arrDate[1] = '0' + arrDate[1];
-              if (arrTime[3] === 'PM' && arrTime[0] !== '12') arrTime[0] = (Number(arrTime[0]) + 12).toString();
-              if (arrTime[3] === 'AM' && arrTime[0] === '12') arrTime[0] = '00';
-              const fineTuneCurrentDate = arrDate[2] + '-' + arrDate[0] + '-' + arrDate[1]; //yyyy-mm-dd
-              const fineTuneCurrentTime = arrTime[0] + ':' + arrTime[1]; //hh:mm
-              setDateStart(fineTuneCurrentDate);
-              setTimeStart(fineTuneCurrentTime);
-              setDateEnd(fineTuneCurrentDate);
-              setTimeEnd(fineTuneCurrentTime);
-            }
             setIsOpen(true);
             setDisabled && setDisabled(true);
           }}
@@ -91,7 +139,7 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({ icon, name, className, 
                 <Button
                   className='flex w-full justify-start border-0 border-button-background dark:border-button-background-dark'
                   onClick={() => {
-                    setTypeActivity('task');
+                    setTypeActivity('Task');
                     setIsOpen(true);
                   }}
                 >
@@ -103,7 +151,7 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({ icon, name, className, 
                   <p className='font-bold'>Email</p>
                   <TextButton
                     onClick={() => {
-                      setTypeActivity('email');
+                      setTypeActivity('Email');
                       setIsOpen(true);
                     }}
                     text='trantoan@gmail.com'
@@ -137,7 +185,7 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({ icon, name, className, 
                 <Button
                   className='flex w-full justify-start border-0 border-button-background dark:border-button-background-dark'
                   onClick={() => {
-                    setTypeActivity('task');
+                    setTypeActivity('Task');
                     setIsOpen(true);
                   }}
                 >
@@ -155,6 +203,8 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({ icon, name, className, 
         </DropDown>
       </ButtonGroup>
 
+      {isPropertiesLoading && <LoadingSpinner className='mt-10' />}
+
       <nav
         className={cn(
           'fixed bottom-0 right-4 flex h-[500px] w-[470px] flex-col rounded',
@@ -167,11 +217,11 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({ icon, name, className, 
         <div className='flex h-[40px] items-center justify-between border-b-2 border-primary-stroke px-4 dark:border-primary-stroke-dark'>
           <div className='flex items-center'>
             <Icon
-              name={cn(typeActivity === 'task' ? 'checklist' : icon)}
-              className={cn('mr-1 rounded p-0.5 text-white', typeActivity === 'task' ? 'bg-green-400' : color)}
+              name={cn(typeActivity === 'Task' ? 'checklist' : icon)}
+              className={cn('mr-1 rounded p-0.5 text-white', typeActivity === 'Task' ? 'bg-green-400' : color)}
             ></Icon>
             <h2 className='text-base font-normal leading-5'>
-              {subject ? subject : cn(typeActivity === 'task' ? 'New Task' : name)}
+              {typeActivity === 'Task' ? 'New Task' : name}
             </h2>
           </div>
           <div className='flex gap-2'>
@@ -194,124 +244,63 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({ icon, name, className, 
           </div>
         </div>
 
-        <div className='flex h-[400px] overflow-y-auto'>
-          <form className='w-full p-4'>
-            {typeActivity === 'email' && <></>}
-
-            {typeActivity !== 'email' && (
-              <>
-                <TextInput
-                  header='Subject'
-                  className='mb-5 w-full'
-                  postfixIcon='search'
-                  onChange={(e) => setSubject(e.target.value)}
-                />
-
-                {typeActivity === 'event' && (
-                  <>
-                    {/* description */}
-                    <TextArea header='Description' className='mb-5' />
-
-                    {/* date time */}
-                    <div className='grid grid-cols-2 gap-2'>
-                      <div>
-                        <span className='font-semibold'>Start</span>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className='flex h-[400px] overflow-y-auto'>
+            <div className='w-full p-4'>
+              {typeProperty ? (
+                typeProperty.properties?.map((property: any) => {
+                  if (
+                    property.property.name === 'Text' ||
+                    property.property.name === 'Phone' ||
+                    property.property.name === 'Email'
+                  )
+                    return (
+                      <TextInput
+                        header={property.label}
+                        className='mb-5 w-full'
+                        postfixIcon='search'
+                        key={property.id}
+                        register={register}
+                        name={property.name}
+                      />
+                    );
+                  else if (property.property.name === 'TextArea')
+                    return (
+                      <TextArea
+                        header={property.label}
+                        className='mb-5'
+                        key={property.id}
+                        register={register}
+                        name={property.name}
+                      />
+                    );
+                  else if (property.property.name === 'DateTime')
+                    return (
+                      <div className='mb-5'>
+                        <span className='font-semibold'>{property.label}</span>
                         <div className='grid grid-cols-2'>
                           <DateInput
-                            header='* Date'
-                            type='date'
-                            value={dateStart}
-                            onChange={(e) => setDateStart(e.target.value)}
-                          />
-                          <DateInput
-                            header='* Time'
-                            type='time'
-                            value={timeStart}
-                            onChange={(e) => setTimeStart(e.target.value)}
+                            type='datetime-local'
+                            register={register}
+                            name={property.name}
                           />
                         </div>
                       </div>
-                      <div>
-                        <span className='font-semibold'>End</span>
-                        <div className='grid grid-cols-2'>
-                          <DateInput
-                            header='* Date'
-                            type='date'
-                            value={dateEnd}
-                            onChange={(e) => setDateEnd(e.target.value)}
-                          />
-                          <DateInput
-                            header='* Time'
-                            type='time'
-                            value={timeEnd}
-                            onChange={(e) => setTimeEnd(e.target.value)}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </>
-                )}
+                    );
+                  else return <div></div>;
+                })
+              ) : (
+                <div>loading</div>
+              )}
+            </div>
+          </div>
 
-                {typeActivity === 'call' && (
-                  <div>
-                    {/* Comments */}
-                    <TextArea header='Comments' className='mb-5' />
-                  </div>
-                )}
-
-                {typeActivity === 'task' && (
-                  <div className='grid grid-cols-2 gap-3'>
-                    <DateInput
-                      header='Due Date'
-                      type='date'
-                      value={dateStart}
-                      onChange={(e) => setDateStart(e.target.value)}
-                    />
-                    <InputRecordRelative header='* Assigned To' pattern='assign' />
-                  </div>
-                )}
-
-                {/* Name and Relative to */}
-                <div className='mt-5 grid grid-cols-2 gap-2'>
-                  <InputRecordRelative header='Name' pattern='name' />
-                  <InputRecordRelative header='Relative To' pattern='relation' />
-                </div>
-
-                {typeActivity === 'event' && (
-                  <div className='mt-5'>
-                    <div>
-                      <span>Attendees</span>
-                    </div>
-                    <TextButton
-                      text='People'
-                      className='mt-2 border-b-[3px] border-blue-400 px-3 py-1 font-bold text-text hover:border-blue-500 hover:text-text hover:no-underline'
-                      onClick={() => {}}
-                    />
-                    <div className='border-b-[2px]'></div>
-
-                    <div className='mt-3'>
-                      <TextInput placeholder='Search People...' className='w-full' />
-                    </div>
-                    <div className='rounded h-fit border py-1'></div>
-
-                    <div className='h-12'></div>
-                  </div>
-                )}
-              </>
-            )}
-          </form>
-        </div>
-
-        <div className='absolute bottom-0 flex h-[50px] w-full items-center justify-end border border-button-stroke bg-panel pr-2 dark:border-button-stroke-dark dark:bg-panel-dark'>
-          <PrimaryButton
-            onClick={() => {
-              console.log('Start', dateStart, timeStart);
-              console.log('End', dateEnd, timeEnd);
-            }}
-          >
-            Save
-          </PrimaryButton>
-        </div>
+          <div className='absolute bottom-0 flex h-[50px] w-full items-center justify-end border border-button-stroke bg-panel pr-2 dark:border-button-stroke-dark dark:bg-panel-dark'>
+            <PrimaryButton type='submit'>
+              Save
+            </PrimaryButton>
+          </div>
+        </form>
       </nav>
     </div>
   );

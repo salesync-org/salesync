@@ -11,6 +11,7 @@ type Type = {
   icon_url: string?;
   background_color: string?;
   type_id: string;
+  id: string;
   name: string;
   description?: string;
   fields?: Field[];

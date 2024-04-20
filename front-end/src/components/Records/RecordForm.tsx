@@ -34,6 +34,7 @@ const RecordForm = ({ currentData = {}, onSubmit, stages, typeProperty, formId =
       register: register,
       name: property.name
     };
+
     return {
       Text: <TextInput {...props} isError={!!errors[property.name]} validation={{ minLength: 1 }}></TextInput>,
       Phone: <TextInput {...props} type='tel' isError={!!errors[property.name]}></TextInput>,
@@ -52,10 +53,14 @@ const RecordForm = ({ currentData = {}, onSubmit, stages, typeProperty, formId =
     };
   };
 
+  const onFormSubmit = (data: Record<string, string>) => {
+    onSubmit(data);
+  };
+
   return (
     <form
       id={formId}
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(onFormSubmit)}
       className={cn('w-full overflow-x-hidden pb-32', isSubmitting && 'pointer-events-none opacity-80', className)}
     >
       {isSubmitting && <ScreenLoading />}

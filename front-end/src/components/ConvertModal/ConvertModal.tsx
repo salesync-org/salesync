@@ -184,7 +184,7 @@ const ConvertModal = () => {
           Cancel
         </Button>
         <PrimaryButton disabled={loading} type='submit' onClick={handleConvert}>
-          {loading ? (
+          {false ? (
             <div className='flex items-center justify-center space-x-2'>
               <div>
                 <LoadingSpinnerSmall className='h-5 w-5 fill-on-primary' />

@@ -37,6 +37,7 @@ export const ConvertSection = ({ typeProperties, formId, check, onCheckStatus, r
 
   const onSubmit = async (data: any) => {
     try {
+      console.log({ data });
       const req = {
         record_name: data['Name'],
         stage_id: data.stage,
@@ -50,18 +51,20 @@ export const ConvertSection = ({ typeProperties, formId, check, onCheckStatus, r
         })
       };
 
-      const typeId = typeProperties.id;
-      const res = await recordApi.createRecord(companyName, typeId, req);
+      // console.log({ req });
 
-      if (res) {
-        toast({
-          title: 'Success',
-          description: 'Create record successfully'
-        });
+      // const typeId = typeProperties.id;
+      // const res = await recordApi.createRecord(companyName, typeId, req);
 
-        setRecord(res);
-        localStorage.setItem(typeProperties.name, JSON.stringify(res));
-      }
+      // if (res) {
+      //   toast({
+      //     title: 'Success',
+      //     description: 'Create record successfully'
+      //   });
+
+      //   setRecord(res);
+      //   localStorage.setItem(typeProperties.name, JSON.stringify(res));
+      // }
     } catch (error) {
       console.error(error);
       toast({
@@ -109,6 +112,9 @@ export const ConvertSection = ({ typeProperties, formId, check, onCheckStatus, r
             )}
           >
             <RecordForm formId={formId} typeProperty={typeProperties} onSubmit={onSubmit} className='pb-4' />
+            <button type='submit' form={formId}>
+              submit
+            </button>
           </div>
         </section>
       </section>

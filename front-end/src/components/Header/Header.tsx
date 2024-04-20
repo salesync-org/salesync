@@ -2,8 +2,10 @@ import salesyncIcon from 'assets/salesync_icon.png';
 
 import { ThemeToggle, UserInfo, Search, QuickSetting } from './index';
 import { cn } from '@/utils/utils';
+import useAuth from '@/hooks/useAuth';
 
 const Header = ({ className }: { className?: string }) => {
+  const { company } = useAuth();
   return (
     <div
       className={cn(
@@ -12,7 +14,11 @@ const Header = ({ className }: { className?: string }) => {
       )}
     >
       <a className='aspect-square h-10 w-10' href='/cheatsheet'>
-        <img src={salesyncIcon} className='' alt='header icon' />
+        <img
+          src={`${import.meta.env.VITE_STORAGE_SERVICE_HOST}/companies/${company?.avatar_url === 'default' ? 'default.svg' : company?.avatar_url}?lastmod=${new Date().getTime().toString()}`}
+          className=''
+          alt='header icon'
+        />
       </a>
       <Search className='align-middle' />
       <div>

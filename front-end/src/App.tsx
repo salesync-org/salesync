@@ -12,6 +12,7 @@ const UserSetting = lazy(() => import('./pages/Settings/UserSetting'));
 const ChangePasswordSetting = lazy(() => import('./pages/Settings/ChangePasswordSetting'));
 const CompanyInformationSetting = lazy(() => import('./pages/Settings/CompanyInformationSetting'));
 const PropertySetting = lazy(() => import('./pages/Settings/PropertySetting'));
+const RoleSetting = lazy(() => import('./pages/Settings/RoleSetting'));
 
 // const LogIn = lazy(() => import('pages/LogIn/LogIn'));
 // const Setting = lazy(() => import('pages/Setting/Setting'));
@@ -53,7 +54,7 @@ function App() {
                 <Route path='personal-information' element={<PersonalInformationSetting />} />
                 <Route path='company-information' element={<CompanyInformationSetting />} />
                 <Route path='change-user-password' element={<ChangePasswordSetting />} />
-                <Route path='profiles' element={<PersonalInformationSetting />} />
+                <Route path='profiles' element={<RoleSetting />} />
                 <Route path='users' element={<UserSetting />} />
                 <Route path='object-manager' element={<ObjectManager />} />
                 <Route path='object-manager/:typeId' element={<TypePropertyManager />} />

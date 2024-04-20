@@ -110,7 +110,7 @@ const SettingLayout = () => {
         <section className='w-full'>
           <header className='mb-4 h-[88px] w-full rounded-md bg-panel dark:bg-panel-dark'>
             <div className='flex h-full items-center px-6'>
-              <div className='rounded-md bg-primary-color p-2'>
+              <div className='rounded-lg bg-primary-color p-2'>
                 <Icon size={28} color='#fff' />
               </div>
               <h1 className='pl-4 text-2xl font-bold'>{title}</h1>

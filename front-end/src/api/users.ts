@@ -64,3 +64,13 @@ export const resetPassword = async (userId: string, newPassword: string, accessT
 
 
 };
+
+export const getUsers = async (realmId: string) => {
+  try {
+    const response = await instance.get(`${BASE_URL}/${realmId}/users`);
+    return response.data;
+  } catch (error) {
+    console.error('Error getting users:', error);
+    throw error;
+  }
+};

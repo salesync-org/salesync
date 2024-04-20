@@ -46,7 +46,11 @@ const FocusTrap: React.FC<FocusTrapProps> = ({ children }) => {
     };
   }, []);
 
-  return <div ref={trapRef}>{children}</div>;
+  return (
+    <div className='h-full' ref={trapRef}>
+      {children}
+    </div>
+  );
 };
 
 export default FocusTrap;

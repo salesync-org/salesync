@@ -8,8 +8,10 @@ import '@/constants/api';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import typeApi from '@/api/type';
 import { Button, Table, TableBody, TableCell, TableHeader, TableRow } from '@/components/ui';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Ellipsis, Pencil, Trash2 } from 'lucide-react';
 import { cn } from '@/utils/utils';
+import { toast } from '@/components/ui/Toast';
+import { useQueryClient } from 'react-query';
 
 const TypePropertyManager = () => {
   // const [typeName, setTypeName] = useState('');
@@ -20,6 +22,7 @@ const TypePropertyManager = () => {
   const [propertySearchResult, setPropertySearchResult] = useState<TypePropertyDetail[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [search, setSearch] = useState(() => {
     return searchParams.get('search') || '';
   });
@@ -98,8 +101,9 @@ const TypePropertyManager = () => {
                 <TableHeader className='max-h-full rounded-sm border-b-2 border-input-stroke-light dark:border-input-stroke-dark'>
                   <TableRow className='left-0 right-0 bg-slate-50 dark:bg-secondary/10'>
                     <TableCell className='max-w-28 font-semibold'>Property Name</TableCell>
-                    <TableCell className='font-semibold'>Property Name</TableCell>
+                    <TableCell className='font-semibold'>Property Label</TableCell>
                     <TableCell className='font-semibold'>Property Type</TableCell>
+                    <TableCell className=''></TableCell>
                   </TableRow>
                 </TableHeader>
                 <TableBody className='h-full overflow-y-scroll'>
@@ -110,6 +114,21 @@ const TypePropertyManager = () => {
                           <TableCell className='max-w-28'>{property.name}</TableCell>
                           <TableCell className='max-w-28'>{property.label}</TableCell>
                           <TableCell className='max-w-28'>{property.property.name}</TableCell>
+                          <TableCell className='flex w-full max-w-28 justify-end space-x-4'>
+                            <Button rounded className='aspect-square rounded-full p-0'>
+                              <Pencil size={'1rem'}></Pencil>
+                            </Button>
+                            <Button
+                              rounded
+                              className='aspect-square rounded-full p-0'
+                              onClick={async (e) => {
+                                await typeApi.deleteTypeProperty(companyName ?? '', property.id);
+                                setPropertySearchResult((prev) => prev.filter((item) => item.id !== property.id));
+                              }}
+                            >
+                              <Trash2 size={'1rem'}></Trash2>
+                            </Button>
+                          </TableCell>
                         </TableRow>
                       );
                     })}

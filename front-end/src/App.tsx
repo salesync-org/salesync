@@ -54,7 +54,7 @@ function App() {
                 <Route path='personal-information' element={<PersonalInformationSetting />} />
                 <Route path='company-information' element={<CompanyInformationSetting />} />
                 <Route path='change-user-password' element={<ChangePasswordSetting />} />
-                <Route path='profiles' element={<RoleSetting />} />
+                <Route path='roles' element={<RoleSetting />} />
                 <Route path='users' element={<UserSetting />} />
                 <Route path='object-manager' element={<ObjectManager />} />
                 <Route path='object-manager/:typeId' element={<TypePropertyManager />} />

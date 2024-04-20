@@ -49,7 +49,14 @@ const UserInfo = () => {
                 setMenuOpen(!isMenuOpen);
               }}
             >
-              <img className='w-full rounded-full' src={avatar_url} alt='avatar'></img>
+              <img
+                className='w-full rounded-full'
+                src={avatar_url}
+                alt='avatar'
+                onError={(e) => {
+                  e.currentTarget.src = defaultAvatar;
+                }}
+              ></img>
             </Button>
             <DropDownList
               open={isMenuOpen}

@@ -307,4 +307,20 @@ public class TypeServiceImpl implements TypeService {
                 .destinationTypeLabel(relationTypeRequestDto.getDestinationTypeLabel())
                 .build();
     }
+
+    @Override
+    public String deleteProperty(UUID typePropId) {
+        TypeProperty typeProperty = typePropertyRepository.findById(typePropId)
+                .orElseThrow(() -> new ObjectNotFoundException(
+                        TypeProperty.class.getSimpleName(),
+                        typePropId.toString()
+                ));
+
+        try {
+            typePropertyRepository.deleteById(typePropId);
+            return "Property deleted successfully";
+        } catch (ObjectNotFoundException e) {
+            return "Fail to delete property";
+        }
+    }
 }

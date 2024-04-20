@@ -34,8 +34,8 @@ const settings = [
     name: 'Users',
     items: [
       {
-        name: 'Profiles',
-        path: 'setting/profiles',
+        name: 'Roles',
+        path: 'setting/roles',
         Icon: User
       },
       {

@@ -6,44 +6,56 @@ import Button from '@/components/ui/Button/Button';
 import Icon from '@/components/ui/Icon/Icon';
 import PrimaryButton from '@/components/ui/Button/PrimaryButton';
 import Modal, { ModalFooter } from '@/components/ui/Modal/Modal';
-import DropDown from '@/components/ui/DropDown/DropDown';
-import Item from '@/components/ui/Item/Item';
 import '@/constants/api';
 import { useParams, useSearchParams } from 'react-router-dom';
-import Pagination from '@/components/ui/Pagination/Pagination';
-import TypeTable from '@/components/ui/Table/TypeTable';
-import useType from '@/hooks/type-service/useType';
-import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/ui/Table';
+import { Table, TableBody, TableCell, TableHeader, TableRow } from '@/components/ui/Table';
 import useAuth from '@/hooks/useAuth';
+import { getUsers } from '@/api/users';
+import { AvatarGroup, TextArea } from '@/components/ui';
+import { UserPlus } from 'lucide-react';
+import ToggleButton from '@/components/ui/ToggleButton/ToggleButton';
+import { createRole } from '@/api/roles';
+import { useToast } from '@/components/ui/Toast';
+import AssignRoleToUserModal from './AssignRoleToUserModal';
 
 const RoleSetting = () => {
   //Pop up modal to create new type
-  const [isTypeModelOpen, setIsTypeModelOpen] = useState(false);
-  //Type name in the input field
-  const [typeName, setTypeName] = useState('');
+  const [isRoleModalOpen, setRoleModal] = useState<Role | null>(null);
+  const [isAssignModalOpen, setAssignModalOpen] = useState<Role | null>(null);
   const { companyName } = useParams();
 
-  const { getRoles } = useAuth();
+  const { getRoles, getPermissions } = useAuth();
   const [roles, setRoles] = useState<Role[]>([]);
+  const [permissions, setPermissions] = useState<{ permission: Permission; isSelected: boolean }[]>([]);
+  const [users, setUsers] = useState<SimpleUser[]>([]);
   const [roleSearchResult, setRoleSearchResult] = useState<Role[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
+  const { toast } = useToast();
   const [search, setSearch] = useState(() => {
     return searchParams.get('search') || '';
   });
   const debouncedSearch = useDebounce(search, 500);
-  const [page, setPage] = useState(() => {
-    return searchParams.get('page') || '1';
-  });
+  const loadUsers = async () => {
+    const newUsers = await getUsers(companyName ?? '');
+    setUsers(newUsers);
+  };
 
   useEffect(() => {
     const fetchRoles = async () => {
       const result = await getRoles(companyName ?? '');
-      console.log('result');
-      console.log(result);
       setRoles(result || []);
     };
+    const fetchPermission = async () => {
+      const result = await getPermissions(companyName ?? '');
+      const permissionSet = result?.map((permission) => {
+        return { permission: permission, isSelected: false };
+      });
+      setPermissions(permissionSet ?? []);
+    };
     fetchRoles();
-  }, [companyName, getRoles]);
+    fetchPermission();
+    loadUsers();
+  }, [companyName, getRoles, getPermissions]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,29 +83,42 @@ const RoleSetting = () => {
     }
   }, [debouncedSearch, searchParams, setSearchParams]);
 
-  //create Type sample data and add to types
-  const handleCreateType = async () => {
-    try {
-      // const res = await typeApi.createType({ typeName: typeName, template: 'Account' });
-      // if (res) {
-      //   console.log('Create Type successfully');
-      //   setTypes([res, ...(types || [])]);
-      //   setTypeSearchResult([res, ...(types || [])]);
-      //   return res;
-      // }
-    } catch (error) {
-      console.error('Create Type failed', error);
-    }
+  const resetPermissions = () => {
+    setPermissions(
+      permissions.map((permission) => {
+        return { ...permission, isSelected: false };
+      })
+    );
   };
 
   //Handle submit when creating new type
-  const handleSubmit = () => {
-    if (!typeName) {
-      return;
+  const handleSubmit = async () => {
+    if (isRoleModalOpen) {
+      const selectedPermissions = permissions
+        .filter((permission) => permission.isSelected)
+        .map((permission) => permission.permission);
+      const newRole: Role = {
+        role_id: '',
+        role_name: isRoleModalOpen.role_name,
+        description: isRoleModalOpen.description,
+        permissions: selectedPermissions
+      };
+      const result = await createRole(companyName ?? '', newRole);
+      if (result) {
+        setRoleModal(null);
+        resetPermissions();
+        setRoles([...roles, result]);
+        toast({
+          title: 'Success',
+          description: 'Role created successfully'
+        });
+      } else {
+        toast({
+          title: 'Error',
+          description: 'Failed to create role. Role name is duplicated'
+        });
+      }
     }
-    setIsTypeModelOpen(false);
-    handleCreateType();
-    setTypeName('');
   };
 
   return (
@@ -106,14 +131,14 @@ const RoleSetting = () => {
                 onChange={(e) => setSearch(e.target.value)}
                 className='w-full'
                 value={search}
-                placeholder='Search for types'
+                placeholder='Search for roles'
                 prefixIcon='search'
               />
             </div>
             <PrimaryButton
               className='ml-2'
               onClick={() => {
-                setIsTypeModelOpen(true);
+                setRoleModal({} as Role);
               }}
               showHeader={true}
             >
@@ -121,59 +146,161 @@ const RoleSetting = () => {
               <p>Create</p>
             </PrimaryButton>
           </div>
-          <div className='h-full min-h-full overflow-scroll'>
-            <Table>
-              <TableHead>
-                <TableCell className='font-semibold'>Role Name</TableCell>
-              </TableHead>
-              <TableBody>
-                {roleSearchResult.map(
-                  (role) =>
-                    role.role_name !== `default-roles-${companyName}` && (
-                      <TableRow key={role.role_id}>
-                        <TableCell>{role.role_name}</TableCell>
-                      </TableRow>
-                    )
-                )}
-              </TableBody>
-            </Table>
+          <div className='h-full min-h-full overflow-y-scroll'>
+            <div className='h-full overflow-y-scroll rounded border-2 border-input-stroke-light dark:border-input-stroke-dark'>
+              <Table className='h-full'>
+                <TableHeader className='max-h-full rounded-sm border-b-2 border-input-stroke-light dark:border-input-stroke-dark'>
+                  <TableRow>
+                    <TableCell className='font-semibold'>Role Name</TableCell>
+                    <TableCell className='font-semibold'>Description</TableCell>
+                    <TableCell className='font-semibold'>Users</TableCell>
+                    <TableCell className='font-semibold'></TableCell>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {roleSearchResult.map(
+                    (role) =>
+                      role.role_name !== `default-roles-${companyName}` && (
+                        <TableRow key={role.role_id}>
+                          <TableCell>
+                            <div className='w-fit'>
+                              <div className='my-2 text-[1.2rem] font-semibold text-primary-bold dark:text-secondary-light'>
+                                {role.role_name}
+                              </div>
+                              <div className=' flex w-fit flex-wrap space-x-2'>
+                                {role.permissions &&
+                                  role.permissions.map((permission) => (
+                                    <div
+                                      key={permission.permission_id}
+                                      className='my-2 mr-1 w-fit text-ellipsis text-nowrap rounded-full bg-gray-200 px-3 py-1 text-xs dark:bg-slate-600'
+                                    >
+                                      {permission.permission_name}
+                                    </div>
+                                  ))}
+                              </div>
+                            </div>
+                          </TableCell>
+                          <TableCell>{role.description ?? 'No Description'}</TableCell>
+                          <TableCell>
+                            <AvatarGroup
+                              maxAvatars={3}
+                              users={users.filter((user) => user.roles.includes(role.role_name))}
+                            ></AvatarGroup>
+                          </TableCell>
+                          <TableCell>
+                            <Button
+                              rounded
+                              className='flex w-40 rounded-full p-0 px-4'
+                              onClick={() => {
+                                setAssignModalOpen(role);
+                              }}
+                            >
+                              <UserPlus size='1rem' />
+                              <p>Assign Users</p>
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      )
+                  )}
+                </TableBody>
+              </Table>
+            </div>
           </div>
         </div>
       </Panel>
 
       <Modal
-        isOpen={isTypeModelOpen}
+        isOpen={!!isRoleModalOpen}
         onClose={() => {
-          setIsTypeModelOpen(false);
+          setRoleModal(null);
+          resetPermissions();
         }}
-        title='Create new Type'
+        className='mx-auto h-[400px] w-2/3'
+        title={isRoleModalOpen?.role_id ? 'Edit Role' : 'Create New Role'}
       >
         <form>
-          <div className='grid grid-cols-5 place-content-center gap-3'>
-            <div className='col-span-3 flex flex-col gap-2'>
+          <div className='grid grid-cols-5 place-content-center gap-10'>
+            <div className='col-span-3 flex flex-col gap-2 '>
+              <div className='mb-2 flex items-baseline'>
+                <h3 className='min-w-[100px]'>Role Details</h3>
+                <div className='w-full border-b-2 border-button-stroke-light py-4 dark:border-button-stroke-dark'></div>
+              </div>
               <TextInput
-                onChange={(e) => setTypeName(e.target.value)}
-                header='Type Name'
+                header='Role Name'
                 className='w-full'
-                value={typeName}
-                placeholder='Search for something'
+                onChange={(e) => {
+                  if (isRoleModalOpen) {
+                    isRoleModalOpen.role_name = e.target.value;
+                  }
+                }}
+                defaultValue={isRoleModalOpen?.role_name}
+                readOnly={isRoleModalOpen?.role_id ? true : false}
+                disabled={isRoleModalOpen?.role_id ? true : false}
+                placeholder='Enter a name for the role'
+              />
+              <TextArea
+                header='Description'
+                className='w-full'
+                onChange={(e) => {
+                  if (isRoleModalOpen) {
+                    isRoleModalOpen.description = e.target.value;
+                  }
+                }}
+                placeholder='Enter a description for the role'
               />
             </div>
-            <div className='col-span-2 flex flex-col gap-2'>
-              <DropDown header='Template' value='Select a value'>
-                <Item title='Account' />
-                <Item title='Contact' />
-                <Item title='Lead' />
-                <Item title='Opportunity' />
-              </DropDown>
+            <div className='col-span-2 flex flex-col gap-5'>
+              <div className='flex items-baseline'>
+                <h3 className='min-w-[100px]'>Permissions</h3>
+                <div className='w-full border-b-2 border-button-stroke-light py-4 dark:border-button-stroke-dark'></div>
+              </div>
+              <div className='flex flex-wrap space-x-2'>
+                {permissions &&
+                  permissions.map((permission) => (
+                    <div key={permission.permission.permission_id}>
+                      <ToggleButton
+                        className='my-2 w-full'
+                        onToggle={() => {
+                          setPermissions(
+                            permissions.map((p) => {
+                              if (p.permission.permission_id === permission.permission.permission_id) {
+                                return { ...p, isSelected: !p.isSelected };
+                              }
+                              return p;
+                            })
+                          );
+                        }}
+                        isToggled={permission.isSelected}
+                      >
+                        {permission.permission.permission_name}
+                      </ToggleButton>
+                    </div>
+                  ))}
+              </div>
             </div>
           </div>
           <ModalFooter className='mt-8'>
-            <Button onClick={() => setIsTypeModelOpen(false)}>Cancel</Button>
-            <PrimaryButton onClick={() => handleSubmit()}>Save</PrimaryButton>
+            <Button
+              onClick={() => {
+                setRoleModal(null);
+                resetPermissions();
+              }}
+            >
+              Cancel
+            </Button>
+            <PrimaryButton onClick={() => handleSubmit()}>{isRoleModalOpen?.role_id ? 'Save' : 'Create'}</PrimaryButton>
           </ModalFooter>
         </form>
       </Modal>
+      <AssignRoleToUserModal
+        isOpen={isAssignModalOpen != null}
+        onClose={() => {
+          setAssignModalOpen(null);
+          loadUsers();
+        }}
+        role={isAssignModalOpen ?? { role_id: '', role_name: '', description: '', permissions: [] }}
+        users={users}
+      />
     </div>
   );
 };

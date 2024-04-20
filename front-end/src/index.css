@@ -16,6 +16,9 @@
 
 /* Track */
 ::-webkit-scrollbar-track {
+  background: #f1f1f100;
+}
+::-webkit-scrollbar-track:hover {
   background: #f1f1f1;
 }
 

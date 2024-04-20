@@ -28,6 +28,11 @@ class TypeApi {
     const res = await axios.get(`${URL}/${companyName}/types/details/${typeId}`);
     return res.data;
   }
+
+  async deleteTypeProperty(companyName: string, propertyId: string) {
+    const res = await axios.delete(`${URL}/${companyName}/types/delete-property/${propertyId}`);
+    return res.data;
+  }
 }
 
 const typeApi = new TypeApi();

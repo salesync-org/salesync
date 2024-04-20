@@ -19,13 +19,13 @@ const UserTable = ({ users }: { users: SimpleUser[] }) => {
             <TableCell>{user.first_name + ' ' + user.last_name}</TableCell>
             <TableCell>{user.email}</TableCell>
             <TableCell>
-              <div className='space-x-2'>
+              <div className='flex space-x-2 overflow-x-scroll'>
                 {user.roles.map(
                   (role, index) =>
                     role !== `default-roles-${companyName}` && (
                       <span
                         key={index}
-                        className='rounded-full border-[1px] border-primary px-4 py-2 text-[.9rem] text-primary'
+                        className='text-nowrap rounded-full border-[1px] border-primary px-4 py-2 text-[.9rem] text-primary dark:border-secondary dark:text-secondary'
                       >
                         {role}
                       </span>

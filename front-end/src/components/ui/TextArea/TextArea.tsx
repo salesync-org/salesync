@@ -45,7 +45,7 @@ const TextArea: React.FC<TextAreaProps> = ({
         <textarea
           placeholder={placeholder}
           className={cn(
-            'w-full rounded bg-transparent px-4 py-2 placeholder:text-ellipsis placeholder:text-opacity-50 focus:outline-primary'
+            'w-full rounded bg-transparent px-4 py-2 placeholder:text-ellipsis placeholder:text-[13px] placeholder:text-opacity-50 focus:outline-primary'
           )}
           disabled={disabled}
           value={value}

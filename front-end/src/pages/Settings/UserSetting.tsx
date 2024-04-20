@@ -117,7 +117,7 @@ const UserSetting = () => {
         </form>
 
         <div className='flex flex-col items-center px-10'>
-          <h2 className='mb-10'>Users and invitations</h2>
+          <h2 className='mb-10'>Users List</h2>
           <UserTable users={users}></UserTable>
         </div>
       </div>

@@ -58,8 +58,10 @@ class RecordApi {
     return response.data;
   }
 
-  async deleteRecord(companyName: string, recordId: string) {
-    const response = await axios.delete(`${URL}/${companyName}/records/${recordId}`);
+  async deleteRecord(companyName: string, recordIds: string[]) {
+    const response = await axios.delete(`${URL}/${companyName}/records`, {
+      data: recordIds
+    });
     return response.data;
   }
 

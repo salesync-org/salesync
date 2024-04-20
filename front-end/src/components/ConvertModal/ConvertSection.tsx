@@ -9,7 +9,15 @@ import { TextInput } from '../ui';
 import LoadingSpinner from '../ui/Loading/LoadingSpinner';
 import { useToast } from '../ui/Toast';
 
-export const ConvertSection = ({ typeProperties, formId, check, onCheckStatus, record, setRecord }: any) => {
+export const ConvertSection = ({
+  typeProperties,
+  formId,
+  check,
+  onCheckStatus,
+  record,
+  setRecord,
+  currentData
+}: any) => {
   const [isExpand, setIsExpand] = useState(false);
   const [search, setSearch] = useState('');
   const [showHint, setShowHint] = useState(false);
@@ -37,7 +45,7 @@ export const ConvertSection = ({ typeProperties, formId, check, onCheckStatus, r
 
   const onSubmit = async (data: any) => {
     try {
-      console.log({ data });
+      console.log({ formId, data });
       const req = {
         record_name: data['Name'],
         stage_id: data.stage,
@@ -51,20 +59,18 @@ export const ConvertSection = ({ typeProperties, formId, check, onCheckStatus, r
         })
       };
 
-      // console.log({ req });
+      const typeId = typeProperties.id;
+      const res = await recordApi.createRecord(companyName, typeId, req);
 
-      // const typeId = typeProperties.id;
-      // const res = await recordApi.createRecord(companyName, typeId, req);
+      if (res) {
+        toast({
+          title: 'Success',
+          description: 'Create record successfully'
+        });
 
-      // if (res) {
-      //   toast({
-      //     title: 'Success',
-      //     description: 'Create record successfully'
-      //   });
-
-      //   setRecord(res);
-      //   localStorage.setItem(typeProperties.name, JSON.stringify(res));
-      // }
+        setRecord(res);
+        localStorage.setItem(typeProperties.name, JSON.stringify(res));
+      }
     } catch (error) {
       console.error(error);
       toast({
@@ -111,10 +117,14 @@ export const ConvertSection = ({ typeProperties, formId, check, onCheckStatus, r
               check !== 'create' && 'pointer-events-none opacity-50'
             )}
           >
-            <RecordForm formId={formId} typeProperty={typeProperties} onSubmit={onSubmit} className='pb-4' />
-            <button type='submit' form={formId}>
-              submit
-            </button>
+            <RecordForm
+              currentData={currentData}
+              formId={formId}
+              typeProperty={typeProperties}
+              onSubmit={onSubmit}
+              className='pb-4'
+            />
+            <button form={formId}>submit</button>
           </div>
         </section>
       </section>

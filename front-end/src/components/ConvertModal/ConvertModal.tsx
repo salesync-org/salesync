@@ -3,7 +3,7 @@ import recordApi from '@/api/record';
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 import useProperties from '@/hooks/type-service/useProperties';
 import useType from '@/hooks/type-service/useType';
-import { getCompanyName } from '@/utils/utils';
+import { convertTypePropertyToCurrentData, getCompanyName } from '@/utils/utils';
 import { useEffect, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { Button, Modal, ModalFooter, PrimaryButton } from '../ui';
@@ -11,6 +11,7 @@ import LoadingSpinner from '../ui/Loading/LoadingSpinner';
 import { useToast } from '../ui/Toast';
 import { ConvertSection } from './ConvertSection';
 import LoadingSpinnerSmall from '../ui/Loading/LoadingSpinnerSmall';
+import { useNavigate } from 'react-router-dom';
 
 const TYPE_FORM_ID = {
   CONTACT: 'contactForm',
@@ -43,14 +44,14 @@ const ConvertModal = () => {
     hideModal,
     store: { modalType }
   } = useGlobalModalContext();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const handleRevert = async () => {
+    const handleConvert = async () => {
       const contact = localStorage.getItem('Contact') ? JSON.parse(localStorage.getItem('Contact')!) : null;
       const opportunity = localStorage.getItem('Opportunity') ? JSON.parse(localStorage.getItem('Opportunity')!) : null;
       const account = localStorage.getItem('Account') ? JSON.parse(localStorage.getItem('Account')!) : null;
 
-      console.log({ contact, opportunity, account, convertClicked });
       if (convertClicked && contact && opportunity && account) {
         try {
           setLoading(true);
@@ -64,7 +65,7 @@ const ConvertModal = () => {
               description: 'Convert successfully'
             });
             queryClient.invalidateQueries(['record']);
-            window.location.href = `/${companyName}/record/${contact.id}`;
+            navigate(`/${companyName}/record/${contact.id}`);
             hideModal();
           }
         } catch (error: any) {
@@ -84,8 +85,8 @@ const ConvertModal = () => {
       }
     };
 
-    handleRevert();
-  }, [account, companyName, contact, convertClicked, hideModal, opportunity, queryClient, toast]);
+    handleConvert();
+  }, [account, companyName, contact, convertClicked, hideModal, navigate, opportunity, queryClient, toast]);
 
   const { types = [], isLoading: isTypesLoading } = useType();
 
@@ -154,22 +155,24 @@ const ConvertModal = () => {
       title='Convert Lead'
     >
       <div className='flex h-[482px] w-full flex-col gap-2 overflow-y-auto pb-[72px]'>
-        <ConvertSection
+        {/* <ConvertSection
           typeProperties={contactProperties}
           formId={TYPE_FORM_ID.CONTACT}
           check={checkStatus.contactCheckStatus}
           onCheckStatus={handleCheckStatus('contactCheckStatus')}
           setRecord={setContact}
           record={contact}
-        />
-        <ConvertSection
+          currentData={convertTypePropertyToCurrentData(contactProperties.properties)}
+        /> */}
+        {/* <ConvertSection
           typeProperties={opportunityProperties}
           formId={TYPE_FORM_ID.OPPORTUNITY}
           check={checkStatus.opportunityCheckStatus}
           onCheckStatus={handleCheckStatus('opportunityCheckStatus')}
           setRecord={setOpportunity}
           record={opportunity}
-        />
+          currentData={convertTypePropertyToCurrentData(opportunityProperties.properties)}
+        /> */}
         <ConvertSection
           typeProperties={accountProperties}
           formId={TYPE_FORM_ID.ACCOUNT}
@@ -177,6 +180,7 @@ const ConvertModal = () => {
           onCheckStatus={handleCheckStatus('accountCheckStatus')}
           setRecord={setAccount}
           record={account}
+          currentData={convertTypePropertyToCurrentData(accountProperties.properties)}
         />
       </div>
       <ModalFooter className='absolute bottom-0 left-0 right-0 m-0 flex h-10 w-full items-center justify-center bg-gray-100 bg-opacity-90 px-3 py-10 shadow-inner'>
@@ -184,7 +188,7 @@ const ConvertModal = () => {
           Cancel
         </Button>
         <PrimaryButton disabled={loading} type='submit' onClick={handleConvert}>
-          {false ? (
+          {loading ? (
             <div className='flex items-center justify-center space-x-2'>
               <div>
                 <LoadingSpinnerSmall className='h-5 w-5 fill-on-primary' />

@@ -15,14 +15,16 @@ type RecordFormProps = {
 
 const RecordForm = ({ currentData = {}, onSubmit, stages, typeProperty, formId = '', className }: RecordFormProps) => {
   const {
-    handleSubmit,
     register,
+    handleSubmit,
+    getValues,
     control,
-    formState: { isSubmitting, errors }
+    formState: { isSubmitting, errors, isDirty }
   } = useForm({
     defaultValues: currentData,
     mode: 'all'
   });
+  console.log(isDirty, formId, getValues());
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const renderTypePropertyInput = (property: any) => {
@@ -36,7 +38,14 @@ const RecordForm = ({ currentData = {}, onSubmit, stages, typeProperty, formId =
     };
 
     return {
-      Text: <TextInput {...props} isError={!!errors[property.name]} validation={{ minLength: 1 }}></TextInput>,
+      // Text: <TextInput {...props} isError={!!errors[property.name]} validation={{ minLength: 1 }}></TextInput>,
+      Text: (
+        <Controller
+          control={control}
+          name={property.name}
+          render={({ field }) => <TextInput {...props} {...field}></TextInput>}
+        />
+      ),
       Phone: <TextInput {...props} type='tel' isError={!!errors[property.name]}></TextInput>,
       Email: (
         <TextInput
@@ -53,14 +62,15 @@ const RecordForm = ({ currentData = {}, onSubmit, stages, typeProperty, formId =
     };
   };
 
-  const onFormSubmit = (data: Record<string, string>) => {
-    onSubmit(data);
-  };
+  // const onFormSubmit = (data: Record<string, string>) => {
+  //   onSubmit(data);
+  // };
+  const onFormSubmit = handleSubmit(onSubmit, () => console.log('error'));
 
   return (
     <form
       id={formId}
-      onSubmit={handleSubmit(onFormSubmit)}
+      onSubmit={onFormSubmit}
       className={cn('w-full overflow-x-hidden pb-32', isSubmitting && 'pointer-events-none opacity-80', className)}
     >
       {isSubmitting && <ScreenLoading />}

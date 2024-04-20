@@ -48,3 +48,13 @@ export const getCompanyName = (index?: number) => {
   const urlParts = url.split('/');
   return urlParts[index ?? 1];
 };
+
+export const convertTypePropertyToCurrentData = (typeProperties: PropertyElement[]) => {
+  const currentData: Record<string, string> = {};
+
+  for (const property of typeProperties) {
+    currentData[property.name] = '';
+  }
+
+  return currentData;
+}

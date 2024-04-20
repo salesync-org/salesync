@@ -1,24 +1,24 @@
-package org.salesync.record_service.components;
+package com.salesync.typeservice.components;
 
 import lombok.AllArgsConstructor;
-import org.salesync.record_service.dtos.MessageDto;
-import org.salesync.record_service.dtos.TypeDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.Exchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RabbitMQProducer {
 
-    private RabbitTemplate rabbitTemplate;
+    private final RabbitTemplate rabbitTemplate;
     private final Exchange exchange;
 
     //routing key theo các key đã map trong file RabbitMQConfig
-    public void sendMessage(String routingKey, MessageDto message)
+    public void sendMessage(String routingKey, Object message)
     {
         rabbitTemplate.convertAndSend(
                 exchange.getName(), routingKey, message);
 
     }
+
 }

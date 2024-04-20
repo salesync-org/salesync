@@ -3,7 +3,7 @@ import axios from 'axios';
 import instance from './axiosConfig';
 
 const URL = `${import.meta.env.VITE_AUTHENTICATION_HOST}/api/v1`;
-
+const UPLOAD_API_ENDPOINT = `${import.meta.env.VITE_UPLOAD_COMPANY_API_ENDPOINT}`;
 class Auth {
   async signUp(signUpInfo: SignUpInfo) {
     const response = await instance.post(`${URL}/create`, signUpInfo);
@@ -44,6 +44,45 @@ class Auth {
     const response = await instance.put(`${URL}/${companyName}/user`, updatedUser);
 
     return response.data;
+  }
+
+  async loadCompanyInfo(companyName: string) {
+    const response = await instance.get(`${URL}/${companyName}/info`);
+
+    return response.data;
+  }
+
+  async updateCompanyInfo(companyName: string, companyInfo: CompanyInfo) {
+    const response = await instance.put(`${URL}/${companyName}/info`, {
+      "company_id": companyInfo.company_id,
+      "company_name": companyInfo.name,
+      "avatar_url": companyInfo.avatar_url,
+      "address": companyInfo.address,
+      "phone": companyInfo.phone,
+      "tax_code": companyInfo.tax_code
+    });
+    return response.data;
+  }
+
+  async uploadCompanyAvatar(companyId: string, avatar: File) {
+    // const processedFilename = `avatar_${userId}`;
+    // const formData = new FormData();
+    // formData.append('image', avatar, processedFilename);
+
+    const config = {
+      headers: {
+        'Content-Type': avatar.type, // Important for file uploads
+        // 'X-Filename': processedFilename
+      }
+    };
+
+    try {
+      console.log('Uploading avatar to ' + UPLOAD_API_ENDPOINT);
+      const response = await axios.put(`${UPLOAD_API_ENDPOINT}${companyId}`, avatar, config);
+      return response;
+    } catch (error) {
+      console.error('Non-Axios Error:', error);
+    }
   }
 
   async verifyEmail() {

@@ -107,6 +107,16 @@ type NewUser = {
   role: string;
 };
 
+type SimpleUser = {
+  first_name: string;
+  last_name: string;
+  email: string;
+  user_id: string;
+  user_name: string;
+  avartar_url: string;
+  roles: string[];
+}
+
 // type NewUser = {
 //   first_name: string;
 //   last_name: string;
@@ -316,4 +326,13 @@ declare enum Template {
   Group = 'Group',
   StageObject = 'StageObject',
   Object = 'Object'
+}
+
+type CompanyInfo = {
+  "company_id": string,
+  "name": string,
+  "avatar_url": string,
+  "address": string,
+  "phone": string,
+  "tax_code": string
 }

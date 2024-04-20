@@ -107,6 +107,16 @@ type NewUser = {
   role: string;
 };
 
+type SimpleUser = {
+  first_name: string;
+  last_name: string;
+  email: string;
+  user_id: string;
+  user_name: string;
+  avartar_url: string;
+  roles: string[];
+}
+
 // type NewUser = {
 //   first_name: string;
 //   last_name: string;

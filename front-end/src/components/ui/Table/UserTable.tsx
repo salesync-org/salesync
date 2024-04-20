@@ -1,6 +1,8 @@
+import { useParams } from 'react-router-dom';
 import { Table, TableHeader, TableRow, TableCell, TableBody } from '.';
 
-const UserTable = () => {
+const UserTable = ({ users }: { users: SimpleUser[] }) => {
+  const { companyName } = useParams();
   return (
     <Table>
       <TableHeader className='bg-gray-100 dark:bg-background-dark'>
@@ -12,6 +14,28 @@ const UserTable = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
+        {users.map((user) => (
+          <TableRow key={user.user_id}>
+            <TableCell>{user.first_name + ' ' + user.last_name}</TableCell>
+            <TableCell>{user.email}</TableCell>
+            <TableCell>
+              <div className='space-x-2'>
+                {user.roles.map(
+                  (role, index) =>
+                    role !== `default-roles-${companyName}` && (
+                      <span
+                        key={index}
+                        className='rounded-full border-[1px] border-primary px-4 py-2 text-[.9rem] text-primary'
+                      >
+                        {role}
+                      </span>
+                    )
+                )}
+              </div>
+            </TableCell>
+            <TableCell className='text-end'></TableCell>
+          </TableRow>
+        ))}
         {/* <TableRow>
           <TableCell>John Doe</TableCell>
           <TableCell>thang@gmail</TableCell>

@@ -2,7 +2,7 @@ import { DropDown, DropDownItem, ErrorText, Panel, PrimaryButton, TextInput } fr
 import { cn } from '@/utils/utils';
 import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import { createUser } from '@/api/users';
+import { createUser, getUsers } from '@/api/users';
 import { loadRoles } from '@/api/roles';
 import UserTable from '@/components/ui/Table/UserTable';
 
@@ -10,6 +10,7 @@ const UserSetting = () => {
   const { companyName } = useParams();
   const [email, setEmail] = useState('');
   const [roles, setRoles] = useState<Role[]>([]);
+  const [users, setUsers] = useState<SimpleUser[]>([]);
   const [profile, setProfile] = useState('');
   const [errors, setErrors] = useState({
     email: '',
@@ -23,7 +24,13 @@ const UserSetting = () => {
       console.log('roles' + roles);
       setRoles(roles);
     };
+
+    const loadUsers = async () => {
+      const newUsers = await getUsers(companyName ?? '');
+      setUsers(newUsers);
+    };
     getProfiles();
+    loadUsers();
   }, []);
 
   const handleSubmit = (event: React.FormEvent) => {
@@ -111,7 +118,7 @@ const UserSetting = () => {
 
         <div className='flex flex-col items-center px-10'>
           <h2 className='mb-10'>Users and invitations</h2>
-          <UserTable></UserTable>
+          <UserTable users={users}></UserTable>
         </div>
       </div>
     </Panel>

@@ -1,4 +1,4 @@
-import { Button, Modal, Panel, TextInput } from '@/components/ui';
+import { Button, Panel, TextInput } from '@/components/ui';
 import useAuth from '@/hooks/useAuth';
 import { Pencil } from 'lucide-react';
 import { cn } from '@/utils/utils';
@@ -15,7 +15,6 @@ const PersonalInfomationSetting = () => {
   const [userLoaded, setUserInfo] = useState({ ...user });
   const { toast } = useToast();
   const [isUpdating, setUpdatingStatus] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(
     `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/avatars/${user?.avatar_url}-256.jpg`
   );
@@ -25,7 +24,7 @@ const PersonalInfomationSetting = () => {
     job_title: true,
     phone: true,
     email: true,
-    user_id: false,
+    user_id: null,
     user_name: false,
     avatar_url: null,
     settings: null,
@@ -46,7 +45,6 @@ const PersonalInfomationSetting = () => {
           setUserInfo(newUser);
           console.log('Loaded: ' + newUser);
           await updateUser(companyName ?? '', newUser as User).then(() => {
-            setModalOpen(false);
             toast({
               title: 'Success',
               description: 'Reload to see your avatar take effect.'
@@ -134,7 +132,7 @@ const PersonalInfomationSetting = () => {
                   'shadow-md shadow-primary-color/10 transition-all duration-300 hover:shadow-lg hover:shadow-primary-color/20'
                 )}
                 onClick={() => {
-                  setModalOpen(true);
+                  handleOpenFilePicker();
                 }}
               >
                 <Pencil size={editAvatarHovered ? '1rem' : '1.5rem'} />
@@ -174,39 +172,6 @@ const PersonalInfomationSetting = () => {
           </Button>
         </div>
       </Panel>
-      <Modal
-        isOpen={modalOpen}
-        className='mx-auto w-[60%] min-w-[600px]'
-        title='Change Your Profile Picture'
-        onClose={() => {
-          setModalOpen(false);
-        }}
-      >
-        <div className='flex w-full flex-col justify-center space-y-5 py-2'>
-          <div className='mx-auto aspect-square w-64 overflow-clip rounded-full'>
-            <img src={`${avatarUrl}?lastmod=${new Date().getTime().toString()}`} />
-          </div>
-          <Button
-            intent='primary'
-            onClick={(_) => {
-              handleOpenFilePicker();
-            }}
-            disabled={isUpdating}
-            className='py-5'
-          >
-            {isUpdating ? (
-              <div className='flex items-center justify-center space-x-2'>
-                <div>
-                  <LoadingSpinnerSmall className='h-5 w-5 fill-on-primary' />
-                </div>
-                <p className='font-semibold'> Please wait...</p>
-              </div>
-            ) : (
-              <p className='font-semibold'>Upload</p>
-            )}
-          </Button>
-        </div>
-      </Modal>
     </>
   );
 };

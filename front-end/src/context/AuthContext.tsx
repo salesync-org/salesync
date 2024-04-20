@@ -1,4 +1,5 @@
 import auth from '@/api/auth';
+import { loadPermimssions, loadRoles } from '@/api/roles';
 // import { SignUpInfo, TokenResponse, User } from '@/type';
 import { useState, createContext, useEffect, Dispatch, useCallback } from 'react';
 
@@ -25,6 +26,8 @@ type AuthContext = {
   updateUser: (companyName: string, updatedUser: User) => Promise<void>;
   getCompanyInfo: (companyName: string) => Promise<void>;
   updateCompanyInfo: (companyName: string, companyInfo: CompanyInfo) => Promise<void>;
+  getRoles: (companyName: string) => Promise<Role[] | null>;
+  getPermissions: (companyName: string) => Promise<Permission[] | null>;
 };
 
 export const AuthContext = createContext<AuthContext | null>(null);
@@ -154,6 +157,16 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return res;
   };
 
+  const getRoles = async (companyName: string) => {
+    const roles = await loadRoles(companyName);
+    return roles;
+  };
+
+  const getPermissions = async (companyName: string) => {
+    const permissions = await loadPermimssions(companyName);
+    return permissions;
+  };
+
   // if (!companyName) return null;
 
   const value = {
@@ -170,6 +183,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     changePassword,
     verifyPassword,
     getCompanyInfo,
+    getRoles,
+    getPermissions,
     updateCompanyInfo
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

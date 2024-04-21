@@ -1,6 +1,6 @@
 import { cn } from '@/utils/utils';
 import { Icon } from '../ui';
-// import { Stage as StageType } from '@/type';
+import { Stage as StageType } from '@/type';
 
 interface StageProps {
   stage: StageType;

@@ -9,7 +9,6 @@ import Modal, { ModalFooter } from '@/components/ui/Modal/Modal';
 import DropDown from '@/components/ui/DropDown/DropDown';
 import Item from '@/components/ui/Item/Item';
 import '@/constants/api';
-import { SAMPLE_ACCESS_TOKEN } from '@/constants/api';
 import { useSearchParams } from 'react-router-dom';
 import Pagination from '@/components/ui/Pagination/Pagination';
 import TypeTable from '@/components/ui/Table/TypeTable';

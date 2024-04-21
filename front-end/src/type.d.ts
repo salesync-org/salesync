@@ -12,7 +12,10 @@ type Type = {
   // background_color: string?;
   id: string;
   name: string;
-  template: string | null;
+  template: {
+    id: string;
+    name: string;
+  };
   // description?: string;
   // fields?: Field[];
 };
@@ -158,6 +161,8 @@ type TokenResponse = {
 type Stage = {
   id: string;
   name: string;
+  sequenceNumber?: number;
+  type?: Type;
 };
 
 type User = {
@@ -311,7 +316,7 @@ declare enum Label {
   Unique = 'Unique'
 }
 
-declare interface PropertyProperty {
+interface PropertyProperty {
   id: string;
   name: string;
   propertyFields: PropertyField[];

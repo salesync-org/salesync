@@ -1,8 +1,34 @@
 // import { Type } from '@/type';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button } from '../Button';
 import { Table, TableHeader, TableRow, TableBody, TableCell } from './Table';
-import { ChevronRight } from 'lucide-react';
+import { ArrowRight, ArrowUpNarrowWide, Box, Waypoints } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from '../DropDownMenu';
+import { cn } from '@/utils/utils';
+import buttonVariants from '../Button/ButtonProps';
+
+const standardTypes = [
+  'Lead',
+  'Contact',
+  'Opportunity',
+  'Account',
+  'Task',
+  'Event',
+  'Deal',
+  'Campaign',
+  'Invoice',
+  'Quote',
+  'Product',
+  'Case',
+  'Contract'
+];
 
 const TypeTable = ({ types }: { types: Type[] }) => {
   const { companyName } = useParams();
@@ -14,6 +40,7 @@ const TypeTable = ({ types }: { types: Type[] }) => {
           <TableRow className='left-0 right-0 bg-slate-50 dark:bg-secondary/10'>
             <TableCell className='max-w-28 font-semibold'>Type Name</TableCell>
             <TableCell className='font-semibold'>Template</TableCell>
+            <TableCell className='font-semibold'>Description</TableCell>
             <TableCell className='max-w-9 font-semibold'></TableCell>
           </TableRow>
         </TableHeader>
@@ -22,30 +49,72 @@ const TypeTable = ({ types }: { types: Type[] }) => {
             types.map((type, index) => {
               return (
                 <TableRow key={index}>
-                  <TableCell className='max-w-28'>
-                    <Button
-                      intent='link'
-                      className='border-none text-secondary-dark underline underline-offset-2 dark:text-secondary'
-                      onClick={() => {
-                        navigate(`/${companyName}/setting/object-manager/${type.id}`);
-                      }}
-                    >
-                      {type.name}
-                    </Button>
+                  <TableCell className='w-4/12'>{type.name}</TableCell>
+                  <TableCell className='w-3/12'>{type.template ? type.template.name : 'No Template'}</TableCell>
+                  <TableCell className='w-3/12'>
+                    {standardTypes.includes(type.name) ? 'Standard Object' : 'Custom Object'}
                   </TableCell>
-                  <TableCell>{typeof type.template == 'string' ? type.template : 'No Template'}</TableCell>
 
-                  <TableCell className='max-w-9'>
-                    <Button
-                      intent={'normal'}
-                      rounded={'icon'}
-                      onClick={() => {
-                        navigate(`/${companyName}/setting/object-manager/${type.id}`);
-                      }}
-                      className='p-0 hover:border-2 hover:border-input-stroke-light dark:hover:border-input-stroke-dark'
-                    >
-                      <ChevronRight name='navigate_next' size={'1.5rem'} />
-                    </Button>
+                  <TableCell className='w-3/12'>
+                    <div className=' flex justify-end pr-11 '>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger
+                          className={cn(
+                            buttonVariants({ intent: 'normal', rounded: 'normal', zoom: true }),
+                            'rounded-full border-2 border-button-stroke px-4 py-2 dark:border-button-stroke-dark'
+                          )}
+                        >
+                          <div className='flex w-fit items-center justify-center space-x-2'>
+                            <p>Manage</p>
+                            <ArrowRight size={'1rem'} />
+                          </div>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent
+                          className={cn(
+                            'hover:bg-dark w-56 bg-button-background-light dark:bg-button-background-dark',
+                            'border-2 border-button-stroke-light/60 dark:border-button-stroke-dark/60'
+                          )}
+                        >
+                          <DropdownMenuLabel>{`${type.name} Settings`}</DropdownMenuLabel>
+                          <DropdownMenuSeparator className='border-[.2px] border-input-stroke-light px-2 dark:border-input-stroke-dark' />
+                          <DropdownMenuGroup>
+                            <DropdownMenuItem
+                              onClick={(_) => {
+                                navigate(`/${companyName}/setting/object-manager/${type.id}?tab=properties`);
+                              }}
+                            >
+                              <div className='flex items-center space-x-2'>
+                                <Box size='1rem' />
+                                <p>Properties</p>
+                              </div>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={(_) => {
+                                navigate(`/${companyName}/setting/object-manager/${type.id}?tab=relations`);
+                              }}
+                            >
+                              <div className='flex items-center space-x-2'>
+                                <Waypoints size='1rem' />
+                                <p>Relations</p>
+                              </div>
+                            </DropdownMenuItem>
+                            {type.template && type.template.name === 'StageObject' && (
+                              <DropdownMenuItem
+                                onClick={(_) => {
+                                  navigate(`/${companyName}/setting/object-manager/${type.id}?tab=stages`);
+                                }}
+                              >
+                                <div className='flex items-center space-x-2'>
+                                  <ArrowUpNarrowWide size='1rem' />
+                                  <p>Stages</p>
+                                </div>
+                              </DropdownMenuItem>
+                            )}
+                          </DropdownMenuGroup>
+                          <DropdownMenuSeparator />
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
                   </TableCell>
                 </TableRow>
               );

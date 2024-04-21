@@ -3,22 +3,22 @@ import recordApi from '@/api/record';
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 import useProperties from '@/hooks/type-service/useProperties';
 import useType from '@/hooks/type-service/useType';
-import { convertTypePropertyToCurrentData, getCompanyName } from '@/utils/utils';
+import { convertTypePropertyToCurrentData } from '@/utils/utils';
 import { useEffect, useState } from 'react';
 import { useQueryClient } from 'react-query';
+import { useNavigate } from 'react-router-dom';
 import { Button, Modal, ModalFooter, PrimaryButton } from '../ui';
 import LoadingSpinner from '../ui/Loading/LoadingSpinner';
+import LoadingSpinnerSmall from '../ui/Loading/LoadingSpinnerSmall';
 import { useToast } from '../ui/Toast';
 import { ConvertSection } from './ConvertSection';
-import LoadingSpinnerSmall from '../ui/Loading/LoadingSpinnerSmall';
-import { useNavigate } from 'react-router-dom';
 
 const TYPE_FORM_ID = {
   CONTACT: 'contactForm',
   OPPORTUNITY: 'opportunityForm',
   ACCOUNT: 'accountForm'
 };
-type Status = 'create' | 'chooseExisting';
+export type Status = 'create' | 'chooseExisting';
 
 type CheckStateStatus = {
   contactCheckStatus: Status;
@@ -89,7 +89,7 @@ const ConvertModal = () => {
     };
 
     handleConvert();
-  }, [account, companyName, contact, convertClicked, hideModal, navigate, opportunity, queryClient, toast]);
+  }, [account, companyName, contact, convertClicked, hideModal, navigate, opportunity, queryClient, recordId, toast]);
 
   const { types = [], isLoading: isTypesLoading } = useType(companyName);
 

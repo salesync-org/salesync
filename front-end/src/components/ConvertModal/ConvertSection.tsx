@@ -1,21 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import recordApi, { RecordsFilter } from '@/api/record';
 import useRecords from '@/hooks/record-service/useRecords';
-import { cn, getCompanyName } from '@/utils/utils';
+import { cn } from '@/utils/utils';
 import { ChevronRight, X } from 'lucide-react';
 import { ChangeEvent, Dispatch, useState } from 'react';
 import RecordForm from '../Records/RecordForm';
 import { TextInput } from '../ui';
 import LoadingSpinner from '../ui/Loading/LoadingSpinner';
 import { useToast } from '../ui/Toast';
+import { Status } from './ConvertModal';
 
 type ConvertSectionProps = {
   typeProperties: TypeProperty;
   formId: string;
   check: string;
-  onCheckStatus: (status: string) => (e: ChangeEvent<HTMLInputElement>) => void;
-  record: RecordPropertyResponse;
-  setRecord: Dispatch<React.SetStateAction<RecordPropertyResponse>>;
+  onCheckStatus: (status: Status) => (e: ChangeEvent<HTMLInputElement>) => void;
+  record: RecordPropertyResponse | null;
+  setRecord: Dispatch<React.SetStateAction<RecordPropertyResponse | null>>;
   currentData: Record<string, string>;
   companyName: string;
 };

@@ -1,9 +1,9 @@
-import useTheme from '@/hooks/useTheme';
-import { useState } from 'react';
-import { Button, Icon, Item, DropDownList, DropDownItem } from '@/components/ui';
-import { Sun, Moon, Eclipse } from 'lucide-react';
+import { Button, DropDownItem, DropDownList, Item } from '@/components/ui';
 import { ThemeEnum } from '@/constants/enum';
+import useTheme from '@/hooks/useTheme';
 import { cn } from '@/utils/utils';
+import { Eclipse, Moon, Sun } from 'lucide-react';
+import { useState } from 'react';
 
 const ThemeToggle = () => {
   const [theme, setTheme, isSystemTheme] = useTheme();

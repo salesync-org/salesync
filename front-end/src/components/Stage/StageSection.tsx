@@ -1,5 +1,4 @@
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
-// import { Stage as StageType } from '@/type';
 import { useEffect, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { useParams } from 'react-router-dom';
@@ -8,7 +7,7 @@ import { useToast } from '../ui/Toast';
 import Stages from './Stages';
 
 interface StageSectionProps {
-  stages: StageType[];
+  stages: Stage[];
   recordId: string;
   currentStage: string;
   // eslint-disable-next-line @typescript-eslint/ban-types

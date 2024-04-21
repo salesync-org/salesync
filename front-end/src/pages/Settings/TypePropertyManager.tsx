@@ -1,17 +1,15 @@
-import { useEffect, useState } from 'react';
-import Panel from '@/components/ui/Panel/Panel';
-import TextInput from '@/components/ui/TextInput/TextInput';
-import useDebounce from '@/hooks/useDebounce';
-import Icon from '@/components/ui/Icon/Icon';
-import PrimaryButton from '@/components/ui/Button/PrimaryButton';
-import '@/constants/api';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import typeApi from '@/api/type';
 import { Button, Table, TableBody, TableCell, TableHeader, TableRow } from '@/components/ui';
-import { ArrowLeft, Ellipsis, Pencil, Trash2 } from 'lucide-react';
+import PrimaryButton from '@/components/ui/Button/PrimaryButton';
+import Icon from '@/components/ui/Icon/Icon';
+import Panel from '@/components/ui/Panel/Panel';
+import TextInput from '@/components/ui/TextInput/TextInput';
+import '@/constants/api';
+import useDebounce from '@/hooks/useDebounce';
 import { cn } from '@/utils/utils';
-import { toast } from '@/components/ui/Toast';
-import { useQueryClient } from 'react-query';
+import { ArrowLeft, Pencil, Trash2 } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 const TypePropertyManager = () => {
   // const [typeName, setTypeName] = useState('');
@@ -22,7 +20,6 @@ const TypePropertyManager = () => {
   const [propertySearchResult, setPropertySearchResult] = useState<TypePropertyDetail[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const [search, setSearch] = useState(() => {
     return searchParams.get('search') || '';
   });
@@ -121,7 +118,7 @@ const TypePropertyManager = () => {
                             <Button
                               rounded
                               className='aspect-square rounded-full p-0'
-                              onClick={async (e) => {
+                              onClick={async () => {
                                 await typeApi.deleteTypeProperty(companyName ?? '', property.id);
                                 setPropertySearchResult((prev) => prev.filter((item) => item.id !== property.id));
                               }}

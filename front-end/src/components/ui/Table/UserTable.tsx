@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { Table, TableHeader, TableRow, TableCell, TableBody } from '.';
 
-const UserTable = ({ users }: { users: SimpleUser[] }) => {
+const UserTable = ({ users = [] }: { users?: SimpleUser[] }) => {
   const { companyName } = useParams();
   return (
     <Table>

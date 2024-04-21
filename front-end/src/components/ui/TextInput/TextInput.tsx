@@ -21,7 +21,8 @@ type TextInputProps = {
   prefixIconNode?: React.ReactNode;
   paddingLeft?: string;
   postfixIcon?: string;
-  validation?: RegisterOptions<FieldValues, FieldName>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  validation?: RegisterOptions<FieldValues, FieldName<any>>;
   isError?: boolean;
   readOnly?: boolean;
   defaultValue?: string;

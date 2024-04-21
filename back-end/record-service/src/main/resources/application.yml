@@ -11,8 +11,6 @@ spring:
     port: ${RABBITMQ_PORT}
     username: ${RABBITMQ_USER}
     password: ${RABBITMQ_PASSWORD}
-
-
   application:
     name: record-service
   datasource:

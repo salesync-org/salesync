@@ -142,7 +142,12 @@ const RecordDetail = () => {
             {stages && stages.length > 0 && (
               <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
                 <div className='px-4'>
-                  <StageSection stages={mapStages} currentStage={currentStage} updateRecord={updateRecord} />
+                  <StageSection
+                    stages={mapStages}
+                    currentStage={currentStage}
+                    updateRecord={updateRecord}
+                    recordId={record.source_record.id}
+                  />
                 </div>
               </Panel>
             )}

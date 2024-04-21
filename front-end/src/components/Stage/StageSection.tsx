@@ -9,6 +9,7 @@ import Stages from './Stages';
 
 interface StageSectionProps {
   stages: StageType[];
+  recordId: string;
   currentStage: string;
   // eslint-disable-next-line @typescript-eslint/ban-types
   updateRecord: (handleUpdate: Function) => unknown;
@@ -35,6 +36,7 @@ const StageSection = ({ stages, currentStage, updateRecord }: StageSectionProps)
   const { recordId = '' } = useParams();
   const queryClient = useQueryClient();
   const { showModal } = useGlobalModalContext();
+  const { companyName = '' } = useParams();
 
   const lastStage = lastStages['lead'];
   const updatedStages = useMemo(
@@ -120,7 +122,7 @@ const StageSection = ({ stages, currentStage, updateRecord }: StageSectionProps)
   };
 
   const handleSelectStatus = () => {
-    showModal(lastStage.modalName, { typeId: 'f4828793-28c2-465b-b783-0c697e41dafb' });
+    showModal(lastStage.modalName, { recordId, companyName });
   };
 
   const stageIdChosenIndex = useMemo(

@@ -39,11 +39,11 @@ const ConvertModal = () => {
   const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
   const { toast } = useToast();
-  const companyName = getCompanyName();
   const {
     hideModal,
-    store: { modalType }
+    store: { modalType, modalProps }
   } = useGlobalModalContext();
+  const { recordId, companyName } = modalProps;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -65,6 +65,9 @@ const ConvertModal = () => {
               description: 'Convert successfully'
             });
             queryClient.invalidateQueries(['record']);
+            await recordApi.deleteRecord(companyName, [recordId]);
+            queryClient.invalidateQueries(['records']);
+
             navigate(`/${companyName}/record/${contact.id}`);
             hideModal();
           }
@@ -88,7 +91,7 @@ const ConvertModal = () => {
     handleConvert();
   }, [account, companyName, contact, convertClicked, hideModal, navigate, opportunity, queryClient, toast]);
 
-  const { types = [], isLoading: isTypesLoading } = useType();
+  const { types = [], isLoading: isTypesLoading } = useType(companyName);
 
   const { data: contactProperties, isLoading: isContactLoading } = useProperties(
     companyName,
@@ -102,7 +105,7 @@ const ConvertModal = () => {
     companyName,
     types.find((type) => type.name === 'Account')?.id
   );
-
+  console.log({ contactProperties, opportunityProperties, accountProperties, types });
   if (isTypesLoading || isContactLoading || isOpportunityLoading || isAccountLoading) {
     return <LoadingSpinner />;
   }
@@ -155,7 +158,7 @@ const ConvertModal = () => {
       title='Convert Lead'
     >
       <div className='flex h-[482px] w-full flex-col gap-2 overflow-y-auto pb-[72px]'>
-        {/* <ConvertSection
+        <ConvertSection
           typeProperties={contactProperties}
           formId={TYPE_FORM_ID.CONTACT}
           check={checkStatus.contactCheckStatus}
@@ -163,8 +166,9 @@ const ConvertModal = () => {
           setRecord={setContact}
           record={contact}
           currentData={convertTypePropertyToCurrentData(contactProperties.properties)}
-        /> */}
-        {/* <ConvertSection
+          companyName={companyName}
+        />
+        <ConvertSection
           typeProperties={opportunityProperties}
           formId={TYPE_FORM_ID.OPPORTUNITY}
           check={checkStatus.opportunityCheckStatus}
@@ -172,7 +176,8 @@ const ConvertModal = () => {
           setRecord={setOpportunity}
           record={opportunity}
           currentData={convertTypePropertyToCurrentData(opportunityProperties.properties)}
-        /> */}
+          companyName={companyName}
+        />
         <ConvertSection
           typeProperties={accountProperties}
           formId={TYPE_FORM_ID.ACCOUNT}
@@ -181,6 +186,7 @@ const ConvertModal = () => {
           setRecord={setAccount}
           record={account}
           currentData={convertTypePropertyToCurrentData(accountProperties.properties)}
+          companyName={companyName}
         />
       </div>
       <ModalFooter className='absolute bottom-0 left-0 right-0 m-0 flex h-10 w-full items-center justify-center bg-gray-100 bg-opacity-90 px-3 py-10 shadow-inner'>

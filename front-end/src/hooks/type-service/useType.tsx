@@ -3,9 +3,9 @@ import typeApi from '@/api/type';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 
-const useType = () => {
+const useType = (defaultCompanyName?: string) => {
   const key = ['types'];
-  const { companyName } = useParams();
+  const { companyName = defaultCompanyName } = useParams();
   const { data, error, isLoading } = useQuery<Type[]>(
     key,
     async () => {
@@ -14,8 +14,7 @@ const useType = () => {
     {
       refetchOnWindowFocus: false,
       staleTime: 1000 * 60 * 5,
-      keepPreviousData: true,
-      enabled: !!companyName
+      keepPreviousData: true
     }
   );
 

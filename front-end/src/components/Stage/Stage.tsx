@@ -1,9 +1,8 @@
 import { cn } from '@/utils/utils';
 import { Icon } from '../ui';
-import { Stage as StageType } from '@/type';
 
 interface StageProps {
-  stage: StageType;
+  stage: Stage;
   isFirst?: boolean;
   isLast?: boolean;
   isCurrentStage: boolean;
@@ -11,7 +10,7 @@ interface StageProps {
   setStageIdChosen: (stageId: string) => void;
   isCompleted: boolean;
 }
-const Stage = ({
+const StageItem = ({
   stage,
   isFirst,
   isLast,
@@ -93,4 +92,4 @@ const Stage = ({
   );
 };
 
-export default Stage;
+export default StageItem;

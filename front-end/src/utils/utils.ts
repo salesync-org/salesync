@@ -49,7 +49,8 @@ export const getCompanyName = (index?: number) => {
   return urlParts[index ?? 1];
 };
 
-export const convertTypePropertyToCurrentData = (typeProperties: PropertyElement[]) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const convertTypePropertyToCurrentData = (typeProperties: any[]) => {
   const currentData: Record<string, string> = {};
 
   for (const property of typeProperties) {
@@ -57,4 +58,4 @@ export const convertTypePropertyToCurrentData = (typeProperties: PropertyElement
   }
 
   return currentData;
-}
+};

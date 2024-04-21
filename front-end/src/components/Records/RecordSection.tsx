@@ -12,7 +12,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 interface RecordSectionProps {
-  type: Type | null | undefined;
+  type: Type | LayoutType | null | undefined;
 }
 
 const RecordSection = ({ type }: RecordSectionProps) => {

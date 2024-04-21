@@ -1,12 +1,9 @@
-import { cn } from '@/utils/utils';
+import { DropDown, DropDownItem, TextInput } from '@/components/ui';
+import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
+import { Button } from '../ui/Button';
 import TextButton from '../ui/Button/TextButton';
 import Icon from '../ui/Icon/Icon';
 import Panel from '../ui/Panel/Panel';
-import TypeTable from '../ui/Table/TypeTable';
-import { Button } from '../ui/Button';
-import { DropDown, DropDownItem, TextInput } from '@/components/ui';
-import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
-// import { Type } from '@/type';
 
 const TypeCard = ({ type }: { type: Type }) => {
   const { showModal } = useGlobalModalContext();

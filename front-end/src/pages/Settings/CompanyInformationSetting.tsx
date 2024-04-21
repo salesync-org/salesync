@@ -7,7 +7,6 @@ import { useToast } from '@/components/ui/Toast';
 import Auth from '@/api/auth';
 import LoadingSpinnerSmall from '@/components/ui/Loading/LoadingSpinnerSmall';
 import { Pencil } from 'lucide-react';
-import { cp } from 'fs';
 
 const CompanyInfomationSetting = () => {
   const { companyName } = useParams();
@@ -30,7 +29,6 @@ const CompanyInfomationSetting = () => {
         }
   );
   const { toast } = useToast();
-  const [modalOpen, setModalOpen] = useState(false);
   const editableFields = {
     company_id: null,
     company_name: false,

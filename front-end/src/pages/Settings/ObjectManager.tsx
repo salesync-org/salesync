@@ -1,19 +1,18 @@
-import { useEffect, useState } from 'react';
-import Panel from '@/components/ui/Panel/Panel';
-import TextInput from '@/components/ui/TextInput/TextInput';
-import useDebounce from '@/hooks/useDebounce';
 import Button from '@/components/ui/Button/Button';
-import Icon from '@/components/ui/Icon/Icon';
 import PrimaryButton from '@/components/ui/Button/PrimaryButton';
-import Modal, { ModalFooter } from '@/components/ui/Modal/Modal';
 import DropDown from '@/components/ui/DropDown/DropDown';
+import Icon from '@/components/ui/Icon/Icon';
 import Item from '@/components/ui/Item/Item';
-import '@/constants/api';
-import { SAMPLE_ACCESS_TOKEN } from '@/constants/api';
-import { useSearchParams } from 'react-router-dom';
+import Modal, { ModalFooter } from '@/components/ui/Modal/Modal';
 import Pagination from '@/components/ui/Pagination/Pagination';
+import Panel from '@/components/ui/Panel/Panel';
 import TypeTable from '@/components/ui/Table/TypeTable';
+import TextInput from '@/components/ui/TextInput/TextInput';
+import '@/constants/api';
 import useType from '@/hooks/type-service/useType';
+import useDebounce from '@/hooks/useDebounce';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 const ObjectManager = () => {
   //Pop up modal to create new type

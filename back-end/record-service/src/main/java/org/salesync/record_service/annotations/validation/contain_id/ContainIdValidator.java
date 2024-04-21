@@ -1,15 +1,10 @@
-package com.salesync.typeservice.annotations.validation.contain_id;
+package org.salesync.record_service.annotations.validation.contain_id;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import jakarta.validation.ValidationException;
-import lombok.SneakyThrows;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
-import java.util.Optional;
-import java.util.UUID;
 
 public class ContainIdValidator implements ConstraintValidator<ContainId, Object> {
 

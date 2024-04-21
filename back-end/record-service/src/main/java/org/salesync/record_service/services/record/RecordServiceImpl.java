@@ -1,5 +1,6 @@
 package org.salesync.record_service.services.record;
 
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.salesync.record_service.components.RabbitMQProducer;
 import org.salesync.record_service.constants.Message;
@@ -37,6 +38,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional(rollbackFor = Throwable.class)
+@Builder
 public class RecordServiceImpl implements RecordService {
 
     private final RecordRepository recordRepository;

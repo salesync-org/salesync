@@ -63,7 +63,7 @@ const TextInput: React.FC<TextInputProps> = ({
         <p className={cn('relative my-1', isError && 'font-medium text-red-500')}>
           {header}
           {isRequired && (
-            <span className='absolute ml-2 size-1 rounded-full text-red-400' title='Required'>
+            <span className='ml-2 size-1 rounded-full text-red-400' title='Required'>
               *
             </span>
           )}

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { cn } from '@/utils/utils';
 import { Controller, useForm } from 'react-hook-form';
 import { Checkbox, DropDown, DropDownItem, ErrorText, Item, TextArea, TextInput } from '../ui';
@@ -36,14 +37,14 @@ const RecordForm = ({ currentData = {}, onSubmit, stages, typeProperty, formId =
       register: register,
       name: property.name
     };
-    const propertyFields = property.propertyFields;
+    const fields = property.fields;
     let isRequired = false;
     let maxLength = 255;
 
-    if (propertyFields) {
-      propertyFields.forEach((field: PropertyField) => {
-        if (field.label === 'Required') isRequired = field.item_value === 'true';
-        if (field.label === 'Length') maxLength = parseInt(field.item_value as string) || 255;
+    if (fields) {
+      fields.forEach((field: any) => {
+        if (field.property_field.label === 'Required') isRequired = field.item_value === 'true';
+        if (field.property_field.label === 'Length') maxLength = parseInt(field.item_value as string) || 255;
       });
     }
 
@@ -129,6 +130,7 @@ const RecordForm = ({ currentData = {}, onSubmit, stages, typeProperty, formId =
             className='h-[100px] w-full'
             isError={!!errors[property.name]}
             validation={{ required: isRequired, maxLength }}
+            isRequired={isRequired}
           ></TextArea>
           {errorMessage && <ErrorComponent></ErrorComponent>}
         </div>
@@ -154,9 +156,9 @@ const RecordForm = ({ currentData = {}, onSubmit, stages, typeProperty, formId =
             // eslint-disable-next-line react-hooks/rules-of-hooks
             useEffect(() => {
               setValue(property.name, value ? 'true' : 'false');
-            }, [value]);
+              // eslint-disable-next-line react-hooks/exhaustive-deps
+            }, []);
 
-            console.log(value);
             return (
               <div className='flex items-center gap-2'>
                 <label htmlFor={property.id}>{property.label}</label>

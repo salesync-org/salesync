@@ -39,7 +39,9 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({
   setDisabled
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  
+  const [dateStart, setDateStart] = useState('');
+  const [dateEnd, setDateEnd] = useState('');
+
   const setType = () => {
     if (name === 'Email') return 'Email';
     if (name === 'New Event') return 'Event';
@@ -51,9 +53,7 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({
   let isDisabledTriangleButton = false;
   if (name === 'New Task') isDisabledTriangleButton = true;
 
-  const { handleSubmit, register } = useForm({
-    // defaultValues: data
-  });
+  const { handleSubmit, register } = useForm();
 
   const { toast } = useToast();
   const location = useLocation();
@@ -65,6 +65,15 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({
   if (!typeId) {
     return null;
   }
+
+  const setDateTimeNow = () => {
+    const now = new Date();
+    const timezoneOffset = now.getTimezoneOffset();
+    now.setTime(now.getTime() - timezoneOffset * 60 * 1000);
+    const formattedDateTime = now.toISOString().slice(0, 16);
+    setDateStart(formattedDateTime);
+    setDateEnd(formattedDateTime);
+  };
 
   const handleCreateRecord = async (data: any) => {
     const req = {
@@ -86,23 +95,23 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({
     if (res) {
       toast({
         title: 'Success',
-        description: 'Create record activity successfully'
+        description: 'Create activity successfully'
       });
     }
   };
 
   const onSubmit = async (data: any) => {
-    console.log("data", data)
     try {
       if (!data['Subject']) {
         throw new Error('Subject is required');
       }
+      setIsOpen(false);
       handleCreateRecord(data);
     } catch (error) {
       console.error(error);
       toast({
         title: 'Error',
-        description: 'Failed to create record',
+        description: 'Failed to create activity',
         variant: 'destructive'
       });
     }
@@ -114,6 +123,7 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({
         <Button
           onClick={() => {
             setIsOpen(true);
+            setDateTimeNow()
             setDisabled && setDisabled(true);
           }}
           title={name}
@@ -128,7 +138,7 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({
         <DropDown
           defaultValue=''
           value=''
-          prefixIcon={<Icon name='arrow_drop_down' size='1' className='ml-1' />}
+          prefixIcon={<Icon name='arrow_drop_down' size='1' />}
           className='m-0 p-0'
           disabled={disabled === true ? disabled : isDisabledTriangleButton}
           align='left'
@@ -211,7 +221,7 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({
           'bg-white shadow-2xl shadow-button-background-dark/10 transition-all duration-200 dark:bg-panel-dark',
           'border-[2px] border-button-stroke dark:border-button-stroke-dark',
           isOpen ? 'translate-y-0' : 'translate-y-[100%]',
-          'z-[110]'
+          'z-[100]'
         )}
       >
         <div className='flex h-[40px] items-center justify-between border-b-2 border-primary-stroke px-4 dark:border-primary-stroke-dark'>
@@ -220,9 +230,7 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({
               name={cn(typeActivity === 'Task' ? 'checklist' : icon)}
               className={cn('mr-1 rounded p-0.5 text-white', typeActivity === 'Task' ? 'bg-green-400' : color)}
             ></Icon>
-            <h2 className='text-base font-normal leading-5'>
-              {typeActivity === 'Task' ? 'New Task' : name}
-            </h2>
+            <h2 className='text-base font-normal leading-5'>{typeActivity === 'Task' ? 'New Task' : name}</h2>
           </div>
           <div className='flex gap-2'>
             <span title='Minimize'>
@@ -246,7 +254,7 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className='flex h-[400px] overflow-y-auto'>
-            <div className='w-full p-4'>
+            <div className='grid w-full grid-cols-2 gap-1 p-4'>
               {typeProperty ? (
                 typeProperty.properties?.map((property: any) => {
                   if (
@@ -255,39 +263,37 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({
                     property.property.name === 'Email'
                   )
                     return (
-                      <TextInput
-                        header={property.label}
-                        className='mb-5 w-full'
-                        postfixIcon='search'
-                        key={property.id}
-                        register={register}
-                        name={property.name}
-                      />
+                      <div className='col-span-2'>
+                        <TextInput
+                          header={property.label}
+                          className='w-full'
+                          postfixIcon='search'
+                          key={property.id}
+                          register={register}
+                          name={property.name}
+                        />
+                      </div>
                     );
                   else if (property.property.name === 'TextArea')
                     return (
-                      <TextArea
-                        header={property.label}
-                        className='mb-5'
-                        key={property.id}
-                        register={register}
-                        name={property.name}
-                      />
-                    );
-                  else if (property.property.name === 'DateTime')
-                    return (
-                      <div className='mb-5'>
-                        <span className='font-semibold'>{property.label}</span>
-                        <div className='grid grid-cols-2'>
-                          <DateInput
-                            type='datetime-local'
-                            register={register}
-                            name={property.name}
-                          />
-                        </div>
+                      <div className='col-span-2'>
+                        <TextArea
+                          header={property.label}
+                          className='w-full'
+                          key={property.id}
+                          register={register}
+                          name={property.name}
+                        />
                       </div>
                     );
-                  else return <div></div>;
+                  else if (property.property.name === 'DateTime') {
+                    return (
+                      <div className='col-span-1'>
+                        <span className='font-semibold'>{property.label}</span>
+                        <DateInput type='datetime-local' register={register} name={property.name} />
+                      </div>
+                    );
+                  } else return <div></div>;
                 })
               ) : (
                 <div>loading</div>
@@ -296,9 +302,7 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({
           </div>
 
           <div className='absolute bottom-0 flex h-[50px] w-full items-center justify-end border border-button-stroke bg-panel pr-2 dark:border-button-stroke-dark dark:bg-panel-dark'>
-            <PrimaryButton type='submit'>
-              Save
-            </PrimaryButton>
+            <PrimaryButton type='submit'>Save</PrimaryButton>
           </div>
         </form>
       </nav>

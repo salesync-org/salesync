@@ -23,6 +23,11 @@ class RecordApi {
     return response.data;
   }
 
+  async getAllRecords(companyName: string) {
+    const response = await axios.get(`${URL}/${companyName}/records`);
+    return response.data;
+  }
+
   async getRecordDetails(recordId: string) {
     const response = await axios.get(`${TYPE_SERVICE_URL}/record/${recordId}`);
     return response.data;
@@ -55,6 +60,11 @@ class RecordApi {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async updateRecord(companyName: string, recordId: string, data: any) {
     const response = await axios.put(`${URL}/${companyName}/records/${recordId}/update`, data);
+    return response.data;
+  }
+
+  async getRelationRecord(companyName: string, recordId: string) {
+    const response = await axios.get(`${URL}/${companyName}/records/list-record-type-relation/${recordId}`);
     return response.data;
   }
 }

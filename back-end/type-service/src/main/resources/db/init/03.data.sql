@@ -7,9 +7,6 @@ INSERT INTO public.template (name) VALUES
 
 
 INSERT INTO public.type (name) VALUES
-
-    ('Task'),
-    ('Event'),
     ('Deal'),
     ('Campaign'),
     ('Invoice'),
@@ -22,7 +19,11 @@ INSERT INTO public.type (type_id, name) VALUES
 ('11111111-1111-1111-1111-111111111111', 'Lead'),
 ('22222222-2222-2222-2222-222222222222', 'Contact'),
 ('33333333-3333-3333-3333-333333333333', 'Opportunity'),
-('44444444-4444-4444-4444-444444444444', 'Account');
+('44444444-4444-4444-4444-444444444444', 'Account'),
+('8cb43743-6be3-4668-9340-0eae04c1eec2', 'Call'),
+('e6c3f747-aadc-4e2a-8ffb-944d38e7959e', 'Task'),
+('6df91480-d06d-4307-8e29-b4865ab9fdaf', 'Event'),
+('990afe34-1538-4b20-9ff4-b5f4ca417406', 'Email');
 
 INSERT INTO public.relation (name) VALUES
     ('One-to-Many'),
@@ -219,6 +220,8 @@ CALL assign_template(get_id('template_id', 'template', 'Human'), get_id('type_id
 CALL assign_template(get_id('template_id', 'template', 'Group'), get_id('type_id', 'type', 'Account'));
 CALL assign_template(get_id('template_id', 'template', 'Activity'), get_id('type_id', 'type', 'Task'));
 CALL assign_template(get_id('template_id', 'template', 'Activity'), get_id('type_id', 'type', 'Event'));
+CALL assign_template(get_id('template_id', 'template', 'Activity'), get_id('type_id', 'type', 'Email'));
+CALL assign_template(get_id('template_id', 'template', 'Activity'), get_id('type_id', 'type', 'Call'));
 CALL assign_template(get_id('template_id', 'template', 'Activity'), get_id('type_id', 'type', 'Deal'));
 CALL assign_template(get_id('template_id', 'template', 'Object'), get_id('type_id', 'type', 'Campaign'));
 CALL assign_template(get_id('template_id', 'template', 'Object'), get_id('type_id', 'type', 'Invoice'));
@@ -232,12 +235,19 @@ INSERT INTO public.type_property(type_property_id, property_id, type_id, name, l
     ('11111111-1111-1111-1111-111111111111', get_id('property_id', 'property', 'Text'), '11111111-1111-1111-1111-111111111111', 'Name', 'Lead Name','No Name', 1),
     ('22222222-2222-2222-2222-222222222222', get_id('property_id', 'property', 'Text'), '11111111-1111-1111-1111-111111111111', 'Title', 'Title','No Title', 2),
     ('33333333-3333-3333-3333-333333333333',get_id('property_id', 'property', 'Text'), '11111111-1111-1111-1111-111111111111', 'Company', 'Company','No Company', 3),
-    ('44444444-4444-4444-4444-444444444444', get_id('property_id', 'property', 'Phone'), '11111111-1111-1111-1111-111111111111', 'Phone', 'Phone','No Phone', 4)
---     ('55555555-5555-5555-5555-555555555555', get_id('property_id', 'property', 'Text'), '22222222-2222-2222-2222-222222222222', 'Email', 'Email','NoEmail', 1),
---     ('66666666-6666-6666-6666-666666666666', get_id('property_id', 'property', 'Text'), '22222222-2222-2222-2222-222222222222', 'Title', 'Title','NoTitle', 2),
---     ('77777777-7777-7777-7777-777777777777',get_id('property_id', 'property', 'Text'), '22222222-2222-2222-2222-222222222222', 'Company', 'Company','NoCompany', 3),
---     ('88888888-8888-8888-8888-888888888888', get_id('property_id', 'property', 'Phone'), '22222222-2222-2222-2222-222222222222', 'Phone', 'Phone','NoPhone', 4)
-    ;
+    ('44444444-4444-4444-4444-444444444444', get_id('property_id', 'property', 'Phone'), '11111111-1111-1111-1111-111111111111', 'Phone', 'Phone','No Phone', 4),
+    ('55555555-5555-5555-5555-555555555555', get_id('property_id', 'property', 'Text'), '6df91480-d06d-4307-8e29-b4865ab9fdaf', 'Subject', 'Subject','No Subject', 1),
+    ('66666666-6666-6666-6666-666666666666', get_id('property_id', 'property', 'TextArea'), '6df91480-d06d-4307-8e29-b4865ab9fdaf', 'Description', 'Description','No Description', 2),
+    ('77777777-7777-7777-7777-777777777777', get_id('property_id', 'property', 'DateTime'), '6df91480-d06d-4307-8e29-b4865ab9fdaf', 'Start', 'Start',null, 3),
+    ('88888888-8888-8888-8888-888888888888', get_id('property_id', 'property', 'DateTime'), '6df91480-d06d-4307-8e29-b4865ab9fdaf', 'End', 'End',null, 4),
+    ('99999999-9999-9999-9999-999999999999', get_id('property_id', 'property', 'Text'), '8cb43743-6be3-4668-9340-0eae04c1eec2', 'Subject', 'Subject','No Subject', 1),
+    ('269f1404-6631-4663-b678-067b87b5ffbb', get_id('property_id', 'property', 'TextArea'), '8cb43743-6be3-4668-9340-0eae04c1eec2', 'Comments', 'Comments','No Description', 2),
+    ('b2300ce2-d10c-4623-bdfb-4275ff5a8af0', get_id('property_id', 'property', 'DateTime'), '8cb43743-6be3-4668-9340-0eae04c1eec2', 'Start', 'Start',null, 3),
+    ('d010846d-f0fd-482a-8fea-0a86c4b4a8e0', get_id('property_id', 'property', 'DateTime'), '8cb43743-6be3-4668-9340-0eae04c1eec2', 'End', 'End',null, 4),
+    ('1da24833-2dfc-44af-af78-bd417c7016a8', get_id('property_id', 'property', 'Text'), 'e6c3f747-aadc-4e2a-8ffb-944d38e7959e', 'Subject', 'Subject','No Subject', 1),
+    ('3c35ac1f-aea5-4176-a58b-5dedacd19ccc', get_id('property_id', 'property', 'TextArea'), 'e6c3f747-aadc-4e2a-8ffb-944d38e7959e', 'Comments', 'Comments','No Comments', 2),
+    ('77300ccf-b437-4992-8acb-1c474d0949b2', get_id('property_id', 'property', 'DateTime'), 'e6c3f747-aadc-4e2a-8ffb-944d38e7959e', 'Start', 'Start',null, 3),
+    ('e6aa2329-b8d6-4b70-a51c-4526e6004dc5', get_id('property_id', 'property', 'DateTime'), 'e6c3f747-aadc-4e2a-8ffb-944d38e7959e', 'End', 'End',null, 4);
 
 INSERT INTO stage (stage_id, name, type_id, sequence_number) VALUES
     ('11111111-1111-1111-1111-111111111111', 'LeadStage1', get_id('type_id', 'type', 'Lead'), 1),

@@ -2,6 +2,7 @@ import { cn } from '@/utils/utils';
 import { Controller, useForm } from 'react-hook-form';
 import { Checkbox, DropDown, DropDownItem, ErrorText, Item, TextArea, TextInput } from '../ui';
 import { ScreenLoading } from '../ui/Loading/LoadingSpinner';
+import { useEffect } from 'react';
 
 type RecordFormProps = {
   currentData?: Record<string, string>;
@@ -17,6 +18,7 @@ const RecordForm = ({ currentData = {}, onSubmit, stages, typeProperty, formId =
   const {
     register,
     handleSubmit,
+    setValue,
     control,
     formState: { isSubmitting, errors }
   } = useForm({
@@ -148,15 +150,20 @@ const RecordForm = ({ currentData = {}, onSubmit, stages, typeProperty, formId =
         <Controller
           control={control}
           name={property.name}
-          render={({ field: { onChange, value } }) => {
+          render={({ field: { value } }) => {
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            useEffect(() => {
+              setValue(property.name, value ? 'true' : 'false');
+            }, [value]);
+
+            console.log(value);
             return (
               <div className='flex items-center gap-2'>
                 <label htmlFor={property.id}>{property.label}</label>
                 <Checkbox
                   id={property.id}
-                  value={Boolean(value).toString()}
                   checked={value === 'true'}
-                  onChange={onChange}
+                  onCheckedChange={(checked) => setValue(property.name, checked ? 'true' : 'false')}
                 ></Checkbox>
               </div>
             );
@@ -197,13 +204,15 @@ const RecordForm = ({ currentData = {}, onSubmit, stages, typeProperty, formId =
             control={control}
             name='stage'
             render={({ field: { onChange, value } }) => (
-              <DropDown header='Status' value={value} onValueChange={onChange}>
-                {stages.map((stage: Stage) => (
-                  <DropDownItem title={stage.name} value={stage.id} key={stage.id}>
-                    <Item title={stage.name}></Item>
-                  </DropDownItem>
-                ))}
-              </DropDown>
+              <div className=''>
+                <DropDown header='Status' value={value} onValueChange={onChange}>
+                  {stages.map((stage: Stage) => (
+                    <DropDownItem title={stage.name} value={stage.id} key={stage.id}>
+                      <Item title={stage.name}></Item>
+                    </DropDownItem>
+                  ))}
+                </DropDown>
+              </div>
             )}
           />
         )}

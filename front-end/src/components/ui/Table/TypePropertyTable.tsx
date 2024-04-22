@@ -20,7 +20,7 @@ const TypePropertyTable = ({ propertyDetailList, onPropertyDelete }: TypePropert
             <TableCell className=''></TableCell>
           </TableRow>
         </TableHeader>
-        <TableBody className='h-full overflow-y-scroll'>
+        <TableBody className='h-full overflow-y-hidden'>
           {propertyDetailList &&
             propertyDetailList.map((property, index) => {
               return (

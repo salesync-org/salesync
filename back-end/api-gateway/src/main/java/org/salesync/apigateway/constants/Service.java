@@ -16,4 +16,9 @@ public final class Service {
         public static final String NAME = "type-service";
         public static final String ENDPOINT = "/stages";
     }
+
+    public static final class Relation {
+        public static final String NAME = "type-service";
+        public static final String ENDPOINT = "/relations";
+    }
 }

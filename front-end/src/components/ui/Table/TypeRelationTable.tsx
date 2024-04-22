@@ -4,11 +4,10 @@ import { Table, TableHeader, TableRow, TableBody, TableCell } from './Table';
 import { Pencil, Trash2 } from 'lucide-react';
 
 type TypeRelationProps = {
-  propertyDetailList: TypePropertyDetail[] | null;
-  onPropertyDelete: (id: string) => void;
+  relationList: TypeRelation[] | null;
 };
 
-const TypeRelationTable = ({ propertyDetailList, onPropertyDelete }: TypeRelationProps) => {
+const TypeRelationTable = ({ relationList }: TypeRelationProps) => {
   return (
     <div className='h-full overflow-y-scroll rounded border-2 border-input-stroke-light dark:border-input-stroke-dark'>
       <Table className='h-full'>
@@ -23,16 +22,28 @@ const TypeRelationTable = ({ propertyDetailList, onPropertyDelete }: TypeRelatio
           </TableRow>
         </TableHeader>
         <TableBody className='h-full overflow-y-scroll'>
-          {propertyDetailList &&
-            propertyDetailList.map((property, index) => {
+          {relationList &&
+            relationList.map((relation, index) => {
               return (
                 <TableRow key={index}>
-                  <TableCell className='w-4/12'>{property.name}</TableCell>
-                  <TableCell className='w-4/12'>{property.label}</TableCell>
-                  <TableCell className='w-4/12'>{property.property.name}</TableCell>
-                  <TableCell className='w-4/12'>{property.name}</TableCell>
-                  <TableCell className='w-4/12'>{property.label}</TableCell>
-                  <TableCell className='w-4/12'>{property.property.name}</TableCell>
+                  <TableCell className='w-1/5'>{relation.source_type.name}</TableCell>
+                  <TableCell className='w-1/5'>{relation.source_type_label}</TableCell>
+                  <TableCell className='w-1/5'>{relation.relation.name}</TableCell>
+                  <TableCell className='w-1/5'>{relation.destination_type_label}</TableCell>
+                  <TableCell className='w-1/5'>{relation.destination_type.name}</TableCell>
+                  <TableCell className='w-1/5'>
+                    <div className='flex w-full justify-end'>
+                      <Button
+                        rounded
+                        className='aspect-square rounded-full p-0'
+                        onClick={(_) => {
+                          // onPropertyDelete(property.id);
+                        }}
+                      >
+                        <Pencil size={'1rem'}></Pencil>
+                      </Button>
+                    </div>
+                  </TableCell>
                 </TableRow>
               );
             })}

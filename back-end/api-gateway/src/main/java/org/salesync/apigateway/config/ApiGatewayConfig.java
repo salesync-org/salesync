@@ -33,6 +33,14 @@ public class ApiGatewayConfig {
                                         .format("{0}{1}", Service.LOADBALANCER, Service.Stage.NAME))
 
                 )
+                .route(Service.Relation.NAME,
+                        r -> r.path(MessageFormat
+                                        .format("{0}{1}{2}/**", Service.CONTEXT_PATH, "/{realm}", Service.Relation.ENDPOINT))
+                                .filters(f -> f.filter(authenticationFilter))
+                                .uri(MessageFormat
+                                        .format("{0}{1}", Service.LOADBALANCER, Service.Relation.NAME))
+
+                )
                 .route(Service.Record.NAME,
                         r -> r.path(MessageFormat
                                         .format("{0}{1}{2}/**", Service.CONTEXT_PATH, "/{realm}", Service.Record.ENDPOINT))

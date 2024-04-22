@@ -57,7 +57,7 @@ const Modal = ({ children, title, isOpen, onClose, className, isStatic = true }:
             {/* <!-- Modal content --> */}
             <div
               className={cn(
-                'relative max-h-[calc(100vh-50px)] rounded-lg bg-panel px-3 py-4 shadow dark:bg-panel-dark',
+                'relative max-h-[calc(100vh-50px)] max-w-[calc(100vw-100px)] rounded-lg bg-panel px-3 py-4 shadow dark:bg-panel-dark',
                 className
               )}
             >

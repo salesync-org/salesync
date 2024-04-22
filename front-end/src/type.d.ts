@@ -51,7 +51,10 @@ type PropertyResponse = {
 type TypeDetail = {
   id: string;
   name: string;
-  template: string;
+  template: {
+    id: string;
+    name: string;
+  };
   properties: TypePropertyDetail[];
 };
 
@@ -87,10 +90,20 @@ type TypePropertyField = {
   options?: string[];
 };
 
-// type Relation = {
-//   id: string;
-//   name: string;
-// };
+type Relation = {
+  id: string;
+  name: string;
+  inverse_id: string;
+};
+
+type TypeRelation = {
+  id: string;
+  source_type: Type;
+  source_type_label: string;
+  relation: Relation;
+  destination_type: Type;
+  destination_type_label: string
+}
 
 type Field = {
   id: string;

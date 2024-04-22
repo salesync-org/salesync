@@ -13,14 +13,15 @@ import { cn } from '@/utils/utils';
 import TypePropertyTable from '@/components/ui/Table/TypePropertyTable';
 import StageSetting from './StageSetting';
 import TypeRelationTable from '@/components/ui/Table/TypeRelationTable';
+import CreateTypeRelationModal from '@/components/CreateTypeRelationModal/CreateTypeRelationModal';
 
 const TypePropertyManager = () => {
-  // const [typeName, setTypeName] = useState('');
   const { companyName, typeId } = useParams();
-  //List of types
   const [typeProperties, setTypeProperties] = useState<TypeDetail>();
-  //List of types after search
+  const [typeRelations, setTypeRelations] = useState<TypeRelation[]>();
+  const [relationSearchResult, setRelationSearchResult] = useState<TypeRelation[]>([]);
   const [propertySearchResult, setPropertySearchResult] = useState<TypePropertyDetail[]>([]);
+  const [createRelation, setCreateRelation] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const [search, setSearch] = useState(() => {
@@ -32,17 +33,19 @@ const TypePropertyManager = () => {
     // Fetch sample data
     const fetchData = async () => {
       const properties = await typeApi.loadTypeDetail(companyName ?? '', typeId ?? '');
-      console.log('result');
+      const relations = await typeApi.getTypeRelations(companyName ?? '', typeId ?? '');
       setTypeProperties(properties);
       setPropertySearchResult(properties.properties);
+      setTypeRelations(relations);
+      setRelationSearchResult(relations);
     };
 
     fetchData();
-  }, []);
+  }, [companyName, typeId]);
 
   //Search for types
   useEffect(() => {
-    const handleSearch = () => {
+    const handleSearchType = () => {
       const searchResult =
         typeProperties &&
         typeProperties.properties.filter((item) => {
@@ -52,10 +55,24 @@ const TypePropertyManager = () => {
       return searchResult;
     };
 
+    const handleSearchRelations = () => {
+      const searchResult =
+        typeRelations &&
+        typeRelations.filter((item) => {
+          return Object.values(item.destination_type_label)
+            .join('')
+            .toLowerCase()
+            .includes(debouncedSearch.toLowerCase());
+        });
+
+      return searchResult;
+    };
+
     if (debouncedSearch || debouncedSearch === '') {
       searchParams.set('search', debouncedSearch);
       setSearchParams(searchParams);
-      setPropertySearchResult(handleSearch() as TypePropertyDetail[]);
+      if (searchParams.get('tab') === 'properties') setPropertySearchResult(handleSearchType() as TypePropertyDetail[]);
+      if (searchParams.get('tab') === 'relations') setRelationSearchResult(handleSearchRelations() as TypeRelation[]);
     }
   }, [debouncedSearch, searchParams, setSearchParams]);
 
@@ -76,7 +93,7 @@ const TypePropertyManager = () => {
               </Button>
             </div>
             <div className='my-2 flex w-full space-x-2 rounded-md p-2 '>
-              {(typeProperties?.template === 'StageObject'
+              {(typeProperties?.template.name === 'StageObject'
                 ? ['Properties', 'Relations', 'Stages']
                 : ['Properties', 'Relations']
               ).map((item, index) => {
@@ -124,7 +141,7 @@ const TypePropertyManager = () => {
                   <p>Create</p>
                 </PrimaryButton>
               </div>
-              <div className='h-full min-h-full overflow-scroll'>
+              <div className='h-full min-h-full overflow-y-hidden'>
                 <TypePropertyTable
                   propertyDetailList={propertySearchResult}
                   onPropertyDelete={async (id) => {
@@ -143,14 +160,14 @@ const TypePropertyManager = () => {
                     onChange={(e) => setSearch(e.target.value)}
                     className='w-full'
                     value={search}
-                    placeholder='Search for properties'
+                    placeholder='Search for relations'
                     prefixIcon='search'
                   />
                 </div>
                 <PrimaryButton
                   className='ml-2'
                   onClick={() => {
-                    navigate(`/${companyName}/setting/object-manager/${typeId}/create`);
+                    setCreateRelation(true);
                   }}
                   showHeader={true}
                 >
@@ -158,20 +175,35 @@ const TypePropertyManager = () => {
                   <p>Create</p>
                 </PrimaryButton>
               </div>
-              <div className='h-full min-h-full overflow-scroll'>
-                <TypeRelationTable
-                  propertyDetailList={propertySearchResult}
-                  onPropertyDelete={async (id) => {
-                    await typeApi.deleteTypeProperty(companyName ?? '', id);
-                    setPropertySearchResult((prev) => prev.filter((item) => item.id !== id));
-                  }}
-                />
+              <div className='h-full min-h-full overflow-y-hidden'>
+                <TypeRelationTable relationList={relationSearchResult} />
               </div>
             </>
           )}
-          {searchParams.get('tab') == 'stages' && <StageSetting typeId={typeId ?? ''}></StageSetting>}
+          {searchParams.get('tab') == 'stages' && (
+            <div className='row-span-2 h-full pb-16'>
+              <StageSetting typeId={typeId ?? ''}></StageSetting>
+            </div>
+          )}
         </div>
       </Panel>
+      {createRelation && (
+        <CreateTypeRelationModal
+          typeId={typeId ?? ''}
+          isOpen={createRelation}
+          onCreate={async (typeRelation) => {
+            const res = await typeApi.createTypeRelation(companyName ?? '', typeRelation);
+            if (res) {
+              setTypeRelations((prev) => [...(prev ?? []), typeRelation]);
+              setRelationSearchResult((prev) => [...prev, typeRelation]);
+            }
+            setCreateRelation(false);
+          }}
+          onClose={() => {
+            setCreateRelation(false);
+          }}
+        ></CreateTypeRelationModal>
+      )}
     </div>
   );
 };

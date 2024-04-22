@@ -1,5 +1,6 @@
 import NavigationButton from '@/components/NavigationButton/NavigationButton';
 import TypeCard from '@/components/ObjectCard/TypeCard';
+import ChartSection from './ChartSection';
 // import { Type } from '@/type';
 const HomeLayout = () => {
   //lead
@@ -35,12 +36,16 @@ const HomeLayout = () => {
         <NavigationButton />
         <h2 className='select-none pl-6 pr-6 leading-6'>Home</h2>
       </section>
-      <section className='grid  flex-grow  grid-cols-1 pt-10 md:grid-cols-2'>
-        <TypeCard type={Lead} />
+      <section className='grid flex-grow  grid-cols-1 pt-10 md:grid-cols-4'>
+        <ChartSection />
+        <ChartSection />
+        <ChartSection />
+        <ChartSection />
+        {/* <TypeCard type={Lead} />
         <TypeCard type={Opportunity} />
         <TypeCard type={Contact} />
         <TypeCard type={Case} />
-        <TypeCard type={Case} />
+        <TypeCard type={Case} /> */}
       </section>
     </div>
   );

@@ -5,7 +5,6 @@ import { useLocation, useParams } from 'react-router-dom';
 import { createUser, getUsers } from '@/api/users';
 import { loadRoles } from '@/api/roles';
 import UserTable from '@/components/ui/Table/UserTable';
-import useAuth from '@/hooks/useAuth';
 
 const UserSetting = () => {
   const { companyName } = useParams();

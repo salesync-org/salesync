@@ -9,11 +9,12 @@ import Pagination from '@/components/ui/Pagination/Pagination';
 import Panel from '@/components/ui/Panel/Panel';
 import TypeTable from '@/components/ui/Table/TypeTable';
 import TextInput from '@/components/ui/TextInput/TextInput';
-import '@/constants/api';
 import useType from '@/hooks/type-service/useType';
 import typeApi from '@/api/type';
-import { DropDownItem } from '@/components/ui';
+import { DropDownItem, Modal, ModalFooter } from '@/components/ui';
 import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
+import { useEffect, useState } from 'react';
+import useDebounce from '@/hooks/useDebounce';
 
 const ObjectManager = () => {
   const { companyName } = useParams();

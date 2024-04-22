@@ -2,9 +2,7 @@ package org.salesync.authentication.controllers;
 
 import lombok.AllArgsConstructor;
 import org.salesync.authentication.constants.Routes;
-import org.salesync.authentication.dtos.NewRoleDto;
-import org.salesync.authentication.dtos.PermissionDto;
-import org.salesync.authentication.dtos.RoleDto;
+import org.salesync.authentication.dtos.*;
 import org.salesync.authentication.services.role.RoleService;
 import org.salesync.authentication.services.user.UserService;
 import org.salesync.authentication.utils.StringUtility;
@@ -63,5 +61,14 @@ public class RoleController {
             @RequestBody NewRoleDto newRoleDto
     ) {
         return ResponseEntity.ok(roleService.createRole(realmName, newRoleDto, StringUtility.removeBearer(token)));
+    }
+
+    @PutMapping(Routes.REALM_ASSIGN_ROLE)
+    ResponseEntity<SimpleUserDto> addRoleToUser(
+            @PathVariable String realmName,
+            @RequestHeader("Authorization") String token,
+            @RequestBody AssignRoleDto assignRoleDto
+    ) {
+        return ResponseEntity.ok(roleService.addRoleToUser(realmName, assignRoleDto.getRoleName(), assignRoleDto.getUserId(), StringUtility.removeBearer(token)));
     }
 }

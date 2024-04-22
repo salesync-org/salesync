@@ -6,7 +6,7 @@ import { Navigate, useParams } from 'react-router-dom';
 import RecordTabs from '../../components/Records/RecordTabs';
 import ErrorToaster from '../Error/ErrorToaster';
 import NavigationButton from '@/components/NavigationButton/NavigationButton';
-import { LayoutOrder, Type } from '@/type';
+// import { LayoutOrder, Type } from '@/type';
 
 const Sales = () => {
   const { user, isLoading } = useAuth();
@@ -22,9 +22,10 @@ const Sales = () => {
   }
 
   const layoutOrders = user.settings.layout_order;
-  const types: Type[] = layoutOrders.find((layoutOrder: LayoutOrder) => layoutOrder.name === 'Sales')?.types ?? [];
+  const types = layoutOrders.find((layoutOrder: LayoutOrder) => layoutOrder.name === 'Sales')?.types ?? [];
 
   if (!typeId && types.length > 0) {
+    console.log('navigate to ' + types?.[0].type_id);
     return <Navigate to={`/${companyName}/sales/${types[0].type_id}`} />;
   }
 

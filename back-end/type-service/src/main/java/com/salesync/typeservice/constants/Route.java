@@ -7,6 +7,7 @@ public final class Route {
         public static final String GET_RELATION = "/relations" + TYPE_ID;
         public static final String CREATE_RELATION = "/create-relation";
         public static final String CREATE_PROPERTY = "/create-property";
+        public static final String DELETE_PROPERTY = "/delete-property/{typePropId}";
         public static final String TYPE_DETAILS = "/details/{typeId}";
         public static final String CREATE_TYPE_RELATION = "/create-type-relation";
     }
@@ -29,5 +30,7 @@ public final class Route {
         public static final String STAGE_ROUTE = "/stages";
         public static final String STAGE_ID = "/{stageId}";
         public static final String GET_STAGES_BY_TYPE_ID = "/{typeId}";
+
+        public static final String UPDATE_SEQUENCE_NUMBER = "/update-sequence-number";
     }
 }

@@ -7,6 +7,7 @@ import lombok.SneakyThrows;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,6 +19,20 @@ public class ContainIdValidator implements ConstraintValidator<ContainId, Object
             return false;
         }
         Class<?> clazz = o.getClass();
+
+        if (o instanceof Collection<?>) {
+            Collection<?> collection = (Collection<?>) o;
+            if (collection.isEmpty()) {
+                return false;
+            }
+            for (Object item : collection) {
+                if (!isValid(item, constraintValidatorContext)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         Field field = null;
         try {
             field = clazz.getDeclaredField("id");

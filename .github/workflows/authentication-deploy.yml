@@ -55,14 +55,10 @@ jobs:
     runs-on: [self-hosted, Linux, X64, authentication]
     steps:
       - name: Login to ECR
-        uses: docker/login-action@v3
-        with:
-          registry: ${{secrets.AWS_ECR_ADDRESS}}
-          username: AWS
-          password: ${{ secrets.AWS_ECR_PASSWORD }}
+        run: sudo docker login -u AWS -p $(aws ecr get-login-password --region ap-southeast-2) ${{secrets.AWS_ECR_ADDRESS}} 
       - name: Pull Image from AWS ECR
-        run: docker pull  ${{secrets.AWS_ECR_ADDRESS}}/authentication:latest
+        run: sudo docker pull  ${{secrets.AWS_ECR_ADDRESS}}/authentication:latest
       - name: Delete old container
         run: sudo docker rm -f authentication-container
       - name: Run Docker Image
-        run: docker run -d -e KEYSTORE_PATH=/app/keys/auth.jks -v auth:/app/keys -p 8082:8082 --name authentication-container ${{secrets.AWS_ECR_ADDRESS}}/authentication:latest
+        run: sudo docker run -d -e KEYSTORE_PATH=/app/keys/auth.jks -e KEYCLOAK_HOST=${{secrets.KEYCLOAK_HOST_URL}} -v /home/ec2-user/auth:/app/keys -p 8082:8082 --name authentication-container ${{secrets.AWS_ECR_ADDRESS}}/authentication:latest

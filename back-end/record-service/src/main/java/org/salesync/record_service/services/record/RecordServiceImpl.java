@@ -1,5 +1,6 @@
 package org.salesync.record_service.services.record;
 
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.salesync.record_service.components.RabbitMQProducer;
 import org.salesync.record_service.constants.Message;
@@ -17,6 +18,7 @@ import org.salesync.record_service.mappers.RecordTypePropertyMapper;
 import org.salesync.record_service.mappers.RecordTypeRelationMapper;
 import org.salesync.record_service.mappers.RelationItemMapper;
 import org.salesync.record_service.repositories.*;
+import org.salesync.record_service.services.token.TokenService;
 import org.salesync.record_service.services.token.TokenService;
 import org.salesync.record_service.utils.SecurityContextHelper;
 import org.springframework.core.ParameterizedTypeReference;
@@ -37,6 +39,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional(rollbackFor = Throwable.class)
+@Builder
 public class RecordServiceImpl implements RecordService {
 
     private final RecordRepository recordRepository;
@@ -119,8 +122,6 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public RecordTypeRelationDto createRecordTypeRelation(RequestRecordTypeRelationDto requestRecordTypeRelationDto) {
-        System.out.println(requestRecordTypeRelationDto);
-
         UUID sourceRecordId = requestRecordTypeRelationDto.getSourceRecordId();
         Record sourceRecord = recordRepository.findById(sourceRecordId).orElseThrow(
                 () -> new ObjectNotFoundException(
@@ -142,6 +143,14 @@ public class RecordServiceImpl implements RecordService {
                 .sourceRecord(sourceRecord)
                 .destinationRecord(destinationRecord)
                 .build();
+
+        RecordTypeRelation inverseRelation = RecordTypeRelation.builder()
+                .typeRelationId(requestRecordTypeRelationDto.getTypeRelationId())
+                .sourceRecord(destinationRecord)
+                .destinationRecord(sourceRecord)
+                .build();
+
+        recordTypeRelationRepository.save(inverseRelation);
 
         return recordTypeRelationMapper.recordTypeRelationToRecordTypeRelationDto(
                 recordTypeRelationRepository.save(recordTypeRelation)
@@ -167,11 +176,12 @@ public class RecordServiceImpl implements RecordService {
             Record record = recordRepository.findById(recordId).orElseThrow(
                     () -> new ConcurrentUpdateException(Message.CONCURRENT_UPDATE)
             );
-            if (userContextId.equals(record.getUserId().toString())) {
+            if (!userContextId.equals(record.getUserId().toString())) {
                 throw new AccessDeniedException("You are not allowed to delete this record");
             }
             recordRepository.delete(record);
         });
+
     }
 
     @Override

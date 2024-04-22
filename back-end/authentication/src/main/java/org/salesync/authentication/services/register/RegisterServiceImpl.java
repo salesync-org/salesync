@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.ObjectNotFoundException;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
@@ -21,40 +22,41 @@ import org.salesync.authentication.constants.AuthenticationClient;
 import org.salesync.authentication.constants.AuthenticationInfo;
 import org.salesync.authentication.constants.UserAttributes;
 import org.salesync.authentication.dtos.*;
+import org.salesync.authentication.entities.Company;
 import org.salesync.authentication.helpers.SettingsManager;
+import org.salesync.authentication.repositories.CompanyRepository;
 import org.salesync.authentication.services.user.UserService;
+import org.salesync.authentication.utils.StringUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-@Service
 @RequiredArgsConstructor
+@Service
 public class RegisterServiceImpl implements RegisterService {
+    private final CompanyRepository companyRepository;
     private final Environment env;
     private final Keycloak keycloak;
-    private UserService userService;
+    private final UserService userService;
     Logger logger = LoggerFactory.getLogger(RegisterServiceImpl.class);
 
-    @Autowired
-    public RegisterServiceImpl(Environment env, Keycloak keycloak, UserService userService) {
-        this.env = env;
-        this.keycloak = keycloak;
-        this.userService = userService;
-    }
-
     @Override
-    public AccessTokenResponse registerCompany(CompanyRegisterDto companyRegisterDTO) {
+    public AccessTokenResponse registerCompany(CompanyRegisterDto companyRegisterDTO) throws AccessDeniedException {
         logger.info("Starting to register company...");
         Response adminRegisterResponse;
         try {
             String realmName = createRealm(companyRegisterDTO.getCompanyName());
+            Company newCompany = new Company();
+            newCompany.setName(companyRegisterDTO.getCompanyName());
+            newCompany.setAvatarUrl("default");
+            companyRepository.save(newCompany);
             adminRegisterResponse = registerUser(
                     companyRegisterDTO.getAdminInfo(),
                     realmName);
@@ -76,7 +78,7 @@ public class RegisterServiceImpl implements RegisterService {
     }
 
     @Override
-    public Response registerUser(NewUserDto newUserDTO, String realmName, String token) {
+    public Response registerUser(NewUserDto newUserDTO, String realmName, String token) throws AccessDeniedException {
         try {
             if (userService.validate(realmName, token) != null) {
                 return registerUser(newUserDTO, realmName);
@@ -129,7 +131,7 @@ public class RegisterServiceImpl implements RegisterService {
     public AccessTokenResponse login(
             String realmName,
             LogInDto logInDTO
-    ) {
+    ) throws AccessDeniedException {
         logger.info(String.format("Starting Login into %s...", realmName));
         try(Keycloak keycloak = KeycloakBuilder.builder()
                 .serverUrl(env.getProperty("keycloak.auth-server-url"))
@@ -164,8 +166,13 @@ public class RegisterServiceImpl implements RegisterService {
     @Override
     public Response logout(String realmName, String token) {
         logger.info("Starting Logout...");
-        UserDto userInfo = userService.validateUser(realmName, token);
-        List<UserSessionRepresentation> sessions = keycloak.realm(realmName).users().get(userInfo.getUserId()).getUserSessions();
+        UserDto userInfo = null;
+        try {
+            userInfo = userService.validateUser(realmName, token);
+        } catch (AccessDeniedException e) {
+            e.printStackTrace();
+        }
+        List<UserSessionRepresentation> sessions = keycloak.realm(realmName).users().get(Objects.requireNonNull(userInfo).getUserId()).getUserSessions();
         for (UserSessionRepresentation session : sessions) {
             keycloak.realm(realmName).deleteSession(session.getId());
         }
@@ -211,6 +218,57 @@ public class RegisterServiceImpl implements RegisterService {
         return null;
     }
 
+    @Override
+    public UpdateCompanyInfoDto updateCompany(String realmName, UpdateCompanyInfoDto updateCompanyInfoDto, String accessToken) throws AccessDeniedException {
+        try {
+            UserDetailDto user = userService.validateUser(realmName, accessToken);
+            if (!userService.isUserInRole(keycloak.realm(realmName), user.getUserId(), AuthenticationInfo.ADMIN_SETTINGS_PERMISSION)) {
+                throw new AccessDeniedException("Unauthorized");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+        Company company = companyRepository.findById(UUID.fromString(updateCompanyInfoDto.getCompanyId())).orElseThrow(
+                () -> new ObjectNotFoundException(
+                        Company.class,
+                        updateCompanyInfoDto.getCompanyId()
+                ));
+        if (!company.getName().equals(realmName)) {
+            throw new IllegalArgumentException();
+        }
+        company.setAvatarUrl(updateCompanyInfoDto.getAvatarUrl());
+        company.setPhone(updateCompanyInfoDto.getPhone());
+        company.setAddress(updateCompanyInfoDto.getAddress());
+        company.setTaxCode(updateCompanyInfoDto.getTaxCode());
+        companyRepository.save(company);
+        return updateCompanyInfoDto;
+    }
+
+    @Override
+    public CompanyInfoDto getCompanyInfo(String companyName, String accessToken) throws AccessDeniedException {
+        try {
+            userService.validate(companyName, accessToken);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new AccessDeniedException("Unauthorized");
+        }
+        Company company = companyRepository.findCompaniesByName(companyName).orElseThrow(
+                () -> new ObjectNotFoundException(
+                        Company.class,
+                        companyName
+                ));
+//
+        CompanyInfoDto companyInfoDto = new CompanyInfoDto();
+        companyInfoDto.setCompanyId(company.getCompanyId().toString());
+        companyInfoDto.setPhone(company.getPhone());
+        companyInfoDto.setAddress(company.getAddress());
+        companyInfoDto.setTaxCode(company.getTaxCode());
+        companyInfoDto.setName(company.getName());
+        companyInfoDto.setAvatarUrl(company.getAvatarUrl());
+        return companyInfoDto;
+    }
+
     private String createRealm(String realmName) {
         try {
             realmName = realmName.replaceAll("\\s+", "").toLowerCase();
@@ -219,6 +277,8 @@ public class RegisterServiceImpl implements RegisterService {
             realmRepresentation.setAttributes(Map.of("frontendUrl",
                     Objects.requireNonNull(env.getProperty("main-website.address"))));
             realmRepresentation.setEnabled(true);
+            realmRepresentation.setEmailTheme("salesync");
+            realmRepresentation.setAccessTokenLifespan(1800);
             keycloak.realms().create(realmRepresentation);
             logger.info(String.format("Created Realm with name: %s", realmName));
             RealmResource realmResource = keycloak.realm(realmName);
@@ -259,7 +319,8 @@ public class RegisterServiceImpl implements RegisterService {
         Map<String, String> smtpConfig = new HashMap<>();
         smtpConfig.put("host", env.getProperty("mail.host"));
         smtpConfig.put("port",  env.getProperty("mail.port"));
-        smtpConfig.put("from", env.getProperty("mail.from"));
+        smtpConfig.put("from", String.format("service.%s@%s", realmRepresentation.getRealm().toLowerCase(), env.getProperty("mail.from")));
+        smtpConfig.put("fromDisplayName", String.format("%s Customer Service", StringUtility.capFirstChar(realmRepresentation.getRealm())));
         smtpConfig.put("starttls", env.getProperty("mail.starttls"));
         smtpConfig.put("auth", env.getProperty("mail.auth"));
         smtpConfig.put("password",  env.getProperty("mail.password"));

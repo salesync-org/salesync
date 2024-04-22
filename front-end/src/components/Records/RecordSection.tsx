@@ -18,6 +18,7 @@ interface RecordSectionProps {
 const RecordSection = ({ type }: RecordSectionProps) => {
   const { showModal } = useGlobalModalContext();
   const { typeId } = useParams();
+  const [search, setSearch] = useState('');
   const [recordFilter] = useState<RecordsFilter>({
     searchTerm: '',
     isAsc: false,
@@ -29,6 +30,14 @@ const RecordSection = ({ type }: RecordSectionProps) => {
   if (!type || !typeId) {
     return null;
   }
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+
+    setTimeout(() => {
+      console.log(search);
+    }, 3000);
+  };
 
   return (
     <Panel className='m-0 h-[calc(100dvh-160px)] max-w-[100vw] overflow-auto p-4'>
@@ -57,16 +66,9 @@ const RecordSection = ({ type }: RecordSectionProps) => {
           </Button>
         </ButtonGroup>
       </section>
-      <section className='my-2 flex items-center justify-between'>
-        <ul className='flex gap-1 leading-[18px]'>
-          <li className='truncate'>• Sorted by Name</li>
-          <li className='truncate'>
-            • Filtered by All {type.name} - {type.name} Status
-          </li>
-          <li className='truncate'>• Updated 8 minutes ago</li>
-        </ul>
+      <section className='my-2 flex items-center justify-end'>
         <div className='flex items-center space-x-1'>
-          <TextInput placeholder='Search this list...' prefixIcon='search' />
+          <TextInput value={search} onChange={handleSearch} placeholder='Search this list...' prefixIcon='search' />
           <div className='hidden space-x-1 md:flex'>
             <DropDown
               value=''

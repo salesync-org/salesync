@@ -27,6 +27,7 @@ type TextInputProps = {
   readOnly?: boolean;
   defaultValue?: string;
   isPassword?: boolean;
+  isRequired?: boolean;
   list?: string;
   type?: string;
   restProps?: React.HTMLAttributes<HTMLInputElement>;
@@ -45,6 +46,7 @@ const TextInput: React.FC<TextInputProps> = ({
   postfixIcon,
   type = 'text',
   validation = {},
+  isRequired = false,
   isError = false,
   onChange,
   onBlur,
@@ -57,7 +59,16 @@ const TextInput: React.FC<TextInputProps> = ({
 }: TextInputProps) => {
   return (
     <div>
-      {showHeader && header && <p className={cn('my-1', isError && 'font-medium text-red-500')}>{header}</p>}
+      {showHeader && header && (
+        <p className={cn('relative my-1', isError && 'font-medium text-red-500')}>
+          {header}
+          {isRequired && (
+            <span className='absolute ml-2 size-1 rounded-full text-red-400' title='Required'>
+              *
+            </span>
+          )}
+        </p>
+      )}
       <div
         className={cn(
           'relative flex h-10 w-64 items-center justify-start align-middle',
@@ -91,6 +102,7 @@ const TextInput: React.FC<TextInputProps> = ({
           name={name}
           {...restProps}
           readOnly={readOnly}
+          required={isRequired}
         />
         <div className='relative flex h-full items-center justify-start rounded px-4'>
           <div className=' absolute bottom-0 top-0 flex w-4 items-center'>

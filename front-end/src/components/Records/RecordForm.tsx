@@ -154,7 +154,7 @@ const RecordForm = ({ currentData = {}, onSubmit, stages, typeProperty, formId =
             // eslint-disable-next-line react-hooks/rules-of-hooks
             useEffect(() => {
               setValue(property.name, value ? 'true' : 'false');
-            }, []);
+            }, [value]);
 
             console.log(value);
             return (

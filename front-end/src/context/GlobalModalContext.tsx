@@ -32,7 +32,10 @@ const GlobalModalContext = createContext(initialState);
 export const useGlobalModalContext = () => useContext(GlobalModalContext);
 
 export const GlobalModalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [store, setStore] = useState({ modalType: '', modalProps: {} });
+  const [store, setStore] = useState({
+    modalType: '',
+    modalProps: {}
+  });
   const { modalType, modalProps } = store;
 
   const showModal = (modalType: string, modalProps: any = {}) => {

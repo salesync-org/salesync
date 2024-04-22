@@ -2,7 +2,7 @@ import NavigationButton from '@/components/NavigationButton/NavigationButton';
 import { SidebarSetting } from '@/components/SettingLayout/SideBarSetting';
 import useType from '@/hooks/type-service/useType';
 import { cn } from '@/utils/utils';
-import { Building, ChevronRight, Layers, Settings, User } from 'lucide-react';
+import { Building, Layers, Settings, User } from 'lucide-react';
 import { Outlet, useLocation, useParams } from 'react-router-dom';
 
 export type Setting = {

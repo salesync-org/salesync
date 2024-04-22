@@ -1,13 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import recordApi, { RecordsFilter } from '@/api/record';
 import useRecords from '@/hooks/record-service/useRecords';
-import { cn, getCompanyName } from '@/utils/utils';
+import { cn } from '@/utils/utils';
 import { ChevronRight, X } from 'lucide-react';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, Dispatch, useState } from 'react';
 import RecordForm from '../Records/RecordForm';
 import { TextInput } from '../ui';
 import LoadingSpinner from '../ui/Loading/LoadingSpinner';
 import { useToast } from '../ui/Toast';
+import { Status } from './ConvertModal';
+
+type ConvertSectionProps = {
+  typeProperties: TypeProperty;
+  formId: string;
+  check: string;
+  onCheckStatus: (status: Status) => (e: ChangeEvent<HTMLInputElement>) => void;
+  record: RecordPropertyResponse | null;
+  setRecord: Dispatch<React.SetStateAction<RecordPropertyResponse | null>>;
+  currentData: Record<string, string>;
+  companyName: string;
+};
 
 export const ConvertSection = ({
   typeProperties,
@@ -16,15 +28,15 @@ export const ConvertSection = ({
   onCheckStatus,
   record,
   setRecord,
-  currentData
-}: any) => {
+  currentData,
+  companyName
+}: ConvertSectionProps) => {
   const [isExpand, setIsExpand] = useState(false);
   const [search, setSearch] = useState('');
   const [showHint, setShowHint] = useState(false);
   const [debounceSearch, setDebounceSearch] = useState('');
 
   const { toast } = useToast();
-  const companyName = getCompanyName();
 
   const recordFilter: RecordsFilter = {
     searchTerm: debounceSearch,
@@ -124,7 +136,6 @@ export const ConvertSection = ({
               onSubmit={onSubmit}
               className='pb-4'
             />
-            <button form={formId}>submit</button>
           </div>
         </section>
       </section>

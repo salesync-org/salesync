@@ -1,5 +1,6 @@
 package org.salesync.record_service.services.record;
 
+import jakarta.validation.Valid;
 import org.salesync.record_service.dtos.*;
 import org.salesync.record_service.dtos.record_type_relation_dto.ListRecordTypeRelationsDto;
 import org.salesync.record_service.dtos.record_type_relation_dto.RecordTypeRelationDto;
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface RecordService {
-    ListRecordsResponseDto getFilteredRecords(ListRecordsRequestDto requestDto);
+    ListRecordsResponseDto getFilteredRecords(@Valid ListRecordsRequestDto requestDto);
 
     List<RecordDto> getAllRecords();
 

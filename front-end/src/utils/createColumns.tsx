@@ -18,7 +18,7 @@ export const createColumns = (companyName: string, properties: any[], records: a
     }
   ];
 
-  properties.forEach((property, index) => {
+  properties.forEach((property) => {
     if (!property.name) {
       return;
     }
@@ -49,7 +49,7 @@ export const createColumns = (companyName: string, properties: any[], records: a
       return;
     }
     columns.push({
-      accessorKey: `${index}_${property.name}`,
+      accessorKey: `${property.name}`,
       header: ({ column }: { column: any }) => (
         <div
           className='flex items-center justify-between'
@@ -174,8 +174,7 @@ export const createColumns = (companyName: string, properties: any[], records: a
       const deleteRecord = async (recordId: string, recordName: string) => {
         if (window.confirm(`Are you sure you want to delete the record: ${recordName}?`)) {
           try {
-            const res = await recordApi.deleteRecord(companyName, [recordId]);
-            console.log(res);
+            await recordApi.deleteRecord(companyName, [recordId]);
             toast({
               title: 'Success',
               description: 'Record deleted successfully'

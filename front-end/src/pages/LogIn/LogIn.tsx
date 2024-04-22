@@ -4,7 +4,7 @@ import useAuth from '@/hooks/useAuth';
 import { cn } from '@/utils/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import salesyncLogo from 'assets/salesync_logo.png';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { z } from 'zod';

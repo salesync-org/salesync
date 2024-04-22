@@ -1,6 +1,5 @@
-import { useState } from 'react';
-import { Checkbox } from '../ui';
 import { cn } from '@/utils/utils';
+import { useState } from 'react';
 
 type RadioButtonFieldInputProps = {
   name: string;
@@ -24,7 +23,7 @@ const RadioButotnFieldInput = ({ label, name, propertyFields, updateFields }: Ra
   return (
     <>
       {label && <p className={cn('my-1')}>{label}</p>}
-      {propertyFields.map((propertyField, index) => {
+      {propertyFields.map((propertyField) => {
         return (
           <div className='my-2 flex space-x-2'>
             <input

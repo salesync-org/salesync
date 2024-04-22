@@ -3,7 +3,7 @@ import { Table, TableHeader, TableRow, TableCell, TableBody } from '.';
 import LoadingSpinner from '../Loading/LoadingSpinner';
 import NotFoundImage from '@/components/NotFoundImage/NotFoundImage';
 
-const UserTable = ({ users }: { users: SimpleUser[] }) => {
+const UserTable = ({ users = [] }: { users?: SimpleUser[] }) => {
   const { companyName } = useParams();
   if (users && users.length > 0) {
     return (

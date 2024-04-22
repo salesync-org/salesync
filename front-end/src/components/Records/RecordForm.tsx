@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { cn } from '@/utils/utils';
 import { Controller, useForm } from 'react-hook-form';
-import { Checkbox, DropDown, DropDownItem, Item, TextArea, TextInput } from '../ui';
+import { Checkbox, DropDown, DropDownItem, ErrorText, Item, TextArea, TextInput } from '../ui';
 import { ScreenLoading } from '../ui/Loading/LoadingSpinner';
+import { useEffect } from 'react';
 
 type RecordFormProps = {
   currentData?: Record<string, string>;
@@ -17,14 +19,13 @@ const RecordForm = ({ currentData = {}, onSubmit, stages, typeProperty, formId =
   const {
     register,
     handleSubmit,
-    getValues,
+    setValue,
     control,
-    formState: { isSubmitting, errors, isDirty }
+    formState: { isSubmitting, errors }
   } = useForm({
     defaultValues: currentData,
     mode: 'all'
   });
-  console.log(isDirty, formId, getValues());
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const renderTypePropertyInput = (property: any) => {
@@ -36,41 +37,152 @@ const RecordForm = ({ currentData = {}, onSubmit, stages, typeProperty, formId =
       register: register,
       name: property.name
     };
+    const fields = property.fields;
+    let isRequired = false;
+    let maxLength = 255;
 
+    if (fields) {
+      fields.forEach((field: any) => {
+        if (field.property_field.label === 'Required') isRequired = field.item_value === 'true';
+        if (field.property_field.label === 'Length') maxLength = parseInt(field.item_value as string) || 255;
+      });
+    }
+
+    let errorMessage = '';
+    if (errors[property.name]?.type === 'required') {
+      errorMessage = 'This field is required';
+    } else if (errors[property.name]?.type === 'maxLength') {
+      errorMessage = `Max length is ${maxLength}`;
+    } else if (errors[property.name]?.type === 'pattern') {
+      errorMessage = 'Invalid input';
+    }
+
+    const ErrorComponent = () => <ErrorText className='mt-1' text={errorMessage}></ErrorText>;
     return {
-      // Text: <TextInput {...props} isError={!!errors[property.name]} validation={{ minLength: 1 }}></TextInput>,
       Text: (
+        <div>
+          <TextInput
+            {...props}
+            isError={!!errors[property.name]}
+            validation={{ required: isRequired, maxLength }}
+          ></TextInput>
+          {errorMessage && <ErrorComponent></ErrorComponent>}
+        </div>
+      ),
+      Phone: (
+        <div>
+          <TextInput
+            {...props}
+            type='tel'
+            isError={!!errors[property.name]}
+            validation={{ pattern: /^\+?[0-9]{1,3}-?[0-9]{3,14}$/ }}
+          ></TextInput>
+          {errorMessage && <ErrorComponent></ErrorComponent>}
+        </div>
+      ),
+      Email: (
+        <div>
+          <TextInput
+            {...props}
+            type='email'
+            isError={!!errors[property.name]}
+            validation={{ pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i }}
+          ></TextInput>
+          {errorMessage && <ErrorComponent></ErrorComponent>}
+        </div>
+      ),
+      Number: (
+        <div>
+          <TextInput
+            {...props}
+            type='number'
+            isError={!!errors[property.name]}
+            validation={{ pattern: /^[0-9]+$/ }}
+          ></TextInput>
+          {errorMessage && <ErrorComponent></ErrorComponent>}
+        </div>
+      ),
+      Date: (
+        <div>
+          <TextInput
+            {...props}
+            type='date'
+            isError={!!errors[property.name]}
+            validation={{ pattern: /^\d{4}-\d{2}-\d{2}$/ }}
+            inputClassName='pr-10'
+          ></TextInput>
+          {errorMessage && <ErrorComponent></ErrorComponent>}
+        </div>
+      ),
+      DateTime: (
+        <TextInput
+          {...props}
+          type='datetime-local'
+          isError={!!errors[property.name]}
+          validation={{ pattern: /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/ }}
+          inputClassName='pr-10'
+        ></TextInput>
+      ),
+      TextArea: (
+        <div>
+          <TextArea
+            {...props}
+            className='h-[100px] w-full'
+            isError={!!errors[property.name]}
+            validation={{ required: isRequired, maxLength }}
+            isRequired={isRequired}
+          ></TextArea>
+          {errorMessage && <ErrorComponent></ErrorComponent>}
+        </div>
+      ),
+      URL: (
+        <div>
+          <TextInput
+            {...props}
+            type='url'
+            isError={!!errors[property.name]}
+            validation={{
+              pattern: /[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/gi
+            }}
+          ></TextInput>
+          {errorMessage && <ErrorComponent></ErrorComponent>}
+        </div>
+      ),
+      Checkbox: (
         <Controller
           control={control}
           name={property.name}
-          render={({ field }) => <TextInput {...props} {...field}></TextInput>}
+          render={({ field: { value } }) => {
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            useEffect(() => {
+              setValue(property.name, value ? 'true' : 'false');
+              // eslint-disable-next-line react-hooks/exhaustive-deps
+            }, []);
+
+            return (
+              <div className='flex items-center gap-2'>
+                <label htmlFor={property.id}>{property.label}</label>
+                <Checkbox
+                  id={property.id}
+                  checked={value === 'true'}
+                  onCheckedChange={(checked) => setValue(property.name, checked ? 'true' : 'false')}
+                ></Checkbox>
+              </div>
+            );
+          }}
         />
-      ),
-      Phone: <TextInput {...props} type='tel' isError={!!errors[property.name]}></TextInput>,
-      Email: (
-        <TextInput
-          {...props}
-          type='email'
-          isError={!!errors[property.name]}
-          validation={{ pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i }}
-        ></TextInput>
-      ),
-      Number: <TextInput {...props} type='number' isError={!!errors[property.name]}></TextInput>,
-      DateTime: <TextInput {...props} type='datetime-local' isError={!!errors[property.name]}></TextInput>,
-      TextArea: <TextArea {...props} className='h-[100px] w-full'></TextArea>,
-      Checkbox: <Checkbox></Checkbox>
+      )
     };
   };
 
-  // const onFormSubmit = (data: Record<string, string>) => {
-  //   onSubmit(data);
-  // };
-  const onFormSubmit = handleSubmit(onSubmit, () => console.log('error'));
+  const onFormSubmit = (data: Record<string, string>) => {
+    onSubmit(data);
+  };
 
   return (
     <form
       id={formId}
-      onSubmit={onFormSubmit}
+      onSubmit={handleSubmit(onFormSubmit)}
       className={cn('w-full overflow-x-hidden pb-32', isSubmitting && 'pointer-events-none opacity-80', className)}
     >
       {isSubmitting && <ScreenLoading />}
@@ -94,13 +206,15 @@ const RecordForm = ({ currentData = {}, onSubmit, stages, typeProperty, formId =
             control={control}
             name='stage'
             render={({ field: { onChange, value } }) => (
-              <DropDown header='Status' value={value} onValueChange={onChange}>
-                {stages.map((stage: Stage) => (
-                  <DropDownItem title={stage.name} value={stage.id} key={stage.id}>
-                    <Item title={stage.name}></Item>
-                  </DropDownItem>
-                ))}
-              </DropDown>
+              <div className=''>
+                <DropDown header='Status' value={value} onValueChange={onChange}>
+                  {stages.map((stage: Stage) => (
+                    <DropDownItem title={stage.name} value={stage.id} key={stage.id}>
+                      <Item title={stage.name}></Item>
+                    </DropDownItem>
+                  ))}
+                </DropDown>
+              </div>
             )}
           />
         )}

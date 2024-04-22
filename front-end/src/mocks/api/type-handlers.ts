@@ -1,4 +1,3 @@
-import { http, HttpResponse } from 'msw';
 import { TYPE_SERVICE_URL } from '@/constants/api';
 import { types, type, relations, typeRelations, type1, stages } from '../db';
 import { typeProperties, properties } from '../db/properties';
@@ -33,16 +32,6 @@ export const handlers = [
   http.get(`${BASE_URL}/abc/types/properties`, async ({ }) => {
     const propertyExamples = properties;
     return HttpResponse.json(propertyExamples);
-  }),
-
-  http.get(`${TYPE_SERVICE_URL}/:typeId/properties`, async ({ params }) => {
-    const typeId = params.typeId;
-
-    const typeProperty = typeProperties.find((property) => property.id === typeId) || typeProperties[0];
-
-    return HttpResponse.json(typeProperty, {
-      status: 200
-    });
   }),
   http.get(`${TYPE_SERVICE_URL}/:typeId/records`, async ({ params }) => {
     const typeId = params.typeId;

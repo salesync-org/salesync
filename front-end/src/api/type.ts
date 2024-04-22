@@ -1,5 +1,4 @@
 import instance from './axiosConfig';
-import axios from './axiosConfig';
 const BASE_URL = `${import.meta.env.VITE_API_GATEWAY_HOST}/api/v1`;
 
 const URL = import.meta.env.VITE_GATEWAY_HOST;
@@ -9,8 +8,18 @@ class TypeApi {
     return res.data;
   }
 
+  async getAllTemplates(companyName: string) {
+    const res = await instance.get(`${BASE_URL}/${companyName}/templates`);
+    return res.data;
+  }
+
   async getAllProperties(companyName: string) {
     const res = await instance.get(`${BASE_URL}/${companyName}/types/properties`);
+    return res.data;
+  }
+
+  async createType(companyName: string, data: any) {
+    const res = await instance.post(`${BASE_URL}/${companyName}/types`, data);
     return res.data;
   }
 
@@ -25,12 +34,27 @@ class TypeApi {
   }
 
   async getTypeProperties(companyName: string, typeId: string) {
-    const res = await axios.get(`${URL}/${companyName}/types/details/${typeId}`);
+    const res = await instance.get(`${URL}/${companyName}/types/details/${typeId}`);
     return res.data;
   }
 
   async deleteTypeProperty(companyName: string, propertyId: string) {
-    const res = await axios.delete(`${URL}/${companyName}/types/delete-property/${propertyId}`);
+    const res = await instance.delete(`${URL}/${companyName}/types/delete-property/${propertyId}`);
+    return res.data;
+  }
+
+  async getAllRelations(companyName: string) {
+    const res = await instance.get(`${URL}/${companyName}/relations`);
+    return res.data;
+  }
+
+  async getTypeRelations(companyName: string, typeId: string) {
+    const res = await instance.get(`${URL}/${companyName}/types/relations/${typeId}`);
+    return res.data;
+  }
+
+  async createTypeRelation(companyName: string, data: TypeRelation) {
+    const res = await instance.post(`${URL}/${companyName}/types/create-relation`, data);
     return res.data;
   }
 }

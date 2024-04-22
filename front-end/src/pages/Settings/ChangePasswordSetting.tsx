@@ -76,9 +76,10 @@ const ChangePasswordSetting = () => {
         <form onSubmit={handleSubmit(handleChangePassword)} className='my-4 grid h-full w-full grid-cols-1 px-4 py-4 '>
           <div className='flex w-full overflow-y-auto'>
             <div className='h-full w-full'>
-              <h2 className='mb-5 w-3/4 border-b-2 border-button-stroke-light py-4 dark:border-button-stroke-dark'>
-                Credential Information
-              </h2>
+              <div className=' flex items-baseline space-x-2 pr-4'>
+                <h3 className='flex-shrink-0'>Credential Information</h3>
+                <div className='w-full border-b-2 border-button-stroke-light py-4 dark:border-button-stroke-dark'></div>
+              </div>
               <div className='w-3/4'>
                 <input type='text' tabIndex={-1} className='h-0 w-0 py-0'></input>
                 <TextInput

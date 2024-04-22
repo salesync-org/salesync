@@ -1,7 +1,7 @@
 import { Button, Panel, TextInput } from '@/components/ui';
 import useAuth from '@/hooks/useAuth';
 import { cn } from '@/utils/utils';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useToast } from '@/components/ui/Toast';
 import Auth from '@/api/auth';
@@ -13,9 +13,7 @@ const CompanyInfomationSetting = () => {
   const { company, updateCompanyInfo } = useAuth();
   const [isUpdating, setUpdatingStatus] = useState(false);
   const [editAvatarHovered, setEditAvatarHovered] = useState(false);
-  const [avatarUrl, setAvatarUrl] = useState(
-    `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/companies/${company?.avatar_url === 'default' ? 'default.svg' : company?.avatar_url}`
-  );
+  const [avatarUrl, setAvatarUrl] = useState('');
   const [companyLoaded, setCompanyLoadedInfo] = useState<CompanyInfo>(
     company
       ? company
@@ -29,6 +27,15 @@ const CompanyInfomationSetting = () => {
         }
   );
   const { toast } = useToast();
+
+  useEffect(() => {
+    if (companyLoaded.avatar_url) {
+      setAvatarUrl(
+        `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/companies/${companyLoaded.avatar_url === 'default' ? 'default.svg' : companyLoaded.avatar_url}`
+      );
+    }
+  }, [company]);
+
   const editableFields = {
     company_id: null,
     company_name: false,
@@ -87,12 +94,13 @@ const CompanyInfomationSetting = () => {
   return (
     <>
       <Panel className={cn('m-0 grid h-full grid-cols-1 px-4 py-6')}>
-        <div className='my-4 flex overflow-y-auto px-4 py-4'>
+        <div className='my-4 flex space-x-4 overflow-y-auto px-4'>
           <div className='flex-grow '>
-            <h2 className='mb-5 w-3/4 border-b-2 border-button-stroke-light py-4 dark:border-button-stroke-dark'>
-              General Information
-            </h2>
-            <div className='w-3/4'>
+            <div className='mb-6 flex items-baseline space-x-2 pr-4'>
+              <h3 className='flex-shrink-0'>General Informataion</h3>
+              <div className='w-full border-b-2 border-button-stroke-light py-4 dark:border-button-stroke-dark'></div>
+            </div>
+            <div className='w-full'>
               {companyLoaded &&
                 Object.entries(companyLoaded).map(([fieldName, fieldValue]) => {
                   if (editableFields[fieldName as keyof typeof editableFields] !== null) {
@@ -119,9 +127,10 @@ const CompanyInfomationSetting = () => {
             </div>
           </div>
           <div className='relative mb-6 mr-8 h-fit w-fit'>
-            <h2 className='mb-5 border-b-2 border-button-stroke-light py-4 dark:border-button-stroke-dark'>
-              Company Logo
-            </h2>
+            <div className='mb-2 flex items-baseline space-x-2 px-4'>
+              <h3 className='flex-shrink-0'>Company Logo</h3>
+              <div className='w-full border-b-2 border-button-stroke-light py-4 dark:border-button-stroke-dark'></div>
+            </div>
             <div className='aspect-square w-64 overflow-clip rounded-sm'>
               <img src={`${avatarUrl}?lastmod=${new Date().getTime().toString()}`} />
             </div>
@@ -157,7 +166,7 @@ const CompanyInfomationSetting = () => {
             </div>
           </div>
         </div>
-        <div className='w-3/4 px-4'>
+        <div className='w-[calc(100%-256px)] px-4'>
           <Button
             intent='primary'
             className='w-full'

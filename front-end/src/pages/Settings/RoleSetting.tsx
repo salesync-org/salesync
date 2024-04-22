@@ -17,6 +17,8 @@ import ToggleButton from '@/components/ui/ToggleButton/ToggleButton';
 import { createRole } from '@/api/roles';
 import { useToast } from '@/components/ui/Toast';
 import AssignRoleToUserModal from './AssignRoleToUserModal';
+import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
+import NotFoundImage from '@/components/NotFoundImage/NotFoundImage';
 
 const RoleSetting = () => {
   //Pop up modal to create new type
@@ -148,62 +150,74 @@ const RoleSetting = () => {
           </div>
           <div className='h-full min-h-full overflow-y-scroll'>
             <div className='h-full overflow-y-scroll rounded border-2 border-input-stroke-light dark:border-input-stroke-dark'>
-              <Table className='h-full'>
-                <TableHeader className='max-h-full rounded-sm border-b-2 border-input-stroke-light dark:border-input-stroke-dark'>
-                  <TableRow>
-                    <TableCell className='font-semibold'>Role Name</TableCell>
-                    <TableCell className='font-semibold'>Description</TableCell>
-                    <TableCell className='font-semibold'>Users</TableCell>
-                    <TableCell className='font-semibold'></TableCell>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {roleSearchResult.map(
-                    (role) =>
-                      role.role_name !== `default-roles-${companyName}` && (
-                        <TableRow key={role.role_id}>
-                          <TableCell>
-                            <div className='w-fit'>
-                              <div className='my-2 text-[1.2rem] font-semibold text-primary-bold dark:text-secondary-light'>
-                                {role.role_name}
-                              </div>
-                              <div className=' flex w-fit flex-wrap space-x-2'>
-                                {role.permissions &&
-                                  role.permissions.map((permission) => (
-                                    <div
-                                      key={permission.permission_id}
-                                      className='my-2 mr-1 w-fit text-ellipsis text-nowrap rounded-full bg-gray-200 px-3 py-1 text-xs dark:bg-slate-600'
-                                    >
-                                      {permission.permission_name}
-                                    </div>
-                                  ))}
-                              </div>
-                            </div>
-                          </TableCell>
-                          <TableCell>{role.description ?? 'No Description'}</TableCell>
-                          <TableCell>
-                            <AvatarGroup
-                              maxAvatars={3}
-                              users={users.filter((user) => user.roles.includes(role.role_name))}
-                            ></AvatarGroup>
-                          </TableCell>
-                          <TableCell>
-                            <Button
-                              rounded
-                              className='flex w-40 rounded-full p-0 px-4'
-                              onClick={() => {
-                                setAssignModalOpen(role);
-                              }}
-                            >
-                              <UserPlus size='1rem' />
-                              <p>Assign Users</p>
-                            </Button>
-                          </TableCell>
-                        </TableRow>
+              {roles.length > 0 ? (
+                <Table className='h-full'>
+                  <TableHeader className='max-h-full rounded-sm border-b-2 border-input-stroke-light dark:border-input-stroke-dark'>
+                    <TableRow>
+                      <TableCell className='font-semibold'>Role Name</TableCell>
+                      <TableCell className='font-semibold'>Description</TableCell>
+                      <TableCell className='font-semibold'>Users</TableCell>
+                      <TableCell className='font-semibold'></TableCell>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {roleSearchResult.length > 0 ? (
+                      roleSearchResult.map(
+                        (role) =>
+                          role.role_name !== `default-roles-${companyName}` && (
+                            <TableRow key={role.role_id}>
+                              <TableCell>
+                                <div className='w-fit'>
+                                  <div className='my-2 text-[1.2rem] font-semibold text-primary-bold dark:text-secondary-light'>
+                                    {role.role_name}
+                                  </div>
+                                  <div className=' flex w-fit flex-wrap space-x-2'>
+                                    {role.permissions &&
+                                      role.permissions.map((permission) => (
+                                        <div
+                                          key={permission.permission_id}
+                                          className='my-2 mr-1 w-fit text-ellipsis text-nowrap rounded-full bg-gray-200 px-3 py-1 text-xs dark:bg-slate-600'
+                                        >
+                                          {permission.permission_name}
+                                        </div>
+                                      ))}
+                                  </div>
+                                </div>
+                              </TableCell>
+                              <TableCell>{role.description ?? 'No Description'}</TableCell>
+                              <TableCell>
+                                <AvatarGroup
+                                  maxAvatars={3}
+                                  users={users.filter((user) => user.roles.includes(role.role_name))}
+                                ></AvatarGroup>
+                              </TableCell>
+                              <TableCell>
+                                <Button
+                                  rounded
+                                  className='flex w-40 rounded-full p-0 px-4'
+                                  onClick={() => {
+                                    setAssignModalOpen(role);
+                                  }}
+                                >
+                                  <UserPlus size='1rem' />
+                                  <p>Assign Users</p>
+                                </Button>
+                              </TableCell>
+                            </TableRow>
+                          )
                       )
-                  )}
-                </TableBody>
-              </Table>
+                    ) : (
+                      <div className='flex h-full items-center justify-center'>
+                        <NotFoundImage />
+                      </div>
+                    )}
+                  </TableBody>
+                </Table>
+              ) : (
+                <div className='flex h-full items-center justify-center'>
+                  <LoadingSpinner />
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -215,81 +229,86 @@ const RoleSetting = () => {
           setRoleModal(null);
           resetPermissions();
         }}
-        className='mx-auto h-[400px] w-2/3'
+        className='mx-auto h-[500px] w-3/4'
         title={isRoleModalOpen?.role_id ? 'Edit Role' : 'Create New Role'}
       >
-        <form>
-          <div className='grid grid-cols-5 place-content-center gap-10'>
-            <div className='col-span-3 flex flex-col gap-2 '>
-              <div className='mb-2 flex items-baseline'>
-                <h3 className='min-w-[100px]'>Role Details</h3>
-                <div className='w-full border-b-2 border-button-stroke-light py-4 dark:border-button-stroke-dark'></div>
+        <form className=''>
+          <div className='grid-col-1 grid h-[350px]'>
+            <div className='grid h-[320px] grid-cols-5 place-content-center gap-10 overflow-scroll'>
+              <div className='col-span-3 flex flex-col gap-2 '>
+                <div className='mb-2 flex items-baseline'>
+                  <h3 className='min-w-[100px]'>Role Details</h3>
+                  <div className='w-full border-b-2 border-button-stroke-light py-4 dark:border-button-stroke-dark'></div>
+                </div>
+                <TextInput
+                  header='Role Name'
+                  className='w-full'
+                  onChange={(e) => {
+                    if (isRoleModalOpen) {
+                      isRoleModalOpen.role_name = e.target.value;
+                    }
+                  }}
+                  defaultValue={isRoleModalOpen?.role_name}
+                  readOnly={isRoleModalOpen?.role_id ? true : false}
+                  disabled={isRoleModalOpen?.role_id ? true : false}
+                  placeholder='Enter a name for the role'
+                />
+                <TextArea
+                  header='Description'
+                  className='w-full'
+                  onChange={(e) => {
+                    if (isRoleModalOpen) {
+                      isRoleModalOpen.description = e.target.value;
+                    }
+                  }}
+                  placeholder='Enter a description for the role'
+                />
               </div>
-              <TextInput
-                header='Role Name'
-                className='w-full'
-                onChange={(e) => {
-                  if (isRoleModalOpen) {
-                    isRoleModalOpen.role_name = e.target.value;
-                  }
-                }}
-                defaultValue={isRoleModalOpen?.role_name}
-                readOnly={isRoleModalOpen?.role_id ? true : false}
-                disabled={isRoleModalOpen?.role_id ? true : false}
-                placeholder='Enter a name for the role'
-              />
-              <TextArea
-                header='Description'
-                className='w-full'
-                onChange={(e) => {
-                  if (isRoleModalOpen) {
-                    isRoleModalOpen.description = e.target.value;
-                  }
-                }}
-                placeholder='Enter a description for the role'
-              />
+              <div className='col-span-2 flex max-h-[350px] flex-col gap-5'>
+                <div className='flex items-baseline'>
+                  <h3 className='min-w-[100px]'>Permissions</h3>
+                  <div className='w-full border-b-2 border-button-stroke-light py-4 dark:border-button-stroke-dark'></div>
+                </div>
+                <div className='flex h-fit flex-wrap space-x-2'>
+                  {permissions &&
+                    permissions.map((permission) => (
+                      <div key={permission.permission.permission_id}>
+                        <ToggleButton
+                          className='my-2 w-full'
+                          onToggle={() => {
+                            setPermissions(
+                              permissions.map((p) => {
+                                if (p.permission.permission_id === permission.permission.permission_id) {
+                                  return { ...p, isSelected: !p.isSelected };
+                                }
+                                return p;
+                              })
+                            );
+                          }}
+                          isToggled={permission.isSelected}
+                        >
+                          {permission.permission.permission_name}
+                        </ToggleButton>
+                      </div>
+                    ))}
+                </div>
+              </div>
             </div>
-            <div className='col-span-2 flex flex-col gap-5'>
-              <div className='flex items-baseline'>
-                <h3 className='min-w-[100px]'>Permissions</h3>
-                <div className='w-full border-b-2 border-button-stroke-light py-4 dark:border-button-stroke-dark'></div>
-              </div>
-              <div className='flex flex-wrap space-x-2'>
-                {permissions &&
-                  permissions.map((permission) => (
-                    <div key={permission.permission.permission_id}>
-                      <ToggleButton
-                        className='my-2 w-full'
-                        onToggle={() => {
-                          setPermissions(
-                            permissions.map((p) => {
-                              if (p.permission.permission_id === permission.permission.permission_id) {
-                                return { ...p, isSelected: !p.isSelected };
-                              }
-                              return p;
-                            })
-                          );
-                        }}
-                        isToggled={permission.isSelected}
-                      >
-                        {permission.permission.permission_name}
-                      </ToggleButton>
-                    </div>
-                  ))}
-              </div>
-            </div>
+
+            <ModalFooter className='mt-8'>
+              <Button
+                onClick={() => {
+                  setRoleModal(null);
+                  resetPermissions();
+                }}
+              >
+                Cancel
+              </Button>
+              <PrimaryButton onClick={() => handleSubmit()}>
+                {isRoleModalOpen?.role_id ? 'Save' : 'Create'}
+              </PrimaryButton>
+            </ModalFooter>
           </div>
-          <ModalFooter className='mt-8'>
-            <Button
-              onClick={() => {
-                setRoleModal(null);
-                resetPermissions();
-              }}
-            >
-              Cancel
-            </Button>
-            <PrimaryButton onClick={() => handleSubmit()}>{isRoleModalOpen?.role_id ? 'Save' : 'Create'}</PrimaryButton>
-          </ModalFooter>
         </form>
       </Modal>
       <AssignRoleToUserModal

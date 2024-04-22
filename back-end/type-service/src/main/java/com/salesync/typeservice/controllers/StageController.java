@@ -2,7 +2,7 @@ package com.salesync.typeservice.controllers;
 
 import com.salesync.typeservice.constants.Route;
 import com.salesync.typeservice.dtos.StageDto;
-import com.salesync.typeservice.entities.Stage;
+import com.salesync.typeservice.dtos.StageUpdateSeqNumberRequestDto;
 import com.salesync.typeservice.services.stage.StageService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -38,5 +38,13 @@ public class StageController {
     public ResponseEntity deleteStage(@PathVariable UUID stageId) {
         stageService.deleteStage(stageId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping(Route.Stage.UPDATE_SEQUENCE_NUMBER + Route.Type.TYPE_ID)
+    public ResponseEntity<List<StageDto>> updateSequenceNumber(
+            @PathVariable UUID typeId,
+            @Valid @RequestBody List<StageUpdateSeqNumberRequestDto> stageDtos
+    ) {
+        return ResponseEntity.ok(stageService.updateSequenceNumber(typeId, stageDtos));
     }
 }

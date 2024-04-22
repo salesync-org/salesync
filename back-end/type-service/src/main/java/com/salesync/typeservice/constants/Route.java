@@ -30,5 +30,7 @@ public final class Route {
         public static final String STAGE_ROUTE = "/stages";
         public static final String STAGE_ID = "/{stageId}";
         public static final String GET_STAGES_BY_TYPE_ID = "/{typeId}";
+
+        public static final String UPDATE_SEQUENCE_NUMBER = "/update-sequence-number";
     }
 }

@@ -7,6 +7,7 @@ import { StrictModeDroppable } from '@/components/ui/StrictModeDroppable';
 import { Check, GripVertical, Pencil, Trash2, X, Plus } from 'lucide-react';
 import { Button, PrimaryButton, TextInput } from '@/components/ui';
 import { useToast } from '@/components/ui/Toast';
+import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
 
 type StageSettingProps = {
   typeId: string;
@@ -107,110 +108,116 @@ const StageSetting = ({ typeId }: StageSettingProps) => {
         </PrimaryButton>
       </div>
       <header className='h-full overflow-y-scroll'>
-        <DragDropContext onDragEnd={handleOnDragEnd}>
-          <StrictModeDroppable droppableId='characters'>
-            {(provided) => (
-              <ul className='characters' {...provided.droppableProps} ref={provided.innerRef}>
-                {visibleStages &&
-                  visibleStages.map((stage, index) => {
-                    return (
-                      <Draggable key={stage.id} draggableId={stage.id} index={index}>
-                        {(provided) => (
-                          <li ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                            <div className='py-2'>
-                              <div
-                                className={cn(
-                                  'h-12 w-full rounded-sm bg-button-background dark:bg-button-background-dark',
-                                  'border-2 border-input-stroke-light dark:border-input-stroke-dark',
-                                  'flex select-none items-center justify-between overflow-hidden pl-2 pr-4 hover:cursor-move'
-                                )}
-                              >
-                                {editStage != null && editStage.id === stage.id ? (
-                                  <div className='spacae-x-4 flex items-center justify-center'>
-                                    <TextInput
-                                      value={editStage.name}
-                                      onChange={(e) => {
-                                        setEditStage({ ...editStage, name: e.target.value });
-                                      }}
-                                      autoFocus
-                                    ></TextInput>
-                                    <Button
-                                      rounded
-                                      className='h-10 w-10 rounded-full border-0 p-0'
-                                      onClick={() => {
-                                        setVisibleStages((prev) => {
-                                          const newStages = prev.map((s) => {
-                                            if (s.id === editStage.id) {
-                                              return editStage;
-                                            }
-                                            return s;
+        {visibleStages.length > 0 ? (
+          <DragDropContext onDragEnd={handleOnDragEnd}>
+            <StrictModeDroppable droppableId='characters'>
+              {(provided) => (
+                <ul className='characters' {...provided.droppableProps} ref={provided.innerRef}>
+                  {visibleStages &&
+                    visibleStages.map((stage, index) => {
+                      return (
+                        <Draggable key={stage.id} draggableId={stage.id} index={index}>
+                          {(provided) => (
+                            <li ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                              <div className='py-2'>
+                                <div
+                                  className={cn(
+                                    'h-12 w-full rounded-sm bg-button-background dark:bg-button-background-dark',
+                                    'border-2 border-input-stroke-light dark:border-input-stroke-dark',
+                                    'flex select-none items-center justify-between overflow-hidden pl-2 pr-4 hover:cursor-move'
+                                  )}
+                                >
+                                  {editStage != null && editStage.id === stage.id ? (
+                                    <div className='spacae-x-4 flex items-center justify-center'>
+                                      <TextInput
+                                        value={editStage.name}
+                                        onChange={(e) => {
+                                          setEditStage({ ...editStage, name: e.target.value });
+                                        }}
+                                        autoFocus
+                                      ></TextInput>
+                                      <Button
+                                        rounded
+                                        className='h-10 w-10 rounded-full border-0 p-0'
+                                        onClick={() => {
+                                          setVisibleStages((prev) => {
+                                            const newStages = prev.map((s) => {
+                                              if (s.id === editStage.id) {
+                                                return editStage;
+                                              }
+                                              return s;
+                                            });
+                                            return newStages;
                                           });
-                                          return newStages;
-                                        });
-                                        handleUpdateStage(editStage);
-                                        setEditStage(null);
-                                      }}
-                                    >
-                                      <Check size={'1rem'}></Check>
-                                    </Button>
+                                          handleUpdateStage(editStage);
+                                          setEditStage(null);
+                                        }}
+                                      >
+                                        <Check size={'1rem'}></Check>
+                                      </Button>
+                                      <Button
+                                        rounded
+                                        className='h-10 w-10 rounded-full border-0 p-0'
+                                        onClick={() => {
+                                          setEditStage(null);
+                                        }}
+                                      >
+                                        <X size={'1rem'}></X>
+                                      </Button>
+                                    </div>
+                                  ) : (
+                                    <div className='flex items-center justify-center space-x-4'>
+                                      <GripVertical size='1rem' className='flex-shrink-0 opacity-40' />
+                                      <div> {stage.name} </div>
+                                      {index == visibleStages.length - 1 && (
+                                        <div className='rounded-full  border-[1px] border-primary px-2 py-1 text-xs text-primary dark:border-secondary dark:text-secondary'>
+                                          Convert
+                                        </div>
+                                      )}
+                                    </div>
+                                  )}
+
+                                  <div className='flex w-fit space-x-2'>
                                     <Button
                                       rounded
                                       className='h-10 w-10 rounded-full border-0 p-0'
                                       onClick={() => {
-                                        setEditStage(null);
+                                        setEditStage(stage);
                                       }}
                                     >
-                                      <X size={'1rem'}></X>
+                                      <Pencil size={'1rem'}></Pencil>
                                     </Button>
-                                  </div>
-                                ) : (
-                                  <div className='flex items-center justify-center space-x-4'>
-                                    <GripVertical size='1rem' className='flex-shrink-0 opacity-40' />
-                                    <div> {stage.name} </div>
-                                    {index == visibleStages.length - 1 && (
-                                      <div className='rounded-full  border-[1px] border-primary px-2 py-1 text-xs text-primary dark:border-secondary dark:text-secondary'>
-                                        Convert
-                                      </div>
+                                    {index == visibleStages.length - 1 || index == 0 ? (
+                                      <></>
+                                    ) : (
+                                      <Button
+                                        rounded
+                                        className='h-10 w-10 rounded-full border-0 p-0'
+                                        onClick={() => {
+                                          handleOnDeleteStage(stage.id);
+                                        }}
+                                      >
+                                        <Trash2 size={'1rem'}></Trash2>
+                                      </Button>
                                     )}
                                   </div>
-                                )}
-
-                                <div className='flex w-fit space-x-2'>
-                                  <Button
-                                    rounded
-                                    className='h-10 w-10 rounded-full border-0 p-0'
-                                    onClick={() => {
-                                      setEditStage(stage);
-                                    }}
-                                  >
-                                    <Pencil size={'1rem'}></Pencil>
-                                  </Button>
-                                  {index == visibleStages.length - 1 || index == 0 ? (
-                                    <></>
-                                  ) : (
-                                    <Button
-                                      rounded
-                                      className='h-10 w-10 rounded-full border-0 p-0'
-                                      onClick={() => {
-                                        handleOnDeleteStage(stage.id);
-                                      }}
-                                    >
-                                      <Trash2 size={'1rem'}></Trash2>
-                                    </Button>
-                                  )}
                                 </div>
                               </div>
-                            </div>
-                          </li>
-                        )}
-                      </Draggable>
-                    );
-                  })}
-                {provided.placeholder}
-              </ul>
-            )}
-          </StrictModeDroppable>
-        </DragDropContext>
+                            </li>
+                          )}
+                        </Draggable>
+                      );
+                    })}
+                  {provided.placeholder}
+                </ul>
+              )}
+            </StrictModeDroppable>
+          </DragDropContext>
+        ) : (
+          <div className='flex h-full items-center justify-center'>
+            <LoadingSpinner />
+          </div>
+        )}
       </header>
     </div>
   );

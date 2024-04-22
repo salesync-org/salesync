@@ -13,6 +13,7 @@ import {
 } from '../DropDownMenu';
 import { cn } from '@/utils/utils';
 import buttonVariants from '../Button/ButtonProps';
+import LoadingSpinner from '../Loading/LoadingSpinner';
 
 const standardTypes = [
   'Lead',
@@ -35,18 +36,18 @@ const TypeTable = ({ types }: { types: Type[] }) => {
   const navigate = useNavigate();
   return (
     <div className='h-full overflow-y-scroll rounded border-2 border-input-stroke-light dark:border-input-stroke-dark'>
-      <Table className='h-full'>
-        <TableHeader className='max-h-full rounded-sm border-b-2 border-input-stroke-light dark:border-input-stroke-dark'>
-          <TableRow className='left-0 right-0 bg-slate-50 dark:bg-secondary/10'>
-            <TableCell className='max-w-28 font-semibold'>Type Name</TableCell>
-            <TableCell className='font-semibold'>Template</TableCell>
-            <TableCell className='font-semibold'>Description</TableCell>
-            <TableCell className='max-w-9 font-semibold'></TableCell>
-          </TableRow>
-        </TableHeader>
-        <TableBody className='h-full overflow-y-scroll'>
-          {types &&
-            types.map((type, index) => {
+      {types ? (
+        <Table className='h-full'>
+          <TableHeader className='max-h-full rounded-sm border-b-2 border-input-stroke-light dark:border-input-stroke-dark'>
+            <TableRow className='left-0 right-0 bg-slate-50 dark:bg-secondary/10'>
+              <TableCell className='max-w-28 font-semibold'>Type Name</TableCell>
+              <TableCell className='font-semibold'>Template</TableCell>
+              <TableCell className='font-semibold'>Description</TableCell>
+              <TableCell className='max-w-9 font-semibold'></TableCell>
+            </TableRow>
+          </TableHeader>
+          <TableBody className='h-full overflow-y-scroll'>
+            {types.map((type, index) => {
               return (
                 <TableRow key={index}>
                   <TableCell className='w-4/12'>{type.name}</TableCell>
@@ -119,8 +120,13 @@ const TypeTable = ({ types }: { types: Type[] }) => {
                 </TableRow>
               );
             })}
-        </TableBody>
-      </Table>
+          </TableBody>
+        </Table>
+      ) : (
+        <div className='flex h-full items-center justify-center'>
+          <LoadingSpinner />
+        </div>
+      )}
     </div>
   );
 };

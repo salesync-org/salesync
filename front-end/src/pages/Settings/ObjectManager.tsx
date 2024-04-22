@@ -15,6 +15,7 @@ import TypeTable from '@/components/ui/Table/TypeTable';
 import useType from '@/hooks/type-service/useType';
 import typeApi from '@/api/type';
 import { DropDownItem } from '@/components/ui';
+import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
 
 const ObjectManager = () => {
   const { companyName } = useParams();
@@ -118,7 +119,13 @@ const ObjectManager = () => {
             </PrimaryButton>
           </div>
           <div className='h-full min-h-full overflow-scroll'>
-            <TypeTable types={typeSearchResult}></TypeTable>
+            {typeSearchResult ? (
+              <TypeTable types={typeSearchResult}></TypeTable>
+            ) : (
+              <div className='flex h-full items-center justify-center'>
+                <LoadingSpinner />
+              </div>
+            )}
           </div>
 
           <div className='hidden'>

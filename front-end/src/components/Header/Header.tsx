@@ -1,11 +1,18 @@
 import salesyncIcon from 'assets/salesync_icon.png';
 
-import { ThemeToggle, UserInfo, Search, QuickSetting } from './index';
+import { ThemeToggle, UserInfo, Search } from './index';
 import { cn } from '@/utils/utils';
 import useAuth from '@/hooks/useAuth';
+import { useEffect, useState } from 'react';
 
 const Header = ({ className }: { className?: string }) => {
   const { company } = useAuth();
+  const [companyLoaded, setCompany] = useState(company);
+
+  useEffect(() => {
+    setCompany(company);
+  }, [company]);
+
   return (
     <div
       className={cn(
@@ -15,7 +22,7 @@ const Header = ({ className }: { className?: string }) => {
     >
       <a className='aspect-square h-10 w-10' href='/cheatsheet'>
         <img
-          src={`${import.meta.env.VITE_STORAGE_SERVICE_HOST}/companies/${company?.avatar_url === 'default' ? 'default.svg' : company?.avatar_url}?lastmod=${new Date().getTime().toString()}`}
+          src={`${import.meta.env.VITE_STORAGE_SERVICE_HOST}/companies/${companyLoaded?.avatar_url === 'default' ? 'default.svg' : company?.avatar_url}?lastmod=${new Date().getTime().toString()}`}
           className=''
           alt='header icon'
           onError={(e) => {
@@ -28,7 +35,6 @@ const Header = ({ className }: { className?: string }) => {
         <div className='justify-right relative flex w-fit align-middle'>
           <div className='flex gap-2'>
             <ThemeToggle />
-            <QuickSetting />
           </div>
           <UserInfo />
         </div>

@@ -13,7 +13,7 @@ export const SettingDropDown = ({ title, items }: { title: string; items: { name
   return (
     <div className='flex flex-col'>
       <div
-        className='flex cursor-pointer items-center gap-2 px-5 py-3 text-sm hover:bg-primary-color/10'
+        className='flex cursor-pointer items-center gap-2 px-5 py-3 hover:bg-primary-color/10'
         onClick={() => setOpen(!open)}
       >
         <ChevronRight

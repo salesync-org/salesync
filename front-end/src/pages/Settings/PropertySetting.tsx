@@ -80,7 +80,7 @@ const PropertySetting = () => {
           title: 'Success',
           description: `A property of ${submitData.name} has been added successfully`
         });
-        navigate(`/${companyName}/setting/object-manager/${typeId}`);
+        navigate(`/${companyName}/setting/object-manager/${typeId}?tab=properties`);
       } else {
         toast({
           title: 'Unsuccessful',
@@ -108,7 +108,7 @@ const PropertySetting = () => {
             <Button
               onClick={() => {
                 if (isFirstStep) {
-                  navigate(`/${companyName}/setting/object-manager/${typeId}`);
+                  navigate(`/${companyName}/setting/object-manager/${typeId}?tab=properties`);
                 } else {
                   back();
                 }

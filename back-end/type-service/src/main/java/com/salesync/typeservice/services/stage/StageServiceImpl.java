@@ -3,6 +3,7 @@ package com.salesync.typeservice.services.stage;
 import com.salesync.typeservice.components.RabbitMQProducer;
 import com.salesync.typeservice.dtos.RabbitMQMessageDto;
 import com.salesync.typeservice.dtos.StageDto;
+import com.salesync.typeservice.dtos.StageUpdateSeqNumberRequestDto;
 import com.salesync.typeservice.entities.Stage;
 import com.salesync.typeservice.entities.Type;
 import com.salesync.typeservice.enums.ActionType;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -116,5 +118,24 @@ public class StageServiceImpl implements StageService {
                 .actionType(ActionType.DELETE_STAGE)
                 .payload(stageId).build());
         stageRepository.delete(stage);
+    }
+
+    @Override
+    public List<StageDto> updateSequenceNumber(UUID typeId, List<StageUpdateSeqNumberRequestDto> stageDtos) {
+        List<StageDto> result = new ArrayList<>();
+        stageDtos.forEach(stageDto -> {
+            Stage stage = stageRepository.findById(stageDto.getStageId()).orElseThrow(
+                    () -> new ObjectNotFoundException(
+                            Stage.class.getSimpleName(),
+                            stageDto.getStageId().toString()
+                    )
+            );
+            if (!stage.getType().getId().equals(typeId)) {
+                throw new TypeServiceException("Stage does not belong to the type");
+            }
+            stage.setSequenceNumber(stageDto.getSequenceNumber());
+            result.add(stageMapper.entityToDto(stageRepository.save(stage)));
+        });
+        return result;
     }
 }

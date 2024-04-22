@@ -105,7 +105,7 @@ const ConvertModal = () => {
     companyName,
     types.find((type) => type.name === 'Account')?.id
   );
-  console.log({ contactProperties, opportunityProperties, accountProperties, types });
+  
   if (isTypesLoading || isContactLoading || isOpportunityLoading || isAccountLoading) {
     return <LoadingSpinner />;
   }

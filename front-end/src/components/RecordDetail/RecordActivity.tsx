@@ -1,13 +1,9 @@
 import { Button, Icon, Switch, PrimaryButton } from '@/components/ui';
-import { useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 import ButtonActivity from './ButtonActivity';
 import InforActivity from './InforActivity';
 import { useParams } from 'react-router-dom';
-// import { RecordsFilter } from '@/api/record';
-import useRecords from '@/hooks/record-service/useRecords';
-import useProperties from '@/hooks/type-service/useProperties';
 import useRecordTemplate from '@/hooks/record-service/useRecordTemplate';
-import useType from '@/hooks/type-service/useType';
 
 const RecordActivity = () => {
   const [expand, setExpand] = useState(false);

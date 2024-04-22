@@ -17,7 +17,7 @@ import useType from '@/hooks/type-service/useType';
 import useProperties from '@/hooks/type-service/useProperties';
 import { useLocation } from 'react-router-dom';
 import recordApi from '@/api/record';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '../ui/Toast';
 // import ErrorToaster from '@/pages/Error/ErrorToaster';
 import { useForm } from 'react-hook-form';
 
@@ -39,8 +39,8 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({
   setDisabled
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [dateStart, setDateStart] = useState('');
-  const [dateEnd, setDateEnd] = useState('');
+  // const [dateStart, setDateStart] = useState('');
+  // const [dateEnd, setDateEnd] = useState('');
 
   const setType = () => {
     if (name === 'Email') return 'Email';
@@ -70,9 +70,9 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({
     const now = new Date();
     const timezoneOffset = now.getTimezoneOffset();
     now.setTime(now.getTime() - timezoneOffset * 60 * 1000);
-    const formattedDateTime = now.toISOString().slice(0, 16);
-    setDateStart(formattedDateTime);
-    setDateEnd(formattedDateTime);
+    // const formattedDateTime = now.toISOString().slice(0, 16);
+    // setDateStart(formattedDateTime);
+    // setDateEnd(formattedDateTime);
   };
 
   const handleCreateRecord = async (data: any) => {

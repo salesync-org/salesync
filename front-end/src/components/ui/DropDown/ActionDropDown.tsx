@@ -18,7 +18,10 @@ const ActionDropDown = ({ actions }: ActionDropDownProps) => {
       zoom={false}
       intent='normal'
       className='relative grid size-8 place-content-center p-0'
-      onClick={() => setMenuOpen(true)}
+      onClick={(e) => {
+        e.preventDefault();
+        setMenuOpen(true);
+      }}
     >
       <Icon name='arrow_drop_down' className='text-3xl'></Icon>
       <DropDownList

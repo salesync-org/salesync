@@ -56,14 +56,15 @@ public class RecordController {
     }
 
     @DeleteMapping
-    public ResponseEntity<RecordDto> deleteRecordsById(@RequestBody List<UUID> recordIds) {
+    public ResponseEntity deleteRecordsById(@RequestBody List<UUID> recordIds) {
         recordService.deleteRecordsById(recordIds);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping(Route.UPDATE_STAGE)
-    public ResponseEntity<RecordDto> updateStage(@RequestBody RequestUpdateStageDto requestUpdateStageDto) {
-        return ResponseEntity.ok(recordService.updateStage(requestUpdateStageDto));
+    public ResponseEntity<RecordDto> updateStage(@RequestBody RequestUpdateStageDto requestUpdateStageDto,
+                                                 @RequestHeader(name = "Authorization") String authorization, @PathVariable String realm) {
+        return ResponseEntity.ok(recordService.updateStage(requestUpdateStageDto, authorization, realm));
     }
 
     @PostMapping(Route.TYPE_ID + Route.CREATE)

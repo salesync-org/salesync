@@ -6,6 +6,11 @@ server:
   
   # Spring application settings
 spring:
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USER}
+    password: ${RABBITMQ_PASSWORD}
   application:
     name: record-service
   datasource:

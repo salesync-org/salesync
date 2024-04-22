@@ -8,6 +8,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USER}
+    password: ${RABBITMQ_PASSWORD}
 
 springdoc:
   api-docs:

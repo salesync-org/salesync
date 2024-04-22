@@ -1,29 +1,37 @@
 package com.salesync.typeservice.services.stage;
 
+import com.salesync.typeservice.components.RabbitMQProducer;
+import com.salesync.typeservice.dtos.RabbitMQMessageDto;
 import com.salesync.typeservice.dtos.StageDto;
+import com.salesync.typeservice.dtos.StageUpdateSeqNumberRequestDto;
 import com.salesync.typeservice.entities.Stage;
 import com.salesync.typeservice.entities.Type;
+import com.salesync.typeservice.enums.ActionType;
 import com.salesync.typeservice.enums.TemplateEnum;
 import com.salesync.typeservice.exceptions.ObjectNotFoundException;
 import com.salesync.typeservice.exceptions.TypeServiceException;
 import com.salesync.typeservice.mapper.StageMapper;
 import com.salesync.typeservice.repositories.StageRepository;
 import com.salesync.typeservice.repositories.TypeRepository;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
-import java.util.List;
-import java.util.UUID;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(rollbackFor = Throwable.class)
+@Builder
 public class StageServiceImpl implements StageService {
     private final StageRepository stageRepository;
     private final TypeRepository typeRepository;
     private final StageMapper stageMapper = StageMapper.INSTANCE;
+    private final RabbitMQProducer rabbitMQProducer;
 
     @Override
     public StageDto createStage(StageDto stageDto) {
@@ -47,7 +55,7 @@ public class StageServiceImpl implements StageService {
 
     @Override
     public List<StageDto> getStagesByTypeId(UUID typeId) {
-        List<Stage> stageList =stageRepository.findAllByTypeIdOrderBySequenceNumberAsc(typeId);
+        List<Stage> stageList = stageRepository.findAllByTypeIdOrderBySequenceNumberAsc(typeId);
         return stageList.stream().map(stageMapper::entityToDto).toList();
     }
 
@@ -90,5 +98,46 @@ public class StageServiceImpl implements StageService {
             sourceStage.setSequenceNumber(stageDto.getSequenceNumber());
         }
         return stageMapper.entityToDto(stageRepository.save(sourceStage));
+    }
+
+    @Override
+    public void deleteStage(UUID stageId) {
+        Stage stage = stageRepository.findById(stageId).orElseThrow(
+                () -> new ObjectNotFoundException(
+                        Stage.class.getSimpleName(),
+                        stageId.toString()
+                )
+        );
+        List<Stage> stageList = stageRepository.findAllByTypeIdOrderBySequenceNumberAsc(stage.getType().getId());
+        if (Objects.equals(stageList.get(0).getId(), stageId)) {
+            throw new TypeServiceException("Cannot delete the last stage");
+        }
+
+        if (Objects.equals(stageList.get(stageList.size() - 1).getId(), stageId)) {
+            throw new TypeServiceException("Cannot delete the last stage");
+        }
+        rabbitMQProducer.sendMessage("type", RabbitMQMessageDto.builder()
+                .actionType(ActionType.DELETE_STAGE)
+                .payload(stageId).build());
+        stageRepository.delete(stage);
+    }
+
+    @Override
+    public List<StageDto> updateSequenceNumber(UUID typeId, List<StageUpdateSeqNumberRequestDto> stageDtos) {
+        List<StageDto> result = new ArrayList<>();
+        stageDtos.forEach(stageDto -> {
+            Stage stage = stageRepository.findById(stageDto.getStageId()).orElseThrow(
+                    () -> new ObjectNotFoundException(
+                            Stage.class.getSimpleName(),
+                            stageDto.getStageId().toString()
+                    )
+            );
+            if (!stage.getType().getId().equals(typeId)) {
+                throw new TypeServiceException("Stage does not belong to the type");
+            }
+            stage.setSequenceNumber(stageDto.getSequenceNumber());
+            result.add(stageMapper.entityToDto(stageRepository.save(stage)));
+        });
+        return result;
     }
 }

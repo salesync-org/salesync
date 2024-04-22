@@ -1,4 +1,3 @@
-import { RecordResponse } from '@/type';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -40,6 +39,23 @@ export const formatRecords = (records: RecordResponse[]) => {
 
     formattedRecords.push(formattedRecord);
   }
-  
+
   return formattedRecords;
+};
+
+export const getCompanyName = (index?: number) => {
+  const url = window.location.pathname;
+  const urlParts = url.split('/');
+  return urlParts[index ?? 1];
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const convertTypePropertyToCurrentData = (typeProperties: any[]) => {
+  const currentData: Record<string, string> = {};
+
+  for (const property of typeProperties) {
+    currentData[property.name] = '';
+  }
+
+  return currentData;
 };

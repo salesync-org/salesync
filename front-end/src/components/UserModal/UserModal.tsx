@@ -11,7 +11,7 @@ import {
 } from '@/components/ui';
 import UserTable from '@/components/ui/Table/UserTable';
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
-import { NewUser } from '@/type';
+// import { NewUser } from '@/type';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -68,7 +68,7 @@ const UserModal = () => {
       className='h-[600px]'
       title='Invite your team'
     >
-      <div className='-z-1 absolute bottom-2 left-2 right-2 top-20 overflow-x-hidden  pb-32  '>
+      <div className='-z-1 overflow-x-hidden  pb-32  '>
         <form className='flex w-full flex-col place-content-center gap-2   p-6'>
           <Panel className='flex flex-col items-center bg-gray-100 p-5'>
             <div className='w-full'>

@@ -10,6 +10,7 @@
         <module name="api-gateway" />
         <module name="rabbitmq" />
         <module name="service-registry" />
+        <module name="notification-service" />
         <module name="authentication" />
       </profile>
       <profile name="Annotation profile for record-service" enabled="true">
@@ -31,6 +32,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="api-gateway" options="-parameters" />
       <module name="authentication" options="-parameters" />
+      <module name="notification-service" options="-parameters" />
       <module name="rabbitmq" options="-parameters" />
       <module name="record-service" options="-parameters" />
       <module name="service-registry" options="-parameters" />

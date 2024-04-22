@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=salesync_notification_service'
+      - 'POSTGRES_PASSWORD=notification_service'
+      - 'POSTGRES_USER=notification_service'
+    volumes:
+      - ./src/main/resources/db/init:/docker-entrypoint-initdb.d
+    # Uncomment the below line to allow Postgres to store data on the host machine even after the container is removed
+    #      - ./src/main/resources/db/data:/var/lib/postgresql/data
+    ports:
+      - '5439:5432'
+volumes:
+  postgres_data:

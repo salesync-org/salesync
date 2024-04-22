@@ -68,5 +68,9 @@ public class TypeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(typeService.createRelationType(request));
     }
 
+    @DeleteMapping(Route.Type.DELETE_PROPERTY)
+    public ResponseEntity<String> deleteProperty(@PathVariable UUID typePropId) {
+        return ResponseEntity.ok(typeService.deleteProperty(typePropId));
+    }
 
 }

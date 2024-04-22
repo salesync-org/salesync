@@ -1,12 +1,21 @@
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 import { cn } from '@/utils/utils';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Button, Icon } from '../ui';
+import { Settings } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import useClickOutside from '@/hooks/useClickOutside';
 
 const QuickSetting = () => {
   const [isOpen, setIsOpen] = useState(false);
+  // const [isUserSettingOpen, setUserSetting] = useState(false);
+  const navigate = useNavigate();
   const location = useLocation();
+  const ref = useRef<HTMLDivElement>(null);
+  useClickOutside([ref], () => {
+    setIsOpen(false);
+  });
 
   const { showModal } = useGlobalModalContext();
 
@@ -21,17 +30,21 @@ const QuickSetting = () => {
   }
 
   return (
-    <div>
+    <div ref={ref}>
       <Button
         title='Quick Settings'
         rounded='icon'
-        className='h-10 w-10'
-        intent='normal'
+        className={cn('h-10 w-10 p-0')}
+        intent={isOpen ? 'primary' : 'normal'}
         onClick={() => {
           setIsOpen(!isOpen);
         }}
       >
-        <Icon name='settings' size='1rem' />
+        {isOpen ? (
+          <Settings className='size-[1.5rem]' fillRule='nonzero' color='white' />
+        ) : (
+          <Settings className='size-[1.5rem]' />
+        )}
       </Button>
       <nav
         onClick={(e) => e.stopPropagation()}
@@ -51,9 +64,12 @@ const QuickSetting = () => {
         <div className='flex flex-col gap-4 px-6'>
           <Button
             intent='normal'
-            className='flex h-8 items-center gap-1 border border-primary-color py-0 text-primary-color shadow-primary-color hover:shadow-md'
+            className='flex items-center gap-1 border-[2px] border-primary-color px-4 py-0 text-primary-color shadow-primary-color/30 transition-all duration-100 hover:shadow-md'
+            onClick={() => {
+              navigate('/settings');
+            }}
           >
-            <span className='text-sm'>Open Advanced Setup</span>
+            <span className='font-semibold'>Open Advanced Setup</span>
             <Icon name='open_in_new' />
           </Button>
           <section>

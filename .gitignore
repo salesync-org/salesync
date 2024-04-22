@@ -34,3 +34,5 @@ build/
 .vscode/
 back-end/authentication/artifacts/authentication-0.0.1-SNAPSHOT.jar
 .env
+front-end/*.env
+back-end/record-service/local.env

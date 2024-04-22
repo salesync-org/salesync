@@ -13,6 +13,7 @@ import com.salesync.typeservice.exceptions.TypeServiceException;
 import com.salesync.typeservice.mapper.StageMapper;
 import com.salesync.typeservice.repositories.StageRepository;
 import com.salesync.typeservice.repositories.TypeRepository;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional(rollbackFor = Throwable.class)
+@Builder
 public class StageServiceImpl implements StageService {
     private final StageRepository stageRepository;
     private final TypeRepository typeRepository;

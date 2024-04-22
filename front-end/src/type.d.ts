@@ -335,13 +335,17 @@ interface PropertyProperty {
   propertyFields: PropertyField[];
 }
 
-declare enum Template {
-  Human = 'Human',
-  Activity = 'Activity',
-  Group = 'Group',
-  StageObject = 'StageObject',
-  Object = 'Object'
+type Template = {
+  id: string;
+  name: string;
 }
+// declare enum Template {
+//   Human = 'Human',
+//   Activity = 'Activity',
+//   Group = 'Group',
+//   StageObject = 'StageObject',
+//   Object = 'Object'
+// }
 
 type CompanyInfo = {
   company_id: string;

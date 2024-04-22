@@ -26,11 +26,11 @@ const TypeRelationTable = ({ relationList }: TypeRelationProps) => {
             relationList.map((relation, index) => {
               return (
                 <TableRow key={index}>
-                  <TableCell className='w-1/5'>{relation.source_type.name}</TableCell>
-                  <TableCell className='w-1/5'>{relation.source_type_label}</TableCell>
-                  <TableCell className='w-1/5'>{relation.relation.name}</TableCell>
-                  <TableCell className='w-1/5'>{relation.destination_type_label}</TableCell>
-                  <TableCell className='w-1/5'>{relation.destination_type.name}</TableCell>
+                  <TableCell className='w-1/5'>{relation.source_type.name ?? ''}</TableCell>
+                  <TableCell className='w-1/5'>{relation.source_type_label ?? ''}</TableCell>
+                  <TableCell className='w-1/5'>{relation.relation ? relation.relation.name : ''}</TableCell>
+                  <TableCell className='w-1/5'>{relation.destination_type_label ?? ''}</TableCell>
+                  <TableCell className='w-1/5'>{relation.destination_type.name ?? ''}</TableCell>
                   <TableCell className='w-1/5'>
                     <div className='flex w-full justify-end'>
                       <Button

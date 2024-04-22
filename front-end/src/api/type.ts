@@ -8,8 +8,18 @@ class TypeApi {
     return res.data;
   }
 
+  async getAllTemplates(companyName: string) {
+    const res = await instance.get(`${BASE_URL}/${companyName}/templates`);
+    return res.data;
+  }
+
   async getAllProperties(companyName: string) {
     const res = await instance.get(`${BASE_URL}/${companyName}/types/properties`);
+    return res.data;
+  }
+
+  async createType(companyName: string, data: any) {
+    const res = await instance.post(`${BASE_URL}/${companyName}/types`, data);
     return res.data;
   }
 

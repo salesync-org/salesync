@@ -33,8 +33,8 @@ export const useGlobalModalContext = () => useContext(GlobalModalContext);
 
 export const GlobalModalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [store, setStore] = useState({
-    modalType: 'CREATE_RECORD_MODAL',
-    modalProps: { typeId: '11111111-1111-1111-1111-111111111111' }
+    modalType: '',
+    modalProps: {}
   });
   const { modalType, modalProps } = store;
 

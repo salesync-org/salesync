@@ -1,6 +1,6 @@
 import { cn } from '@/utils/utils';
 import { Controller, useForm } from 'react-hook-form';
-import { Checkbox, DatePicker, DropDown, DropDownItem, ErrorText, Item, TextArea, TextInput } from '../ui';
+import { Checkbox, DropDown, DropDownItem, ErrorText, Item, TextArea, TextInput } from '../ui';
 import { ScreenLoading } from '../ui/Loading/LoadingSpinner';
 
 type RecordFormProps = {

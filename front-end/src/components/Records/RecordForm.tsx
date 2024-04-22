@@ -174,8 +174,7 @@ const RecordForm = ({ currentData = {}, onSubmit, stages, typeProperty, formId =
   };
 
   const onFormSubmit = (data: Record<string, string>) => {
-    console.log(data);
-    // onSubmit(data);
+    onSubmit(data);
   };
 
   return (

@@ -139,7 +139,6 @@ const RecordForm = ({ currentData = {}, onSubmit, stages, typeProperty, formId =
         <div>
           <TextInput
             {...props}
-            type='url'
             isError={!!errors[property.name]}
             validation={{
               pattern: /[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/gi

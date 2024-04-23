@@ -5,7 +5,7 @@ import { Button, Icon, TextInput } from '@/components/ui';
 import { Pencil, X } from 'lucide-react';
 import { ChangeEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { cn } from './utils';
+import { cn, formatCurrency } from './utils';
 import { useToast } from '@/components/ui/Toast';
 import { useQueryClient } from 'react-query';
 
@@ -14,7 +14,7 @@ export const createColumns = (companyName: string, properties: any[], records: a
     {
       accessorKey: 'id',
       header: '',
-      cell: ({ row }: { row: any }) => <span className='select-none text-xs'>{row.index + 1}</span>
+      cell: () => <span className='select-none text-xs'></span>
     }
   ];
 
@@ -60,7 +60,11 @@ export const createColumns = (companyName: string, properties: any[], records: a
         </div>
       ),
       cell: ({ row, cell }: { row: any; cell: any }) => {
-        const [currentValue, setCurrentValue] = useState(row.getValue(property.name));
+        let cellValue = row.getValue(property.name);
+        if (property.name === 'Amount') {
+          cellValue = formatCurrency(+cellValue) || '0';
+        }
+        const [currentValue, setCurrentValue] = useState(cellValue);
         const [isUpdating, setIsUpdating] = useState(false);
         const [isLoading, setIsLoading] = useState(false);
         const [value, setValue] = useState(row.getValue(property.name));
@@ -114,6 +118,13 @@ export const createColumns = (companyName: string, properties: any[], records: a
             setIsLoading(false);
           }
         };
+
+        const inputType = {
+          Date: 'date',
+          Number: 'number',
+          Text: 'text'
+        };
+
         return (
           <div>
             {isUpdating ? (
@@ -141,6 +152,7 @@ export const createColumns = (companyName: string, properties: any[], records: a
                   </Button>
                 </div>
                 <TextInput
+                  type={inputType[property.property.name as keyof typeof inputType] || 'text'}
                   className='w-full select-none'
                   value={value}
                   onChange={handleChange}

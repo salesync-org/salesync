@@ -34,7 +34,7 @@ export const formatRecords = (records: RecordResponse[]) => {
     formattedRecord['Name'] = records[i].name;
 
     for (const property of records[i].properties) {
-      formattedRecord[property.property_label] = property.item_value;
+      formattedRecord[property.property_name] = property.item_value;
     }
 
     formattedRecords.push(formattedRecord);
@@ -58,4 +58,20 @@ export const convertTypePropertyToCurrentData = (typeProperties: any[]) => {
   }
 
   return currentData;
+};
+
+export const generateChartColor = (size: number) => {
+  const backgroundColor = [];
+  const borderColor = [];
+  const MIN = 255;
+  for (let i = 0; i < size; i++) {
+    const r = Math.floor(Math.random() * MIN);
+    const g = Math.floor(Math.random() * MIN);
+    const b = Math.floor(Math.random() * MIN);
+
+    backgroundColor.push(`rgba(${r}, ${g}, ${b}, 0.2)`);
+    borderColor.push(`rgba(${r}, ${g}, ${b}, 1)`);
+  }
+
+  return { backgroundColor, borderColor };
 };

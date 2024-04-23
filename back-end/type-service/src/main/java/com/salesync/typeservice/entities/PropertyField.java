@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "property_field")
-@AttributeOverride(name="id",column = @Column(name="property_field_id"))
+@AttributeOverride(name = "id", column = @Column(name = "property_field_id"))
 public class PropertyField extends BaseEntity {
     @JsonProperty("label")
     private String label;

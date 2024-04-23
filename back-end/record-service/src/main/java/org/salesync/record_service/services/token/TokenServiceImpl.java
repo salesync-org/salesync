@@ -20,7 +20,6 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class TokenServiceImpl implements TokenService {
 
-
     @Value("${token.public-key}")
     private String publicKey;
 
@@ -40,12 +39,8 @@ public class TokenServiceImpl implements TokenService {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(getSigningKey()) //public key
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        return Jwts.parserBuilder().setSigningKey(getSigningKey()) //public key
+                .build().parseClaimsJws(token).getBody();
     }
 
     private RSAPublicKey getSigningKey() {
@@ -60,7 +55,7 @@ public class TokenServiceImpl implements TokenService {
 
             // Convert the public key to RSAPublicKey
             return (RSAPublicKey) publicKey;
-        } catch ( CertificateException e) {
+        } catch (CertificateException e) {
             throw new RuntimeException(e);
         }
     }

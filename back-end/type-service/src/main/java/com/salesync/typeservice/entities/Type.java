@@ -1,4 +1,5 @@
 package com.salesync.typeservice.entities;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
@@ -13,8 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "type")
-@AttributeOverride(name="id",column = @Column(name="type_id"))
-public class Type extends BaseEntity  {
+@AttributeOverride(name = "id", column = @Column(name = "type_id"))
+public class Type extends BaseEntity {
     private String name;
 
     @OneToMany(mappedBy = "sourceType", cascade = CascadeType.ALL, orphanRemoval = true)

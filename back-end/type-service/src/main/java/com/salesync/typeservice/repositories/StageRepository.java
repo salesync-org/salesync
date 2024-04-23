@@ -10,7 +10,10 @@ import java.util.UUID;
 
 public interface StageRepository extends JpaRepository<Stage, UUID> {
     Optional<Stage> findTopByTypeIdOrderBySequenceNumberDesc(UUID typeId);
+
     Optional<Stage> findTopByTypeIdOrderBySequenceNumberAsc(UUID typeId);
+
     Optional<Stage> findByTypeIdAndSequenceNumber(UUID typeId, Integer sequenceNumber);
+
     List<Stage> findAllByTypeIdOrderBySequenceNumberAsc(UUID typeId);
 }

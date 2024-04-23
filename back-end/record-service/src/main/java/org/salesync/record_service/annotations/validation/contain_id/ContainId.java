@@ -11,6 +11,8 @@ import java.lang.annotation.*;
 @Documented
 public @interface ContainId {
     String message() default "must contain id field";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }

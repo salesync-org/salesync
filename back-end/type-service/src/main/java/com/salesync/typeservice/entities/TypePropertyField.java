@@ -16,7 +16,7 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @Data
 @Table(name = "type_property_field")
-@AttributeOverride(name="id",column = @Column(name="type_property_field_id"))
+@AttributeOverride(name = "id", column = @Column(name = "type_property_field_id"))
 public class TypePropertyField extends BaseEntity {
     @Column(name = "item_value")
     @JsonProperty("item_value")

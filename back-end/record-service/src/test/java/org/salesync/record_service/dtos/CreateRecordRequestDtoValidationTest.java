@@ -20,24 +20,17 @@ public class CreateRecordRequestDtoValidationTest {
     }
 
     private CreateRecordRequestDto getCreateRecordRequestDto(String name) {
-        return CreateRecordRequestDto.builder()
-                .recordName(name)
-                .stageId(null)
-                .properties(null)
-                .build();
+        return CreateRecordRequestDto.builder().recordName(name).stageId(null).properties(null).build();
     }
 
     private RecordTypePropertyDto getRecordTypePropertyDto(UUID id, String itemValue) {
-        return RecordTypePropertyDto.builder()
-                .id(id)
-                .itemValue(itemValue)
-                .build();
+        return RecordTypePropertyDto.builder().id(id).itemValue(itemValue).build();
     }
 
     @Test
     public void testRecordNameIsNull() {
         CreateRecordRequestDto createRecordRequestDto = getCreateRecordRequestDto(null);
-        Assert.assertThrows(ValidationException.class,() -> validator.validate(createRecordRequestDto, CreateRecordRequestDto.class));
+        Assert.assertThrows(ValidationException.class, () -> validator.validate(createRecordRequestDto, CreateRecordRequestDto.class));
     }
 
     @Test

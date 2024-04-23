@@ -9,7 +9,6 @@ import org.salesync.record_service.dtos.RecordDto;
 
 import java.util.List;
 
-
 @Getter
 @Setter
 @Builder
@@ -18,6 +17,3 @@ public class ListRecordTypeRelationsDto {
     RecordDto sourceRecord;
     List<RelationItemDto> relations;
 }
-
-
-

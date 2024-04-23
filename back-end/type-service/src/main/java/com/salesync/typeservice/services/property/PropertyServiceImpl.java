@@ -10,9 +10,8 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
-public class PropertyServiceImpl implements IPropertyService{
+public class PropertyServiceImpl implements IPropertyService {
     private final PropertyRepository propertyRepository;
-
 
     @Override
     public Property getProperty(UUID propertyId) {

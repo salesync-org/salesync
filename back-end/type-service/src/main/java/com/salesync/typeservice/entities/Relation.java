@@ -16,8 +16,8 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "relation")
-@AttributeOverride(name="id",column = @Column(name="relation_id"))
-public class Relation extends BaseEntity  {
+@AttributeOverride(name = "id", column = @Column(name = "relation_id"))
+public class Relation extends BaseEntity {
     private String name;
 
     @OneToMany(mappedBy = "relation", cascade = CascadeType.ALL, orphanRemoval = true)

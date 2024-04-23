@@ -13,6 +13,7 @@ import java.util.UUID;
 public class RabbitMQServiceImpl implements RabbitMQService {
     private final RecordRepository recordRepository;
     private final RecordStageRepository recordStageRepository;
+
     @Override
     public void dispatchMessage(RabbitMQMessageDto message) {
         switch (message.getActionType()) {

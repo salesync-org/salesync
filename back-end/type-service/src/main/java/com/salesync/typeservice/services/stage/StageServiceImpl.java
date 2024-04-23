@@ -37,16 +37,13 @@ public class StageServiceImpl implements StageService {
     public StageDto createStage(StageDto stageDto) {
         Type type = typeRepository.findById(stageDto.getType().getId()).orElseThrow(
                 () -> new ObjectNotFoundException(
-                        Type.class.getSimpleName(),
-                        stageDto.getType().getId().toString()
+                        Type.class.getSimpleName(), stageDto.getType().getId().toString()
                 )
         );
         if (TemplateEnum.StageObject.equals(type.getTemplate().getName())) {
             Stage stage = stageMapper.dtoToEntity(stageDto);
             stage.setType(type);
-            Integer seq = stageRepository.findTopByTypeIdOrderBySequenceNumberDesc(type.getId())
-                    .map(Stage::getSequenceNumber)
-                    .orElse(0);
+            Integer seq = stageRepository.findTopByTypeIdOrderBySequenceNumberDesc(type.getId()).map(Stage::getSequenceNumber).orElse(0);
             stage.setSequenceNumber(seq + 1);
             return stageMapper.entityToDto(stageRepository.save(stage));
         }
@@ -63,8 +60,7 @@ public class StageServiceImpl implements StageService {
     public StageDto updateStage(StageDto stageDto) {
         Type type = typeRepository.findById(stageDto.getType().getId()).orElseThrow(
                 () -> new ObjectNotFoundException(
-                        Type.class.getSimpleName(),
-                        stageDto.getType().getId().toString()
+                        Type.class.getSimpleName(), stageDto.getType().getId().toString()
                 )
         );
         if (!TemplateEnum.StageObject.equals(type.getTemplate().getName())) {
@@ -72,27 +68,21 @@ public class StageServiceImpl implements StageService {
         }
         Stage sourceStage = stageRepository.findById(stageDto.getId()).orElseThrow(
                 () -> new ObjectNotFoundException(
-                        Stage.class.getSimpleName(),
-                        stageDto.getId().toString()
+                        Stage.class.getSimpleName(), stageDto.getId().toString()
                 )
         );
         sourceStage.setName(stageDto.getName() == null ? sourceStage.getName() : stageDto.getName());
-        Integer seq = stageRepository.findTopByTypeIdOrderBySequenceNumberDesc(type.getId())
-                .map(Stage::getSequenceNumber)
-                .orElse(0);
-        if (stageDto.getSequenceNumber() != null &&
-                !sourceStage.getSequenceNumber().equals(stageDto.getSequenceNumber())
+        Integer seq = stageRepository.findTopByTypeIdOrderBySequenceNumberDesc(type.getId()).map(Stage::getSequenceNumber).orElse(0);
+        if (stageDto.getSequenceNumber() != null && !sourceStage.getSequenceNumber().equals(stageDto.getSequenceNumber())
         ) {
             if (seq < stageDto.getSequenceNumber()) {
                 throw new TypeServiceException("Sequence number is greater than the last sequence number");
             }
-            Stage targetStage = stageRepository.findByTypeIdAndSequenceNumber(type.getId(), stageDto.getSequenceNumber())
-                    .orElseThrow(
-                            () -> new ObjectNotFoundException(
-                                    Stage.class.getSimpleName(),
-                                    stageDto.getSequenceNumber().toString()
-                            )
-                    );
+            Stage targetStage = stageRepository.findByTypeIdAndSequenceNumber(type.getId(), stageDto.getSequenceNumber()).orElseThrow(
+                    () -> new ObjectNotFoundException(
+                            Stage.class.getSimpleName(), stageDto.getSequenceNumber().toString()
+                    )
+            );
             targetStage.setSequenceNumber(sourceStage.getSequenceNumber());
             stageRepository.save(targetStage);
             sourceStage.setSequenceNumber(stageDto.getSequenceNumber());
@@ -104,8 +94,7 @@ public class StageServiceImpl implements StageService {
     public void deleteStage(UUID stageId) {
         Stage stage = stageRepository.findById(stageId).orElseThrow(
                 () -> new ObjectNotFoundException(
-                        Stage.class.getSimpleName(),
-                        stageId.toString()
+                        Stage.class.getSimpleName(), stageId.toString()
                 )
         );
         List<Stage> stageList = stageRepository.findAllByTypeIdOrderBySequenceNumberAsc(stage.getType().getId());
@@ -116,9 +105,7 @@ public class StageServiceImpl implements StageService {
         if (Objects.equals(stageList.get(stageList.size() - 1).getId(), stageId)) {
             throw new TypeServiceException("Cannot delete the last stage");
         }
-        rabbitMQProducer.sendMessage("type", RabbitMQMessageDto.builder()
-                .actionType(ActionType.DELETE_STAGE)
-                .payload(stageId).build());
+        rabbitMQProducer.sendMessage("type", RabbitMQMessageDto.builder().actionType(ActionType.DELETE_STAGE).payload(stageId).build());
         stageRepository.delete(stage);
     }
 
@@ -128,8 +115,7 @@ public class StageServiceImpl implements StageService {
         stageDtos.forEach(stageDto -> {
             Stage stage = stageRepository.findById(stageDto.getStageId()).orElseThrow(
                     () -> new ObjectNotFoundException(
-                            Stage.class.getSimpleName(),
-                            stageDto.getStageId().toString()
+                            Stage.class.getSimpleName(), stageDto.getStageId().toString()
                     )
             );
             if (!stage.getType().getId().equals(typeId)) {

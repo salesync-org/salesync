@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-
-public interface TypeRelationRepository extends JpaRepository<TypeRelation, UUID>{
+public interface TypeRelationRepository extends JpaRepository<TypeRelation, UUID> {
 
     Optional<TypeRelation> findBySourceTypeIdAndDestinationTypeIdAndRelationId(UUID sourceId, UUID destinationId, UUID relationId);
 

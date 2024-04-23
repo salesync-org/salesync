@@ -44,8 +44,7 @@ public class TokenFilter extends OncePerRequestFilter {
                     return claims.get(PERMISSIONS, (Class<List<String>>) ((Class) List.class));
                 });
 
-                PreAuthenticatedAuthenticationToken authentication = new PreAuthenticatedAuthenticationToken(userId, null,
-                        permisstions.stream().map(SimpleGrantedAuthority::new).toList());
+                PreAuthenticatedAuthenticationToken authentication = new PreAuthenticatedAuthenticationToken(userId, null, permisstions.stream().map(SimpleGrantedAuthority::new).toList());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
             filterChain.doFilter(request, response);

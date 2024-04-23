@@ -1,6 +1,5 @@
 package com.salesync.typeservice.mapper;
 
-
 import com.salesync.typeservice.dtos.TypeRelationDTO;
 import com.salesync.typeservice.entities.TypeRelation;
 import org.mapstruct.Mapper;

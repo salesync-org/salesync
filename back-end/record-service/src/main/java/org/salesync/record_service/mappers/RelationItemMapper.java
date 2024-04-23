@@ -13,6 +13,7 @@ public interface RelationItemMapper {
     RelationItemMapper INSTANCE = Mappers.getMapper(RelationItemMapper.class);
 
     RelationItemDto recordTypeRelationToRelationItemDto(RecordTypeRelation recordTypeRelation);
+
     RecordTypeRelation relationItemDtoToRecordTypeRelation(RelationItemDto relationItemDto);
 
     List<RelationItemDto> recordTypeRelationsToRelationItemDtos(List<RecordTypeRelation> recordTypeRelations);

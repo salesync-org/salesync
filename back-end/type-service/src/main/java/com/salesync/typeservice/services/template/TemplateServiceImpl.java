@@ -25,13 +25,7 @@ public class TemplateServiceImpl implements TemplateService {
 
     @Override
     public List<TemplateDto> getTemplates() {
-        return templateRepository.findAll()
-                .stream()
-                .map(template -> TemplateDto.builder()
-                        .id(template.getId())
-                        .name(template.getName())
-                        .build()
-                )
-                .collect(Collectors.toList());
+        return templateRepository.findAll().stream().map(template -> TemplateDto.builder().id(template.getId()).name(template.getName()).build()
+        ).collect(Collectors.toList());
     }
 }

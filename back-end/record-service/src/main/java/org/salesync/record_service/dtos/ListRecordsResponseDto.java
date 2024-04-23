@@ -7,7 +7,6 @@ import lombok.Getter;
 
 import java.util.List;
 
-
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Builder
 @Getter

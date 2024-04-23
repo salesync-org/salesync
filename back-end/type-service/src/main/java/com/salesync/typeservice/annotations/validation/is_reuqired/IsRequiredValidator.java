@@ -1,6 +1,5 @@
 package com.salesync.typeservice.annotations.validation.is_reuqired;
 
-import com.salesync.typeservice.annotations.validation.is_reuqired.IsRequired;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

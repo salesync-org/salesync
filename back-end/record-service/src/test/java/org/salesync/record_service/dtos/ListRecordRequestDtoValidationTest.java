@@ -27,14 +27,7 @@ public class ListRecordRequestDtoValidationTest {
 
     @Test
     public void testValidation() {
-        ListRecordsRequestDto listRecordsRequestDto = ListRecordsRequestDto.builder()
-                .searchTerm("searchTerm")
-                .typeId(null)
-                .propertyName("propertyName")
-                .isAsc(true)
-                .pageSize(5)
-                .currentPage(1)
-                .build();
+        ListRecordsRequestDto listRecordsRequestDto = ListRecordsRequestDto.builder().searchTerm("searchTerm").typeId(null).propertyName("propertyName").isAsc(true).pageSize(5).currentPage(1).build();
         Assert.assertThrows(ValidationException.class, () -> validator.validate(listRecordsRequestDto, ListRecordsRequestDto.class));
     }
 

@@ -37,17 +37,17 @@ const RecordChart = () => {
     return null;
   }
 
+  const leadNumber = leadRecords.records.length;
+  const opportunityNumber = opportunityRecords.records.length;
+  const contactNumber = contactRecords.records.length;
+  const accountNumber = accountRecords.records.length;
+
   const data = {
     labels: ['Leads', 'Opportunities', 'Contacts', 'Accounts'],
     datasets: [
       {
         label: '# of Votes',
-        data: [
-          leadRecords.records.length,
-          opportunityRecords.records.length,
-          contactRecords.records.length,
-          accountRecords.records.length
-        ],
+        data: [leadNumber, opportunityNumber, contactNumber, accountNumber],
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
           'rgba(54, 162, 235, 0.2)',
@@ -73,11 +73,15 @@ const RecordChart = () => {
 
   return (
     <Panel>
-      <section>
+      <section className='flex h-full flex-col'>
         <h2>Records</h2>
         <p className='mb-4'>Records owned by me and created in the last 30 days</p>
-        <div className='grid place-content-center'>
-          <Doughnut data={data} options={options} />
+        <div className='grid h-max flex-grow place-content-center'>
+          {leadNumber === 0 && opportunityNumber === 0 && contactNumber === 0 && accountNumber === 0 ? (
+            <h3>{"You don't have any records"}</h3>
+          ) : (
+            <Doughnut data={data} options={options} />
+          )}
         </div>
       </section>
     </Panel>

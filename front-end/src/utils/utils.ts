@@ -25,6 +25,7 @@ export const formatCompanyName = (name: string) => {
 export const formatRecords = (records: RecordResponse[]) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const formattedRecords: any[] = [];
+  console.log({ records });
 
   for (let i = 0; i < records.length; i++) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -34,7 +35,7 @@ export const formatRecords = (records: RecordResponse[]) => {
     formattedRecord['Name'] = records[i].name;
 
     for (const property of records[i].properties) {
-      formattedRecord[property.property_label] = property.item_value;
+      formattedRecord[property.property_name] = property.item_value;
     }
 
     formattedRecords.push(formattedRecord);

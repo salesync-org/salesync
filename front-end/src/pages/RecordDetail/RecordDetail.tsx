@@ -14,7 +14,7 @@ import useRecord from '@/hooks/record-service/useRecord';
 import useStages from '@/hooks/type-service/useStage';
 import useAuth from '@/hooks/useAuth';
 // import { LayoutOrder, Stage } from '@/type';
-import { formatRecords } from '@/utils/utils';
+import { formatCurrency, formatRecords } from '@/utils/utils';
 import { useParams } from 'react-router-dom';
 
 const RecordDetail = () => {
@@ -135,7 +135,12 @@ const RecordDetail = () => {
             {formattedRecord &&
               Object.keys(formattedRecord).map((key) => {
                 if (key === 'id') return null;
-                return <InputProperty key={key} name={key} value={formattedRecord[key]} />;
+                let value = formattedRecord[key];
+
+                if (key === 'Amount') {
+                  value = formatCurrency(+value) || '0';
+                }
+                return <InputProperty key={key} name={key} value={value} />;
               })}
           </Panel>
           <section className='col-span-2'>

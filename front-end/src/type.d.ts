@@ -213,6 +213,7 @@ type RecordResponse = {
   properties: {
     id: string;
     type_property_id: string;
+    property_name: string;
     property_label: string;
     item_value: string;
   }[];

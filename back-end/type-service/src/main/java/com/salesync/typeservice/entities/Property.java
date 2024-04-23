@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "property")
-@AttributeOverride(name="id",column = @Column(name="property_id"))
+@AttributeOverride(name = "id", column = @Column(name = "property_id"))
 public class Property extends BaseEntity {
     private String name;
 

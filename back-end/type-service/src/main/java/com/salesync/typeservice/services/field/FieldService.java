@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface FieldService {
     List<FieldDto> getAllFields();
+
     FieldDto createField(FieldDto fieldDto);
 }

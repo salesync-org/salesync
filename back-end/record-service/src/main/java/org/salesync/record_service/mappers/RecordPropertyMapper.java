@@ -10,5 +10,6 @@ public interface RecordPropertyMapper {
     RecordPropertyMapper INSTANCE = Mappers.getMapper(RecordPropertyMapper.class);
 
     RecordProperty recordPropertyDtoToRecordProperty(RecordPropertyDto recordPropertyDto);
+
     RecordPropertyDto recordPropertyToRecordPropertyDto(RecordProperty recordProperty);
 }

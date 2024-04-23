@@ -14,12 +14,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "type_relation", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"source_id", "destination_id", "relation_id"})
+@Table(name = "type_relation", uniqueConstraints = {@UniqueConstraint(columnNames = {"source_id", "destination_id", "relation_id"})
 }
 )
-@AttributeOverride(name="id",column = @Column(name="type_relation_id"))
-public class TypeRelation extends BaseEntity  {
+@AttributeOverride(name = "id", column = @Column(name = "type_relation_id"))
+public class TypeRelation extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "source_id")
     private Type sourceType;

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TextInput } from '../ui';
+import { TextArea } from '../ui';
 
 type TextAreaFieldInputProps = {
   name: string;
@@ -12,7 +12,7 @@ const TextAreaFieldInput = ({ label, name, propertyFields, updateFields }: TextA
   const [value, setValue] = useState<string>(propertyFields[0].default_value!);
   return (
     <>
-      <TextInput
+      <TextArea
         name={name}
         header={label}
         value={value}
@@ -21,7 +21,7 @@ const TextAreaFieldInput = ({ label, name, propertyFields, updateFields }: TextA
           setValue(e.target.value);
           updateFields([{ ...propertyFields[0], default_value: value }]);
         }}
-      ></TextInput>
+      ></TextArea>
     </>
   );
 };

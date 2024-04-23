@@ -102,7 +102,7 @@ const RecordDetail = () => {
         <Icon name='edit' className='ml-auto' />
       </section>
       <section className='pt-12'>
-        <Panel className='flex flex-row items-center justify-between p-2 '>
+        <Panel className='flex flex-row items-center justify-between p-2 mb-0'>
           <div className='flex flex-row items-center'>
             <img
               className='mx-2 h-[32px] w-[32px] rounded-sm bg-blue-500'

@@ -1,6 +1,5 @@
 package com.salesync.typeservice.dtos;
 
-
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
@@ -27,7 +26,6 @@ public class RequestCreatePropertyDto {
 
     String defaultValue;
 
-   List<RequestTypePropertyFieldDto> fields;
-
+    List<RequestTypePropertyFieldDto> fields;
 
 }

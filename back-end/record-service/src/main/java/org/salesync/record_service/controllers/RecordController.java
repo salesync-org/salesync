@@ -47,7 +47,7 @@ public class RecordController {
 
     @GetMapping(Route.LIST_RECORD_TYPE_RELATION)
     public ListRecordTypeRelationsDto getListRecordTypeRelationsById(@PathVariable String sourceRecordId, @PathVariable String realm, @RequestHeader(name = "Authorization") String authorization) {
-        return recordService.getListRecordTypeRelationsById(UUID.fromString(sourceRecordId),authorization, realm);
+        return recordService.getListRecordTypeRelationsById(UUID.fromString(sourceRecordId), authorization, realm);
     }
 
     @PutMapping(Route.PROPERTY)
@@ -62,8 +62,7 @@ public class RecordController {
     }
 
     @PutMapping(Route.UPDATE_STAGE)
-    public ResponseEntity<RecordDto> updateStage(@RequestBody RequestUpdateStageDto requestUpdateStageDto,
-                                                 @RequestHeader(name = "Authorization") String authorization, @PathVariable String realm) {
+    public ResponseEntity<RecordDto> updateStage(@RequestBody RequestUpdateStageDto requestUpdateStageDto, @RequestHeader(name = "Authorization") String authorization, @PathVariable String realm) {
         return ResponseEntity.ok(recordService.updateStage(requestUpdateStageDto, authorization, realm));
     }
 

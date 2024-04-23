@@ -23,6 +23,11 @@ class RecordApi {
     return response.data;
   }
 
+  async getAllRecords(companyName: string) {
+    const response = await axios.get(`${URL}/${companyName}/records`);
+    return response.data;
+  }
+
   async getRecordDetails(recordId: string) {
     const response = await axios.get(`${TYPE_SERVICE_URL}/record/${recordId}`);
     return response.data;
@@ -58,6 +63,11 @@ class RecordApi {
     return response.data;
   }
 
+  async getRelationRecord(companyName: string, recordId: string) {
+    const response = await axios.get(`${URL}/${companyName}/records/list-record-type-relation/${recordId}`);
+    return response.data;
+  }
+  
   async deleteRecord(companyName: string, recordIds: string[]) {
     const response = await axios.delete(`${URL}/${companyName}/records`, {
       data: recordIds

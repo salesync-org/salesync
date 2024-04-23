@@ -7,5 +7,6 @@ import java.util.UUID;
 
 public interface IPropertyService {
     Property getProperty(UUID propertyId);
+
     List<Property> getAllProperties();
 }

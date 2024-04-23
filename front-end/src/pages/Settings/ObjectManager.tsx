@@ -3,26 +3,27 @@ import PrimaryButton from '@/components/ui/Button/PrimaryButton';
 import DropDown from '@/components/ui/DropDown/DropDown';
 import Icon from '@/components/ui/Icon/Icon';
 import Item from '@/components/ui/Item/Item';
-import Modal, { ModalFooter } from '@/components/ui/Modal/Modal';
+import '@/constants/api';
+import { useParams, useSearchParams } from 'react-router-dom';
 import Pagination from '@/components/ui/Pagination/Pagination';
 import Panel from '@/components/ui/Panel/Panel';
 import TypeTable from '@/components/ui/Table/TypeTable';
 import TextInput from '@/components/ui/TextInput/TextInput';
-import '@/constants/api';
 import useType from '@/hooks/type-service/useType';
-import useDebounce from '@/hooks/useDebounce';
+import typeApi from '@/api/type';
+import { DropDownItem, Modal, ModalFooter } from '@/components/ui';
+import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import useDebounce from '@/hooks/useDebounce';
 
 const ObjectManager = () => {
-  //Pop up modal to create new type
-  const [isTypeModelOpen, setIsTypeModelOpen] = useState(false);
-  //Type name in the input field
-  const [typeName, setTypeName] = useState('');
+  const { companyName } = useParams();
   //List of types
   const { types } = useType();
   //List of types after search
   const [typeSearchResult, setTypeSearchResult] = useState<Type[]>([]);
+  const [templates, setTemplates] = useState<Template[]>([]);
+  const [newType, setNewType] = useState<Type | null>(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const [search, setSearch] = useState(() => {
     return searchParams.get('search') || '';
@@ -36,10 +37,12 @@ const ObjectManager = () => {
     // Fetch sample data
     const fetchData = async () => {
       setTypeSearchResult(types ?? []);
+      const templateResult: Template[] = await typeApi.getAllTemplates(companyName ?? '');
+      setTemplates(templateResult);
     };
 
     fetchData();
-  }, [types]);
+  }, [types, companyName]);
 
   //Search for types
   useEffect(() => {
@@ -63,13 +66,12 @@ const ObjectManager = () => {
   //create Type sample data and add to types
   const handleCreateType = async () => {
     try {
-      // const res = await typeApi.createType({ typeName: typeName, template: 'Account' });
-      // if (res) {
-      //   console.log('Create Type successfully');
-      //   setTypes([res, ...(types || [])]);
-      //   setTypeSearchResult([res, ...(types || [])]);
-      //   return res;
-      // }
+      const res = await typeApi.createType(companyName ?? '', newType ?? {});
+      if (res) {
+        console.log('Create Type successfully');
+        setTypeSearchResult([res, ...(types || [])]);
+        return res;
+      }
     } catch (error) {
       console.error('Create Type failed', error);
     }
@@ -77,12 +79,11 @@ const ObjectManager = () => {
 
   //Handle submit when creating new type
   const handleSubmit = () => {
-    if (!typeName) {
+    if (!newType) {
       return;
     }
-    setIsTypeModelOpen(false);
+    setNewType(null);
     handleCreateType();
-    setTypeName('');
   };
 
   //Handle page change
@@ -108,7 +109,7 @@ const ObjectManager = () => {
             <PrimaryButton
               className='ml-2'
               onClick={() => {
-                setIsTypeModelOpen(true);
+                setNewType({ id: '', name: '', template: { id: '', name: '' } });
               }}
               showHeader={true}
             >
@@ -117,7 +118,13 @@ const ObjectManager = () => {
             </PrimaryButton>
           </div>
           <div className='h-full min-h-full overflow-scroll'>
-            <TypeTable types={typeSearchResult}></TypeTable>
+            {typeSearchResult ? (
+              <TypeTable types={typeSearchResult}></TypeTable>
+            ) : (
+              <div className='flex h-full items-center justify-center'>
+                <LoadingSpinner />
+              </div>
+            )}
           </div>
 
           <div className='hidden'>
@@ -127,34 +134,54 @@ const ObjectManager = () => {
       </Panel>
 
       <Modal
-        isOpen={isTypeModelOpen}
+        isOpen={newType != null}
         onClose={() => {
-          setIsTypeModelOpen(false);
+          setNewType(null);
         }}
         title='Create new Type'
       >
         <form>
           <div className='grid grid-cols-5 place-content-center gap-3'>
-            <div className='col-span-3 flex flex-col gap-2'>
+            <div className='col-span-3 flex flex-col'>
               <TextInput
-                onChange={(e) => setTypeName(e.target.value)}
+                onChange={(e) =>
+                  setNewType({
+                    id: '',
+                    template: newType?.template ?? { id: '', name: '' },
+                    name: e.target.value ?? ''
+                  })
+                }
                 header='Type Name'
                 className='w-full'
-                value={typeName}
+                value={newType?.name ?? ''}
                 placeholder='Search for something'
               />
             </div>
-            <div className='col-span-2 flex flex-col gap-2'>
-              <DropDown header='Template' value='Select a value'>
-                <Item title='Account' />
-                <Item title='Contact' />
-                <Item title='Lead' />
-                <Item title='Opportunity' />
+            <div className='col-span-2 flex flex-col'>
+              <DropDown
+                header='Template'
+                defaultValue='Select a Template'
+                className='w-full'
+                value={newType?.template.name ?? ''}
+                onValueChange={(value) => {
+                  console.log('value is' + value);
+                  setNewType({
+                    template: templates.find((template) => template.id == value) ?? { id: '', name: '' },
+                    id: '',
+                    name: newType?.name ?? ''
+                  });
+                }}
+              >
+                {templates.map((template) => (
+                  <DropDownItem key={template.id + '_1'} title={template.name} value={template.id}>
+                    <Item key={template.id} title={template.name} value={template.id} />
+                  </DropDownItem>
+                ))}
               </DropDown>
             </div>
           </div>
           <ModalFooter className='mt-8'>
-            <Button onClick={() => setIsTypeModelOpen(false)}>Cancel</Button>
+            <Button onClick={() => setNewType(null)}>Cancel</Button>
             <PrimaryButton onClick={() => handleSubmit()}>Save</PrimaryButton>
           </ModalFooter>
         </form>

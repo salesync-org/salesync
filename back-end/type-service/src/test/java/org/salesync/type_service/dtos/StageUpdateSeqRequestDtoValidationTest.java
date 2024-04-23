@@ -30,9 +30,7 @@ public class StageUpdateSeqRequestDtoValidationTest {
     @Test
     public void testStageIdIsNull() {
         // given
-        StageUpdateSeqNumberRequestDto stageUpdateSeqNumberRequestDto = StageUpdateSeqNumberRequestDto.builder()
-                .sequenceNumber(1)
-                .build();
+        StageUpdateSeqNumberRequestDto stageUpdateSeqNumberRequestDto = StageUpdateSeqNumberRequestDto.builder().sequenceNumber(1).build();
 
         // when // then
         Assert.assertThrows(ValidationException.class, () -> validator.validate(stageUpdateSeqNumberRequestDto, StageUpdateSeqNumberRequestDto.class));
@@ -41,13 +39,10 @@ public class StageUpdateSeqRequestDtoValidationTest {
     @Test
     public void testSequenceNumberIsNull() {
         // given
-        StageUpdateSeqNumberRequestDto stageUpdateSeqNumberRequestDto = StageUpdateSeqNumberRequestDto.builder()
-                .stageId(UUID.randomUUID())
-                .build();
+        StageUpdateSeqNumberRequestDto stageUpdateSeqNumberRequestDto = StageUpdateSeqNumberRequestDto.builder().stageId(UUID.randomUUID()).build();
 
         // when // then
         Assert.assertThrows(ValidationException.class, () -> validator.validate(stageUpdateSeqNumberRequestDto, StageUpdateSeqNumberRequestDto.class));
     }
-
 
 }

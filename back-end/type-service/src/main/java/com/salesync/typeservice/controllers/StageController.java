@@ -42,8 +42,7 @@ public class StageController {
 
     @PutMapping(Route.Stage.UPDATE_SEQUENCE_NUMBER + Route.Type.TYPE_ID)
     public ResponseEntity<List<StageDto>> updateSequenceNumber(
-            @PathVariable UUID typeId,
-            @Valid @RequestBody List<StageUpdateSeqNumberRequestDto> stageDtos
+                                                               @PathVariable UUID typeId, @Valid @RequestBody List<StageUpdateSeqNumberRequestDto> stageDtos
     ) {
         return ResponseEntity.ok(stageService.updateSequenceNumber(typeId, stageDtos));
     }

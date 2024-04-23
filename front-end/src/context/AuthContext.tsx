@@ -50,7 +50,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const token = localStorage.getItem('access_token');
         const user = companyName && companyName.length > 0 ? await auth.getUser(companyName) : null;
         const companyInfo = companyName && companyName.length > 0 ? await auth.loadCompanyInfo(companyName) : null;
-        console.log('loaded company' + companyInfo);
         if (!token || !user) {
           throw new Error('No token found');
         }

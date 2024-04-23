@@ -12,7 +12,10 @@ type Type = {
   // background_color: string?;
   id: string;
   name: string;
-  template: string | null;
+  template: {
+    id: string;
+    name: string;
+  };
   // description?: string;
   // fields?: Field[];
 };
@@ -48,7 +51,10 @@ type PropertyResponse = {
 type TypeDetail = {
   id: string;
   name: string;
-  template: string;
+  template: {
+    id: string;
+    name: string;
+  };
   properties: TypePropertyDetail[];
 };
 
@@ -84,10 +90,20 @@ type TypePropertyField = {
   options?: string[];
 };
 
-// type Relation = {
-//   id: string;
-//   name: string;
-// };
+type Relation = {
+  id: string;
+  name: string;
+  inverse_id: string;
+};
+
+type TypeRelation = {
+  id: string;
+  source_type: Type;
+  source_type_label: string;
+  relation: Relation;
+  destination_type: Type;
+  destination_type_label: string
+}
 
 type Field = {
   id: string;
@@ -158,6 +174,8 @@ type TokenResponse = {
 type Stage = {
   id: string;
   name: string;
+  sequenceNumber?: number;
+  type?: Type;
 };
 
 type User = {
@@ -312,19 +330,23 @@ declare enum Label {
   Unique = 'Unique'
 }
 
-declare interface PropertyProperty {
+interface PropertyProperty {
   id: string;
   name: string;
   propertyFields: PropertyField[];
 }
 
-declare enum Template {
-  Human = 'Human',
-  Activity = 'Activity',
-  Group = 'Group',
-  StageObject = 'StageObject',
-  Object = 'Object'
+type Template = {
+  id: string;
+  name: string;
 }
+// declare enum Template {
+//   Human = 'Human',
+//   Activity = 'Activity',
+//   Group = 'Group',
+//   StageObject = 'StageObject',
+//   Object = 'Object'
+// }
 
 type CompanyInfo = {
   company_id: string;

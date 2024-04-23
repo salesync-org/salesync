@@ -14,7 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Table(name = "relationship_of_records")
-@AttributeOverride(name="id",column = @Column(name="record_relation_id"))
+@AttributeOverride(name = "id", column = @Column(name = "record_relation_id"))
 public class RelationshipOfRecords extends BaseEntity {
 
     @ManyToOne

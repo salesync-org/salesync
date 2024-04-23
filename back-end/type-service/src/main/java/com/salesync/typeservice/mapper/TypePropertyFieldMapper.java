@@ -10,11 +10,7 @@ import org.mapstruct.factory.Mappers;
 public interface TypePropertyFieldMapper {
     TypePropertyFieldMapper INSTANCE = Mappers.getMapper(TypePropertyFieldMapper.class);
 
-
-
     TypePropertyField dtoToEntity(TypePropertyFieldDto dto);
-
-
 
     TypePropertyFieldDto entityToDto(TypePropertyField entity);
 

@@ -6,7 +6,7 @@ import org.salesync.record_service.constants.Message;
 
 @Setter
 @Getter
-public class ObjectNotFoundException extends RecordServiceException{
+public class ObjectNotFoundException extends RecordServiceException {
     private String key;
     private String value;
 

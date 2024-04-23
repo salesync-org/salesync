@@ -15,7 +15,9 @@ import useStages from '@/hooks/type-service/useStage';
 import useAuth from '@/hooks/useAuth';
 // import { LayoutOrder, Stage } from '@/type';
 import { formatCurrency, formatRecords } from '@/utils/utils';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useToast } from '@/components/ui/Toast';
+import { useQueryClient } from 'react-query';
 
 const RecordDetail = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -24,6 +26,9 @@ const RecordDetail = () => {
   const { data: record, isLoading: isRecordLoading } = useRecord(companyName, recordId);
   const { data: stages, isLoading: isStagesLoading } = useStages(companyName, record?.source_record?.type.id);
   const { showModal } = useGlobalModalContext();
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const { user } = useAuth();
 
@@ -61,6 +66,28 @@ const RecordDetail = () => {
     const res = await recordApi.updateRecord(companyName, record.source_record.id, updatedRecord);
 
     return res;
+  };
+
+  const handleDeleteClick = async () => {
+    if (window.confirm(`Are you sure you want to delete the record: ${record.source_record.name}?`)) {
+      try {
+        await recordApi.deleteRecord(companyName, [record.source_record.id]);
+
+        queryClient.invalidateQueries(['records']);
+        navigate(`/${companyName}/sales/${record.source_record.type.id}`);
+        toast({
+          title: 'Success',
+          description: 'Record deleted successfully'
+        });
+      } catch (error) {
+        console.error(error);
+        toast({
+          title: 'Error',
+          description: 'An error occurred while deleting the record',
+          variant: 'destructive'
+        });
+      }
+    }
   };
 
   const types =
@@ -101,7 +128,7 @@ const RecordDetail = () => {
             >
               Edit
             </Button>
-            <Button intent='normal' zoom={false}>
+            <Button intent='normal' zoom={false} onClick={handleDeleteClick}>
               Delete
             </Button>
             {record.source_record.type.name === 'Lead' && (

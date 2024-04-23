@@ -25,7 +25,6 @@ export const formatCompanyName = (name: string) => {
 export const formatRecords = (records: RecordResponse[]) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const formattedRecords: any[] = [];
-  console.log({ records });
 
   for (let i = 0; i < records.length; i++) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

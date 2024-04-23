@@ -43,6 +43,9 @@ const OpportunityStageChart = () => {
 
   const labels: string[] = [];
   const chartData: number[] = [];
+  records.sort((a: { current_stage_id: string }, b: { current_stage_id: string }) => {
+    return a.current_stage_id.localeCompare(b.current_stage_id);
+  });
   for (const record of records) {
     const stageId = record.current_stage_id;
     const stageName = stageMap[stageId];

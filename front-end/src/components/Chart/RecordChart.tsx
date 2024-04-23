@@ -4,32 +4,50 @@ import useType from '@/hooks/type-service/useType';
 import { ArcElement, Chart as ChartJS, Legend, Title, Tooltip } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import ChartSkeleton from './ChartSkeleton';
+import { useParams } from 'react-router-dom';
 
 ChartJS.register(ArcElement, Tooltip, Title, Legend);
 
 const RecordChart = () => {
-  const { types, isLoading: isTypesLoading } = useType();
-  const { } = useRecords()
+  const { types = [], isLoading: isTypesLoading } = useType();
+  const { companyName = '' } = useParams();
 
-  if (isTypesLoading) {
+  const { data: leadRecords, isLoading: leadsLoading } = useRecords(
+    companyName,
+    types?.find((type) => type.name === 'Lead')?.id || ''
+  );
+  const { data: contactRecords, isLoading: contactsLoading } = useRecords(
+    companyName,
+    types?.find((type) => type.name === 'Contact')?.id || ''
+  );
+  const { data: opportunityRecords, isLoading: opportunityLoading } = useRecords(
+    companyName,
+    types?.find((type) => type.name === 'Opportunity')?.id || ''
+  );
+  const { data: accountRecords, isLoading: accountLoading } = useRecords(
+    companyName,
+    types?.find((type) => type.name === 'Account')?.id || ''
+  );
+
+  if (isTypesLoading || leadsLoading || contactsLoading || opportunityLoading || accountLoading) {
     return <ChartSkeleton />;
   }
 
-  if (!types) {
+  if (!types || !leadRecords || !contactRecords || !opportunityRecords || !accountRecords) {
     return null;
   }
 
-  const options = {
-    maintainAspectRatio: false,
-    plugins: { legend: { display: true, position: 'right' } }
-  };
-
   const data = {
-    labels: ['Leads', 'Opportunities', 'Contacts', 'Cases'],
+    labels: ['Leads', 'Opportunities', 'Contacts', 'Accounts'],
     datasets: [
       {
         label: '# of Votes',
-        data: [12, 19, 3, 5],
+        data: [
+          leadRecords.records.length,
+          opportunityRecords.records.length,
+          contactRecords.records.length,
+          accountRecords.records.length
+        ],
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
           'rgba(54, 162, 235, 0.2)',
@@ -47,6 +65,12 @@ const RecordChart = () => {
       }
     ]
   };
+
+  const options = {
+    maintainAspectRatio: false,
+    plugins: { legend: { display: true, position: 'right' as const } }
+  };
+
   return (
     <Panel>
       <section>

@@ -1,7 +1,17 @@
 import recordApi, { RecordsFilter } from '@/api/record';
 import { useQuery } from 'react-query';
 
-const useRecords = (companyName: string, typeId: string, recordFilter: RecordsFilter) => {
+const useRecords = (
+  companyName: string,
+  typeId: string,
+  recordFilter: RecordsFilter = {
+    searchTerm: '',
+    isAsc: null,
+    propertyName: null,
+    currentPage: 1,
+    pageSize: 300
+  }
+) => {
   const key = ['records', typeId, recordFilter];
   const { data, error, isLoading } = useQuery(
     key,
@@ -12,7 +22,8 @@ const useRecords = (companyName: string, typeId: string, recordFilter: RecordsFi
       refetchOnWindowFocus: false,
       staleTime: 1000 * 60 * 5,
       refetchOnMount: 'always',
-      keepPreviousData: true
+      keepPreviousData: true,
+      enabled: !!typeId
     }
   );
 

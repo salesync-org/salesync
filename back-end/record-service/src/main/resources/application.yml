@@ -3,7 +3,7 @@ server:
   port: 8292
   servlet:
     context-path: /api/v1
-  
+
   # Spring application settings
 spring:
   rabbitmq:
@@ -29,12 +29,11 @@ springdoc:
 eureka:
   client:
     service-url:
-      defaultZone: http://35.240.194.81:8761/eureka
+      defaultZone: ${EUREKA_SERVER_URL}
     fetch-registry: true
     register-with-eureka: true
   instance:
     prefer-ip-address: true
-
 
 token:
   public-key: ${TOKEN_PUBLIC_KEY}

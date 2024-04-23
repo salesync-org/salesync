@@ -38,10 +38,10 @@ const TextArea: React.FC<TextAreaProps> = ({
   return (
     <div>
       {showHeader && header && (
-        <p className='my-1'>
+        <p className={cn('relative my-1', isError && 'font-medium text-red-500')}>
           {header}
           {isRequired && (
-            <span className='absolute ml-2 size-1 rounded-full text-red-400' title='Required'>
+            <span className='ml-2 size-1 rounded-full text-red-400' title='Required'>
               *
             </span>
           )}
@@ -56,6 +56,7 @@ const TextArea: React.FC<TextAreaProps> = ({
           'bg-input-background-light dark:bg-input-background-dark ',
           'border-[2px] border-input-stroke-light  dark:border-input-background-dark',
           !disabled && 'dark:hover:bg-button-background-dark',
+          isError && 'border-red-400 ring-1 ring-red-300',
 
           className
         )}

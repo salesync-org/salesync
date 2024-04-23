@@ -39,23 +39,23 @@ INSERT INTO public.type_relation (type_relation_id, relation_id,
                                   destination_id, destination_label) VALUES
     ('11111111-1111-1111-1111-111111111111',
     get_id('relation_id', 'relation', 'One-to-Many'),
-    get_id('template_id', 'type', 'Account'), 'Account',
-    get_id('template_id', 'type', 'Case'), 'Case'),
+    get_id('type_id', 'type', 'Account'), 'Account',
+    get_id('type_id', 'type', 'Case'), 'Case'),
 
     ('22222222-2222-2222-2222-222222222222',
      get_id('relation_id', 'relation', 'One-to-Many'),
-     get_id('template_id', 'type', 'Account'), 'Account',
-     get_id('template_id', 'type', 'Contact'), 'Contact'),
+     get_id('type_id', 'type', 'Account'), 'Account',
+     get_id('type_id', 'type', 'Contact'), 'Contact'),
 
     ('33333333-3333-3333-3333-333333333333',
     get_id('relation_id', 'relation', 'One-to-Many'),
-    get_id('template_id', 'type', 'Account'), 'Account',
-    get_id('template_id', 'type', 'Opportunity'), 'Opportunity'),
+    get_id('type_id', 'type', 'Account'), 'Account',
+    get_id('type_id', 'type', 'Opportunity'), 'Opportunity'),
 
     ('44444444-4444-4444-4444-444444444444',
     get_id('relation_id', 'relation', 'One-to-Many'),
-    get_id('template_id', 'type', 'Contact'), 'Contact',
-    get_id('template_id', 'type', 'Task'), 'Task');
+    get_id('type_id', 'type', 'Contact'), 'Contact',
+    get_id('type_id', 'type', 'Task'), 'Task');
 
 INSERT INTO public.property (property_id,name) VALUES
     ('11111111-1111-1111-1111-111111111111','Text'),

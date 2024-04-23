@@ -10,7 +10,6 @@ spring:
           enabled: true
           lower-case-service-id: true
 
-
 server:
   port: 8083
 
@@ -23,7 +22,6 @@ eureka:
   instance:
     prefer-ip-address: true
 
-
 logging:
   level:
     root: info
@@ -33,4 +31,3 @@ logging:
 auth:
   server:
     url: ${AUTH_SERVER_URL}
-

@@ -3,7 +3,7 @@ server:
   port: 8292
   servlet:
     context-path: /api/v1
-  
+
   # Spring application settings
 spring:
   rabbitmq:
@@ -34,7 +34,6 @@ eureka:
     register-with-eureka: true
   instance:
     prefer-ip-address: true
-
 
 token:
   public-key: ${TOKEN_PUBLIC_KEY}

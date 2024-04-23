@@ -77,9 +77,10 @@ const PersonalInfomationSetting = () => {
       <Panel className={cn('m-0 grid h-full grid-cols-1 px-4 py-6')}>
         <div className='my-4 flex overflow-y-auto px-4 py-4'>
           <div className='flex-grow '>
-            <h2 className='mb-5 border-b-2 border-button-stroke-light py-4 dark:border-button-stroke-dark'>
-              General Information
-            </h2>
+            <div className='mb-6 flex items-baseline space-x-2'>
+              <h3 className='flex-shrink-0'>General Informataion</h3>
+              <div className='w-full border-b-2 border-button-stroke-light py-4 dark:border-button-stroke-dark'></div>
+            </div>
             <div>
               {user &&
                 Object.entries(userLoaded).map(([fieldName, fieldValue]) => {
@@ -107,9 +108,10 @@ const PersonalInfomationSetting = () => {
             </div>
           </div>
           <div className='relative mb-6 ml-12 mr-8 h-fit w-fit'>
-            <h2 className='mb-5 border-b-2 border-button-stroke-light py-4 dark:border-button-stroke-dark'>
-              Profile Picture
-            </h2>
+            <div className='mb-6 flex items-baseline space-x-2 pr-4'>
+              <h3 className='flex-shrink-0'>Profile Avatar</h3>
+              <div className='w-full border-b-2 border-button-stroke-light py-4 dark:border-button-stroke-dark'></div>
+            </div>
             <div className='aspect-square w-64 overflow-clip rounded-full'>
               <img src={`${avatarUrl}?lastmod=${new Date().getTime().toString()}`} />
             </div>

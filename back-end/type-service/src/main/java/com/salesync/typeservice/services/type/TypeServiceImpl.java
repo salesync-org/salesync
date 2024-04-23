@@ -249,7 +249,6 @@ public class TypeServiceImpl implements TypeService {
                     String itemValue = requestItemValue != null &&
                             !requestItemValue.isEmpty()
                             ? requestItemValue : propertyField.getDefaultValue();
-
                     return TypePropertyField.builder()
                             .propertyField(propertyField)
                             .itemValue(itemValue)

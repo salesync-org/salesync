@@ -147,7 +147,7 @@ const List = ({
         <Popup
           style={{ maxHeight: calculateMaxHeight(), overflow: 'auto', maxWidth: calculateMaxWidth() }}
           className={cn(
-            'absolute z-[50] h-fit overflow-x-hidden rounded-xl border-[2px] px-2 transition-all duration-100 ease-in-out',
+            'absolute z-[1000] h-fit overflow-x-hidden rounded-xl border-[2px] px-2 transition-all duration-100 ease-in-out',
             divide ? 'divide divide-y-2 divide-button-stroke-light *:py-2 dark:divide-button-stroke-dark' : 'py-2',
             'bg-button-background-light dark:bg-button-background-dark',
             'border-button-stroke-light/60 dark:border-button-stroke-dark/60',

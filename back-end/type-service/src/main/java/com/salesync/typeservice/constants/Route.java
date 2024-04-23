@@ -33,4 +33,8 @@ public final class Route {
 
         public static final String UPDATE_SEQUENCE_NUMBER = "/update-sequence-number";
     }
+
+    public static final class Template {
+        public static final String TEMPLATE_ROUTE = "/templates";
+    }
 }

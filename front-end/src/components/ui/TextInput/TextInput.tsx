@@ -30,6 +30,7 @@ type TextInputProps = {
   isRequired?: boolean;
   list?: string;
   type?: string;
+  autoFocus?: boolean;
   restProps?: React.HTMLAttributes<HTMLInputElement>;
 };
 const TextInput: React.FC<TextInputProps> = ({
@@ -41,6 +42,7 @@ const TextInput: React.FC<TextInputProps> = ({
   header,
   showHeader = true,
   prefixIcon,
+  autoFocus,
   prefixIconNode = null,
   paddingLeft = 'pl-[55px]',
   postfixIcon,
@@ -63,7 +65,7 @@ const TextInput: React.FC<TextInputProps> = ({
         <p className={cn('relative my-1', isError && 'font-medium text-red-500')}>
           {header}
           {isRequired && (
-            <span className='absolute ml-2 size-1 rounded-full text-red-400' title='Required'>
+            <span className='ml-2 size-1 rounded-full text-red-400' title='Required'>
               *
             </span>
           )}
@@ -86,6 +88,7 @@ const TextInput: React.FC<TextInputProps> = ({
           type={type}
           list={list}
           placeholder={placeholder}
+          autoFocus={autoFocus}
           className={cn(
             'absolute h-full w-full rounded bg-transparent py-2 pr-2 placeholder:text-ellipsis placeholder:text-[13px] placeholder:text-opacity-50 focus:outline-primary',
             prefixIcon ? 'pl-10' : cn(prefixIconNode ? paddingLeft : 'pl-4'),

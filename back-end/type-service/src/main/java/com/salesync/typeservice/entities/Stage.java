@@ -15,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @Entity
 @Table(name = "stage")
-@AttributeOverride(name="id",column = @Column(name="stage_id"))
+@AttributeOverride(name = "id", column = @Column(name = "stage_id"))
 public class Stage extends BaseEntity {
 
     private String name;

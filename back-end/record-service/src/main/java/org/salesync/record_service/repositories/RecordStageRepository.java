@@ -8,5 +8,6 @@ import java.util.UUID;
 
 public interface RecordStageRepository extends JpaRepository<RecordStage, UUID> {
     RecordStage findByRecordId(UUID recordId);
+
     void deleteByStageId(UUID stageId);
 }

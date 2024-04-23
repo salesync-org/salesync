@@ -1,6 +1,5 @@
 package com.salesync.typeservice.mapper;
 
-
 import com.salesync.typeservice.dtos.TypePropertyDto;
 import com.salesync.typeservice.entities.TypeProperty;
 import org.mapstruct.Mapper;
@@ -13,12 +12,8 @@ public interface TypePropertyMapper {
 
     TypePropertyMapper INSTANCE = Mappers.getMapper(TypePropertyMapper.class);
 
-
-
     @Mapping(target = "fields", source = "typePropertyFields")
     TypePropertyDto entityToDto(TypeProperty entity);
-
-
 
     @Mapping(target = "typePropertyFields", source = "fields")
 

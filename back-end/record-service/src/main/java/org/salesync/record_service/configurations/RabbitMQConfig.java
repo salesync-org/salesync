@@ -1,4 +1,5 @@
 package org.salesync.record_service.configurations;
+
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -11,22 +12,17 @@ public class RabbitMQConfig {
 
     @Bean
     public Queue recordQueue() {
-        return new Queue("record-queue", true,false,false);
+        return new Queue("record-queue", true, false, false);
     }
 
-    @Bean public Exchange exchange()
-    {
+    @Bean
+    public Exchange exchange() {
         return new TopicExchange("topic-exchange");
     }
 
-
     @Bean
-    public Binding binding(Queue recordQueue, Exchange exchange)
-    {
-        return BindingBuilder.bind(recordQueue)
-                .to(exchange)
-                .with("record")
-                .noargs();
+    public Binding binding(Queue recordQueue, Exchange exchange) {
+        return BindingBuilder.bind(recordQueue).to(exchange).with("record").noargs();
     }
 
     @Bean

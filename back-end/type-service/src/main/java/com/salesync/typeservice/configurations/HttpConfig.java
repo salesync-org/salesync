@@ -39,18 +39,11 @@ public class HttpConfig {
         return permitAllMatchers;
     }
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors(AbstractHttpConfigurer::disable).csrf(AbstractHttpConfigurer::disable)
-                .httpBasic(Customizer.withDefaults())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(permitAllRequestMatchers().toArray(new RequestMatcher[0])).permitAll()
+        http.cors(AbstractHttpConfigurer::disable).csrf(AbstractHttpConfigurer::disable).httpBasic(Customizer.withDefaults()).authorizeHttpRequests(auth -> auth.requestMatchers(permitAllRequestMatchers().toArray(new RequestMatcher[0])).permitAll()
 //                        .requestMatchers(Route.Type.TYPE_ROUTE + "/**").authenticated()
-                        .anyRequest().authenticated())
-                .exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(exceptionHandler))
-                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
+                .anyRequest().authenticated()).exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(exceptionHandler)).sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }

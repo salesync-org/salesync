@@ -10,9 +10,9 @@ import org.springframework.stereotype.Controller;
 @RequiredArgsConstructor
 public class RabbitMQController {
     private final RabbitMQService rabbitMQService;
-    @RabbitListener(queues = "type-queue",ackMode = "AUTO")
-    public void receiveMessage(RabbitMQMessageDto message)
-    {
+
+    @RabbitListener(queues = "type-queue", ackMode = "AUTO")
+    public void receiveMessage(RabbitMQMessageDto message) {
         rabbitMQService.dispatchMessage(message);
     }
 }

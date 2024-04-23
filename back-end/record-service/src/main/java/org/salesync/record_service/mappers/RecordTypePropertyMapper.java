@@ -11,7 +11,6 @@ import org.salesync.record_service.entities.RecordTypeProperty;
 public interface RecordTypePropertyMapper {
     RecordTypePropertyMapper INSTANCE = Mappers.getMapper(RecordTypePropertyMapper.class);
 
-
     @Mapping(target = "recordTypePropertyLabel", source = "propertyLabel")
     RecordTypeProperty dtoToEntity(RecordTypePropertyDto recordTypePropertyDto);
 

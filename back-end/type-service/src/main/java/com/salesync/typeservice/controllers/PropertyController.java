@@ -1,6 +1,5 @@
 package com.salesync.typeservice.controllers;
 
-
 import com.salesync.typeservice.constants.Route;
 import com.salesync.typeservice.entities.Property;
 import com.salesync.typeservice.services.property.IPropertyService;
@@ -19,8 +18,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PropertyController {
     private final IPropertyService propertyService;
-
-
 
     @GetMapping(Route.Property.GET_PROPERTY)
     public ResponseEntity<Property> getProperty(@PathVariable UUID propertyId) {

@@ -1,6 +1,5 @@
 package com.salesync.typeservice.dtos;
 
-
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.salesync.typeservice.entities.Type;
@@ -29,6 +28,5 @@ public class TypePropertyDto {
     String defaultValue;
 
     List<TypePropertyFieldDto> fields;
-
 
 }

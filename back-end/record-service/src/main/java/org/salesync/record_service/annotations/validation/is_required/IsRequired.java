@@ -11,6 +11,8 @@ import java.lang.annotation.*;
 @Documented
 public @interface IsRequired {
     String message() default "is required";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }

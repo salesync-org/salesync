@@ -19,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "field")
-@AttributeOverride(name="id",column = @Column(name="field_id"))
+@AttributeOverride(name = "id", column = @Column(name = "field_id"))
 public class Field extends BaseEntity {
     @JsonProperty("input_type")
     @Column(name = "input_type")

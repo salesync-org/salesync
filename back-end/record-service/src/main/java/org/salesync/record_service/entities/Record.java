@@ -16,7 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Table(name = "record")
-@AttributeOverride(name="id",column = @Column(name="record_id"))
+@AttributeOverride(name = "id", column = @Column(name = "record_id"))
 public class Record extends BaseEntity {
     private String name;
     private UUID userId;

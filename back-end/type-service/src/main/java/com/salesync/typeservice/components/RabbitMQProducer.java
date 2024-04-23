@@ -14,8 +14,7 @@ public class RabbitMQProducer {
     private final Exchange exchange;
 
     //routing key theo các key đã map trong file RabbitMQConfig
-    public void sendMessage(String routingKey, Object message)
-    {
+    public void sendMessage(String routingKey, Object message) {
         rabbitTemplate.convertAndSend(
                 exchange.getName(), routingKey, message);
 

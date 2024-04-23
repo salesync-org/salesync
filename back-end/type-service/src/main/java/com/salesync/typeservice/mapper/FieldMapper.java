@@ -11,5 +11,6 @@ public interface FieldMapper {
     FieldMapper INSTANCE = Mappers.getMapper(FieldMapper.class);
 
     FieldDto fieldToFieldDto(Field field);
+
     Field fieldDtoToField(FieldDto fieldDto);
 }

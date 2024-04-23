@@ -11,17 +11,14 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class FieldServiceImpl implements FieldService{
+public class FieldServiceImpl implements FieldService {
 
     private final FieldRepository fieldRepository;
     private final FieldMapper fieldMapper = FieldMapper.INSTANCE;
+
     @Override
     public List<FieldDto> getAllFields() {
-        return fieldRepository.findAll()
-                .stream()
-                .map(fieldMapper::fieldToFieldDto)
-                .toList()
-                ;
+        return fieldRepository.findAll().stream().map(fieldMapper::fieldToFieldDto).toList();
     }
 
     @Override

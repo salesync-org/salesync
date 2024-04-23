@@ -30,9 +30,7 @@ public class RecordServiceTest {
     public void setUp() {
         recordRepository = Mockito.mock(RecordRepository.class);
         securityContextHelperMockedStatic = Mockito.mockStatic(SecurityContextHelper.class);
-        recordService = RecordServiceImpl.builder()
-                .recordRepository(recordRepository)
-                .build();
+        recordService = RecordServiceImpl.builder().recordRepository(recordRepository).build();
     }
 
     @After
@@ -45,33 +43,19 @@ public class RecordServiceTest {
         //given
         UUID typeId = UUID.randomUUID();
         UUID userId = UUID.randomUUID();
-        ListRecordsRequestDto listRecordsRequestDto = ListRecordsRequestDto.builder()
-                .searchTerm("")
-                .typeId(typeId)
-                .propertyName("propertyName")
-                .isAsc(true)
-                .pageSize(5)
-                .currentPage(1)
-                .build();
+        ListRecordsRequestDto listRecordsRequestDto = ListRecordsRequestDto.builder().searchTerm("").typeId(typeId).propertyName("propertyName").isAsc(true).pageSize(5).currentPage(1).build();
 
         Pageable pageRequest = PageRequest.of(
-                listRecordsRequestDto.getCurrentPage() - 1,
-                listRecordsRequestDto.getPageSize()
+                listRecordsRequestDto.getCurrentPage() - 1, listRecordsRequestDto.getPageSize()
         );
 
         Page<Record> recordPage = new PageImpl<>(List.of(
-                createRecord(userId, "name1"),
-                createRecord(userId, "name2")
+                createRecord(userId, "name1"), createRecord(userId, "name2")
         ), pageRequest, 2);
 
         Mockito.when(
                 recordRepository.getFilteredRecord(
-                        userId,
-                        listRecordsRequestDto.getPropertyName(),
-                        listRecordsRequestDto.getTypeId(),
-                        listRecordsRequestDto.getSearchTerm(),
-                        listRecordsRequestDto.isAsc(),
-                        pageRequest
+                        userId, listRecordsRequestDto.getPropertyName(), listRecordsRequestDto.getTypeId(), listRecordsRequestDto.getSearchTerm(), listRecordsRequestDto.isAsc(), pageRequest
                 )
         ).thenReturn(
                 recordPage
@@ -92,9 +76,6 @@ public class RecordServiceTest {
     }
 
     private Record createRecord(UUID userId, String name) {
-        return Record.builder()
-                .userId(userId)
-                .name(name)
-                .build();
+        return Record.builder().userId(userId).name(name).build();
     }
 }

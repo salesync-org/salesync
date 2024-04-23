@@ -24,9 +24,7 @@ public class StageServiceTest {
     @Before
     public void setUp() {
         stageRepository = Mockito.mock(StageRepository.class);
-        stageService = StageServiceImpl.builder()
-                .stageRepository(stageRepository)
-                .build();
+        stageService = StageServiceImpl.builder().stageRepository(stageRepository).build();
     }
 
     @After
@@ -41,27 +39,11 @@ public class StageServiceTest {
         UUID typeId = UUID.randomUUID();
         UUID stage1Id = UUID.randomUUID();
         UUID stage2Id = UUID.randomUUID();
-        Type type = Type.builder()
-                .id(typeId)
-                .build();
-        Stage stage1 = Stage.builder()
-                .id(stage1Id)
-                .sequenceNumber(1)
-                .type(type)
-                .build();
-        StageUpdateSeqNumberRequestDto stageUpdateSeqNumberRequestDto = StageUpdateSeqNumberRequestDto.builder()
-                .stageId(stage1Id)
-                .sequenceNumber(2)
-                .build();
-        Stage stage2 = Stage.builder()
-                .id(stage2Id)
-                .sequenceNumber(2)
-                .type(type)
-                .build();
-        StageUpdateSeqNumberRequestDto stageUpdateSeqNumberRequestDto2 = StageUpdateSeqNumberRequestDto.builder()
-                .stageId(stage2Id)
-                .sequenceNumber(1)
-                .build();
+        Type type = Type.builder().id(typeId).build();
+        Stage stage1 = Stage.builder().id(stage1Id).sequenceNumber(1).type(type).build();
+        StageUpdateSeqNumberRequestDto stageUpdateSeqNumberRequestDto = StageUpdateSeqNumberRequestDto.builder().stageId(stage1Id).sequenceNumber(2).build();
+        Stage stage2 = Stage.builder().id(stage2Id).sequenceNumber(2).type(type).build();
+        StageUpdateSeqNumberRequestDto stageUpdateSeqNumberRequestDto2 = StageUpdateSeqNumberRequestDto.builder().stageId(stage2Id).sequenceNumber(1).build();
         Mockito.when(stageRepository.findById(stage1Id)).thenReturn(Optional.of(stage1));
         Mockito.when(stageRepository.findById(stage2Id)).thenReturn(Optional.of(stage2));
         Mockito.when(stageRepository.save(stage1)).thenReturn(stage1);

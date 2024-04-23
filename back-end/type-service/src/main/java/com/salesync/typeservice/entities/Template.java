@@ -17,8 +17,8 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "template")
-@AttributeOverride(name="id",column = @Column(name="template_id"))
-public class Template extends BaseEntity{
+@AttributeOverride(name = "id", column = @Column(name = "template_id"))
+public class Template extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private TemplateEnum name;
 

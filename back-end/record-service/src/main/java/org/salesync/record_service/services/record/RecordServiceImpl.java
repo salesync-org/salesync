@@ -60,51 +60,27 @@ public class RecordServiceImpl implements RecordService {
         Pageable pageRequest = PageRequest.of(requestDto.getCurrentPage() - 1, requestDto.getPageSize());
         Page<Record> page = null;
         if (requestDto.getPropertyName() != null) {
-            page = recordRepository
-                    .getFilteredRecord(
-                            UUID.fromString(SecurityContextHelper.getContextUserId()),
-                            requestDto.getPropertyName(),
-                            requestDto.getTypeId(),
-                            requestDto.getSearchTerm(),
-                            requestDto.isAsc(),
-                            pageRequest
-                    );
+            page = recordRepository.getFilteredRecord(
+                    UUID.fromString(SecurityContextHelper.getContextUserId()), requestDto.getPropertyName(), requestDto.getTypeId(), requestDto.getSearchTerm(), requestDto.isAsc(), pageRequest
+            );
         } else {
-            page = recordRepository
-                    .getFilteredRecordsAndOrderByName(
-                            UUID.fromString(SecurityContextHelper.getContextUserId()),
-                            requestDto.getTypeId(),
-                            requestDto.getSearchTerm(),
-                            requestDto.isAsc(),
-                            pageRequest
-                    );
+            page = recordRepository.getFilteredRecordsAndOrderByName(
+                    UUID.fromString(SecurityContextHelper.getContextUserId()), requestDto.getTypeId(), requestDto.getSearchTerm(), requestDto.isAsc(), pageRequest
+            );
         }
-        List<RecordDto> recordDtos = page.getContent().stream()
-                .map(recordMapper::recordToRecordDto)
-                .toList();
+        List<RecordDto> recordDtos = page.getContent().stream().map(recordMapper::recordToRecordDto).toList();
 
-        return ListRecordsResponseDto.builder()
-                .records(recordDtos)
-                .totalSize(page.getTotalElements())
-                .pageSize(page.getSize())
-                .currentPage(page.getNumber() + 1)
-                .build();
+        return ListRecordsResponseDto.builder().records(recordDtos).totalSize(page.getTotalElements()).pageSize(page.getSize()).currentPage(page.getNumber() + 1).build();
     }
 
     @Override
     public List<RecordDto> getAllRecords() {
-        return recordRepository.findAll()
-                .stream().map(recordMapper::recordToRecordDto)
-                .toList();
+        return recordRepository.findAll().stream().map(recordMapper::recordToRecordDto).toList();
     }
 
     @Override
     public ListRecordsResponseDto getAllRecordsWithCondition(ListRecordsRequestDto listRecordsRequestDto) {
-        return ListRecordsResponseDto.builder()
-                .records(recordRepository.findAll().stream()
-                        .map(recordMapper::recordToRecordDto)
-                        .toList())
-                .build();
+        return ListRecordsResponseDto.builder().records(recordRepository.findAll().stream().map(recordMapper::recordToRecordDto).toList()).build();
     }
 
     @Override
@@ -125,30 +101,20 @@ public class RecordServiceImpl implements RecordService {
         UUID sourceRecordId = requestRecordTypeRelationDto.getSourceRecordId();
         Record sourceRecord = recordRepository.findById(sourceRecordId).orElseThrow(
                 () -> new ObjectNotFoundException(
-                        "Source type",
-                        sourceRecordId.toString()
+                        "Source type", sourceRecordId.toString()
                 )
         );
 
         UUID destinationRecordId = requestRecordTypeRelationDto.getDestinationRecordId();
         Record destinationRecord = recordRepository.findById(destinationRecordId).orElseThrow(
                 () -> new ObjectNotFoundException(
-                        "Destination type",
-                        destinationRecordId.toString()
+                        "Destination type", destinationRecordId.toString()
                 )
         );
 
-        RecordTypeRelation recordTypeRelation = RecordTypeRelation.builder()
-                .typeRelationId(requestRecordTypeRelationDto.getTypeRelationId())
-                .sourceRecord(sourceRecord)
-                .destinationRecord(destinationRecord)
-                .build();
+        RecordTypeRelation recordTypeRelation = RecordTypeRelation.builder().typeRelationId(requestRecordTypeRelationDto.getTypeRelationId()).sourceRecord(sourceRecord).destinationRecord(destinationRecord).build();
 
-        RecordTypeRelation inverseRelation = RecordTypeRelation.builder()
-                .typeRelationId(requestRecordTypeRelationDto.getTypeRelationId())
-                .sourceRecord(destinationRecord)
-                .destinationRecord(sourceRecord)
-                .build();
+        RecordTypeRelation inverseRelation = RecordTypeRelation.builder().typeRelationId(requestRecordTypeRelationDto.getTypeRelationId()).sourceRecord(destinationRecord).destinationRecord(sourceRecord).build();
 
         recordTypeRelationRepository.save(inverseRelation);
 
@@ -161,8 +127,7 @@ public class RecordServiceImpl implements RecordService {
     public RecordTypePropertyDto updateRecordProperty(RecordTypePropertyDto recordTypePropertyDto) {
         RecordTypeProperty recordTypeProperty = recordTypePropertyRepository.findById(recordTypePropertyDto.getId()).orElseThrow(
                 () -> new ObjectNotFoundException(
-                        "Record type property",
-                        recordTypePropertyDto.getId().toString()
+                        "Record type property", recordTypePropertyDto.getId().toString()
                 )
         );
         recordTypeProperty.setItemValue(recordTypePropertyDto.getItemValue());
@@ -210,10 +175,7 @@ public class RecordServiceImpl implements RecordService {
 
         // Make the HTTP GET request
         ResponseEntity<List<TypeDto>> response = restTemplate.exchange(
-                "http://type-service/api/v1/" + realm + "/types",
-                HttpMethod.GET,
-                entity,
-                new ParameterizedTypeReference<List<TypeDto>>() {
+                "http://type-service/api/v1/" + realm + "/types", HttpMethod.GET, entity, new ParameterizedTypeReference<List<TypeDto>>() {
                 }
         );
         List<TypeDto> allType = response.getBody();
@@ -222,33 +184,29 @@ public class RecordServiceImpl implements RecordService {
         assert allType != null;
         sourceRecordDto.setType(findTypeById(sourceRecord.getRecordType().getTypeId(), allType));
 
-        return ListRecordTypeRelationsDto.builder()
-                .sourceRecord(sourceRecordDto)
-                .relations(
-                        listRecordTypeRelations.stream().map(recordTypeRelation -> {
-                            RecordDto destinationRecordDto = recordMapper.recordToRecordDto(recordTypeRelation.getDestinationRecord());
-                            TypeDto typeDto = findTypeById(recordTypeRelation.getDestinationRecord().getRecordType().getTypeId(), allType);
+        return ListRecordTypeRelationsDto.builder().sourceRecord(sourceRecordDto).relations(
+                listRecordTypeRelations.stream().map(recordTypeRelation -> {
+                    RecordDto destinationRecordDto = recordMapper.recordToRecordDto(recordTypeRelation.getDestinationRecord());
+                    TypeDto typeDto = findTypeById(recordTypeRelation.getDestinationRecord().getRecordType().getTypeId(), allType);
 //                            System.out.println(recordTypeRelation.getDestinationRecord().getId());
 
-                            RelationItemDto item = relationItemMapper.recordTypeRelationToRelationItemDto(recordTypeRelation);
-                            destinationRecordDto.setType(typeDto);
-                            item.setDestinationRecord(destinationRecordDto);
+                    RelationItemDto item = relationItemMapper.recordTypeRelationToRelationItemDto(recordTypeRelation);
+                    destinationRecordDto.setType(typeDto);
+                    item.setDestinationRecord(destinationRecordDto);
 
-                            return item;
-                        }).toList()
+                    return item;
+                }).toList()
 
-                )
-                .build();
+        ).build();
     }
 
     @Override
-    public RecordDto updateStage(RequestUpdateStageDto requestUpdateStageDto, String token,String realm) {
+    public RecordDto updateStage(RequestUpdateStageDto requestUpdateStageDto, String token, String realm) {
 
         /* TODO: validate stageId */
         Record record = recordRepository.findById(requestUpdateStageDto.getRecordId()).orElseThrow(
                 () -> new ObjectNotFoundException(
-                        Record.class.getSimpleName(),
-                        requestUpdateStageDto.getRecordId().toString()
+                        Record.class.getSimpleName(), requestUpdateStageDto.getRecordId().toString()
                 )
         );
         RecordStage recordStage = record.getRecordStage();
@@ -256,55 +214,30 @@ public class RecordServiceImpl implements RecordService {
         record.setRecordStage(recordStage);
 
         String userId = tokenService.extractClaim(token.split(" ")[1], claims -> claims.get("userId", String.class));
-        rabbitMQProducer.sendMessage("record",MessageDto.builder()
-                        .content("${"+userId+"} Updated "+ record.getName() +" stage")
-                        .title("Stage Updated")
-                        .createdAt(new Date())
-                        .action("update")
-                        .isRead(false)
-                        .url("/"+realm+"/record/"+record.getId())
-                        .senderId(UUID.fromString(userId))
-                        .receiverId(record.getUserId())
-                .build());
+        rabbitMQProducer.sendMessage("record", MessageDto.builder().content("${" + userId + "} Updated " + record.getName() + " stage").title("Stage Updated").createdAt(new Date()).action("update").isRead(false).url("/" + realm + "/record/" + record.getId()).senderId(UUID.fromString(userId)).receiverId(record.getUserId()).build());
 
         return recordMapper.recordToRecordDto(recordRepository.save(record));
     }
 
     @Override
     public RecordDto createRecordByTypeId(
-            String typeId,
-            String token,
-            CreateRecordRequestDto createRecordRequestDto
+                                          String typeId, String token, CreateRecordRequestDto createRecordRequestDto
     ) {
         String userContextId = SecurityContextHelper.getContextUserId();
 
-        Record recordEntity = Record.builder()
-                .userId(UUID.fromString(userContextId))
-                .name(createRecordRequestDto.getRecordName())
-                .build();
+        Record recordEntity = Record.builder().userId(UUID.fromString(userContextId)).name(createRecordRequestDto.getRecordName()).build();
 
-        RecordType recordType = RecordType.builder()
-                .record(recordEntity)
-                .typeId(UUID.fromString(typeId))
-                .build();
+        RecordType recordType = RecordType.builder().record(recordEntity).typeId(UUID.fromString(typeId)).build();
         recordEntity.setRecordType(recordType);
 
         if (createRecordRequestDto.getStageId() != null) {
-            RecordStage recordStage = RecordStage.builder()
-                    .record(recordEntity)
-                    .stageId(createRecordRequestDto.getStageId())
-                    .build();
+            RecordStage recordStage = RecordStage.builder().record(recordEntity).stageId(createRecordRequestDto.getStageId()).build();
             recordEntity.setRecordStage(recordStage);
         }
 
         List<RecordTypeProperty> recordTypeProperties = new ArrayList<>();
         for (RecordTypePropertyDto recordTypePropertyDto : createRecordRequestDto.getProperties()) {
-            RecordTypeProperty recordTypeProperty = RecordTypeProperty.builder()
-                    .itemValue(recordTypePropertyDto.getItemValue())
-                    .propertyName(recordTypePropertyDto.getPropertyName())
-                    .recordTypePropertyLabel(recordTypePropertyDto.getPropertyLabel())
-                    .record(recordEntity)
-                    .build();
+            RecordTypeProperty recordTypeProperty = RecordTypeProperty.builder().itemValue(recordTypePropertyDto.getItemValue()).propertyName(recordTypePropertyDto.getPropertyName()).recordTypePropertyLabel(recordTypePropertyDto.getPropertyLabel()).record(recordEntity).build();
 
             recordTypeProperties.add(recordTypeProperty);
         }
@@ -317,8 +250,7 @@ public class RecordServiceImpl implements RecordService {
     public RecordDto updateRecordByRecordId(String recordId, String token, RecordDto updateRecordRequestDto) {
         Record recordEntity = recordRepository.findById(UUID.fromString(recordId)).orElseThrow(
                 () -> new ObjectNotFoundException(
-                        "Record",
-                        recordId
+                        "Record", recordId
                 )
         );
         recordEntity.setName(updateRecordRequestDto.getName());

@@ -3,6 +3,13 @@ package org.salesync.apigateway.constants;
 public final class Service {
     public static final String CONTEXT_PATH = "/api/v1";
     public static final String LOADBALANCER = "lb://";
+
+    public static final class Auth {
+        public static final String NAME = "auth-service";
+        public static final String AUTH_CONTEXT_PATH = "/api/v1";
+        public static final String ENDPOINT = "/auth";
+    }
+
     public static final class Type {
         public static final String NAME = "type-service";
         public static final String ENDPOINT = "/types";

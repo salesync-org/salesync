@@ -1,6 +1,8 @@
 import RecordChart from '@/components/Chart/RecordChart';
 import NavigationButton from '@/components/NavigationButton/NavigationButton';
 import ChartSection from './ChartSection';
+import LeadStageChart from '@/components/Chart/LeadStageChart';
+import OpportunityStageChart from '@/components/Chart/OpportunityStageChart';
 const HomeLayout = () => {
   return (
     <div>
@@ -10,8 +12,8 @@ const HomeLayout = () => {
       </section>
       <section className='grid flex-grow grid-cols-1 pt-10 md:grid-cols-2 2xl:grid-cols-4'>
         <RecordChart />
-        <ChartSection />
-        <ChartSection />
+        <LeadStageChart />
+        <OpportunityStageChart />
         <ChartSection />
       </section>
     </div>

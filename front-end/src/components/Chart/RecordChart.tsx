@@ -46,7 +46,7 @@ const RecordChart = () => {
     labels: ['Leads', 'Opportunities', 'Contacts', 'Accounts'],
     datasets: [
       {
-        label: '# of Votes',
+        label: '# of Records',
         data: [leadNumber, opportunityNumber, contactNumber, accountNumber],
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
@@ -78,7 +78,7 @@ const RecordChart = () => {
         <p className='mb-4'>Records owned by me and created in the last 30 days</p>
         <div className='grid h-max flex-grow place-content-center'>
           {leadNumber === 0 && opportunityNumber === 0 && contactNumber === 0 && accountNumber === 0 ? (
-            <h3>{"You don't have any records"}</h3>
+            <h3>{"You don't have any Records"}</h3>
           ) : (
             <Doughnut data={data} options={options} />
           )}

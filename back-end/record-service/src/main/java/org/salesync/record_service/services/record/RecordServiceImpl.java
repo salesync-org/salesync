@@ -19,6 +19,7 @@ import org.salesync.record_service.mappers.RecordTypeRelationMapper;
 import org.salesync.record_service.mappers.RelationItemMapper;
 import org.salesync.record_service.repositories.*;
 import org.salesync.record_service.services.token.TokenService;
+import org.salesync.record_service.services.token.TokenService;
 import org.salesync.record_service.utils.SecurityContextHelper;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
@@ -241,7 +242,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public RecordDto updateStage(RequestUpdateStageDto requestUpdateStageDto, String token, String realm) {
+    public RecordDto updateStage(RequestUpdateStageDto requestUpdateStageDto, String token,String realm) {
 
         /* TODO: validate stageId */
         Record record = recordRepository.findById(requestUpdateStageDto.getRecordId()).orElseThrow(
@@ -255,15 +256,15 @@ public class RecordServiceImpl implements RecordService {
         record.setRecordStage(recordStage);
 
         String userId = tokenService.extractClaim(token.split(" ")[1], claims -> claims.get("userId", String.class));
-        rabbitMQProducer.sendMessage("record", MessageDto.builder()
-                .content("${" + userId + "} Updated " + record.getName() + " stage")
-                .title("Stage Updated")
-                .createdAt(new Date())
-                .action("update")
-                .isRead(false)
-                .url("/" + realm + "/record/" + record.getId())
-                .senderId(UUID.fromString(userId))
-                .receiverId(record.getUserId())
+        rabbitMQProducer.sendMessage("record",MessageDto.builder()
+                        .content("${"+userId+"} Updated "+ record.getName() +" stage")
+                        .title("Stage Updated")
+                        .createdAt(new Date())
+                        .action("update")
+                        .isRead(false)
+                        .url("/"+realm+"/record/"+record.getId())
+                        .senderId(UUID.fromString(userId))
+                        .receiverId(record.getUserId())
                 .build());
 
         return recordMapper.recordToRecordDto(recordRepository.save(record));

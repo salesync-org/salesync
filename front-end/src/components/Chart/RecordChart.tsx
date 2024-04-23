@@ -1,10 +1,24 @@
 import { Panel } from '@/components/ui';
-import { Chart as ChartJS, ArcElement, Tooltip, Title, Legend } from 'chart.js';
+import useRecords from '@/hooks/record-service/useRecords';
+import useType from '@/hooks/type-service/useType';
+import { ArcElement, Chart as ChartJS, Legend, Title, Tooltip } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
+import ChartSkeleton from './ChartSkeleton';
 
 ChartJS.register(ArcElement, Tooltip, Title, Legend);
 
-const ChartSection = () => {
+const RecordChart = () => {
+  const { types, isLoading: isTypesLoading } = useType();
+  const { } = useRecords()
+
+  if (isTypesLoading) {
+    return <ChartSkeleton />;
+  }
+
+  if (!types) {
+    return null;
+  }
+
   const options = {
     maintainAspectRatio: false,
     plugins: { legend: { display: true, position: 'right' } }
@@ -36,8 +50,8 @@ const ChartSection = () => {
   return (
     <Panel>
       <section>
-        <h2>Lead</h2>
-        <p className='mb-4'>Leads owned by me and created in the last 30 days</p>
+        <h2>Records</h2>
+        <p className='mb-4'>Records owned by me and created in the last 30 days</p>
         <div className='grid place-content-center'>
           <Doughnut data={data} options={options} />
         </div>
@@ -45,4 +59,4 @@ const ChartSection = () => {
     </Panel>
   );
 };
-export default ChartSection;
+export default RecordChart;

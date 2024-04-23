@@ -2,13 +2,13 @@ import { cn } from '@/utils/utils';
 import React from 'react';
 
 interface SkeletonProps {
-  width: string;
+  width?: string;
   height?: string;
   borderRadius?: string;
   className?: string;
 }
 
-const Skeleton: React.FC<SkeletonProps> = ({ width, height = '16px', borderRadius = '12px', className }) => {
+const Skeleton: React.FC<SkeletonProps> = ({ width = '16px', height = '16px', borderRadius = '12px', className }) => {
   return (
     <div
       style={{

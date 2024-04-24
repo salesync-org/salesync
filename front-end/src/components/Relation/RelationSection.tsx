@@ -8,7 +8,7 @@ type RelationSectionProps = {
   relations: RelationResponse[];
 };
 
-const RelationSection = ({ title, relations }: RelationSectionProps) => {
+const RelationSection = ({ title, relations = [] }: RelationSectionProps) => {
   const createNewRelation = () => {
     console.log('Create new relation');
   };
@@ -38,7 +38,7 @@ const RelationSection = ({ title, relations }: RelationSectionProps) => {
       <section className='border px-4 py-4'>
         <ul className='space-y-4'>
           {relations.map((relation) => (
-            <li>
+            <li key={relation.id}>
               <div className='flex items-center justify-between'>
                 <Link className='text-base font-semibold text-primary-color' to={'#'}>
                   {relation.destination_record.name}

@@ -102,7 +102,7 @@ const RecordDetail = () => {
         <Icon name='edit' className='ml-auto' />
       </section>
       <section className='pt-12'>
-        <Panel className='flex flex-row items-center justify-between p-2 mb-0'>
+        <Panel className='mb-0 flex flex-row items-center justify-between p-2'>
           <div className='flex flex-row items-center'>
             <img
               className='mx-2 h-[32px] w-[32px] rounded-sm bg-blue-500'
@@ -132,7 +132,11 @@ const RecordDetail = () => {
               Delete
             </Button>
             {record.source_record.type.name === 'Lead' && (
-              <Button intent='normal' zoom={false}>
+              <Button
+                intent='normal'
+                zoom={false}
+                onClick={() => showModal(MODAL_TYPES.CONVERT_MODAL, { recordId: record.source_record.id, companyName })}
+              >
                 Convert
               </Button>
             )}
@@ -189,21 +193,7 @@ const RecordDetail = () => {
           </section>
 
           <section className='col-span-1'>
-            {record.relations.length !== 0 && <RelationSections relations={record.relations} />}
-            {record.relations.length === 0 && (
-              <Panel className='col-span-1 h-fit p-4'>
-                <div className='flex items-center'>
-                  <div className='mr-2'>
-                    <Icon name='merge' className='mr-1 rounded bg-orange-400 p-0.5 text-white'></Icon>
-                  </div>
-                  <div>
-                    <span className='font-bold'>
-                      We found no potential duplicates of this {record.source_record.type.name}.
-                    </span>
-                  </div>
-                </div>
-              </Panel>
-            )}
+            <RelationSections relations={record.relations} typeId={record.source_record.type.id} />
           </section>
         </div>
       </section>

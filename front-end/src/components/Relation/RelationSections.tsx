@@ -1,9 +1,8 @@
 // import { RelationResponse } from '@/type';
 import useTypeRelation from '@/hooks/type-service/useTypeRelation';
-import RelationSection from './RelationSection';
-import { useParams } from 'react-router-dom';
+import { Icon, Panel } from '../ui';
 import LoadingSpinner from '../ui/Loading/LoadingSpinner';
-import { Panel } from '../ui';
+import RelationSection from './RelationSection';
 
 type RelationSectionsProp = {
   relations: RelationResponse[];
@@ -26,8 +25,6 @@ const RelationSections = ({ relations, typeId }: RelationSectionsProp) => {
     relationObjects[typeName].push(relation);
   });
 
-  const typeGroups = Object.keys(relationObjects);
-
   if (isLoading) {
     return (
       <Panel>
@@ -38,6 +35,21 @@ const RelationSections = ({ relations, typeId }: RelationSectionsProp) => {
 
   if (!typeRelations) {
     return null;
+  }
+
+  if (typeRelations.length === 0) {
+    return (
+      <Panel className='col-span-1 h-fit p-4'>
+        <div className='flex items-center'>
+          <div className='mr-2'>
+            <Icon name='merge' className='mr-1 rounded bg-orange-400 p-0.5 text-white'></Icon>
+          </div>
+          <div>
+            <span className='font-bold'>We found no potential duplicates of this type.</span>
+          </div>
+        </div>
+      </Panel>
+    );
   }
 
   return (

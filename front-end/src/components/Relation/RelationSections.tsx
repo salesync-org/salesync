@@ -3,6 +3,7 @@ import useTypeRelation from '@/hooks/type-service/useTypeRelation';
 import { Icon, Panel } from '../ui';
 import LoadingSpinner from '../ui/Loading/LoadingSpinner';
 import RelationSection from './RelationSection';
+import { useParams } from 'react-router-dom';
 
 type RelationSectionsProp = {
   relations: RelationResponse[];
@@ -16,6 +17,7 @@ export type RelationGroup = {
 const RelationSections = ({ relations, typeId }: RelationSectionsProp) => {
   const relationObjects: { [key: string]: RelationResponse[] } = {};
   const { data: typeRelations = [], isLoading } = useTypeRelation(typeId);
+  const { recordId = '' } = useParams();
 
   relations.forEach((relation) => {
     const typeName = relation.destination_record.type.name;
@@ -55,12 +57,13 @@ const RelationSections = ({ relations, typeId }: RelationSectionsProp) => {
   return (
     <ul>
       {typeRelations.map((typeRelation) => {
-        console.log({ typeRelation });
         return (
           <li key={typeRelation.id}>
             <RelationSection
               title={typeRelation.destination_type_label}
               relations={relationObjects[typeRelation.destination_type.name]}
+              destinationType={typeRelation.destination_type}
+              recordId={recordId}
             />
           </li>
         );

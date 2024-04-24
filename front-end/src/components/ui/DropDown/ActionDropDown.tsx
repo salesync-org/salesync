@@ -12,7 +12,6 @@ type ActionDropDownProps = {
 
 const ActionDropDown = ({ actions }: ActionDropDownProps) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
-
   return (
     <div className='relative'>
       <Button
@@ -32,7 +31,7 @@ const ActionDropDown = ({ actions }: ActionDropDownProps) => {
           setMenuOpen(false);
         }}
         align='right'
-        className='right-[-50%] top-[32px] mt-0'
+        className='absolute right-[-50%] top-[32px] mt-0'
         divide={false}
       >
         {actions.map((action) => (

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import instance from './axiosConfig';
 const BASE_URL = `${import.meta.env.VITE_API_GATEWAY_HOST}/api/v1`;
 

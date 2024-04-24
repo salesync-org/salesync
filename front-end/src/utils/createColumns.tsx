@@ -2,14 +2,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import recordApi from '@/api/record';
 import { Button, Icon, TextInput } from '@/components/ui';
-import { Pencil, X } from 'lucide-react';
-import { ChangeEvent, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { cn, formatCurrency } from './utils';
-import { useToast } from '@/components/ui/Toast';
-import { useQueryClient } from 'react-query';
 import { ActionDropDown } from '@/components/ui/DropDown';
-import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
+import { useToast } from '@/components/ui/Toast';
+import { Pencil } from 'lucide-react';
+import { ChangeEvent, useState } from 'react';
+import { useQueryClient } from 'react-query';
+import { Link } from 'react-router-dom';
+import { cn, formatCurrency } from './utils';
 
 export const createColumns = (companyName: string, properties: any[], records: any[]) => {
   const columns: any = [

@@ -1,5 +1,5 @@
 import typeApi from '@/api/type';
-import { Button, Table, TableBody, TableCell, TableHeader, TableRow } from '@/components/ui';
+import { Button } from '@/components/ui';
 import PrimaryButton from '@/components/ui/Button/PrimaryButton';
 import Icon from '@/components/ui/Icon/Icon';
 import Panel from '@/components/ui/Panel/Panel';
@@ -7,17 +7,18 @@ import TextInput from '@/components/ui/TextInput/TextInput';
 import '@/constants/api';
 import useDebounce from '@/hooks/useDebounce';
 import { cn } from '@/utils/utils';
-import { ArrowLeft, Pencil, Trash2 } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 // import typeApi from '@/api/type';
 // import { Button } from '@/components/ui';
 // import { ArrowLeft } from 'lucide-react';
 // import { cn } from '@/utils/utils';
-import TypePropertyTable from '@/components/ui/Table/TypePropertyTable';
-import StageSetting from './StageSetting';
-import TypeRelationTable from '@/components/ui/Table/TypeRelationTable';
 import CreateTypeRelationModal from '@/components/CreateTypeRelationModal/CreateTypeRelationModal';
+import TypePropertyTable from '@/components/ui/Table/TypePropertyTable';
+import TypeRelationTable from '@/components/ui/Table/TypeRelationTable';
+import StageSetting from './StageSetting';
+import { useQueryClient } from 'react-query';
 
 const TypePropertyManager = () => {
   const { companyName, typeId } = useParams();
@@ -32,6 +33,7 @@ const TypePropertyManager = () => {
     return searchParams.get('search') || '';
   });
   const debouncedSearch = useDebounce(search, 500);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     // Fetch sample data
@@ -200,6 +202,7 @@ const TypePropertyManager = () => {
             if (res) {
               setTypeRelations((prev) => [...(prev ?? []), typeRelation]);
               setRelationSearchResult((prev) => [...prev, typeRelation]);
+              queryClient.invalidateQueries(['type-relation', typeId]);
             }
             setCreateRelation(false);
           }}

@@ -114,7 +114,7 @@ const RelationModal = () => {
       isOpen={modalType === MODAL_TYPES.RELATION_MODAL}
       onClose={hideModal}
       className='mx-auto h-[600px] w-[1024px] max-w-[calc(100vw-12px)] overflow-y-hidden'
-      title='Convert Lead'
+      title='Create Relation'
     >
       <div className='flex h-[482px] w-full flex-col gap-2 overflow-y-auto pb-[72px]'>
         <RelationForm

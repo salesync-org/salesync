@@ -1,8 +1,7 @@
-import RecordChart from '@/components/Chart/RecordChart';
-import NavigationButton from '@/components/NavigationButton/NavigationButton';
-import ChartSection from './ChartSection';
 import LeadStageChart from '@/components/Chart/LeadStageChart';
 import OpportunityStageChart from '@/components/Chart/OpportunityStageChart';
+import RecordChart from '@/components/Chart/RecordChart';
+import NavigationButton from '@/components/NavigationButton/NavigationButton';
 const HomeLayout = () => {
   return (
     <div>
@@ -14,7 +13,6 @@ const HomeLayout = () => {
         <RecordChart />
         <LeadStageChart />
         <OpportunityStageChart />
-        <ChartSection />
       </section>
     </div>
   );

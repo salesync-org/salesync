@@ -1,16 +1,25 @@
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Panel } from '../ui';
 import ActionDropDown from '../ui/DropDown/ActionDropDown';
+import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 // import { RelationResponse } from '@/type';
 
 type RelationSectionProps = {
   title: string;
   relations: RelationResponse[];
+  destinationType: Type;
+  recordId: string;
 };
 
-const RelationSection = ({ title, relations }: RelationSectionProps) => {
+const RelationSection = ({ title, relations = [], destinationType, recordId }: RelationSectionProps) => {
+  const { showModal } = useGlobalModalContext();
+  const { companyName } = useParams();
   const createNewRelation = () => {
-    console.log('Create new relation');
+    showModal(MODAL_TYPES.RELATION_MODAL, {
+      recordId: recordId,
+      companyName: companyName,
+      typeId: destinationType.id
+    });
   };
 
   const editRecord = (recordId: string) => {
@@ -38,7 +47,7 @@ const RelationSection = ({ title, relations }: RelationSectionProps) => {
       <section className='border px-4 py-4'>
         <ul className='space-y-4'>
           {relations.map((relation) => (
-            <li>
+            <li key={relation.id}>
               <div className='flex items-center justify-between'>
                 <Link className='text-base font-semibold text-primary-color' to={'#'}>
                   {relation.destination_record.name}

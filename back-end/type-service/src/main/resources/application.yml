@@ -30,7 +30,8 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
   instance:
-    prefer-ip-address: true
+    prefer-ip-address: false
+    hostname: 35.240.223.64
 
 token:
   public-key: ${TOKEN_PUBLIC_KEY}

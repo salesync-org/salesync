@@ -57,6 +57,7 @@ const RelationSections = ({ relations, typeId }: RelationSectionsProp) => {
   return (
     <ul>
       {typeRelations.map((typeRelation) => {
+        if (typeRelation.destination_type.template.name === 'Activity') return null;
         return (
           <li key={typeRelation.id}>
             <RelationSection

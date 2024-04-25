@@ -24,7 +24,7 @@ const InforActivity: React.FC<InforActivityProps> = ({ className, data, type }) 
   const [dateEnd, setDateEnd] = useState('');
 
   const subject = data?.find((data) => data.property_name === 'Name')?.item_value;
-  const description = data?.find((data) => data.property_name === 'Description')?.item_value;
+  const description = data?.find((data) => data.property_label === 'Description')?.item_value;
   const comments = data?.find((data) => data.property_label === 'Comment')?.item_value;
   const start = data?.find((data) => data.property_label === 'Start')?.item_value;
   const end = data?.find((data) => data.property_label === 'End')?.item_value;

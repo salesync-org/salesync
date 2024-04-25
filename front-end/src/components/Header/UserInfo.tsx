@@ -1,8 +1,9 @@
 import defaultAvatar from '@/assets/default_avatar.png';
-import { Button, DropDownList, Icon, Item } from '@/components/ui';
+import { Button, DropDownList, Item } from '@/components/ui';
 import useAuth from '@/hooks/useAuth';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Bell, Settings, LogOut } from 'lucide-react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const UserInfo = () => {
   const { user, logout } = useAuth();
@@ -10,6 +11,7 @@ const UserInfo = () => {
   const [name, setName] = useState('Unknown');
   const [avatar_url, setAvatar] = useState('');
   const navigate = useNavigate();
+  const { companyName = '' } = useParams();
 
   useEffect(() => {
     const updateInfo = async () => {
@@ -17,11 +19,12 @@ const UserInfo = () => {
         setName('Unknown');
         setAvatar(defaultAvatar);
       } else {
-        const { first_name, last_name, avatar_url } = user;
-        setName(`${first_name} ${last_name}`);
+        setName(`${user.first_name} ${user.last_name}`);
         // const availability = await isImageShowableHead(avatar_url);
         if (avatar_url) {
-          setAvatar(`${import.meta.env.VITE_STORAGE_SERVICE_HOST}${avatar_url}-48.jpg`);
+          setAvatar(
+            `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/avatars/${user.avatar_url}-48.jpg?lastMod=${new Date().getTime()}`
+          );
         } else {
           setAvatar(defaultAvatar);
         }
@@ -34,8 +37,8 @@ const UserInfo = () => {
     <>
       {
         <div className='relative flex w-fit space-x-3 pl-2 align-middle'>
-          <Button rounded='icon' className='h-10 w-10' intent='normal' onClick={() => {}}>
-            <Icon name='notifications' size='1rem' />
+          <Button rounded='icon' className='h-10 w-10 p-0' intent='normal' onClick={() => {}}>
+            <Bell strokeWidth={'2px'} name='notifications' className='size-[1.5rem]' />
           </Button>
           <div>
             <Button
@@ -46,14 +49,20 @@ const UserInfo = () => {
                 setMenuOpen(!isMenuOpen);
               }}
             >
-              <img className='w-full rounded-full' src={avatar_url} alt='avatar'></img>
+              <img
+                className='w-full rounded-full'
+                src={avatar_url}
+                alt='avatar'
+                onError={(e) => {
+                  e.currentTarget.src = defaultAvatar;
+                }}
+              ></img>
             </Button>
             <DropDownList
               open={isMenuOpen}
               onClose={() => {
                 setMenuOpen(false);
               }}
-              align='right'
               className='right-[.25rem] top-[3rem] mt-0 w-80'
               divide={false}
             >
@@ -62,17 +71,18 @@ const UserInfo = () => {
               </div>
               <Item
                 className='py-0'
-                icon={<Icon name='settings' size='2rem' />}
+                icon={<Settings name='settings' size='1.5rem' />}
                 title='Settings & Administration'
                 onClick={() => {
-                  navigate('/setting');
+                  navigate(`/${companyName}/setting/personal-information`);
                 }}
               />
               <Item
                 className='py-0'
-                icon={<Icon name='logout' size='2rem' />}
+                icon={<LogOut name='logout' size='1.5rem' />}
                 title='Log out'
                 onClick={() => {
+                  navigate(`/${companyName}/home`);
                   logout();
                 }}
               />

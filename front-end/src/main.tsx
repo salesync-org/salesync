@@ -10,24 +10,23 @@ import { GlobalModalProvider } from './context/GlobalModalContext.tsx';
 const queryClient = new QueryClient();
 
 async function enableMocking() {
-  if (process.env.NODE_ENV !== 'development') {
-    return;
+  if (process.env.NODE_ENV === 'mock') {
+    const { server } = await import('@/mocks/api/handlers.ts');
+    return server.start();
   }
-  // const { server } = await import('@/mocks/api/handlers.ts');
-  // return server.start();
 }
 
 enableMocking().then(() => {
   ReactDOM.createRoot(document.getElementById('entry')!).render(
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
-        <GlobalModalProvider>
-          <AuthProvider>
-            <BrowserRouter>
+        <AuthProvider>
+          <BrowserRouter>
+            <GlobalModalProvider>
               <App />
-            </BrowserRouter>
-          </AuthProvider>
-        </GlobalModalProvider>
+            </GlobalModalProvider>
+          </BrowserRouter>
+        </AuthProvider>
       </QueryClientProvider>
     </React.StrictMode>
   );

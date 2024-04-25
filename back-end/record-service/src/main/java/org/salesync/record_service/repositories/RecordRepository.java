@@ -11,12 +11,11 @@ import java.util.List;
 import java.util.UUID;
 
 public interface RecordRepository extends JpaRepository<Record, UUID> {
-    @Query (value = "SELECT * FROM get_filtered_records(:name, :typeId, :searchTerm, :isAsc)",
-    nativeQuery = true
+    @Query(value = "SELECT * FROM get_filtered_records(:userId, :name, :typeId, :searchTerm, :isAsc)", nativeQuery = true
     )
-    Page<Record> getFilteredRecord(String name, UUID typeId, String searchTerm, boolean isAsc, Pageable pageable);
-    @Query (value = "SELECT * FROM get_filtered_records_and_sort_by_name(:typeId, :searchTerm, :isAsc)",
-            nativeQuery = true
+    Page<Record> getFilteredRecord(UUID userId, String name, UUID typeId, String searchTerm, boolean isAsc, Pageable pageable);
+
+    @Query(value = "SELECT * FROM get_filtered_records_and_sort_by_name(:userId, :typeId, :searchTerm, :isAsc)", nativeQuery = true
     )
-    Page<Record> getFilteredRecordsAndOrderByName(UUID typeId, String searchTerm, boolean isAsc, Pageable pageable);
+    Page<Record> getFilteredRecordsAndOrderByName(UUID userId, UUID typeId, String searchTerm, boolean isAsc, Pageable pageable);
 }

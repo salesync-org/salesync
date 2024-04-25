@@ -28,7 +28,7 @@ public class TokenFilter extends OncePerRequestFilter {
         try {
             String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
             if (authHeader == null || !authHeader.startsWith(TokenService.TOKEN_TYPE)) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                filterChain.doFilter(request, response);
                 return;
             }
             String token = authHeader.substring(TokenService.TOKEN_TYPE.length() + 1);
@@ -40,9 +40,7 @@ public class TokenFilter extends OncePerRequestFilter {
                 List<String> permisstions = tokenService.extractClaim(token, claims -> claims.get(PERMISSIONS, (Class<List<String>>) ((Class) List.class)));
                 String userId = tokenService.extractClaim(token, claims -> claims.get(USER_ID, String.class));
                 PreAuthenticatedAuthenticationToken authentication = new PreAuthenticatedAuthenticationToken(
-                        userId,
-                        null,
-                        permisstions.stream().map(SimpleGrantedAuthority::new).toList());
+                        userId, null, permisstions.stream().map(SimpleGrantedAuthority::new).toList());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
             filterChain.doFilter(request, response);

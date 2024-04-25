@@ -28,8 +28,8 @@ public class FieldController {
     @PostMapping
     public ResponseEntity<FieldDto> createField(@Valid @RequestBody FieldDto fieldDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                        fieldService.createField(fieldDto)
-                );
+                fieldService.createField(fieldDto)
+        );
     }
 
 }

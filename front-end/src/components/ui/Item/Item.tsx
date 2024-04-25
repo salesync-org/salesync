@@ -11,6 +11,9 @@ interface ItemProps extends React.HTMLAttributes<HTMLDivElement> {
   additionalInfo?: string;
   icon?: React.ReactNode;
   selected?: boolean;
+  wrapTitle?: boolean;
+  onKeyDown?: React.DOMAttributes<HTMLDivElement>['onKeyDown'];
+  onClick?: () => void;
   restProps?: React.HTMLAttributes<HTMLDivElement>;
 }
 
@@ -20,20 +23,31 @@ const Item: React.FC<ItemProps> = ({
   title,
   subTitle,
   selected = false,
+  wrapTitle = true,
   additionalInfo,
+  onKeyDown,
+  onClick,
   icon,
   ...restProps
 }) => {
   return (
-    <div title={title}>
+    <div
+      title={title}
+      onKeyDown={(e) => {
+        if (onClick && !onKeyDown && e.key === 'Enter') {
+          onClick();
+        }
+      }}
+    >
       <a className={cn(`flex rounded-sm`, className)} href={href} tabIndex={0} title={title}>
         <div
           className={cn(
             'flex flex-grow cursor-pointer items-center rounded-sm px-2 py-2 align-middle',
             selected && 'bg-secondary-light dark:bg-secondary-dark',
-            'hover:bg-secondary-light dark:hover:bg-secondary-dark',
+            'hover:bg-secondary-light/40 dark:hover:bg-secondary-dark/40',
             'hover:text-link-text-light  dark:hover:text-link-text-dark'
           )}
+          onClick={onClick}
           {...restProps}
         >
           {icon && (
@@ -41,7 +55,7 @@ const Item: React.FC<ItemProps> = ({
               className={cn(
                 'flex h-9 w-9 items-center justify-center rounded-full align-middle',
                 'bg-button-background-light dark:bg-button-background-dark',
-                selected && 'bg-secondary-dark dark:bg-secondary-light text-text-dark dark:text-text-light'
+                selected && 'bg-secondary-dark text-text-dark dark:bg-secondary-light dark:text-text-light'
               )}
             >
               {icon}
@@ -50,8 +64,12 @@ const Item: React.FC<ItemProps> = ({
           <div className='mx-2 min-w-32 flex-grow flex-nowrap text-ellipsis pr-4 align-middle'>
             <div>
               <h5 className='select-none text-ellipsis text-nowrap'>{additionalInfo}</h5>
-              {(subTitle || additionalInfo) && <p className='select-none'>{title}</p>}
-              {!subTitle && !additionalInfo && <p className='select-none'>{title}</p>}
+              {(subTitle || additionalInfo) && (
+                <p className={cn('select-none', wrapTitle ? 'text-wrap' : 'text-nowrap')}>{title}</p>
+              )}
+              {!subTitle && !additionalInfo && (
+                <p className={cn('select-none', wrapTitle ? 'text-wrap' : 'text-nowrap')}>{title}</p>
+              )}
               <h5 className='select-none'>{subTitle}</h5>
             </div>
           </div>

@@ -1,3 +1,5 @@
+import { Button } from 'react-day-picker';
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
@@ -118,6 +120,18 @@ export default {
           '0%, 100%': { opacity: '1' },
           '50%': { opacity: '0.5' }
         },
+        bounce: {
+          '0%, 20%, 50%, 80%, 100%': { transform: 'translateY(0)' },
+          '40%': { transform: 'translateY(-12px)' },
+          '60%': { transform: 'translateY(-8px)' }
+        },
+        ping: {
+          '0%': { transform: 'scale(1)', opacity: '1' },
+          '25%': { transform: 'scale(1.2)', opacity: '1' },
+          '50%': { transform: 'scale(1.4)', opacity: '1' },
+          '75%': { transform: 'scale(1.2)', opacity: '1' },
+          '100%': { transform: 'scale(1)', opacity: '1' }
+        },
         'to-top': {
           '0%': { transform: 'translateY(100%)', opacity: '0' },
           '100%': { transform: 'translateY(0)', opacity: '1' }
@@ -125,6 +139,9 @@ export default {
         appearing: {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' }
+        },
+        spinner_svv2: {
+          '100%': { transform: 'rotate(360deg)' }
         }
       }
     }

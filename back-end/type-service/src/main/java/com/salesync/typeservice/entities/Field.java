@@ -9,16 +9,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
 @Data
-@Builder
+@SuperBuilder
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "field")
-@AttributeOverride(name="id",column = @Column(name="field_id"))
+@AttributeOverride(name = "id", column = @Column(name = "field_id"))
 public class Field extends BaseEntity {
     @JsonProperty("input_type")
     @Column(name = "input_type")

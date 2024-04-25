@@ -2,10 +2,14 @@ package org.salesync.authentication.services.role;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.http.HttpStatus;
+import org.keycloak.TokenVerifier;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.RoleResource;
+import org.keycloak.representations.AccessToken;
 import org.keycloak.representations.idm.*;
+import org.salesync.authentication.constants.AuthenticationInfo;
+import org.salesync.authentication.converters.KeyConverter;
 import org.salesync.authentication.dtos.*;
 import org.salesync.authentication.services.user.UserService;
 import org.slf4j.Logger;
@@ -15,6 +19,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
+import java.security.PublicKey;
 import java.util.*;
 
 @Service
@@ -58,8 +63,8 @@ public class RoleServiceImpl implements RoleService {
         } catch (Exception e) {
             logger.error("Error occurred while fetching roles");
             e.printStackTrace();
-            throw e;
         }
+        return null;
     }
 
     @Override
@@ -80,8 +85,8 @@ public class RoleServiceImpl implements RoleService {
         } catch (Exception e) {
             logger.error("Error occurred while fetching role details");
             e.printStackTrace();
-            throw e;
         }
+        return null;
     }
 
     @Override
@@ -113,8 +118,8 @@ public class RoleServiceImpl implements RoleService {
         } catch (Exception e) {
             logger.error("Error occurred while fetching permissions");
             e.printStackTrace();
-            throw e;
         }
+        return null;
     }
 
     @Override
@@ -141,8 +146,8 @@ public class RoleServiceImpl implements RoleService {
         } catch (Exception e) {
             logger.error("Error occurred while fetching permissions");
             e.printStackTrace();
-            throw e;
         }
+        return null;
     }
 
     @Override
@@ -154,6 +159,10 @@ public class RoleServiceImpl implements RoleService {
             roleRepresentation.setDescription(newRoleDto.getDescription());
             roleRepresentation.setComposite(true);
             realmResource.roles().create(roleRepresentation);
+            RoleResource roleResource = realmResource.roles().get(newRoleDto.getRoleName());
+            for (PermissionDto permissionDto : newRoleDto.getPermissions()) {
+                roleResource.addComposites(Collections.singletonList(realmResource.roles().get(permissionDto.getPermissionName()).toRepresentation()));
+            }
             return getRoleDto(realmResource.roles().get(roleRepresentation.getName()));
         } catch (Exception e) {
             logger.error("Error occurred while creating role");
@@ -197,5 +206,39 @@ public class RoleServiceImpl implements RoleService {
             permissions.add(permissionDto);
         }
         return permissions;
+    }
+
+    @Override
+    public SimpleUserDto addRoleToUser(String realmName, String roleName, String userId, String accessToken) {
+        try {
+            logger.info(String.format("Adding role %s to user.", roleName));
+            RealmResource realmResource = keycloak.realm(realmName);
+            PublicKey publicKey = KeyConverter.convertStringToPublicKey(userService.getKey(realmResource));
+            AccessToken token = TokenVerifier.create(accessToken, AccessToken.class)
+                    .publicKey(publicKey)
+                    .verify()
+                    .getToken();
+            if (token.isActive() && userService.isUserInRole(realmResource, token.getSubject(), AuthenticationInfo.ADMIN_SETTINGS_PERMISSION) &&
+                    realmResource.roles().get(roleName) != null) {
+                UserRepresentation userRepresentation = realmResource.users().get(userId).toRepresentation();
+                List<RoleRepresentation> roleMappings = realmResource.users().get(userId).roles().realmLevel().listAll();
+                realmResource.users().get(userId).roles().realmLevel().remove(roleMappings);
+                realmResource.users().get(userId).roles().realmLevel().add(Collections.singletonList(realmResource.roles().get(roleName).toRepresentation()));
+                realmResource.users().get(userId).update(userRepresentation);
+                return userService.getUser(realmName, userId);
+            } else {
+                throw HttpClientErrorException.Unauthorized.create(
+                        HttpStatusCode.valueOf(HttpStatus.SC_UNAUTHORIZED),
+                        "Unauthorized", null, null, null);
+            }
+        } catch (HttpClientErrorException.Unauthorized e) {
+            logger.error("Unauthorized access");
+            e.printStackTrace();
+            throw e;
+        } catch (Exception e) {
+            logger.error("Error occurred while fetching permissions");
+            e.printStackTrace();
+        }
+        return null;
     }
 }

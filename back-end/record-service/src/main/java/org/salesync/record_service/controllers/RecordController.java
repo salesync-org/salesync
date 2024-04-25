@@ -7,11 +7,9 @@ import org.salesync.record_service.constants.Route;
 import org.salesync.record_service.dtos.record_type_relation_dto.ListRecordTypeRelationsDto;
 import org.salesync.record_service.dtos.record_type_relation_dto.RecordTypeRelationDto;
 import org.salesync.record_service.dtos.record_type_relation_dto.RequestRecordTypeRelationDto;
-import org.salesync.record_service.entities.RecordTypeRelation;
 import org.salesync.record_service.services.record.RecordService;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -42,15 +40,14 @@ public class RecordController {
         return recordService.createRecordByType(requestRecordDto);
     }
 
-    @PutMapping(Route.RECORD_TYPE_RELATION)
+    @PostMapping(Route.RECORD_TYPE_RELATION)
     public RecordTypeRelationDto createRecordTypeRelation(@RequestBody RequestRecordTypeRelationDto requestRecordTypeRelationDto) {
-
         return recordService.createRecordTypeRelation(requestRecordTypeRelationDto);
     }
 
     @GetMapping(Route.LIST_RECORD_TYPE_RELATION)
-    public ListRecordTypeRelationsDto getListRecordTypeRelationsById(@PathVariable String sourceRecordId) {
-        return recordService.getListRecordTypeRelationsById(UUID.fromString(sourceRecordId));
+    public ListRecordTypeRelationsDto getListRecordTypeRelationsById(@PathVariable String sourceRecordId, @PathVariable String realm, @RequestHeader(name = "Authorization") String authorization) {
+        return recordService.getListRecordTypeRelationsById(UUID.fromString(sourceRecordId), authorization, realm);
     }
 
     @PutMapping(Route.PROPERTY)
@@ -62,5 +59,20 @@ public class RecordController {
     public ResponseEntity deleteRecordsById(@RequestBody List<UUID> recordIds) {
         recordService.deleteRecordsById(recordIds);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping(Route.UPDATE_STAGE)
+    public ResponseEntity<RecordDto> updateStage(@RequestBody RequestUpdateStageDto requestUpdateStageDto, @RequestHeader(name = "Authorization") String authorization, @PathVariable String realm) {
+        return ResponseEntity.ok(recordService.updateStage(requestUpdateStageDto, authorization, realm));
+    }
+
+    @PostMapping(Route.TYPE_ID + Route.CREATE)
+    public ResponseEntity<RecordDto> createRecordByTypeId(@PathVariable String typeId, @RequestHeader(name = "Authorization") String authorization, @RequestBody CreateRecordRequestDto createRecordRequestDto) {
+        return ResponseEntity.ok(recordService.createRecordByTypeId(typeId, authorization, createRecordRequestDto));
+    }
+
+    @PutMapping(Route.RECORD_ID + Route.UPDATE)
+    public ResponseEntity<RecordDto> updateRecordByRecordId(@PathVariable String recordId, @RequestHeader(name = "Authorization") String authorization, @RequestBody RecordDto updateRecordRequestDto) {
+        return ResponseEntity.ok(recordService.updateRecordByRecordId(recordId, authorization, updateRecordRequestDto));
     }
 }

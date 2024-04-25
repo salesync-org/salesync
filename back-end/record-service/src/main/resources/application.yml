@@ -3,9 +3,14 @@ server:
   port: 8292
   servlet:
     context-path: /api/v1
-  
+
   # Spring application settings
 spring:
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USER}
+    password: ${RABBITMQ_PASSWORD}
   application:
     name: record-service
   datasource:
@@ -24,12 +29,11 @@ springdoc:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: ${EUREKA_SERVER_URL}
     fetch-registry: true
     register-with-eureka: true
   instance:
     prefer-ip-address: true
-
 
 token:
   public-key: ${TOKEN_PUBLIC_KEY}

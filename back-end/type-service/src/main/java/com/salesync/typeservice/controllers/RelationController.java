@@ -1,6 +1,5 @@
 package com.salesync.typeservice.controllers;
 
-
 import com.salesync.typeservice.constants.Route;
 import com.salesync.typeservice.dtos.RelationDTO;
 import com.salesync.typeservice.services.relation.IRelationService;
@@ -24,7 +23,7 @@ public class RelationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<RelationDTO>> getAllRelation(){
+    public ResponseEntity<List<RelationDTO>> getAllRelation() {
         return ResponseEntity.ok(relationService.getAllRelation());
     }
 }

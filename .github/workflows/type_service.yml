@@ -28,6 +28,9 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
+      - name: Run Tests with Maven
+        working-directory: back-end/type-service
+        run: mvn -B test --file pom.xml
       - name: Build with Maven
         working-directory: back-end/type-service 
         run: mvn -B package --file pom.xml 

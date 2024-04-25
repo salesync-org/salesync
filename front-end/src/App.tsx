@@ -2,8 +2,17 @@ import { Suspense, lazy } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import ConfigLayout from './components/Layout/ConfigLayout';
 import LoadingSpinner from './components/ui/Loading/LoadingSpinner';
-import { Toaster } from './components/ui/toaster';
+import { Toaster } from './components/ui/Toast';
 import PrivateRoute from './pages/PrivateRoute/PrivateRoute';
+import ObjectManager from './pages/Settings/ObjectManager';
+import TypePropertyManager from './pages/Settings/TypePropertyManager';
+const SettingLayout = lazy(() => import('./pages/Settings/SettingLayout'));
+const PersonalInformationSetting = lazy(() => import('./pages/Settings/PersonalInformationSetting'));
+const UserSetting = lazy(() => import('./pages/Settings/UserSetting'));
+const ChangePasswordSetting = lazy(() => import('./pages/Settings/ChangePasswordSetting'));
+const CompanyInformationSetting = lazy(() => import('./pages/Settings/CompanyInformationSetting'));
+const PropertySetting = lazy(() => import('./pages/Settings/PropertySetting'));
+const RoleSetting = lazy(() => import('./pages/Settings/RoleSetting'));
 
 // const LogIn = lazy(() => import('pages/LogIn/LogIn'));
 // const Setting = lazy(() => import('pages/Setting/Setting'));
@@ -18,6 +27,7 @@ const VerifyEmail = lazy(() => import('pages/VerifyEmail/VerifyEmail'));
 const ChangePassword = lazy(() => import('pages/ChangePassword/ChangePassword'));
 const ForgotPassword = lazy(() => import('pages/LogIn/ForgotPassword'));
 const RecordDetail = lazy(() => import('./pages/RecordDetail/RecordDetail'));
+const AllTypes = lazy(() => import('./pages/AllTypes/AllTypes'));
 
 function App() {
   return (
@@ -40,8 +50,19 @@ function App() {
             <Route element={<ConfigLayout />}>
               <Route path='home' element={<HomeLayout />} />
               <Route path='sales/:typeId' element={<Sales />} />
+              <Route path='all/:typeId' element={<AllTypes />} />
               <Route path='record/:recordId' element={<RecordDetail />} />
-              <Route path='*' element={<Sales />} />
+              <Route path='setting/' element={<SettingLayout />}>
+                <Route path='personal-information' element={<PersonalInformationSetting />} />
+                <Route path='company-information' element={<CompanyInformationSetting />} />
+                <Route path='change-user-password' element={<ChangePasswordSetting />} />
+                <Route path='roles' element={<RoleSetting />} />
+                <Route path='users' element={<UserSetting />} />
+                <Route path='object-manager' element={<ObjectManager />} />
+                <Route path='object-manager/:typeId' element={<TypePropertyManager />} />
+                <Route path='object-manager/:typeId/create' element={<PropertySetting />} />
+              </Route>
+              {/* <Route path='*' element={<Sales />} /> */}
             </Route>
           </Route>
           <Route path='/:companyName/login' element={<LogIn />}></Route>

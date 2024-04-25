@@ -8,14 +8,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-@Builder
+@SuperBuilder
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Entity
 @Data
 @Table(name = "type_property_field")
-@AttributeOverride(name="id",column = @Column(name="type_property_field_id"))
+@AttributeOverride(name = "id", column = @Column(name = "type_property_field_id"))
 public class TypePropertyField extends BaseEntity {
     @Column(name = "item_value")
     @JsonProperty("item_value")
@@ -30,7 +31,4 @@ public class TypePropertyField extends BaseEntity {
     @JsonIgnore
     @JoinColumn(name = "type_property_id")
     private TypeProperty typeProperty;
-
-
-
 }

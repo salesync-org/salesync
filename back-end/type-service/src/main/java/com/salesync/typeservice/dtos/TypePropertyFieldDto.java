@@ -2,13 +2,17 @@ package com.salesync.typeservice.dtos;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+import java.util.UUID;
+
+@AllArgsConstructor
+@RequiredArgsConstructor
 @Builder
-@Getter
+@Data
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class TypePropertyFieldDto {
-    private String value;
-    private FieldDto field;
+    private String itemValue;
+
+    private PropertyFieldDto propertyField;
 }

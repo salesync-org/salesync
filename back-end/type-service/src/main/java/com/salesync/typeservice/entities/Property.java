@@ -6,16 +6,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
 @Data
-@Builder
+@SuperBuilder
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "property")
-@AttributeOverride(name="id",column = @Column(name="property_id"))
+@AttributeOverride(name = "id", column = @Column(name = "property_id"))
 public class Property extends BaseEntity {
     private String name;
 
@@ -24,6 +25,6 @@ public class Property extends BaseEntity {
     private List<TypeProperty> typeProperties;
 
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
+//    @JsonIgnore
     private List<PropertyField> propertyFields;
 }

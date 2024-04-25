@@ -10,7 +10,7 @@ interface StageProps {
   setStageIdChosen: (stageId: string) => void;
   isCompleted: boolean;
 }
-const Stage = ({
+const StageItem = ({
   stage,
   isFirst,
   isLast,
@@ -68,9 +68,7 @@ const Stage = ({
         )}
       >
         <Icon name='check' className={cn('', (!isCompleted || isChosen) && 'hidden', 'group-hover:hidden')} />
-        <span
-          className={cn('text-[13px]', isCompleted && 'hidden transition-all group-hover:block', isChosen && 'block')}
-        >
+        <span className={cn('text-xs', isCompleted && 'hidden transition-all group-hover:block', isChosen && 'block')}>
           {stage.name}
         </span>
       </span>
@@ -94,4 +92,4 @@ const Stage = ({
   );
 };
 
-export default Stage;
+export default StageItem;

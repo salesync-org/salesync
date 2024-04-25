@@ -1,6 +1,7 @@
 import React, { Dispatch, useEffect, useRef, useState } from 'react';
-import { Button, Icon, DropDownList } from '@/components/ui';
+import { Button, DropDownList } from '@/components/ui';
 import { cn } from '@/utils/utils';
+import { ChevronRight } from 'lucide-react';
 import { textErrorClassName } from '../ErrorText/ErrorText';
 
 interface DropdownButtonProps {
@@ -17,6 +18,9 @@ interface DropdownButtonProps {
   setError?: Dispatch<React.SetStateAction<boolean>>;
   disabled?: boolean;
   divide?: boolean;
+  maxHeightList?: number;
+  maxWidthList?: number;
+  align?: 'left' | 'right' | null;
 }
 
 const DropDown: React.FC<DropdownButtonProps> = ({
@@ -26,7 +30,7 @@ const DropDown: React.FC<DropdownButtonProps> = ({
   onValueChange = () => {},
   defaultValue = 'Select a value',
   header,
-  prefixIcon = <Icon name='expand_more' />,
+  prefixIcon,
   suffixIcon = null,
   isError = false,
   setError,
@@ -36,7 +40,7 @@ const DropDown: React.FC<DropdownButtonProps> = ({
 }) => {
   // const { isOpen, setIsOpen, shoulDropUp, selectedOption, setSelectedOption, buttonContentRef, buttonRef, menuRef } =
   //   useDropDown();
-  const buttonRef = useRef<HTMLDivElement>(null);
+  // const buttonRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const [selectedOption, setSelectedOption] = useState(defaultValue);
   const [isOpen, setIsOpen] = useState(true);
@@ -49,7 +53,6 @@ const DropDown: React.FC<DropdownButtonProps> = ({
         for (let i = 0; i < inputElements.length; i++) {
           const inputElement = inputElements[i];
           if (inputElement.getAttribute('value') === value) {
-            console.log('Seems like we got title  = ' + inputElement.getAttribute('title'));
             return inputElement.getAttribute('title');
           }
         }
@@ -66,11 +69,9 @@ const DropDown: React.FC<DropdownButtonProps> = ({
   }, [listRef]);
 
   function handleOptionClick(option: HTMLElement): void {
-    console.log('onItemClick: ', option);
     const inputNode = option as HTMLInputElement;
     setSelectedOption(inputNode.title);
     if (inputNode) {
-      console.log('inputNode.value: ', inputNode.value);
       onValueChange(inputNode.value);
 
       typeof setError === 'function' && setError(false);
@@ -78,45 +79,54 @@ const DropDown: React.FC<DropdownButtonProps> = ({
   }
 
   return (
-    <div ref={listRef} className='dropdown relative'>
-      <div ref={buttonRef} className='h-fit'>
-        <Button
-          header={header}
-          showHeader={showHeader}
-          headerClassName={cn(isError && textErrorClassName)}
-          className={cn(isError && 'border-red-400 ring-1 ring-red-300', className)}
-          disabled={disabled}
-          onClick={() => {
-            setIsOpen(!isOpen);
-          }}
-        >
-          <div
-            className={cn(
-              'flex w-full items-center',
-              isError && textErrorClassName,
-              selectedOption != '' && value != '' && 'gap-4'
-            )}
+    <>
+      {showHeader && header && <p className={cn('my-1')}>{header}</p>}
+      <div ref={listRef} className='dropdown relative'>
+        <div className='h-fit'>
+          <Button
+            // header={header}
+            // showHeader={showHeader}
+            headerClassName={cn(isError && textErrorClassName)}
+            className={cn(isError && 'border-red-400 ring-1 ring-red-300', className)}
+            disabled={disabled}
+            onClick={() => {
+              setIsOpen(!isOpen);
+            }}
           >
-            {prefixIcon}
-            <p className={cn('w-full truncate text-left', isError && textErrorClassName)}>
-              {selectedOption ? selectedOption : value}
-            </p>
-            <span className='ml-auto grid place-content-center'>{suffixIcon}</span>
-          </div>
-        </Button>
+            <div
+              className={cn(
+                'flex w-full items-center',
+                isError && textErrorClassName,
+                selectedOption != '' && value != ''
+              )}
+            >
+              {prefixIcon ?? (
+                <ChevronRight
+                  name='expand_more'
+                  size={'1rem'}
+                  className={cn('mr-2 origin-center transition-all duration-150', `${isOpen && 'rotate-90'}`)}
+                />
+              )}
+              <p className={cn('w-full truncate text-left', isError && textErrorClassName)}>
+                {selectedOption ? selectedOption : value}
+              </p>
+              <span className='ml-auto grid place-content-center'>{suffixIcon}</span>
+            </div>
+          </Button>
+        </div>
+        <DropDownList
+          onItemClick={handleOptionClick}
+          className={cn(className)}
+          onClose={() => {
+            setIsOpen(false);
+          }}
+          open={isOpen}
+          divide={divide}
+        >
+          {children}
+        </DropDownList>
       </div>
-      <DropDownList
-        onItemClick={handleOptionClick}
-        className={cn(className)}
-        onClose={() => {
-          setIsOpen(false);
-        }}
-        open={isOpen}
-        divide={divide}
-      >
-        {children}
-      </DropDownList>
-    </div>
+    </>
   );
 };
 

@@ -1,17 +1,17 @@
-import recordApi from '@/api/record';
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { Button, Icon } from '../ui';
-import { useToast } from '../ui/use-toast';
+import { useToast } from '../ui/Toast';
 import Stages from './Stages';
 
 interface StageSectionProps {
-  stage: {
-    stages: Stage[];
-    currentStage: string;
-  };
+  stages: Stage[];
+  recordId: string;
+  currentStage: string;
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  updateRecord: (handleUpdate: Function) => unknown;
 }
 
 const lastStages = {
@@ -19,17 +19,23 @@ const lastStages = {
     id: '5',
     name: 'Converted',
     title: 'Select Convert Status',
-    modalName: MODAL_TYPES.CREATE_RECORD_MODAL
+    modalName: MODAL_TYPES.CONVERT_MODAL
   }
 };
 
-const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) => {
+const StageSection = ({ stages, currentStage, updateRecord }: StageSectionProps) => {
   const [stageIdChosen, setStageIdChosen] = useState(currentStage);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setStageIdChosen(currentStage);
+  }, [currentStage]);
 
   const { toast } = useToast();
   const { recordId = '' } = useParams();
   const queryClient = useQueryClient();
   const { showModal } = useGlobalModalContext();
+  const { companyName = '' } = useParams();
 
   const lastStage = lastStages['lead'];
   const updatedStages = useMemo(
@@ -43,17 +49,23 @@ const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) =>
     [lastStage.id, lastStage.name, stages]
   );
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleUpdate = (oldRecord: any) => {
+    const updatedRecord = { ...oldRecord, current_stage_id: stageIdChosen };
+
+    return updatedRecord;
+  };
   const handleUpdateStage = async (recordId: string, stageId: string) => {
-    const res = await recordApi.updateRecordStage(recordId, stageId);
+    const res = await updateRecord(handleUpdate);
 
     if (res) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       queryClient.setQueryData(['record', recordId], (data: any) => {
         return {
           ...data,
-          stage: {
-            ...data.stage,
-            currentStage: stageId
+          source_record: {
+            ...data.source_record,
+            current_stage_id: stageId
           }
         };
       });
@@ -69,6 +81,7 @@ const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) =>
 
   const handleMarkStatusAsCurrent = async () => {
     try {
+      setLoading(true);
       await handleUpdateStage(recordId, stageIdChosen);
     } catch (error) {
       console.error(error);
@@ -77,11 +90,14 @@ const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) =>
         description: 'An error occurred while marking status as current',
         variant: 'destructive'
       });
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleMarkStatusAsComplete = async () => {
     try {
+      setLoading(true);
       if (!recordId || !stageIdChosen) return;
       const findIndex = updatedStages.findIndex((stage) => stage.id === stageIdChosen);
 
@@ -99,11 +115,13 @@ const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) =>
         description: 'An error occurred while marking status as complete',
         variant: 'destructive'
       });
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSelectStatus = () => {
-    showModal(lastStage.modalName, { typeId: 'f4828793-28c2-465b-b783-0c697e41dafb' });
+    showModal(lastStage.modalName, { recordId, companyName });
   };
 
   const stageIdChosenIndex = useMemo(
@@ -121,6 +139,15 @@ const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) =>
   if (!recordId) return null;
 
   const ActionButton = () => {
+    if (loading) {
+      return (
+        <Button intent='primary' disabled={loading} className='py-0'>
+          <Icon name='check' />
+          <span className='text-xs'>Setting stage...</span>
+        </Button>
+      );
+    }
+
     if (isLastStage) {
       return (
         <Button intent='primary' className='py-0' onClick={handleSelectStatus}>
@@ -150,13 +177,14 @@ const StageSection = ({ stage: { stages, currentStage } }: StageSectionProps) =>
   return (
     <>
       <Stages
+        isLoading={loading}
         currentStage={currentStage}
         stages={updatedStages}
         stageIdChosen={stageIdChosen}
         setStageIdChosen={setStageIdChosen}
       />
-      <div className='mt-4 flex items-center justify-between text-[13px]'>
-        <h3>Status: {updatedStages.find((stage) => stage.id === currentStage)?.name}</h3>
+      <div className='mt-4 flex items-center justify-between'>
+        <h3 className='text-base'>Status: {updatedStages.find((stage) => stage.id === currentStage)?.name}</h3>
         <ActionButton />
       </div>
     </>

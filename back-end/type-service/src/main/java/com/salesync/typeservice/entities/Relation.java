@@ -6,17 +6,18 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
 @Data
-@Builder
+@SuperBuilder
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "relation")
-@AttributeOverride(name="id",column = @Column(name="relation_id"))
-public class Relation extends BaseEntity  {
+@AttributeOverride(name = "id", column = @Column(name = "relation_id"))
+public class Relation extends BaseEntity {
     private String name;
 
     @OneToMany(mappedBy = "relation", cascade = CascadeType.ALL, orphanRemoval = true)

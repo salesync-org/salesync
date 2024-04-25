@@ -1,16 +1,17 @@
 import recordApi from '@/api/record';
 import { useQuery } from 'react-query';
 
-const useRecord = (recordId: string) => {
+const useRecord = (companyName: string, recordId: string) => {
   const key = ['record', recordId];
   const { data, error, isLoading } = useQuery(
     key,
     async () => {
-      return recordApi.getRecordDetails(recordId);
+      return recordApi.getRecordDetail(companyName, recordId);
     },
     {
       refetchOnWindowFocus: false,
       staleTime: 1000 * 60 * 5,
+      refetchOnMount: 'always',
       keepPreviousData: true
     }
   );

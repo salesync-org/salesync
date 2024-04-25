@@ -1,22 +1,12 @@
+import { Button, ButtonGroup, DropDown, Icon, PrimaryButton, TextButton } from '@/components/ui';
 import React, { useState } from 'react';
-import {
-  Button,
-  Icon,
-  ButtonGroup,
-  PrimaryButton,
-  TextInput,
-  TextArea,
-  DateInput,
-  DropDown,
-  TextButton
-} from '@/components/ui';
 import { cn } from 'utils/utils';
 // import InputRecordRelative from './InputRecordRelative';
-import LoadingSpinner from '../ui/Loading/LoadingSpinner';
-import useType from '@/hooks/type-service/useType';
-import useProperties from '@/hooks/type-service/useProperties';
-import { useLocation } from 'react-router-dom';
 import recordApi from '@/api/record';
+import useProperties from '@/hooks/type-service/useProperties';
+import useType from '@/hooks/type-service/useType';
+import { useLocation } from 'react-router-dom';
+import LoadingSpinner from '../ui/Loading/LoadingSpinner';
 import { useToast } from '../ui/Toast';
 // import ErrorToaster from '@/pages/Error/ErrorToaster';
 import { useForm } from 'react-hook-form';

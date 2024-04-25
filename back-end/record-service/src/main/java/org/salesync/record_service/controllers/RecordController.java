@@ -10,6 +10,7 @@ import org.salesync.record_service.dtos.record_type_relation_dto.RequestRecordTy
 import org.salesync.record_service.services.record.RecordService;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -21,8 +22,8 @@ public class RecordController {
     private final RecordService recordService;
 
     @PostMapping(Route.LIST_RECORD)
-    public ResponseEntity<ListRecordsResponseDto> getFilteredRecords(@Valid @RequestBody ListRecordsRequestDto listRecordsRequestDto,@PathVariable String realm) {
-        return ResponseEntity.ok(recordService.getFilteredRecords(listRecordsRequestDto,realm));
+    public ResponseEntity<ListRecordsResponseDto> getFilteredRecords(@Valid @RequestBody ListRecordsRequestDto listRecordsRequestDto, @PathVariable String realm) {
+        return ResponseEntity.ok(recordService.getFilteredRecords(listRecordsRequestDto, realm));
     }
 
     @GetMapping(Route.RECORD_ID)
@@ -67,8 +68,8 @@ public class RecordController {
     }
 
     @PostMapping(Route.TYPE_ID + Route.CREATE)
-    public ResponseEntity<RecordDto> createRecordByTypeId(@PathVariable String realm,@PathVariable String typeId, @RequestHeader(name = "Authorization") String authorization, @RequestBody CreateRecordRequestDto createRecordRequestDto) {
-        return ResponseEntity.ok(recordService.createRecordByTypeId(realm,typeId, authorization, createRecordRequestDto));
+    public ResponseEntity<RecordDto> createRecordByTypeId(@PathVariable String realm, @PathVariable String typeId, @RequestHeader(name = "Authorization") String authorization, @RequestBody CreateRecordRequestDto createRecordRequestDto) {
+        return ResponseEntity.ok(recordService.createRecordByTypeId(realm, typeId, authorization, createRecordRequestDto));
     }
 
     @PutMapping(Route.RECORD_ID + Route.UPDATE)

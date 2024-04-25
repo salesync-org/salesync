@@ -22,7 +22,6 @@ public class Record extends BaseEntity {
     private UUID userId;
 
 
-
     @JsonIgnore
     @Column(name = "company_name")
     private String companyName;

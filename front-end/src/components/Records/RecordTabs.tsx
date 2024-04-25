@@ -11,9 +11,10 @@ interface RecordTabsProps {
   // setTabs: React.Dispatch<React.SetStateAction<{ title: string; href: string }[]>>;
   name: string;
   currentTab?: string;
+  domainName?: string;
 }
 
-const RecordTabs = ({ tabs = [], name, currentTab }: RecordTabsProps) => {
+const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: RecordTabsProps) => {
   const id = useParams().typeId as string;
   const companyName = useParams().companyName as string;
   const { updateUser, user, isLoading, setUser } = useAuth();
@@ -100,7 +101,7 @@ const RecordTabs = ({ tabs = [], name, currentTab }: RecordTabsProps) => {
               }}
             >
               <NavLink
-                to={`/${companyName}/sales/${tab.type_id}`}
+                to={`/${companyName}/${domainName}/${tab.type_id}`}
                 data-index={index}
                 draggable
                 onDragStart={handleDragStart}

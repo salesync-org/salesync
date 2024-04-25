@@ -27,6 +27,7 @@ const VerifyEmail = lazy(() => import('pages/VerifyEmail/VerifyEmail'));
 const ChangePassword = lazy(() => import('pages/ChangePassword/ChangePassword'));
 const ForgotPassword = lazy(() => import('pages/LogIn/ForgotPassword'));
 const RecordDetail = lazy(() => import('./pages/RecordDetail/RecordDetail'));
+const AllTypes = lazy(() => import('./pages/AllTypes/AllTypes'));
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
             <Route element={<ConfigLayout />}>
               <Route path='home' element={<HomeLayout />} />
               <Route path='sales/:typeId' element={<Sales />} />
+              <Route path='all/:typeId' element={<AllTypes />} />
               <Route path='record/:recordId' element={<RecordDetail />} />
               <Route path='setting/' element={<SettingLayout />}>
                 <Route path='personal-information' element={<PersonalInformationSetting />} />
@@ -60,7 +62,7 @@ function App() {
                 <Route path='object-manager/:typeId' element={<TypePropertyManager />} />
                 <Route path='object-manager/:typeId/create' element={<PropertySetting />} />
               </Route>
-              <Route path='*' element={<Sales />} />
+              {/* <Route path='*' element={<Sales />} /> */}
             </Route>
           </Route>
           <Route path='/:companyName/login' element={<LogIn />}></Route>

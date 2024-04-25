@@ -44,8 +44,6 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({
   let isDisabledTriangleButton = false;
   if (name === 'New Task') isDisabledTriangleButton = true;
 
-  const { handleSubmit, register } = useForm();
-
   const { toast } = useToast();
   const location = useLocation();
   const companyName = location.pathname.split('/')[1] || '';

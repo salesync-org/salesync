@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, ButtonGroup, DropDown, Icon, PrimaryButton, TextButton } from '@/components/ui';
 import React, { useState } from 'react';
 import { cn } from 'utils/utils';
@@ -5,11 +6,12 @@ import { cn } from 'utils/utils';
 import recordApi from '@/api/record';
 import useProperties from '@/hooks/type-service/useProperties';
 import useType from '@/hooks/type-service/useType';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import LoadingSpinner from '../ui/Loading/LoadingSpinner';
 import { useToast } from '../ui/Toast';
 // import ErrorToaster from '@/pages/Error/ErrorToaster';
 import RecordForm from '../Records/RecordForm';
+import { useQueryClient } from 'react-query';
 
 interface ButtonActivityProps {
   name: 'Email' | 'New Event' | 'Log a Call' | 'New Task';
@@ -38,7 +40,9 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({
     if (name === 'Log a Call') return 'Call';
     if (name === 'New Task') return 'Task';
   };
+  const queryClient = useQueryClient();
   const [typeActivity, setTypeActivity] = useState(setType()); // Email, Event, Call, Task
+  const { recordId = '' } = useParams();
 
   let isDisabledTriangleButton = false;
   if (name === 'New Task') isDisabledTriangleButton = true;
@@ -47,11 +51,9 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({
   const location = useLocation();
   const companyName = location.pathname.split('/')[1] || '';
   const { types: types } = useType(companyName);
-  console.log(types);
+
   const typeId = types?.find((type) => type.name === setType())?.id;
   const { data: typeProperty, isLoading: isPropertiesLoading } = useProperties(companyName, typeId!);
-
-  console.log({ typeId, typeProperty });
 
   if (!typeId) {
     return null;
@@ -82,13 +84,14 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({
     };
 
     const res = await recordApi.createRecord(companyName, typeId!, req);
+    const newActivityId = res.id;
+    await recordApi.createRelation(companyName, recordId, newActivityId);
+    queryClient.invalidateQueries(['record', recordId]);
 
-    if (res) {
-      toast({
-        title: 'Success',
-        description: 'Create activity successfully'
-      });
-    }
+    toast({
+      title: 'Success',
+      description: 'Create activity successfully'
+    });
   };
 
   const onSubmit = async (data: any) => {
@@ -103,10 +106,12 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({
         description: 'Failed to create activity',
         variant: 'destructive'
       });
+    } finally {
+      setDisabled && setDisabled(false);
     }
   };
 
-  const FORM_ID = 'activity-form';
+  const FORM_ID = `activity-form-${name}`;
 
   return (
     <div>

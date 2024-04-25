@@ -102,8 +102,8 @@ type TypeRelation = {
   source_type_label: string;
   relation: Relation;
   destination_type: Type;
-  destination_type_label: string
-}
+  destination_type_label: string;
+};
 
 type Field = {
   id: string;
@@ -339,7 +339,7 @@ interface PropertyProperty {
 type Template = {
   id: string;
   name: string;
-}
+};
 // declare enum Template {
 //   Human = 'Human',
 //   Activity = 'Activity',

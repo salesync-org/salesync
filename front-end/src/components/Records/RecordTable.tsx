@@ -15,6 +15,7 @@ interface RecordTableProps {
 }
 
 const RecordTable = ({ typeId, recordFilter }: RecordTableProps) => {
+  console.log(recordFilter);
   const { companyName = '' } = useParams();
 
   const { data: recordData, isLoading: isRecordLoading } = useRecords(companyName, typeId, recordFilter);

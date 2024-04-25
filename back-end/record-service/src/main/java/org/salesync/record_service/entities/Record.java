@@ -21,6 +21,12 @@ public class Record extends BaseEntity {
     private String name;
     private UUID userId;
 
+
+
+    @JsonIgnore
+    @Column(name = "company_name")
+    private String companyName;
+
     @OneToMany(mappedBy = "record", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<RecordTypeProperty> recordProperties;

@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.UUID;
 
 public interface RecordService {
-    ListRecordsResponseDto getFilteredRecords(@Valid ListRecordsRequestDto requestDto);
+    ListRecordsResponseDto getFilteredRecords(@Valid ListRecordsRequestDto requestDto, String companyName);
 
-    List<RecordDto> getAllRecords();
+    List<RecordDto> getAllRecords(String companyName);
 
     ListRecordsResponseDto getAllRecordsWithCondition(ListRecordsRequestDto listRecordsRequestDto);
 
-    RecordDto createRecordByType(RequestRecordDto requestRecordDto);
+    RecordDto createRecordByType(String realm, RequestRecordDto requestRecordDto);
 
     RecordDto getRecordById(String recordId);
 
@@ -30,7 +30,7 @@ public interface RecordService {
 
     RecordDto updateStage(RequestUpdateStageDto requestUpdateStageDto, String token, String realm);
 
-    RecordDto createRecordByTypeId(String typeId, String token, CreateRecordRequestDto createRecordRequestDto);
+    RecordDto createRecordByTypeId(String companyName,String typeId, String token, CreateRecordRequestDto createRecordRequestDto);
 
     RecordDto updateRecordByRecordId(String recordId, String token, RecordDto updateRecordRequestDto);
 }

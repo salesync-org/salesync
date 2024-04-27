@@ -56,16 +56,16 @@ public class RecordServiceImpl implements RecordService {
     private final TokenService tokenService;
 
     @Override
-    public ListRecordsResponseDto getFilteredRecords(ListRecordsRequestDto requestDto) {
+    public ListRecordsResponseDto getFilteredRecords(ListRecordsRequestDto requestDto, String companyName) {
         Pageable pageRequest = PageRequest.of(requestDto.getCurrentPage() - 1, requestDto.getPageSize());
         Page<Record> page = null;
         if (requestDto.getPropertyName() != null) {
             page = recordRepository.getFilteredRecord(
-                    UUID.fromString(SecurityContextHelper.getContextUserId()), requestDto.getPropertyName(), requestDto.getTypeId(), requestDto.getSearchTerm(), requestDto.isAsc(), pageRequest
+                    UUID.fromString(SecurityContextHelper.getContextUserId()), requestDto.getPropertyName(), requestDto.getTypeId(), requestDto.getSearchTerm(), requestDto.isAsc(), pageRequest , companyName
             );
         } else {
             page = recordRepository.getFilteredRecordsAndOrderByName(
-                    UUID.fromString(SecurityContextHelper.getContextUserId()), requestDto.getTypeId(), requestDto.getSearchTerm(), requestDto.isAsc(), pageRequest
+                    UUID.fromString(SecurityContextHelper.getContextUserId()), requestDto.getTypeId(), requestDto.getSearchTerm(), requestDto.isAsc(), pageRequest, companyName
             );
         }
         List<RecordDto> recordDtos = page.getContent().stream().map(recordMapper::recordToRecordDto).toList();
@@ -74,8 +74,8 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public List<RecordDto> getAllRecords() {
-        return recordRepository.findAll().stream().map(recordMapper::recordToRecordDto).toList();
+    public List<RecordDto> getAllRecords(String companyName) {
+        return recordRepository.findAll().stream().filter(record -> record.getCompanyName().equals(companyName)).map(recordMapper::recordToRecordDto).toList();
     }
 
     @Override
@@ -84,9 +84,10 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public RecordDto createRecordByType(RequestRecordDto requestRecordDto) {
+    public RecordDto createRecordByType(String realm, RequestRecordDto requestRecordDto) {
         Record recordEntity = new Record();
         recordEntity.setUserId(UUID.fromString(requestRecordDto.getUserId()));
+        recordEntity.setCompanyName(realm);
 
         return recordMapper.recordToRecordDto(recordRepository.save(recordEntity));
     }
@@ -220,7 +221,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public RecordDto createRecordByTypeId(
+    public RecordDto createRecordByTypeId( String companyName,
                                           String typeId, String token, CreateRecordRequestDto createRecordRequestDto
     ) {
         String userContextId = SecurityContextHelper.getContextUserId();
@@ -242,6 +243,7 @@ public class RecordServiceImpl implements RecordService {
             recordTypeProperties.add(recordTypeProperty);
         }
         recordEntity.setRecordProperties(recordTypeProperties);
+        recordEntity.setCompanyName(companyName);
 
         return recordMapper.recordToRecordDto(recordRepository.save(recordEntity));
     }

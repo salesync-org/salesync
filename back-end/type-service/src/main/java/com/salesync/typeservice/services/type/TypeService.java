@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.UUID;
 
 public interface TypeService {
-    TypeDTO createType(TypeDTO typeDTO);
+    TypeDTO createType(String companyName, TypeDTO typeDTO);
 
     TypeDTO getType(UUID typeId);
 
-    List<TypeDTO> getAllType();
+    List<TypeDTO> getAllType(String companyName);
 
     List<TypeRelationDTO> getAllRelationsByType(UUID typeId);
 

@@ -45,13 +45,13 @@ public class TypeServiceImpl implements TypeService {
     private final TypeMapper typeMapper = TypeMapper.INSTANCE;
 
     @Override
-    public TypeDTO createType(TypeDTO typeDTO) {
+    public TypeDTO createType(String companyName, TypeDTO typeDTO) {
         Template template = templateRepository.findById(typeDTO.getTemplate().getId()).orElseThrow(() -> new ObjectNotFoundException(
                 Template.class.getSimpleName(), typeDTO.getTemplate().getId().toString()
         ));
 
         Type savedType = typeRepository.save(
-                Type.builder().name(typeDTO.getName()).template(template).build()
+                Type.builder().name(typeDTO.getName()).template(template).companyName(companyName).build()
         );
         return typeMapper.typeToTypeDTO(savedType);
 
@@ -67,8 +67,9 @@ public class TypeServiceImpl implements TypeService {
     }
 
     @Override
-    public List<TypeDTO> getAllType() {
-        return typeRepository.findAll().stream().map(typeMapper::typeToTypeDTO).collect(Collectors.toList());
+    public List<TypeDTO> getAllType(String companyName) {
+        List<Type> types = typeRepository.findAllByCompanyName(companyName);
+        return types.stream().map(typeMapper::typeToTypeDTO).collect(Collectors.toList());
     }
 
     @Override
@@ -151,7 +152,6 @@ public class TypeServiceImpl implements TypeService {
                 Property.class.getSimpleName(), requestCreatePropertyDto.getPropertyId().toString()
         ));
 
-        //check có đầy đủ các field của property chưa
         Set<UUID> propertyFieldSet = property.getPropertyFields().stream().map(PropertyField::getId).collect(Collectors.toSet());
 
         Set<UUID> requestSet = requestCreatePropertyDto.getFields().stream().map(RequestTypePropertyFieldDto::getPropertyFieldId).collect(Collectors.toSet());
@@ -199,14 +199,14 @@ public class TypeServiceImpl implements TypeService {
         ));
         TypeRelation typeRelation = TypeRelation.builder().sourceType(sourceType).destinationType(destinationType).relation(relation).sourceTypeLabel(relationTypeRequestDto.getSourceTypeLabel()).destinationLabel(relationTypeRequestDto.getDestinationTypeLabel()).build();
         TypeRelation inverseTypeRelation = TypeRelation.builder().sourceType(destinationType).destinationType(sourceType).relation(inverseRelation).sourceTypeLabel(relationTypeRequestDto.getDestinationTypeLabel()).destinationLabel(relationTypeRequestDto.getSourceTypeLabel()).build();
-        TypeRelation savedTypeRelation = typeRelationRepository.save(typeRelation);
-        TypeRelation savedInverseTypeRelation = typeRelationRepository.save(inverseTypeRelation);
+        typeRelationRepository.save(typeRelation);
+        typeRelationRepository.save(inverseTypeRelation);
         return RelationTypeResponseDto.builder().sourceType(typeMapper.typeToTypeDTO(sourceType)).destinationType(typeMapper.typeToTypeDTO(destinationType)).relation(relationMapper.relationToRelationDTO(relation)).inverseRelation(relationMapper.relationToRelationDTO(inverseRelation)).sourceTypeLabel(relationTypeRequestDto.getSourceTypeLabel()).destinationTypeLabel(relationTypeRequestDto.getDestinationTypeLabel()).build();
     }
 
     @Override
     public String deleteProperty(UUID typePropId) {
-        TypeProperty typeProperty = typePropertyRepository.findById(typePropId).orElseThrow(() -> new ObjectNotFoundException(
+        typePropertyRepository.findById(typePropId).orElseThrow(() -> new ObjectNotFoundException(
                 TypeProperty.class.getSimpleName(), typePropId.toString()
         ));
 

@@ -27,14 +27,14 @@ public class TypeController {
     }
 
     @PostMapping
-    public ResponseEntity<TypeDTO> createType(@Valid @RequestBody TypeDTO typeDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(typeService.createType(typeDTO));
+    public ResponseEntity<TypeDTO> createType(@PathVariable String realm, @Valid @RequestBody TypeDTO typeDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(typeService.createType(realm, typeDTO));
     }
 
     @GetMapping
-    public ResponseEntity<List<TypeDTO>> getAllType() {
+    public ResponseEntity<List<TypeDTO>> getAllType(@PathVariable String realm) {
 
-        return ResponseEntity.ok(typeService.getAllType());
+        return ResponseEntity.ok(typeService.getAllType(realm));
     }
 
     @GetMapping(Route.Type.GET_RELATION)

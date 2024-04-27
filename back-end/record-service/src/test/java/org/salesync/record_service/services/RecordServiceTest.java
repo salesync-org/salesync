@@ -43,6 +43,8 @@ public class RecordServiceTest {
         //given
         UUID typeId = UUID.randomUUID();
         UUID userId = UUID.randomUUID();
+        String companyName= "companyName";
+
         ListRecordsRequestDto listRecordsRequestDto = ListRecordsRequestDto.builder().searchTerm("").typeId(typeId).propertyName("propertyName").isAsc(true).pageSize(5).currentPage(1).build();
 
         Pageable pageRequest = PageRequest.of(
@@ -55,7 +57,7 @@ public class RecordServiceTest {
 
         Mockito.when(
                 recordRepository.getFilteredRecord(
-                        userId, listRecordsRequestDto.getPropertyName(), listRecordsRequestDto.getTypeId(), listRecordsRequestDto.getSearchTerm(), listRecordsRequestDto.isAsc(), pageRequest
+                        userId, listRecordsRequestDto.getPropertyName(), listRecordsRequestDto.getTypeId(), listRecordsRequestDto.getSearchTerm(), listRecordsRequestDto.isAsc(), pageRequest,companyName
                 )
         ).thenReturn(
                 recordPage
@@ -64,7 +66,7 @@ public class RecordServiceTest {
                 SecurityContextHelper.getContextUserId()
         ).thenReturn(userId.toString());
         // when
-        ListRecordsResponseDto listRecordsResponseDto = recordService.getFilteredRecords(listRecordsRequestDto);
+        ListRecordsResponseDto listRecordsResponseDto = recordService.getFilteredRecords(listRecordsRequestDto,companyName);
         // then
         Assert.assertNotNull(listRecordsResponseDto);
         Assert.assertEquals(2, listRecordsResponseDto.getRecords().size());

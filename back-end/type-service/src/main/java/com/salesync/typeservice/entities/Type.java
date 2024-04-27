@@ -37,4 +37,8 @@ public class Type extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "template_id")
     private Template template;
+
+    @JsonIgnore
+    @Column(name = "company_name")
+    private String companyName;
 }

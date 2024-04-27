@@ -12,7 +12,7 @@ import java.util.UUID;
 public interface RecordService {
     ListRecordsResponseDto getFilteredRecords(@Valid ListRecordsRequestDto requestDto, String companyName);
 
-    List<RecordDto> getAllRecords();
+    List<RecordDto> getAllRecords(String companyName);
 
     ListRecordsResponseDto getAllRecordsWithCondition(ListRecordsRequestDto listRecordsRequestDto);
 

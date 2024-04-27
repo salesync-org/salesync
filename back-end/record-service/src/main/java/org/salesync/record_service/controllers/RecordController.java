@@ -32,8 +32,8 @@ public class RecordController {
     }
 
     @GetMapping
-    public List<RecordDto> getAllRecords() {
-        return recordService.getAllRecords();
+    public List<RecordDto> getAllRecords(@PathVariable String realm) {
+        return recordService.getAllRecords(realm);
     }
 
     @PostMapping

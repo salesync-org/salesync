@@ -16,13 +16,6 @@ services:
     ports:
       - "9090:8080"
     command: 'start-dev'
-    volumes:
-      - D://kc:/opt/keycloak/themes
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
-#      KC_DB: postgres
-#      KC_FEATURES: token-exchange
-#      KC_DB_URL: jdbc:postgresql://postgres:54320/salesync_authentication
-#      KC_DB_USERNAME: admin
-#      KC_DB_PASSWORD: admin

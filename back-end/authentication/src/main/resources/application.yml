@@ -29,9 +29,9 @@ spring:
 main-website:
   address: https://www.salesync.org
 mail:
-  host: email-smtp.ap-southeast-2.amazonaws.com
-  port: 2587
-  from: salesync.org
+  host: ${MAIL_SERVER_HOST}
+  port: ${MAIL_SERVER_PORT}
+  from: ${DEFAULT_MAIL_DOMAIN}
   starttls: true
   auth: true
   user: ${MAIL_SERVER_USER}

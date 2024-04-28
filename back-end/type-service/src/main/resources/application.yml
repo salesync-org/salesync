@@ -31,7 +31,7 @@ eureka:
     register-with-eureka: true
   instance:
     prefer-ip-address: false
-    hostname: 35.240.223.64
+    hostname: ${EUREKA_SERVER_HOST}
 
 token:
-  public-key: ${TOKEN_PUBLIC_KEY}
+  key_location: ${TOKEN_KEY_LOCATION}

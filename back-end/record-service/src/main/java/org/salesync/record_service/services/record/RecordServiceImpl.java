@@ -75,7 +75,7 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public List<RecordDto> getAllRecords(String companyName) {
-        return recordRepository.findAll().stream().filter(record -> record.getCompanyName().equals(companyName)).map(recordMapper::recordToRecordDto).toList();
+        return recordRepository.findAllByCompanyName(companyName).stream().map(recordMapper::recordToRecordDto).toList();
     }
 
     @Override

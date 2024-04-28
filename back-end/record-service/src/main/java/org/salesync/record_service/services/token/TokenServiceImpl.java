@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.security.PublicKey;
 import java.security.cert.CertificateException;
@@ -20,8 +22,8 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class TokenServiceImpl implements TokenService {
 
-    @Value("${token.public-key}")
-    private String publicKey;
+    @Value("${token.key_location}")
+    private String keyLocation;
 
     @Override
     public <T> T extractClaim(String token, Function<Claims, T> claimResolver) {
@@ -45,8 +47,8 @@ public class TokenServiceImpl implements TokenService {
 
     private RSAPublicKey getSigningKey() {
         try {
-            byte[] keyBytes = publicKey.getBytes();
-            InputStream inputStream = new ByteArrayInputStream(keyBytes);
+            FileInputStream inputPublicKey = new FileInputStream(keyLocation);
+            InputStream inputStream = new ByteArrayInputStream(inputPublicKey.readAllBytes());
             CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
             X509Certificate certificate = (X509Certificate) certificateFactory.generateCertificate(inputStream);
 
@@ -55,7 +57,7 @@ public class TokenServiceImpl implements TokenService {
 
             // Convert the public key to RSAPublicKey
             return (RSAPublicKey) publicKey;
-        } catch (CertificateException e) {
+        } catch (CertificateException | IOException e) {
             throw new RuntimeException(e);
         }
     }

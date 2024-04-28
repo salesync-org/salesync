@@ -4,6 +4,7 @@ import instance from './axiosConfig';
 // import { S3 } from 'aws-sdk';
 
 const BASE_URL = `${import.meta.env.VITE_AUTHENTICATION_HOST}/api/v1`;
+
 const UPLOAD_API_ENDPOINT = `${import.meta.env.VITE_UPLOAD_API_ENDPOINT}`;
 
 // Create a user within a realm
@@ -29,7 +30,7 @@ export const uploadAvatar = async (userId: string, avatar: File) => {
 
   const config = {
     headers: {
-      'Content-Type': avatar.type, // Important for file uploads
+      'Content-Type': avatar.type // Important for file uploads
       // 'X-Filename': processedFilename
     }
   };
@@ -41,7 +42,7 @@ export const uploadAvatar = async (userId: string, avatar: File) => {
   } catch (error) {
     console.error('Non-Axios Error:', error);
   }
-}
+};
 
 // Reset password for a user
 export const resetPassword = async (userId: string, newPassword: string, accessToken: string) => {
@@ -61,8 +62,6 @@ export const resetPassword = async (userId: string, newPassword: string, accessT
     console.error('Error resetting password:', error);
     throw error;
   }
-
-
 };
 
 export const getUsers = async (realmId: string) => {

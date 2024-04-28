@@ -188,7 +188,7 @@ const RecordDetail = () => {
               </Panel>
             )}
             <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
-              <RecordActivity />
+              <RecordActivity  relations={record.relations}/>
             </Panel>
           </section>
 

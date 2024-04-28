@@ -1,25 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Button, ButtonGroup, DropDown, Icon, PrimaryButton, TextButton } from '@/components/ui';
 import React, { useState } from 'react';
-import {
-  Button,
-  Icon,
-  ButtonGroup,
-  PrimaryButton,
-  TextInput,
-  TextArea,
-  DateInput,
-  DropDown,
-  TextButton
-} from '@/components/ui';
 import { cn } from 'utils/utils';
 // import InputRecordRelative from './InputRecordRelative';
-import LoadingSpinner from '../ui/Loading/LoadingSpinner';
-import useType from '@/hooks/type-service/useType';
-import useProperties from '@/hooks/type-service/useProperties';
-import { useLocation } from 'react-router-dom';
 import recordApi from '@/api/record';
+import useProperties from '@/hooks/type-service/useProperties';
+import useType from '@/hooks/type-service/useType';
+import { useLocation, useParams } from 'react-router-dom';
+import LoadingSpinner from '../ui/Loading/LoadingSpinner';
 import { useToast } from '../ui/Toast';
 // import ErrorToaster from '@/pages/Error/ErrorToaster';
-import { useForm } from 'react-hook-form';
+import RecordForm from '../Records/RecordForm';
+import { useQueryClient } from 'react-query';
 
 interface ButtonActivityProps {
   name: 'Email' | 'New Event' | 'Log a Call' | 'New Task';
@@ -48,17 +40,18 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({
     if (name === 'Log a Call') return 'Call';
     if (name === 'New Task') return 'Task';
   };
+  const queryClient = useQueryClient();
   const [typeActivity, setTypeActivity] = useState(setType()); // Email, Event, Call, Task
+  const { recordId = '' } = useParams();
 
   let isDisabledTriangleButton = false;
   if (name === 'New Task') isDisabledTriangleButton = true;
-
-  const { handleSubmit, register } = useForm();
 
   const { toast } = useToast();
   const location = useLocation();
   const companyName = location.pathname.split('/')[1] || '';
   const { types: types } = useType(companyName);
+
   const typeId = types?.find((type) => type.name === setType())?.id;
   const { data: typeProperty, isLoading: isPropertiesLoading } = useProperties(companyName, typeId!);
 
@@ -77,7 +70,7 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({
 
   const handleCreateRecord = async (data: any) => {
     const req = {
-      record_name: data['Subject'],
+      record_name: data['Name'],
       stage_id: null,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       properties: typeProperty?.properties.map((property: any) => {
@@ -91,21 +84,20 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({
     };
 
     const res = await recordApi.createRecord(companyName, typeId!, req);
+    const newActivityId = res.id;
+    await recordApi.createRelation(companyName, recordId, newActivityId);
+    queryClient.invalidateQueries(['record', recordId]);
 
-    if (res) {
-      toast({
-        title: 'Success',
-        description: 'Create activity successfully'
-      });
-    }
+    toast({
+      title: 'Success',
+      description: 'Create activity successfully'
+    });
   };
 
   const onSubmit = async (data: any) => {
     try {
-      if (!data['Subject']) {
-        throw new Error('Subject is required');
-      }
       setIsOpen(false);
+
       handleCreateRecord(data);
     } catch (error) {
       console.error(error);
@@ -114,8 +106,12 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({
         description: 'Failed to create activity',
         variant: 'destructive'
       });
+    } finally {
+      setDisabled && setDisabled(false);
     }
   };
+
+  const FORM_ID = `activity-form-${name}`;
 
   return (
     <div>
@@ -123,7 +119,7 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({
         <Button
           onClick={() => {
             setIsOpen(true);
-            setDateTimeNow()
+            setDateTimeNow();
             setDisabled && setDisabled(true);
           }}
           title={name}
@@ -252,59 +248,21 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({
           </div>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className='flex h-[400px] overflow-y-auto'>
-            <div className='grid w-full grid-cols-2 gap-1 p-4'>
-              {typeProperty ? (
-                typeProperty.properties?.map((property: any) => {
-                  if (
-                    property.property.name === 'Text' ||
-                    property.property.name === 'Phone' ||
-                    property.property.name === 'Email'
-                  )
-                    return (
-                      <div className='col-span-2'>
-                        <TextInput
-                          header={property.label}
-                          className='w-full'
-                          postfixIcon='search'
-                          key={property.id}
-                          register={register}
-                          name={property.name}
-                        />
-                      </div>
-                    );
-                  else if (property.property.name === 'TextArea')
-                    return (
-                      <div className='col-span-2'>
-                        <TextArea
-                          header={property.label}
-                          className='w-full'
-                          key={property.id}
-                          register={register}
-                          name={property.name}
-                        />
-                      </div>
-                    );
-                  else if (property.property.name === 'DateTime') {
-                    return (
-                      <div className='col-span-1'>
-                        <span className='font-semibold'>{property.label}</span>
-                        <DateInput type='datetime-local' register={register} name={property.name} />
-                      </div>
-                    );
-                  } else return <div></div>;
-                })
-              ) : (
-                <div>loading</div>
-              )}
-            </div>
+        <div className='flex h-[400px] overflow-y-auto'>
+          <div className='grid w-full gap-1 p-4'>
+            {typeProperty ? (
+              <RecordForm formId={FORM_ID} typeProperty={typeProperty} onSubmit={onSubmit} className='pb-4' />
+            ) : (
+              <div>loading</div>
+            )}
           </div>
+        </div>
 
-          <div className='absolute bottom-0 flex h-[50px] w-full items-center justify-end border border-button-stroke bg-panel pr-2 dark:border-button-stroke-dark dark:bg-panel-dark'>
-            <PrimaryButton type='submit'>Save</PrimaryButton>
-          </div>
-        </form>
+        <div className='absolute bottom-0 flex h-[50px] w-full items-center justify-end border border-button-stroke bg-panel pr-2 dark:border-button-stroke-dark dark:bg-panel-dark'>
+          <PrimaryButton type='submit' form={FORM_ID}>
+            Save
+          </PrimaryButton>
+        </div>
       </nav>
     </div>
   );

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { RecordsFilter } from '@/api/record';
 import typeApi from '@/api/type';
 
-const useRecordTemplate = (companyName: string, typeTemplate: string) => {
+const   useRecordTemplate = (companyName: string, typeTemplate: string) => {
   const key = ['template', typeTemplate];
   const [recordFilter] = useState<RecordsFilter>({
     searchTerm: '',

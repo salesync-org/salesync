@@ -15,6 +15,7 @@ import { DropDownItem, Modal, ModalFooter } from '@/components/ui';
 import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
 import { useEffect, useState } from 'react';
 import useDebounce from '@/hooks/useDebounce';
+import { useQueryClient } from 'react-query';
 
 const ObjectManager = () => {
   const { companyName } = useParams();
@@ -32,6 +33,7 @@ const ObjectManager = () => {
   const [page, setPage] = useState(() => {
     return searchParams.get('page') || '1';
   });
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     // Fetch sample data
@@ -70,6 +72,7 @@ const ObjectManager = () => {
       if (res) {
         console.log('Create Type successfully');
         setTypeSearchResult([res, ...(types || [])]);
+        queryClient.invalidateQueries('types');
         return res;
       }
     } catch (error) {

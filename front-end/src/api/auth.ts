@@ -3,6 +3,7 @@ import axios from 'axios';
 import instance from './axiosConfig';
 
 const URL = `${import.meta.env.VITE_AUTHENTICATION_HOST}/api/v1`;
+
 const UPLOAD_API_ENDPOINT = `${import.meta.env.VITE_UPLOAD_COMPANY_API_ENDPOINT}`;
 class Auth {
   async signUp(signUpInfo: SignUpInfo) {
@@ -54,12 +55,12 @@ class Auth {
 
   async updateCompanyInfo(companyName: string, companyInfo: CompanyInfo) {
     const response = await instance.put(`${URL}/${companyName}/info`, {
-      "company_id": companyInfo.company_id,
-      "company_name": companyInfo.name,
-      "avatar_url": companyInfo.avatar_url,
-      "address": companyInfo.address,
-      "phone": companyInfo.phone,
-      "tax_code": companyInfo.tax_code
+      company_id: companyInfo.company_id,
+      company_name: companyInfo.name,
+      avatar_url: companyInfo.avatar_url,
+      address: companyInfo.address,
+      phone: companyInfo.phone,
+      tax_code: companyInfo.tax_code
     });
     return response.data;
   }
@@ -71,7 +72,7 @@ class Auth {
 
     const config = {
       headers: {
-        'Content-Type': avatar.type, // Important for file uploads
+        'Content-Type': avatar.type // Important for file uploads
         // 'X-Filename': processedFilename
       }
     };
@@ -86,15 +87,13 @@ class Auth {
   }
 
   async verifyEmail() {
-    const response = await instance.get(`${URL}/verify-email`, {
-    });
+    const response = await instance.get(`${URL}/verify-email`, {});
 
     return response.data;
   }
 
   async validateUser(companyName: string) {
-    const response = await instance.get(`${URL}/${companyName}/user/validate`, {
-    });
+    const response = await instance.get(`${URL}/${companyName}/user/validate`, {});
 
     return response.data;
   }
@@ -109,15 +108,19 @@ class Auth {
   }
 
   async changePasswordWithToken(companyName: string, userId: string, password: string, access_token: string) {
-    const response = await axios.put(`${URL}/${companyName}/user/password`, {
-      user_id: userId,
-      new_password: password
-    }, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${access_token}`
+    const response = await axios.put(
+      `${URL}/${companyName}/user/password`,
+      {
+        user_id: userId,
+        new_password: password
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${access_token}`
+        }
       }
-    });
+    );
 
     return response.data;
   }

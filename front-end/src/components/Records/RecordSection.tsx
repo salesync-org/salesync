@@ -8,7 +8,7 @@ import TextInput from '@/components/ui/TextInput/TextInput';
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 // import { Type } from '@/type';
 import icon from 'assets/type-icon/lead_icon.png';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 interface RecordSectionProps {
@@ -19,12 +19,24 @@ const RecordSection = ({ type }: RecordSectionProps) => {
   const { showModal } = useGlobalModalContext();
   const { typeId } = useParams();
   const [search, setSearch] = useState('');
-  const [recordFilter] = useState<RecordsFilter>({
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      // setDebounceSearch(search);
+      setRecordFilter({ ...recordFilter, searchTerm: search });
+    }, 500);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [search]);
+
+  const [recordFilter, setRecordFilter] = useState<RecordsFilter>({
     searchTerm: '',
     isAsc: false,
     propertyName: null,
     currentPage: 1,
-    pageSize: 300
+    pageSize: 3000
   });
 
   if (!type || !typeId) {
@@ -33,10 +45,6 @@ const RecordSection = ({ type }: RecordSectionProps) => {
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
-
-    setTimeout(() => {
-      console.log(search);
-    }, 3000);
   };
 
   return (

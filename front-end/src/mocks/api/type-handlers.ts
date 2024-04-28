@@ -4,7 +4,7 @@ import { properties } from '../db/properties';
 import { records } from '../db/record/records';
 import { http, HttpResponse } from 'msw';
 
-const BASE_URL = `${import.meta.env.VITE_API_GATEWAY_HOST}/api/v1`;
+const BASE_URL = `${import.meta.env.VITE_GATEWAY_HOST}`;
 
 export const handlers = [
   http.get(`${TYPE_SERVICE_URL}`, () => {

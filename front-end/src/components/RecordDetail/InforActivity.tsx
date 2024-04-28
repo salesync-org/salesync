@@ -12,21 +12,22 @@ interface InforActivityStruct {
 interface InforActivityProps {
   className?: string;
   data: InforActivityStruct[];
-  type: string;
+  type: Type;
 }
 
 const InforActivity: React.FC<InforActivityProps> = ({ className, data, type }) => {
+  console.log(data);
   const [expand, setExpand] = useState(false);
   const [iconName, setIconName] = useState('calendar_month');
   const [iconColor, setIconColor] = useState('bg-purple-400');
   const [dateStart, setDateStart] = useState('');
   const [dateEnd, setDateEnd] = useState('');
 
-  const subject = data?.find((data) => data.property_name === 'Subject')?.item_value;
-  const description = data?.find((data) => data.property_name === 'Description')?.item_value;
-  const comments = data?.find((data) => data.property_name === 'Comments')?.item_value;
-  const start = data?.find((data) => data.property_name === 'Start')?.item_value;
-  const end = data?.find((data) => data.property_name === 'End')?.item_value;
+  const subject = data?.find((data) => data.property_name === 'Name')?.item_value;
+  const description = data?.find((data) => data.property_label === 'Description')?.item_value;
+  const comments = data?.find((data) => data.property_label === 'Comment')?.item_value;
+  const start = data?.find((data) => data.property_label === 'Start')?.item_value;
+  const end = data?.find((data) => data.property_label === 'End')?.item_value;
 
   useEffect(() => {
     function convertDateTimeFormat(dateTimeString: string) {
@@ -62,18 +63,19 @@ const InforActivity: React.FC<InforActivityProps> = ({ className, data, type }) 
       }
     }
 
-    if (type === 'Event') {
+    console.log({ type });
+    if (type.name === 'Event') {
       setIconName('calendar_month');
       setIconColor('bg-purple-400');
       setDateStart(convertDateTimeFormat(start!));
       setDateEnd(convertDateTimeFormat(end!));
     }
-    if (type === 'Call') {
+    if (type.name === 'Call') {
       setIconName('call_log');
       setIconColor('bg-teal-600');
       setDateStart(convertDateFormat(start!));
     }
-    if (type === 'Task') {
+    if (type.name === 'Task') {
       setIconName('checklist');
       setIconColor('bg-green-600');
       setDateStart(convertDateFormat(start!));
@@ -104,7 +106,7 @@ const InforActivity: React.FC<InforActivityProps> = ({ className, data, type }) 
               className='m-0 p-0'
             >
               <div className='h-fit'>
-                {type === 'Event' && (
+                {type.name === 'Event' && (
                   <>
                     <Button
                       className={cn(
@@ -136,7 +138,7 @@ const InforActivity: React.FC<InforActivityProps> = ({ className, data, type }) 
                   </>
                 )}
 
-                {type !== 'Event' && (
+                {type.name !== 'Event' && (
                   <>
                     <Button
                       className={cn(
@@ -225,14 +227,14 @@ const InforActivity: React.FC<InforActivityProps> = ({ className, data, type }) 
         <div className='table-cell'>
           <div className='px-2'>
             <div className='px-2'>
-              {type === 'Event' && <span>You had an event</span>}
-              {type === 'Call' && <span>You logged a call</span>}
-              {type === 'Task' && <span>You had a task</span>}
+              {type.name === 'Event' && <span>You had an event</span>}
+              {type.name === 'Call' && <span>You logged a call</span>}
+              {type.name === 'Task' && <span>You had a task</span>}
             </div>
             {expand && (
               <div>
                 <div className='w-full rounded border border-zinc-200 px-2'>
-                  {type === 'Event' && (
+                  {type.name === 'Event' && (
                     <div className='grid grid-cols-2'>
                       <div>
                         <div>Start</div>
@@ -244,7 +246,7 @@ const InforActivity: React.FC<InforActivityProps> = ({ className, data, type }) 
                       </div>
                     </div>
                   )}
-                  {type === 'Event' ? (
+                  {type.name === 'Event' ? (
                     <>
                       <div>
                         <span>Description</span>

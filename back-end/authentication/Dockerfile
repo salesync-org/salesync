@@ -5,7 +5,7 @@ FROM openjdk:17-alpine
 WORKDIR /app
 
 # Copy the JAR file from the 'artifacts' directory (created by your build step)
-COPY artifacts/*.jar authentication.jar
+COPY target/*.jar authentication.jar
 
 # Define the command to execute when the container starts
 ENTRYPOINT ["java", "-jar", "authentication.jar"]

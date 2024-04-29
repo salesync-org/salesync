@@ -25,8 +25,8 @@ The documentation is divided into several sections:
 
 You can improve it by sending pull requests to [this repository](https://github.com/salesync-org/salesync).
 
-<!-- ## License
+## License
 
 Copyright (c) Microsoft Corporation. All rights reserved.
 
-Licensed under the [MIT](LICENSE.txt) license. -->
+Licensed under the [AGPL](LICENSE) license.

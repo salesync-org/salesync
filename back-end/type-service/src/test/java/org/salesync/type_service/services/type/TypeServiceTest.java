@@ -9,7 +9,6 @@ import com.salesync.typeservice.repositories.TypeRepository;
 import com.salesync.typeservice.services.type.TypeService;
 import com.salesync.typeservice.services.type.TypeServiceImpl;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -49,9 +48,9 @@ public class TypeServiceTest {
         Mockito.when(templateRepository.findById(templateId)).thenReturn(Optional.of(template));
         Mockito.when(typeRepository.save(type)).thenReturn(savedType);
 
+//        TypeDTO result = typeService.createType("totnghiep", typeDTO);
         // Check this function later
 //        // when
-//        TypeDTO result = typeService.createType("totnghiep", typeDTO);
 //        // then
 //        Assert.assertNotNull(result);
 //        Assert.assertEquals(savedType.getId(), result.getId());

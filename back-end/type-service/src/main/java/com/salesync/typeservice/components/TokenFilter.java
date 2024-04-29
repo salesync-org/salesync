@@ -2,20 +2,17 @@ package com.salesync.typeservice.components;
 
 import com.salesync.typeservice.services.token.TokenService;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
 import java.util.List;
 
 @Component
@@ -26,7 +23,7 @@ public class TokenFilter extends OncePerRequestFilter {
     private final TokenService tokenService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) {
         try {
             String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
             if (authHeader == null || !authHeader.startsWith(TokenService.TOKEN_TYPE)) {
@@ -40,11 +37,11 @@ public class TokenFilter extends OncePerRequestFilter {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     return;
                 }
-                List<String> permisstions = tokenService.extractClaim(token, claims -> {
-                    return claims.get(PERMISSIONS, (Class<List<String>>) ((Class) List.class));
-                });
+                List<?> rawClaims = tokenService.extractClaim(token, claims ->
+                    claims.get(PERMISSIONS, List.class));
+                List<String> permissions = rawClaims.stream().map(Object::toString).toList();
 
-                PreAuthenticatedAuthenticationToken authentication = new PreAuthenticatedAuthenticationToken(userId, null, permisstions.stream().map(SimpleGrantedAuthority::new).toList());
+                        PreAuthenticatedAuthenticationToken authentication = new PreAuthenticatedAuthenticationToken(userId, null, permissions.stream().map(SimpleGrantedAuthority::new).toList());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
             filterChain.doFilter(request, response);

@@ -1,45 +1,32 @@
-## Back-end structure
+<p align="center"><img src="https://github.com/salesync-org/salesync/assets/106808117/f2dda484-5e8f-43ae-ada5-7f5f163c18fd" alt="drawing" width="64"/></p>
 
-- components: chứa các component
-- configuration: chứa các config, thường sử dụng để tạo bean cho thư viện bên thứ ba
-- constants: chứa các hằng, enum,...
-- controllers: chứa các controller, nhận rest api
-- dtos: data transfer objec, chứa các dto class, dùng để truyền dữ liệu giữa các layer
-- entities: chứa các entity, entity đại diện cho bảng trong DB, dùng để thao tác với dao hoặc jpa repository
-- exceptions: Chứa các exceptions và global handler.
-- repositories: chứa các class dùng truy cập DB thông qua jpa repository
-- services: chứa các service class, dùng để xử lý logic ứng dụng
-- utils
+<h1 align="center">SaleSync – CRM System</h1>
 
-## note:
+[![Commit](https://img.shields.io/github/commit-activity/t/salesync-org/salesync)](https://github.com/salesync-org/salesync/issues?utf8=✓&q=is%3Aissue)
+![LastCommit](https://img.shields.io/github/last-commit/salesync-org/salesync)
+![CreateAt](https://img.shields.io/github/created-at/salesync-org/salesync)
 
-- Tránh gọi thẳng entity manager ở service mà phải gọi repository.
-- Dùng querydsl thay cho native query hoặc JPQL khi cần.
+**SaleSync** is a simple CRM System that helps small business store, manage, relate their business data in the simpliest way possible. We aim to provide business a secure, fast and easy-to-use platform.
 
-## Dependencies
+## Build And Run
 
-![Screenshot 2024-02-21 105031](https://github.com/salesync-org/test-salesync/assets/113912946/3b574094-ddf5-4d4b-ae21-83f1567efc46) ![Screenshot 2024-02-21 105002](https://github.com/salesync-org/test-salesync/assets/113912946/f7375010-8220-47b6-a29c-12e1bc06e35c)
+SaleSync has a microservices architecture that requires the building and deploying process separated by each service.
 
-## Project
+- Start from the GitHub Wiki Page [Envinronment Variables](https://github.com/salesync-org/salesync/wiki/Envinronment-Variables) to set all of the necessary environment variables needed to build the project.
+- Use [Build And Run The Project](https://github.com/salesync-org/salesync/wiki/Build-And-Run-The-Project) to get the detailed steps.
+- [Build And Run With Containers](https://github.com/salesync-org/salesync/wiki/Build-And-Run-With-Containers) if you prefer to fully containerize the project.
 
-![Screenshot 2024-02-21 105124](https://github.com/salesync-org/test-salesync/assets/113912946/616a419b-6d9f-4034-b1d8-b2cbf972472b)
+## Documentation
 
-## Environment variables
+The documentation is divided into several sections:
 
-### Backend
+- [Service Usage Guide](https://github.com/salesync-org/salesync/wiki/Service-Usage-Guide)
+- [Tutorial](#) (Updating)
 
-- Gateway:
-  - AUTH_SERVER_URL: URL của Authentication Service. Ví dụ: http://localhost: 8082
-- Authentication Service:
-  - KEYSTORE_PATH: Đường dẫn tới file "auth.jks". Ví dụ: D:\\\DATN\\\auth.jks
-- Record/Type/Notification service:
-  - DB_NAME=
-  - DB_HOST=
-  - DB_PORT=
-  - DB_USER=
-  - DB_PASSWORD=
-  - TOKEN_PUBLIC_KEY=
-  - RABBITMQ_HOST=
-  - RABBITMQ_PORT=
-  - RABBITMQ_USER=
-  - RABBITMQ_PASSWORD=
+You can improve it by sending pull requests to [this repository](https://github.com/salesync-org/salesync).
+
+<!-- ## License
+
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+Licensed under the [MIT](LICENSE.txt) license. -->

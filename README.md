@@ -27,6 +27,6 @@ You can improve it by sending pull requests to [this repository](https://github.
 
 ## License
 
-Copyright (c) Microsoft Corporation. All rights reserved.
+Copyright (c) **SaleSync Organization**. All rights reserved.
 
 Licensed under the [AGPL](LICENSE) license.

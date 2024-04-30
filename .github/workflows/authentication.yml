@@ -27,4 +27,6 @@ jobs:
           cache: maven
       - name: Build with Maven
         working-directory: back-end/authentication
-        run: mvn -B -DKEYCLOAK_HOST=${{secrets.KEYCLOAK_HOST_URL}} package --file pom.xml
+        run: mvn -B -DKEYCLOAK_HOST=${{secrets.KEYCLOAK_HOST_URL}} -DDB_HOST=${{secrets.AUTH_DB_HOST}}\
+        -DDB_PORT=${{secrets.AUTH_DB_PORT}} -DDB_NAME=${{secrets.AUTH_DB_NAME}} -DDB_USER=${{secrets.AUTH_DB_USER}}\
+        -DDB_PASSWORD=${{secrets.AUTH_DB_PASSWORD}} package --file pom.xml

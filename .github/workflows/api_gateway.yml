@@ -30,4 +30,4 @@ jobs:
         run: mvn -B test -DAUTH_SERVER_URL=${{secrets.AUTH_SERVER_URL}} -DEUREKA_SERVER_URL=${{secrets.EUREKA_SERVER_URL}} --file pom.xml
       - name: Build with Maven
         working-directory: back-end/api-gateway
-        run: mvn -B package --file pom.xml
+        run: mvn -B package -DAUTH_SERVER_URL=${{secrets.AUTH_SERVER_URL}} -DEUREKA_SERVER_URL=${{secrets.EUREKA_SERVER_URL}} --file pom.xml

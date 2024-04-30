@@ -16,12 +16,12 @@ const OpportunityStageChart = () => {
 
   const { data: opportunityStages, isLoading: opportunityStageLoading } = useStages(
     companyName,
-    types?.find((type) => type.name === 'Opportunity')?.id || ''
+    Array.isArray(types) ? types.find((type) => type.name === 'Opportunity')?.id || '' : ''
   );
 
   const { data: opportunityRecords, isLoading: opportunityLoading } = useRecords(
     companyName,
-    types?.find((type) => type.name === 'Opportunity')?.id || ''
+    Array.isArray(types) ? types.find((type) => type.name === 'Opportunity')?.id || '' : ''
   );
 
   if (isTypesLoading || opportunityStageLoading || opportunityLoading) {

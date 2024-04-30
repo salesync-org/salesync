@@ -16,9 +16,9 @@ import java.util.UUID;
 @Getter
 @Setter
 public class CreateRecordRequestDto {
+    @ContainId
+    List<RecordTypePropertyDto> properties;
     @IsRequired
     private String recordName;
     private UUID stageId;
-    @ContainId
-    List<RecordTypePropertyDto> properties;
 }

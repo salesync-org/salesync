@@ -15,7 +15,8 @@ const useType = (defaultCompanyName?: string) => {
 
     for (const layout of layoutOrder) {
       for (const type of layout.types) {
-        const typeIndex = types.findIndex((t) => t.id === type.type_id);
+        const typeIndex = Array.isArray(types) ? types.findIndex((t) => t.id === type.type_id) : -1;
+
         if (typeIndex !== -1) {
           type.name = types[typeIndex].name;
           type.type_id = types[typeIndex].id;

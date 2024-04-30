@@ -14,19 +14,19 @@ const RecordChart = () => {
 
   const { data: leadRecords, isLoading: leadsLoading } = useRecords(
     companyName,
-    types?.find((type) => type.name === 'Lead')?.id || ''
+    Array.isArray(types) ? types.find((type) => type.name === 'Lead')?.id || '' : ''
   );
   const { data: contactRecords, isLoading: contactsLoading } = useRecords(
     companyName,
-    types?.find((type) => type.name === 'Contact')?.id || ''
+    Array.isArray(types) ? types.find((type) => type.name === 'Contact')?.id || '' : ''
   );
   const { data: opportunityRecords, isLoading: opportunityLoading } = useRecords(
     companyName,
-    types?.find((type) => type.name === 'Opportunity')?.id || ''
+    Array.isArray(types) ? types.find((type) => type.name === 'Opportunity')?.id || '' : ''
   );
   const { data: accountRecords, isLoading: accountLoading } = useRecords(
     companyName,
-    types?.find((type) => type.name === 'Account')?.id || ''
+    Array.isArray(types) ? types.find((type) => type.name === 'Account')?.id || '' : ''
   );
 
   if (isTypesLoading || leadsLoading || contactsLoading || opportunityLoading || accountLoading) {

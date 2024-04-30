@@ -1,11 +1,25 @@
-# Use a lightweight Java base image - adjust the version as needed
-FROM openjdk:17-alpine
+# Create a new image for running the application
+FROM maven:3.8.3-openjdk-17 AS build
 
-# Create a working directory for your app
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy the JAR file from the 'artifacts' directory (created by your build step)
-COPY artifacts/*.jar authentication.jar
+# Copy the project files into the container
+COPY . .
 
-# Define the command to execute when the container starts
-ENTRYPOINT ["java", "-jar", "authentication.jar"]
+# Build the Maven project
+RUN mvn clean package -DskipTests
+
+# Create a new image for running the application
+FROM openjdk:17-alpine
+
+# Set the working directory in the container
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the built JAR file from the previous stage
+COPY --from=build /app/target/*.jar app.jar
+# Copy the built JAR file from the previous stage
+COPY --from=build /app/target/*.jar app.jar
+
+ENTRYPOINT ["java", "-jar", "app.jar"]

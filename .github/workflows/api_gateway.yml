@@ -1,0 +1,33 @@
+name: API Gateway Service Build
+
+on:
+  push:
+    branches:
+      - main
+      - development
+    paths:
+      - back-end/api-gateway/**
+  pull_request:
+    branches:
+      - main
+      - development
+    paths:
+      - back-end/api-gateway/**
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: "temurin"
+          cache: maven
+      - name: Run Tests with Maven
+        working-directory: back-end/api-gateway
+        run: mvn -B test -DAUTH_SERVER_URL=${{secrets.AUTH_SERVER_URL}} -DEUREKA_SERVER_URL=${{secrets.EUREKA_SERVER_URL}} --file pom.xml
+      - name: Build with Maven
+        working-directory: back-end/api-gateway
+        run: mvn -B package -DAUTH_SERVER_URL=${{secrets.AUTH_SERVER_URL}} -DEUREKA_SERVER_URL=${{secrets.EUREKA_SERVER_URL}} --file pom.xml

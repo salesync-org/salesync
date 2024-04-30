@@ -5,7 +5,7 @@ import instance from './axiosConfig';
 
 const BASE_URL = `${import.meta.env.VITE_AUTHENTICATION_HOST}/api/v1`;
 
-const UPLOAD_API_ENDPOINT = `${import.meta.env.VITE_UPLOAD_API_ENDPOINT}`;
+const UPLOAD_API_ENDPOINT = `${import.meta.env.VITE_UPLOAD_AVATAR_API_ENDPOINT}`;
 
 // Create a user within a realm
 export const createUser = async (realmId: string, user: NewUser, accessToken: string) => {

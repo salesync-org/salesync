@@ -53,6 +53,7 @@ public class TypeServiceImpl implements TypeService {
         Type savedType = typeRepository.save(
                 Type.builder().name(typeDTO.getName()).template(template).companyName(companyName).build()
         );
+
         return typeMapper.typeToTypeDTO(savedType);
 
     }

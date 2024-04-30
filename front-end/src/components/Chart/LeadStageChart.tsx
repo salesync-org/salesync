@@ -16,12 +16,12 @@ const LeadStageChart = () => {
 
   const { data: leadStages, isLoading: leadStageLoading } = useStages(
     companyName,
-    types?.find((type) => type.name === 'Lead')?.id || ''
+    Array.isArray(types) ? types.find((type) => type.name === 'Lead')?.id || '' : ''
   );
 
   const { data: leadRecords, isLoading: leadsLoading } = useRecords(
     companyName,
-    types?.find((type) => type.name === 'Lead')?.id || ''
+    Array.isArray(types) ? types.find((type) => type.name === 'Lead')?.id || '' : ''
   );
 
   if (isTypesLoading || leadStageLoading || leadsLoading) {

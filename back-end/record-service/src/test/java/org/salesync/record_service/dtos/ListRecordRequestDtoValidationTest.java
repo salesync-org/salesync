@@ -7,10 +7,6 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
-import org.salesync.record_service.dtos.ListRecordsRequestDto;
-import org.salesync.record_service.services.token.TokenService;
-import org.salesync.record_service.services.token.TokenServiceImpl;
 
 public class ListRecordRequestDtoValidationTest {
     private Validator validator;

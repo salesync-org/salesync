@@ -1,4 +1,4 @@
-name: Type Service Build
+name: API Gateway Service Build
 
 on:
   push:
@@ -27,7 +27,7 @@ jobs:
           cache: maven
       - name: Run Tests with Maven
         working-directory: back-end/api-gateway
-        run: mvn -B test --file pom.xml
+        run: mvn -B test -DAUTH_SERVER_URL=${{secrets.AUTH_SERVER_URL}} -DEUREKA_SERVER_URL=${{secrets.EUREKA_SERVER_URL}} --file pom.xml
       - name: Build with Maven
         working-directory: back-end/api-gateway
         run: mvn -B package --file pom.xml

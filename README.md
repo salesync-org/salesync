@@ -10,8 +10,6 @@
 
 ![homescreen](https://github.com/salesync-org/salesync/assets/106808117/034c7920-2a83-4df0-abea-0a6b26d86b19)
 
-
-
 ## Build And Run
 
 SaleSync has a microservices architecture that requires the building and deploying process separated by each service.

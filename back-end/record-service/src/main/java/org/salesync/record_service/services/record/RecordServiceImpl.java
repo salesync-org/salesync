@@ -19,7 +19,6 @@ import org.salesync.record_service.mappers.RecordTypeRelationMapper;
 import org.salesync.record_service.mappers.RelationItemMapper;
 import org.salesync.record_service.repositories.*;
 import org.salesync.record_service.services.token.TokenService;
-import org.salesync.record_service.services.token.TokenService;
 import org.salesync.record_service.utils.SecurityContextHelper;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
@@ -61,7 +60,7 @@ public class RecordServiceImpl implements RecordService {
         Page<Record> page = null;
         if (requestDto.getPropertyName() != null) {
             page = recordRepository.getFilteredRecord(
-                    UUID.fromString(SecurityContextHelper.getContextUserId()), requestDto.getPropertyName(), requestDto.getTypeId(), requestDto.getSearchTerm(), requestDto.isAsc(), pageRequest , companyName
+                    UUID.fromString(SecurityContextHelper.getContextUserId()), requestDto.getPropertyName(), requestDto.getTypeId(), requestDto.getSearchTerm(), requestDto.isAsc(), pageRequest, companyName
             );
         } else {
             page = recordRepository.getFilteredRecordsAndOrderByName(
@@ -221,7 +220,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public RecordDto createRecordByTypeId( String companyName,
+    public RecordDto createRecordByTypeId(String companyName,
                                           String typeId, String token, CreateRecordRequestDto createRecordRequestDto
     ) {
         String userContextId = SecurityContextHelper.getContextUserId();

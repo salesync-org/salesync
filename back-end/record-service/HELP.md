@@ -1,11 +1,14 @@
 # Read Me First
+
 The following was discovered as part of building this project:
 
-* The original package name 'org.salesync.record-service' is invalid and this project uses 'org.salesync.record_service' instead.
+* The original package name 'org.salesync.record-service' is invalid and this
+  project uses 'org.salesync.record_service' instead.
 
 # Getting Started
 
 ### Reference Documentation
+
 For further reference, please consider the following sections:
 
 * [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
@@ -21,6 +24,7 @@ For further reference, please consider the following sections:
 * [Spring Boot DevTools](https://docs.spring.io/spring-boot/docs/3.2.3/reference/htmlsingle/index.html#using.devtools)
 
 ### Guides
+
 The following guides illustrate how to use some features concretely:
 
 * [Accessing Data with MongoDB](https://spring.io/guides/gs/accessing-data-mongodb/)
@@ -33,6 +37,7 @@ The following guides illustrate how to use some features concretely:
 * [Messaging with RabbitMQ](https://spring.io/guides/gs/messaging-rabbitmq/)
 
 ### Docker Compose support
+
 This project contains a Docker Compose file named `compose.yaml`.
 In this file, the following services have been defined:
 
@@ -40,5 +45,6 @@ In this file, the following services have been defined:
 * postgres: [`postgres:latest`](https://hub.docker.com/_/postgres)
 * rabbitmq: [`rabbitmq:latest`](https://hub.docker.com/_/rabbitmq)
 
-Please review the tags of the used images and set them to the same as you're running in production.
+Please review the tags of the used images and set them to the same as you're
+running in production.
 

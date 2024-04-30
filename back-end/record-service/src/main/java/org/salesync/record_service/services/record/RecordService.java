@@ -30,7 +30,7 @@ public interface RecordService {
 
     RecordDto updateStage(RequestUpdateStageDto requestUpdateStageDto, String token, String realm);
 
-    RecordDto createRecordByTypeId(String companyName,String typeId, String token, CreateRecordRequestDto createRecordRequestDto);
+    RecordDto createRecordByTypeId(String companyName, String typeId, String token, CreateRecordRequestDto createRecordRequestDto);
 
     RecordDto updateRecordByRecordId(String recordId, String token, RecordDto updateRecordRequestDto);
 }

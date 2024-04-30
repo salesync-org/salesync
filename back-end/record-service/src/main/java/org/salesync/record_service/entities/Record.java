@@ -2,14 +2,12 @@ package org.salesync.record_service.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 import java.util.UUID;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
 @RequiredArgsConstructor
@@ -20,7 +18,6 @@ import java.util.UUID;
 public class Record extends BaseEntity {
     private String name;
     private UUID userId;
-
 
     @JsonIgnore
     @Column(name = "company_name")

@@ -19,7 +19,6 @@ import org.salesync.record_service.mappers.RecordTypeRelationMapper;
 import org.salesync.record_service.mappers.RelationItemMapper;
 import org.salesync.record_service.repositories.*;
 import org.salesync.record_service.services.token.TokenService;
-import org.salesync.record_service.services.token.TokenService;
 import org.salesync.record_service.utils.SecurityContextHelper;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
@@ -58,10 +57,10 @@ public class RecordServiceImpl implements RecordService {
     @Override
     public ListRecordsResponseDto getFilteredRecords(ListRecordsRequestDto requestDto, String companyName) {
         Pageable pageRequest = PageRequest.of(requestDto.getCurrentPage() - 1, requestDto.getPageSize());
-        Page<Record> page = null;
+        Page<Record> page;
         if (requestDto.getPropertyName() != null) {
             page = recordRepository.getFilteredRecord(
-                    UUID.fromString(SecurityContextHelper.getContextUserId()), requestDto.getPropertyName(), requestDto.getTypeId(), requestDto.getSearchTerm(), requestDto.isAsc(), pageRequest , companyName
+                    UUID.fromString(SecurityContextHelper.getContextUserId()), requestDto.getPropertyName(), requestDto.getTypeId(), requestDto.getSearchTerm(), requestDto.isAsc(), pageRequest, companyName
             );
         } else {
             page = recordRepository.getFilteredRecordsAndOrderByName(
@@ -176,7 +175,7 @@ public class RecordServiceImpl implements RecordService {
 
         // Make the HTTP GET request
         ResponseEntity<List<TypeDto>> response = restTemplate.exchange(
-                "http://type-service/api/v1/" + realm + "/types", HttpMethod.GET, entity, new ParameterizedTypeReference<List<TypeDto>>() {
+                "http://type-service/api/v1/" + realm + "/types", HttpMethod.GET, entity, new ParameterizedTypeReference<>() {
                 }
         );
         List<TypeDto> allType = response.getBody();
@@ -221,8 +220,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public RecordDto createRecordByTypeId( String companyName,
-                                          String typeId, String token, CreateRecordRequestDto createRecordRequestDto
+    public RecordDto createRecordByTypeId(String companyName, String typeId, String token, CreateRecordRequestDto createRecordRequestDto
     ) {
         String userContextId = SecurityContextHelper.getContextUserId();
 
@@ -269,7 +267,9 @@ public class RecordServiceImpl implements RecordService {
 
         for (RecordTypePropertyDto recordTypePropertyDto : updateRecordRequestDto.getRecordProperties()) {
             RecordTypeProperty recordTypeProperty = recordTypePropertyRepository.findById(recordTypePropertyDto.getId()).orElse(null);
-            recordTypeProperty.setItemValue(recordTypePropertyDto.getItemValue());
+            if (recordTypeProperty != null) {
+                recordTypeProperty.setItemValue(recordTypePropertyDto.getItemValue());
+            }
 
             recordEntity.getRecordProperties().add(recordTypeProperty);
         }

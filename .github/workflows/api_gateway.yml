@@ -1,4 +1,4 @@
-name: Record Service Build
+name: Type Service Build
 
 on:
   push:
@@ -6,13 +6,13 @@ on:
       - main
       - development
     paths:
-      - back-end/record-service/**
+      - back-end/api-gateway/**
   pull_request:
     branches:
       - main
       - development
     paths:
-      - back-end/record-service/**
+      - back-end/api-gateway/**
 
 jobs:
   build:
@@ -26,8 +26,8 @@ jobs:
           distribution: "temurin"
           cache: maven
       - name: Run Tests with Maven
-        working-directory: back-end/record-service
+        working-directory: back-end/api-gateway
         run: mvn -B test --file pom.xml
       - name: Build with Maven
-        working-directory: back-end/record-service
+        working-directory: back-end/api-gateway
         run: mvn -B package --file pom.xml

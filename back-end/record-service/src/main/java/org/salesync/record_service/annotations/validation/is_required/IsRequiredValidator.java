@@ -2,7 +2,6 @@ package org.salesync.record_service.annotations.validation.is_required;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.salesync.record_service.annotations.validation.is_required.IsRequired;
 
 public class IsRequiredValidator implements ConstraintValidator<IsRequired, Object> {
     @Override

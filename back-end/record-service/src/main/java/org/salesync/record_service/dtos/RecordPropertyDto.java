@@ -11,8 +11,8 @@ import java.util.List;
 @Builder
 @Getter
 public class RecordPropertyDto {
+    List<RecordPropertyDto> properties;
     private String id;
     private String label;
     private String value;
-    List<RecordPropertyDto> properties;
 }

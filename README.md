@@ -8,6 +8,10 @@
 
 **SaleSync** is a simple CRM System that helps small business store, manage, relate their business data in the simpliest way possible. We aim to provide business a secure, fast and easy-to-use platform.
 
+![homescreen](https://github.com/salesync-org/salesync/assets/106808117/034c7920-2a83-4df0-abea-0a6b26d86b19)
+
+
+
 ## Build And Run
 
 SaleSync has a microservices architecture that requires the building and deploying process separated by each service.
@@ -25,8 +29,8 @@ The documentation is divided into several sections:
 
 You can improve it by sending pull requests to [this repository](https://github.com/salesync-org/salesync).
 
-<!-- ## License
+## License
 
-Copyright (c) Microsoft Corporation. All rights reserved.
+Copyright (c) **SaleSync Organization**. All rights reserved.
 
-Licensed under the [MIT](LICENSE.txt) license. -->
+Licensed under the [AGPL](LICENSE) license.

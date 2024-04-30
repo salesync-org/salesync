@@ -57,7 +57,7 @@ public class RecordController {
     }
 
     @DeleteMapping
-    public ResponseEntity deleteRecordsById(@RequestBody List<UUID> recordIds) {
+    public ResponseEntity<String> deleteRecordsById(@RequestBody List<UUID> recordIds) {
         recordService.deleteRecordsById(recordIds);
         return ResponseEntity.noContent().build();
     }

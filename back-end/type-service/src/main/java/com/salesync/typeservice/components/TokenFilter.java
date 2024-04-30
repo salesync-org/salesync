@@ -37,11 +37,10 @@ public class TokenFilter extends OncePerRequestFilter {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     return;
                 }
-                List<?> rawClaims = tokenService.extractClaim(token, claims ->
-                    claims.get(PERMISSIONS, List.class));
+                List<?> rawClaims = tokenService.extractClaim(token, claims -> claims.get(PERMISSIONS, List.class));
                 List<String> permissions = rawClaims.stream().map(Object::toString).toList();
 
-                        PreAuthenticatedAuthenticationToken authentication = new PreAuthenticatedAuthenticationToken(userId, null, permissions.stream().map(SimpleGrantedAuthority::new).toList());
+                PreAuthenticatedAuthenticationToken authentication = new PreAuthenticatedAuthenticationToken(userId, null, permissions.stream().map(SimpleGrantedAuthority::new).toList());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
             filterChain.doFilter(request, response);

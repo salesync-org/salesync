@@ -220,8 +220,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public RecordDto createRecordByTypeId(String companyName,
-                                          String typeId, String token, CreateRecordRequestDto createRecordRequestDto
+    public RecordDto createRecordByTypeId(String companyName, String typeId, String token, CreateRecordRequestDto createRecordRequestDto
     ) {
         String userContextId = SecurityContextHelper.getContextUserId();
 

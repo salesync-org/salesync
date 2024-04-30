@@ -10,6 +10,7 @@ public interface ListRecordTypeRelationMapper {
     ListRecordTypeRelationMapper INSTANCE = Mappers.getMapper(ListRecordTypeRelationMapper.class);
 
     ListRecordTypeRelationsDto recordTypeRelationToListRecordTypeRelationsDto(RecordTypeRelation recordTypeRelation);
+
     RecordTypeRelation listRecordTypeRelationsDtoToRecordTypeRelation(ListRecordTypeRelationsDto listRecordTypeRelationsDtoRecordTypeRelationsDto);
 
 }

@@ -42,6 +42,12 @@ keystore:
   password: ${KEYSTORE_PASSWORD}
   alias: ${KEYSTORE_ALIAS}
 
+rabbitmq:
+  host: ${RABBITMQ_HOST}
+  port: ${RABBITMQ_PORT}
+  username: ${RABBITMQ_USER}
+  password: ${RABBITMQ_PASSWORD}
+
 jwt:
   expiration:
     ms: 7776000000

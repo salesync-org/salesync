@@ -18,11 +18,13 @@ import org.keycloak.representations.idm.*;
 import org.keycloak.representations.userprofile.config.UPAttribute;
 import org.keycloak.representations.userprofile.config.UPAttributePermissions;
 import org.keycloak.representations.userprofile.config.UPConfig;
+import org.salesync.authentication.components.MessageQueueProducer;
 import org.salesync.authentication.constants.AuthenticationClient;
 import org.salesync.authentication.constants.AuthenticationInfo;
 import org.salesync.authentication.constants.UserAttributes;
 import org.salesync.authentication.dtos.*;
 import org.salesync.authentication.entities.Company;
+import org.salesync.authentication.enums.ActionType;
 import org.salesync.authentication.helpers.SettingsManager;
 import org.salesync.authentication.repositories.CompanyRepository;
 import org.salesync.authentication.services.user.UserService;
@@ -45,6 +47,7 @@ public class RegisterServiceImpl implements RegisterService {
     private final Environment env;
     private final Keycloak keycloak;
     private final UserService userService;
+    private final MessageQueueProducer messageQueueProducer;
     Logger logger = LoggerFactory.getLogger(RegisterServiceImpl.class);
 
     @Override
@@ -57,6 +60,7 @@ public class RegisterServiceImpl implements RegisterService {
             newCompany.setName(companyRegisterDTO.getCompanyName());
             newCompany.setAvatarUrl("default");
             companyRepository.save(newCompany);
+            messageQueueProducer.sendMessage("type-service", MessageQueueDto.builder().actionType(ActionType.INIT_TYPES).payload(realmName).build());
             adminRegisterResponse = registerUser(
                     companyRegisterDTO.getAdminInfo(),
                     realmName);

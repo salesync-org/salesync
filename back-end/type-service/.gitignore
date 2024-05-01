@@ -35,3 +35,4 @@ build/
 
 ###
 *-local.*
+/src/main/resources/application-dev.properties

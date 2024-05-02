@@ -1,5 +1,5 @@
 package com.salesync.typeservice.enums;
 
 public enum ActionType {
-    INIT_TYPES
+    DELETE_STAGE, INIT_TYPES
 }

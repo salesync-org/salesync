@@ -14,6 +14,7 @@ public class MessageQueueProducer {
     private RabbitTemplate rabbitTemplate;
 
     public void sendMessage(String routingKey, MessageQueueDto message) {
+        System.out.println("Sending message with routing key: " + routingKey + " to exchange: " + exchange.getName());
         rabbitTemplate.convertAndSend(
                 exchange.getName(), routingKey, message);
     }

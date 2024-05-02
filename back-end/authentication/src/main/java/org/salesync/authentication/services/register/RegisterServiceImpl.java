@@ -59,8 +59,6 @@ public class RegisterServiceImpl implements RegisterService {
             Company newCompany = new Company();
             newCompany.setName(companyRegisterDTO.getCompanyName());
             newCompany.setAvatarUrl("default");
-            companyRepository.save(newCompany);
-            messageQueueProducer.sendMessage("type-service", MessageQueueDto.builder().actionType(ActionType.INIT_TYPES).payload(realmName).build());
             adminRegisterResponse = registerUser(
                     companyRegisterDTO.getAdminInfo(),
                     realmName);
@@ -68,6 +66,8 @@ public class RegisterServiceImpl implements RegisterService {
             LogInDto loginDto = new LogInDto(
                     companyRegisterDTO.getAdminInfo().getEmail(),
                     AuthenticationInfo.DEFAULT_PASSWORD);
+            companyRepository.save(newCompany);
+            messageQueueProducer.sendMessage("auth-queue", MessageQueueDto.builder().actionType(ActionType.INIT_TYPES).payload(realmName).build());
             return login(
                     realmName,
                     loginDto);

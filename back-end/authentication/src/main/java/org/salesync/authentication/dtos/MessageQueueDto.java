@@ -6,7 +6,6 @@ import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
-import lombok.*;
 
 import org.salesync.authentication.enums.ActionType;
 

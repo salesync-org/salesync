@@ -1,7 +1,7 @@
-GRANT ALL PRIVILEGES ON DATABASE type_service TO type_service;
+-- GRANT ALL PRIVILEGES ON DATABASE salesync_type_service TO type_service;
 -- CREATE ROLE postgres WITH LOGIN SUPERUSER PASSWORD 'strong_password';
 
-\c type_service;
+\c salesync_type_service;
 
 DROP TABLE IF EXISTS public.template CASCADE;
 CREATE TABLE IF NOT EXISTS public.template

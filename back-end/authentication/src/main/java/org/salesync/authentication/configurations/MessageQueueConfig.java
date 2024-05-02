@@ -1,4 +1,4 @@
-package com.salesync.typeservice.configurations;
+package org.salesync.authentication.configurations;
 
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -8,11 +8,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class RabbitMQConfig {
+public class MessageQueueConfig {
 
     @Bean
-    public Queue typeQueue() {
-        return new Queue("type-queue", true, false, false);
+    public Queue authQueue() {
+        return new Queue("auth-queue", true, false, false);
     }
 
     @Bean
@@ -21,8 +21,8 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public Binding binding(Queue typeQueue, Exchange exchange) {
-        return BindingBuilder.bind(typeQueue).to(exchange).with("type").noargs();
+    public Binding binding(Queue queue, Exchange exchange) {
+        return BindingBuilder.bind(queue).to(exchange).with("auth-queue").noargs();
     }
 
     @Bean

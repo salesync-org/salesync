@@ -5,8 +5,6 @@ import lombok.RequiredArgsConstructor;
 import com.salesync.typeservice.dtos.RabbitMQMessageDto;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Service
 @RequiredArgsConstructor
 public class RabbitMQServiceImpl implements RabbitMQService {
@@ -15,9 +13,7 @@ public class RabbitMQServiceImpl implements RabbitMQService {
     @Override
     public void dispatchMessage(RabbitMQMessageDto message) {
         switch (message.getActionType()) {
-            case INIT_TYPES:
-                initTypes((String) message.getPayload());
-                break;
+            case INIT_TYPES -> initTypes((String) message.getPayload());
         }
     }
 

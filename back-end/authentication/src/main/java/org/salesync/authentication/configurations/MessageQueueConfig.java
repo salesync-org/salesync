@@ -22,7 +22,7 @@ public class MessageQueueConfig {
 
     @Bean
     public Binding binding(Queue queue, Exchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with("auth-queue").noargs();
+        return BindingBuilder.bind(queue).to(exchange).with("auth").noargs();
     }
 
     @Bean

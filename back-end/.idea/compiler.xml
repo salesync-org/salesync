@@ -27,6 +27,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="keycloak" target="19" />
       <module name="rabbitmq" target="17" />
     </bytecodeTargetLevel>
   </component>

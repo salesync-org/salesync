@@ -11,6 +11,7 @@ spring:
     port: ${RABBITMQ_PORT}
     username: ${RABBITMQ_USER}
     password: ${RABBITMQ_PASSWORD}
+    virtual-host: tfibxvlh
   application:
     name: record-service
   datasource:

@@ -12,12 +12,14 @@ public class RabbitMQServiceImpl implements RabbitMQService {
 
     @Override
     public void dispatchMessage(RabbitMQMessageDto message) {
+        System.out.println("Received message action: " + message.getActionType().toString());
         switch (message.getActionType()) {
             case INIT_TYPES -> initTypes((String) message.getPayload());
         }
     }
 
     private void initTypes(String realmName) {
+        System.out.println("Initialize company successfully with name: " + realmName);
         typeService.initializeStandardTypes(realmName);
     }
 }

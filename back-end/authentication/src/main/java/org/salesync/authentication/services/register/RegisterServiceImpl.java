@@ -67,7 +67,7 @@ public class RegisterServiceImpl implements RegisterService {
                     companyRegisterDTO.getAdminInfo().getEmail(),
                     AuthenticationInfo.DEFAULT_PASSWORD);
             companyRepository.save(newCompany);
-            messageQueueProducer.sendMessage("auth-queue", MessageQueueDto.builder().actionType(ActionType.INIT_TYPES).payload(realmName).build());
+            messageQueueProducer.sendMessage("auth", MessageQueueDto.builder().actionType(ActionType.INIT_TYPES).payload(realmName).build());
             return login(
                     realmName,
                     loginDto);

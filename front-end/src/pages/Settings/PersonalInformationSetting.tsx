@@ -31,7 +31,6 @@ const PersonalInfomationSetting = () => {
     roles: null,
     permissions: null
   };
-  console.log(user);
 
   const handleOnChange = ({ field, value }: { field: string; value: string }) => {
     setUserInfo((prev) => ({ ...prev, [field]: value }));
@@ -43,7 +42,6 @@ const PersonalInfomationSetting = () => {
         if (res && res.status === 200) {
           const newUser = { ...userLoaded, avatar_url: `avatar_${userLoaded.user_id}` };
           setUserInfo(newUser);
-          console.log('Loaded: ' + newUser);
           await updateUser(companyName ?? '', newUser as User).then(() => {
             toast({
               title: 'Success',
@@ -88,6 +86,7 @@ const PersonalInfomationSetting = () => {
                     return (
                       <div key={fieldName.toString()}>
                         <TextInput
+                          key={`${fieldName.toString()}-input`}
                           header={fieldName
                             .split('_')
                             .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -101,8 +100,6 @@ const PersonalInfomationSetting = () => {
                         />
                       </div>
                     );
-                  } else {
-                    return <></>;
                   }
                 })}
             </div>
@@ -119,11 +116,9 @@ const PersonalInfomationSetting = () => {
               <Button
                 rounded
                 onMouseEnter={(_) => {
-                  console.log('Hovering');
                   setEditAvatarHovered(true);
                 }}
                 onMouseLeave={(_) => {
-                  console.log('Stop Hovering');
                   setEditAvatarHovered(false);
                 }}
                 className={cn(

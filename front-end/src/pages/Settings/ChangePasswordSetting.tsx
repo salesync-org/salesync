@@ -83,14 +83,14 @@ const ChangePasswordSetting = () => {
               <div className='w-3/4'>
                 <input type='text' tabIndex={-1} className='h-0 w-0 py-0'></input>
                 <TextInput
-                  isPassword={true}
+                  type='password'
                   header={'Current Password'}
                   register={register}
                   name='currentPassword'
                   className='w-full'
                 />
                 <TextInput
-                  isPassword={true}
+                  type='password'
                   header={'New Password'}
                   register={register}
                   name='password'
@@ -98,7 +98,7 @@ const ChangePasswordSetting = () => {
                   isError={!!errors.password}
                 />
                 <TextInput
-                  isPassword={true}
+                  type='password'
                   header={'Confirm Password'}
                   register={register}
                   name='confirmPassword'

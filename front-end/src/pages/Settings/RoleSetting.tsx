@@ -167,22 +167,24 @@ const RoleSetting = () => {
                           role.role_name !== `default-roles-${companyName}` && (
                             <TableRow key={role.role_id}>
                               <TableCell>
-                                <div className='w-fit'>
-                                  <div className='my-2 text-[1.2rem] font-semibold text-primary-bold dark:text-secondary-light'>
-                                    {role.role_name}
+                                <td>
+                                  <div className='w-fit'>
+                                    <div className='my-2 text-[1.2rem] font-semibold text-primary-bold dark:text-secondary-light'>
+                                      {role.role_name}
+                                    </div>
+                                    <div className=' flex w-fit flex-wrap space-x-2'>
+                                      {role.permissions &&
+                                        role.permissions.map((permission) => (
+                                          <div
+                                            key={permission.permission_id}
+                                            className='my-2 mr-1 w-fit text-ellipsis text-nowrap rounded-full bg-gray-200 px-3 py-1 text-xs dark:bg-slate-600'
+                                          >
+                                            {permission.permission_name}
+                                          </div>
+                                        ))}
+                                    </div>
                                   </div>
-                                  <div className=' flex w-fit flex-wrap space-x-2'>
-                                    {role.permissions &&
-                                      role.permissions.map((permission) => (
-                                        <div
-                                          key={permission.permission_id}
-                                          className='my-2 mr-1 w-fit text-ellipsis text-nowrap rounded-full bg-gray-200 px-3 py-1 text-xs dark:bg-slate-600'
-                                        >
-                                          {permission.permission_name}
-                                        </div>
-                                      ))}
-                                  </div>
-                                </div>
+                                </td>
                               </TableCell>
                               <TableCell>{role.description ?? 'No Description'}</TableCell>
                               <TableCell>

@@ -22,6 +22,7 @@ const Button: React.FC<ButtonProps> = ({
         className={cn(
           buttonVariants({ intent, rounded, zoom }),
           'flex items-center justify-center space-x-1',
+          'disabled:cursor-not-allowed disabled:opacity-50',
           !rounded && 'first:rounded-bl first:rounded-tl last:rounded-br last:rounded-tr last:border-r-[2px]',
           className
         )}

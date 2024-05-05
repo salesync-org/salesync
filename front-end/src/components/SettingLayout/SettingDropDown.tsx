@@ -25,11 +25,11 @@ export const SettingDropDown = ({ title, items }: { title: string; items: { name
       </div>
       {open && (
         <div className='flex flex-col'>
-          {items.map((item, index) => (
+          {items.map((item, _) => (
             <ItemSetting
               className='pl-12'
               activeClassName='pl-[40px]'
-              key={index}
+              key={item.name}
               name={item.name}
               href={`/${companyName}/${item.path}`}
             />

@@ -1,5 +1,5 @@
-GRANT ALL PRIVILEGES ON DATABASE salesync_type_service TO type_service;
-CREATE ROLE postgres WITH LOGIN SUPERUSER PASSWORD 'strong_password';
+-- GRANT ALL PRIVILEGES ON DATABASE salesync_type_service TO type_service;
+-- CREATE ROLE postgres WITH LOGIN SUPERUSER PASSWORD 'strong_password';
 
 \c salesync_type_service;
 
@@ -11,7 +11,6 @@ CREATE TABLE IF NOT EXISTS public.template
 	version bigint DEFAULT 0,
     CONSTRAINT pk_template PRIMARY KEY (template_id)
 );
-ALTER TABLE IF EXISTS public.type OWNER to postgres;
 
 DROP TABLE IF EXISTS public.type CASCADE;
 CREATE TABLE IF NOT EXISTS public.type
@@ -19,6 +18,7 @@ CREATE TABLE IF NOT EXISTS public.type
     type_id uuid NOT NULL DEFAULT gen_random_uuid(),
     template_id uuid,
     name text,
+    company_name text,
 	version bigint DEFAULT 0,
     CONSTRAINT pk_type PRIMARY KEY (type_id),
     CONSTRAINT fk_type_template FOREIGN KEY (template_id)
@@ -26,7 +26,6 @@ CREATE TABLE IF NOT EXISTS public.type
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
-ALTER TABLE IF EXISTS public.type OWNER to postgres;
 
 DROP TABLE IF EXISTS public.relation CASCADE;
 CREATE TABLE IF NOT EXISTS public.relation
@@ -42,7 +41,6 @@ CREATE TABLE IF NOT EXISTS public.relation
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
-ALTER TABLE IF EXISTS public.relation OWNER to postgres;
 
 DROP TABLE IF EXISTS public.type_relation CASCADE;
 CREATE TABLE IF NOT EXISTS public.type_relation
@@ -68,7 +66,6 @@ CREATE TABLE IF NOT EXISTS public.type_relation
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
-ALTER TABLE IF EXISTS public.type_relation OWNER to postgres;
 
 DROP TABLE IF EXISTS public.property CASCADE;
 CREATE TABLE IF NOT EXISTS public.property
@@ -78,7 +75,6 @@ CREATE TABLE IF NOT EXISTS public.property
 	version bigint DEFAULT 0,
     CONSTRAINT pk_property PRIMARY KEY (property_id)
 );
-ALTER TABLE IF EXISTS public.property OWNER to postgres;
 
 DROP TABLE IF EXISTS public.type_property CASCADE;
 CREATE TABLE IF NOT EXISTS public.type_property
@@ -101,7 +97,6 @@ CREATE TABLE IF NOT EXISTS public.type_property
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
 );
-ALTER TABLE IF EXISTS public.type_property OWNER to postgres;
 
 DROP TABLE IF EXISTS public.field CASCADE;
 CREATE TABLE IF NOT EXISTS public.field
@@ -112,7 +107,6 @@ CREATE TABLE IF NOT EXISTS public.field
 	version bigint DEFAULT 0,
     CONSTRAINT pk_field PRIMARY KEY (field_id)
 );
-ALTER TABLE IF EXISTS public.field OWNER to postgres;
 
 DROP TABLE IF EXISTS public.property_field CASCADE;
 CREATE TABLE IF NOT EXISTS public.property_field
@@ -136,7 +130,6 @@ CREATE TABLE IF NOT EXISTS public.property_field
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     );
-ALTER TABLE IF EXISTS public.property_field OWNER to postgres;
 
 DROP TABLE IF EXISTS public.stage CASCADE;
 CREATE TABLE IF NOT EXISTS public.stage
@@ -152,7 +145,6 @@ CREATE TABLE IF NOT EXISTS public.stage
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
     );
-ALTER TABLE IF EXISTS public.stage OWNER to postgres;
 
 DROP TABLE IF EXISTS public.type_property_field CASCADE;
 CREATE TABLE IF NOT EXISTS public.type_property_field
@@ -172,4 +164,3 @@ CREATE TABLE IF NOT EXISTS public.type_property_field
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
     );
-ALTER TABLE IF EXISTS public.type_property_field OWNER to postgres;

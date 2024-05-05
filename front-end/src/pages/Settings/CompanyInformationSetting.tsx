@@ -53,14 +53,10 @@ const CompanyInfomationSetting = () => {
   const handleFileUpload = async (file: File) => {
     if (companyLoaded.company_id != undefined) {
       setUpdatingStatus(true);
-      console.log('file name  was: ' + file.name);
-      const fileName = `avatar_${companyLoaded.company_id}.${file.name.split('.').pop()}`;
-      console.log('Company name file: ' + fileName);
       Auth.uploadCompanyAvatar(`avatar_${companyLoaded.company_id}`, file).then(async (res) => {
         if (res && res.status === 200) {
           const newCompany = { ...companyLoaded, avatar_url: `avatar_${companyLoaded.company_id}` };
           setCompanyLoadedInfo(newCompany);
-          console.log('Loaded: ' + newCompany);
           await updateCompanyInfo(companyName ?? '', newCompany).then(() => {
             toast({
               title: 'Success',
@@ -107,6 +103,7 @@ const CompanyInfomationSetting = () => {
                     return (
                       <div key={fieldName.toString()}>
                         <TextInput
+                          key={`${fieldName.toString()}-input`}
                           header={fieldName
                             .split('_')
                             .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -120,8 +117,6 @@ const CompanyInfomationSetting = () => {
                         />
                       </div>
                     );
-                  } else {
-                    return <></>;
                   }
                 })}
             </div>
@@ -138,11 +133,9 @@ const CompanyInfomationSetting = () => {
               <Button
                 rounded
                 onMouseEnter={(_) => {
-                  console.log('Hovering');
                   setEditAvatarHovered(true);
                 }}
                 onMouseLeave={(_) => {
-                  console.log('Stop Hovering');
                   setEditAvatarHovered(false);
                 }}
                 className={cn(

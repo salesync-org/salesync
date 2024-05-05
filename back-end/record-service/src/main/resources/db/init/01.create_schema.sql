@@ -9,12 +9,10 @@ CREATE TABLE IF NOT EXISTS public.record
     record_id uuid NOT NULL DEFAULT gen_random_uuid(),
     user_id   uuid NOT NULL,
     name      text,
+    company_name text,
     version   bigint        DEFAULT 0,
     CONSTRAINT pk_record PRIMARY KEY (record_id)
 );
-
-ALTER TABLE IF EXISTS public.record
-    OWNER to postgres;
 
 DROP TABLE IF EXISTS public.record_type_property CASCADE;
 CREATE TABLE IF NOT EXISTS public.record_type_property
@@ -31,9 +29,6 @@ CREATE TABLE IF NOT EXISTS public.record_type_property
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
-
-ALTER TABLE IF EXISTS public.record_type_property
-    OWNER to postgres;
 
 DROP TABLE IF EXISTS public.record_type_relation CASCADE;
 CREATE TABLE IF NOT EXISTS public.record_type_relation
@@ -54,9 +49,6 @@ CREATE TABLE IF NOT EXISTS public.record_type_relation
         ON DELETE NO ACTION
 );
 
-ALTER TABLE IF EXISTS public.record_type_relation
-    OWNER to postgres;
-
 DROP TABLE IF EXISTS public.record_type CASCADE;
 CREATE TABLE IF NOT EXISTS public.record_type
 (
@@ -71,9 +63,6 @@ CREATE TABLE IF NOT EXISTS public.record_type
         ON DELETE NO ACTION
 );
 
-ALTER TABLE IF EXISTS public.record_type
-    OWNER to postgres;
-
 DROP TABLE IF EXISTS public.record_stage CASCADE;
 CREATE TABLE IF NOT EXISTS public.record_stage
 (
@@ -87,6 +76,3 @@ CREATE TABLE IF NOT EXISTS public.record_stage
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
-
-ALTER TABLE IF EXISTS public.record_stage
-    OWNER to postgres;

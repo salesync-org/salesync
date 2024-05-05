@@ -120,7 +120,6 @@ const List = ({
   const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
     handleOptionClick(event.target as HTMLElement);
   };
-
   const calculateMaxHeight = () => {
     if (maxHeight > 0) return maxHeight;
     if (align) {

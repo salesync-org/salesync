@@ -1,5 +1,4 @@
 import { Table, TableHeader, TableRow, TableBody, TableCell } from '@/components/ui';
-import { useEffect, useRef } from 'react';
 
 const descriptions: { [key: string]: string } = {
   Text: 'Allows users to enter any combination of letters and numbers.',
@@ -12,8 +11,6 @@ const descriptions: { [key: string]: string } = {
   Geolocation: 'Allows users to enter a location.',
   Image: 'Allows users to upload an image.',
   Date: 'Allows users to enter a date or pick a date from a popup calendar.',
-  Currency: 'Allows users to enter a currency amount. Automatically formats it as a currency amount.',
-  File: 'Allows users to upload a file.',
   DateTime: 'Allows users to enter a date or pick a date and time from a popup calendar.',
   PickList: 'Allows users to select a value from a list you define.'
 };
@@ -29,18 +26,7 @@ type PropertyManagerProps = PropertyData & {
 };
 
 const PropertyManager = ({ type_id, property_id: propertyId, propertyList, updateFields }: PropertyManagerProps) => {
-  const propertyRef = useRef<HTMLInputElement>(null);
-  useEffect(() => {
-    if (propertyRef.current) {
-      const element = propertyRef.current;
-      if (element) {
-        const { top, bottom } = element.getBoundingClientRect();
-        if (top < 0 || bottom > window.innerHeight) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      }
-    }
-  }, [propertyId]);
+  // const { companyName = '' } = useParams();
   return (
     <>
       <input value={type_id} name='type_id' readOnly className='hidden'></input>
@@ -58,7 +44,6 @@ const PropertyManager = ({ type_id, property_id: propertyId, propertyList, updat
                 <TableCell className='col-span-4 flex items-center gap-2 md:col-span-3'>
                   <input
                     type='radio'
-                    ref={property.id === propertyId ? propertyRef : null}
                     name='property_id'
                     id={'propertyManager' + property.name}
                     className='size-5'

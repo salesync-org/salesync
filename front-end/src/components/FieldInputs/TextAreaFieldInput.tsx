@@ -15,12 +15,11 @@ const TextAreaFieldInput = ({ label, name, propertyFields, updateFields }: TextA
       <TextArea
         name={name}
         header={label}
-        placeholder={value}
-        isRequired={propertyFields[0].is_required}
+        value={value}
         className='w-full'
         onChange={(e) => {
           setValue(e.target.value);
-          updateFields([{ ...propertyFields[0], item_value: e.target.value }]);
+          updateFields([{ ...propertyFields[0], default_value: value }]);
         }}
       ></TextArea>
     </>

@@ -46,7 +46,6 @@ function App() {
           <Route path='/cheatsheet' element={<Cheatsheet />} />
           <Route path='/sign-up' element={<SignUp />} />
           <Route path='/forgot-password' element={<ForgotPassword />}></Route>
-          <Route path='/:companyName/login' element={<LogIn />}></Route>
           <Route path='/:companyName/' element={<PrivateRoute />}>
             <Route element={<ConfigLayout />}>
               <Route path='home' element={<HomeLayout />} />
@@ -66,6 +65,7 @@ function App() {
               {/* <Route path='*' element={<Sales />} /> */}
             </Route>
           </Route>
+          <Route path='/:companyName/login' element={<LogIn />}></Route>
           <Route path='/realms/:companyName/login-actions/action-token' element={<VerifyEmail />}></Route>
           <Route path='/:companyName/:userId/change-password' element={<ChangePassword />}></Route>
           <Route path='*' element={<div>Oops</div>} />

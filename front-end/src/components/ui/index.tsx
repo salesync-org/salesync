@@ -12,7 +12,6 @@ export { Panel } from './Panel';
 export { Checkbox } from './Checkbox';
 export { Popup } from './Popup';
 export { Skeleton } from './Skeleton';
-export { Currency } from './Currency';
 export { Switch } from './Switch';
 export { Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption } from './Table';
 export { TextInput } from './TextInput';

@@ -27,13 +27,6 @@ jobs:
           cache: maven
       - name: Build with Maven
         working-directory: back-end/authentication
-        run: |
-          mvn -B -DKEYCLOAK_HOST=${{secrets.KEYCLOAK_HOST_URL}} -DKEYCLOAK_ADMIN_USER=${{secrets.KEYCLOAK_ADMIN_USER}} \
-            -DKEYCLOAK_ADMIN_PASSWORD=${{secrets.KEYCLOAK_ADMIN_PASSWORD}} -DDB_HOST=${{secrets.AUTH_DB_HOST}} \
-            -DDB_PORT=${{secrets.AUTH_DB_PORT}} -DDB_NAME=${{secrets.AUTH_DB_NAME}} \
-            -DDB_USER=${{secrets.AUTH_DB_USER}} -DDB_PASSWORD=${{secrets.AUTH_DB_PASSWORD}} \
-            -DMAIL_SERVER_HOST=${{secrets.MAIL_SERVER_HOST}} -DMAIL_SERVER_PORT=${{secrets.MAIL_SERVER_PORT}} -DDEFAULT_MAIL_DOMAIN=${{secrets.DEFAULT_MAIL_DOMAIN}} \
-            -DMAIL_SERVER_USER=${{secrets.MAIL_SERVER_USER}} -DMAIL_SERVER_PASSWORD=${{secrets.MAIL_SERVER_PASSWORD}} \
-            -DRABBITMQ_HOST=${{secrets.AUTH_RABBITMQ_HOST}} -DRABBITMQ_PORT=${{secrets.AUTH_RABBITMQ_PORT}} \
-            -DRABBITMQ_USER=${{secrets.AUTH_RABBITMQ_USER}} -DRABBITMQ_PASSWORD=${{secrets.AUTH_RABBITMQ_PASSWORD}} \
-            package --file pom.xml
+        run: mvn -B -DKEYCLOAK_HOST=${{secrets.KEYCLOAK_HOST_URL}} -DDB_HOST=${{secrets.AUTH_DB_HOST}}\
+        -DDB_PORT=${{secrets.AUTH_DB_PORT}} -DDB_NAME=${{secrets.AUTH_DB_NAME}} -DDB_USER=${{secrets.AUTH_DB_USER}}\
+        -DDB_PASSWORD=${{secrets.AUTH_DB_PASSWORD}} package --file pom.xml

@@ -16,23 +16,19 @@ import buttonVariants from '../Button/ButtonProps';
 import LoadingSpinner from '../Loading/LoadingSpinner';
 
 const standardTypes = [
-  'Account',
-  'Campaign',
-  'Call',
-  'Case',
-  'Contact',
-  'Contract',
-  'Deal',
-  'Email',
-  'Event',
-  'Invoice',
   'Lead',
+  'Contact',
   'Opportunity',
-  'Order',
-  'Product',
-  'PriceBook',
+  'Account',
+  'Task',
+  'Event',
+  'Deal',
+  'Campaign',
+  'Invoice',
   'Quote',
-  'Task'
+  'Product',
+  'Case',
+  'Contract'
 ];
 
 const TypeTable = ({ types }: { types: Type[] }) => {

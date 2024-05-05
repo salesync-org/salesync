@@ -59,7 +59,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setIsAuthenticated(true);
       } catch (error) {
         setIsAuthenticated(false);
-        // console.error(error);
+        console.error(error);
       } finally {
         setIsLoading(false);
       }

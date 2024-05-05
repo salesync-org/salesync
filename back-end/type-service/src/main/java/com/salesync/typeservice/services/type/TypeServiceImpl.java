@@ -59,11 +59,6 @@ public class TypeServiceImpl implements TypeService {
     }
 
     @Override
-    public void initializeStandardTypes(String companyName) {
-        typeRepository.initializeCompany(companyName);
-    }
-
-    @Override
     public TypeDTO getType(UUID typeId) {
         Type type = typeRepository.findById(typeId).orElseThrow(() -> new ObjectNotFoundException(
                 Type.class.getSimpleName(), typeId.toString()

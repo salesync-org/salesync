@@ -53,7 +53,7 @@ const Modal = ({ children, title, isOpen, onClose, className, isStatic = true }:
           className='fixed bottom-0 left-0 right-0 z-[999] flex h-full w-full items-center justify-center overflow-x-hidden overflow-y-hidden bg-black bg-opacity-50 transition-all dark:bg-gray-900 dark:bg-opacity-50 md:inset-0'
           // onClick={handleCloseWhenClickOutside}
         >
-          <div ref={ref} className='relative min-w-[65%] origin-center' id='modal'>
+          <div ref={ref} className='relative left-10 right-10 min-w-[65%] origin-center' id='modal'>
             {/* <!-- Modal content --> */}
             <div
               className={cn(

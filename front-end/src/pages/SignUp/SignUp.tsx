@@ -351,9 +351,9 @@ const SignUp = () => {
                     ></Checkbox>
                     <label htmlFor='agreePolicy' className='ml-2 block'>
                       <span>I agree to the </span>
-                      <Link to='#' className='text-blue-500'>
+                      <a href='' className='text-blue-500'>
                         Main Services Agreement.
-                      </Link>
+                      </a>
                     </label>
                   </div>
                   {errorCheck1 && (

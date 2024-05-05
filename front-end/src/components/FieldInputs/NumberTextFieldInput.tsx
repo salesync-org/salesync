@@ -10,9 +10,7 @@ type NumberTextFieldInputProps = {
 
 const NumberTextFieldInput = ({ label, name, propertyFields, updateFields }: NumberTextFieldInputProps) => {
   const [value, setValue] = useState<number>(
-    !propertyFields[0].default_value! || propertyFields[0].default_value! === ''
-      ? 10
-      : parseInt(propertyFields[0].default_value!)
+    propertyFields[0].default_value! === '' ? 0 : parseInt(propertyFields[0].default_value!)
   );
   return (
     <NumberText
@@ -22,7 +20,7 @@ const NumberTextFieldInput = ({ label, name, propertyFields, updateFields }: Num
       className='w-full'
       onChange={(e) => {
         setValue(parseInt(e.target.value));
-        updateFields([{ ...propertyFields[0], default_value: e.target.value }]);
+        updateFields([{ ...propertyFields[0], default_value: value.toString() }]);
       }}
       min={0}
     ></NumberText>

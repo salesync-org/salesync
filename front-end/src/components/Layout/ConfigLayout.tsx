@@ -1,7 +1,9 @@
+import useType from '@/hooks/type-service/useType';
 import Header from 'components/Header/Header';
 import { Outlet } from 'react-router-dom';
 
 const ConfigLayout = () => {
+  useType();
   return (
     <div className='flex min-h-dvh'>
       <div className='flex h-dvh flex-grow flex-col'>

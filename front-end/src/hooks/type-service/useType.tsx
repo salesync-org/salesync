@@ -26,6 +26,8 @@ const useType = (defaultCompanyName?: string) => {
 
     newUser = { ...oldUser, settings: { ...oldUser.settings, layout_order: layoutOrder } };
 
+    console.log({ newUser });
+
     await auth.updateUser(companyName ?? '', newUser);
   };
 

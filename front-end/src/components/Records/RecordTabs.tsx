@@ -1,9 +1,9 @@
-import Icon from '@/components/ui/Icon/Icon';
 import useAuth from '@/hooks/useAuth';
 import { cn } from '@/utils/utils';
 import { useEffect, useState } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import LoadingSpinner from '../ui/Loading/LoadingSpinner';
+import { set } from 'date-fns';
 // import { LayoutOrder, Type } from '@/type';
 
 interface RecordTabsProps {
@@ -18,6 +18,7 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
   const id = useParams().typeId as string;
   const companyName = useParams().companyName as string;
   const [isSwap, setIsSwap] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const { updateUser, user, isLoading, setUser } = useAuth();
 
   useEffect(() => {
@@ -44,6 +45,7 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
   const handleDragStart = (e: React.DragEvent<HTMLAnchorElement>) => {
     e.currentTarget.classList.add('opacity-0');
     e.currentTarget.classList.add('dragging');
+    setIsDragging(true);
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLAnchorElement>) => {
@@ -84,7 +86,7 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
   const handleDragEnd = (e: React.DragEvent<HTMLAnchorElement>) => {
     e.currentTarget.classList.remove('opacity-0');
     e.currentTarget.classList.remove('dragging');
-
+    setIsDragging(false);
     localStorage.setItem(name, JSON.stringify(tabs));
   };
 
@@ -95,11 +97,11 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
           return (
             <li
               key={tab.type_id}
-              className={`-translate-x-[${index * 2}%] relative min-h-[40px] text-sm leading-5`}
+              className={`relative min-h-[40px] text-sm leading-5`}
               value={index}
               style={{
                 transition: 'all 0.3s ease',
-                transform: `translateX(${index * 2}%)`
+                transform: isDragging ? `translateX(${index * 2}%)` : 'none'
               }}
             >
               <NavLink
@@ -112,7 +114,7 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
                 onDragEnd={handleDragEnd}
                 className={({ isActive }) =>
                   cn(
-                    'flex cursor-pointer items-center gap-1 truncate border-t-[3px] border-transparent bg-clip-border px-3 py-2 transition-all duration-100 ease-in-out',
+                    'flex h-full w-[100px] cursor-pointer items-center gap-1 truncate border-t-[3px] border-transparent bg-clip-border px-3 py-2 transition-all duration-100 ease-in-out',
                     (isActive || tab.name === currentTab) && 'bg-secondary/40 dark:bg-secondary-dark/40',
                     'hover:border-b-2 hover:border-b-primary hover:bg-secondary/30 focus:border-b-0 active:border-b-0 dark:hover:bg-secondary-dark/30',
                     `${name}-tab`
@@ -121,11 +123,11 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
               >
                 {(tab.type_id === id || tab.name === currentTab) && (
                   <span
-                    className={cn('absolute left-[-1px] right-[-1px] top-0 h-[3px] animate-to-top bg-primary')}
+                    className={cn('absolute left-[0px] right-[0px] top-0 h-[3px] animate-to-top bg-primary')}
                   ></span>
                 )}
-                <p>{tab.name}</p>
-                <Icon name='expand_more' />
+                <p className='w-full text-center'>{tab.name}</p>
+                {/* <Icon name='expand_more' /> */}
               </NavLink>
             </li>
           );

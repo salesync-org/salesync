@@ -35,7 +35,7 @@ const NavigationButton = () => {
                 className='grid size-8 place-content-center rounded-md bg-primary-border-secondary p-1 text-xl text-white'
                 name={layoutOrder.icon}
               ></Icon>
-              <h3 className='text font-semibold'>{layoutOrder.name}</h3>
+              <h3 className='text font-[450]'>{layoutOrder.name}</h3>
             </Link>
           );
         })}
@@ -48,7 +48,7 @@ const NavigationButton = () => {
             className='grid size-8 place-content-center rounded-md bg-primary-border-secondary p-1 text-xl text-white'
             name={'data_object'}
           ></Icon>
-          <h3 className='text font-semibold'>All</h3>
+          <h3 className='text font-[450]'>All</h3>
         </Link>
       </DropDownList>
     </div>

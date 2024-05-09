@@ -48,7 +48,7 @@ const RecordSection = ({ type }: RecordSectionProps) => {
   };
 
   return (
-    <Panel className='m-0 h-[calc(100dvh-160px)] max-w-[100vw] overflow-auto p-4'>
+    <Panel className='fixed bottom-[10px] left-[10px] right-[10px] top-[108px] m-0 flex h-[calc(100dvh-120px)] max-w-[100vw] flex-col overflow-auto p-4'>
       <section className='px flex items-center justify-between pt-4'>
         <div className='flex items-center gap-2'>
           <div className='w-fit cursor-pointer overflow-hidden rounded-sm bg-primary-color'>
@@ -109,7 +109,7 @@ const RecordSection = ({ type }: RecordSectionProps) => {
           </div>
         </div>
       </section>
-      <div className='-mx-4 mt-4'>
+      <div className='-mx-4 mt-4 flex-grow'>
         <RecordTable typeId={typeId} recordFilter={recordFilter} />
       </div>
     </Panel>

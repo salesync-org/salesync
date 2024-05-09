@@ -84,7 +84,7 @@ const TypeTable = ({ types }: { types: Type[] }) => {
                           <DropdownMenuSeparator className='border-[.2px] border-input-stroke-light px-2 dark:border-input-stroke-dark' />
                           <DropdownMenuGroup>
                             <DropdownMenuItem
-                              onClick={(_) => {
+                              onClick={() => {
                                 navigate(`/${companyName}/setting/object-manager/${type.id}?tab=properties`);
                               }}
                             >
@@ -94,7 +94,7 @@ const TypeTable = ({ types }: { types: Type[] }) => {
                               </div>
                             </DropdownMenuItem>
                             <DropdownMenuItem
-                              onClick={(_) => {
+                              onClick={() => {
                                 navigate(`/${companyName}/setting/object-manager/${type.id}?tab=relations`);
                               }}
                             >
@@ -105,7 +105,7 @@ const TypeTable = ({ types }: { types: Type[] }) => {
                             </DropdownMenuItem>
                             {type.template && type.template.name === 'StageObject' && (
                               <DropdownMenuItem
-                                onClick={(_) => {
+                                onClick={() => {
                                   navigate(`/${companyName}/setting/object-manager/${type.id}?tab=stages`);
                                 }}
                               >

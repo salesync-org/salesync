@@ -21,9 +21,11 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
   const { updateUser, user, isLoading, setUser } = useAuth();
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
+    const timeout = setTimeout(async () => {
       if (user && isSwap) {
-        updateUser(companyName, user);
+        await updateUser(companyName, user);
+
+        setIsSwap(false);
       }
     }, 1000);
 

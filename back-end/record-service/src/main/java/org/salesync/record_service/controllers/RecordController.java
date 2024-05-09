@@ -76,10 +76,4 @@ public class RecordController {
     public ResponseEntity<RecordDto> updateRecordByRecordId(@PathVariable String recordId, @RequestHeader(name = "Authorization") String authorization, @RequestBody RecordDto updateRecordRequestDto) {
         return ResponseEntity.ok(recordService.updateRecordByRecordId(recordId, authorization, updateRecordRequestDto));
     }
-
-    @DeleteMapping(Route.RECORD_ID)
-    public ResponseEntity<String> deleteRecordById(@PathVariable UUID recordId) {
-        recordService.deleteRecordById(recordId);
-        return ResponseEntity.ok("Record deleted successfully");
-    }
 }

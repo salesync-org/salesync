@@ -277,19 +277,6 @@ public class RecordServiceImpl implements RecordService {
         return recordMapper.recordToRecordDto(recordRepository.save(recordEntity));
     }
 
-    @Override
-    public void deleteRecordById(UUID recordId) {
-        String userContextId = SecurityContextHelper.getContextUserId();
-        Record record = recordRepository.findById(recordId).orElseThrow(
-                () -> new ObjectNotFoundException(
-                        "Record", recordId.toString()
-                )
-        );
-        if (!userContextId.equals(record.getUserId().toString())) {
-            throw new AccessDeniedException("You are not allowed to delete this record");
-        }
-        recordRepository.delete(record);
-    }
 
     public TypeDto findTypeById(UUID typeId, List<TypeDto> allType) {
         return allType.stream().filter(typeDto -> typeDto.getId().equals(typeId)).findFirst().orElse(null);

@@ -277,7 +277,6 @@ public class RecordServiceImpl implements RecordService {
         return recordMapper.recordToRecordDto(recordRepository.save(recordEntity));
     }
 
-
     public TypeDto findTypeById(UUID typeId, List<TypeDto> allType) {
         return allType.stream().filter(typeDto -> typeDto.getId().equals(typeId)).findFirst().orElse(null);
     }

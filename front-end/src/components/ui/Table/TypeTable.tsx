@@ -15,7 +15,7 @@ import { cn } from '@/utils/utils';
 import buttonVariants from '../Button/ButtonProps';
 import LoadingSpinner from '../Loading/LoadingSpinner';
 
-const standardTypes = [
+export const standardTypes = [
   'Account',
   'Campaign',
   'Call',

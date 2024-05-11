@@ -10,6 +10,7 @@ import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext
 import icon from 'assets/type-icon/lead_icon.png';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import SelectReportModal from '../Report/SelectReportModal';
 
 interface RecordSectionProps {
   type: Type | LayoutType | null | undefined;
@@ -49,6 +50,7 @@ const RecordSection = ({ type }: RecordSectionProps) => {
 
   return (
     <Panel className='m-0 h-[calc(100dvh-160px)] max-w-[100vw] overflow-auto p-4'>
+      <SelectReportModal></SelectReportModal>
       <section className='px flex items-center justify-between pt-4'>
         <div className='flex items-center gap-2'>
           <div className='w-fit cursor-pointer overflow-hidden rounded-sm bg-primary-color'>

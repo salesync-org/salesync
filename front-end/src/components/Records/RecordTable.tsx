@@ -38,7 +38,7 @@ const RecordTable = ({ typeId, recordFilter }: RecordTableProps) => {
   return <div className='px-4 py-2'>{<DataTable columns={columns} data={tableData} />}</div>;
 };
 
-const RecordTableSkeleton = () => {
+export const RecordTableSkeleton = () => {
   const height = '40px';
   const borderRadius = '4px';
   return (

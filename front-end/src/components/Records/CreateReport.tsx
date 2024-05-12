@@ -6,6 +6,11 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button, Panel, TextInput } from '../ui';
 import RecordTable, { RecordTableSkeleton } from './RecordTable';
+import useType from '@/hooks/type-service/useType';
+import useProperty from '@/hooks/type-service/useProperty';
+import recordApi from '@/api/record';
+import { useQueryClient } from 'react-query';
+import { useToast } from '../ui/Toast';
 
 const CreateReport = () => {
   const [reportName, setReportName] = useState('New Report');
@@ -15,14 +20,75 @@ const CreateReport = () => {
   const { companyName = '' } = useParams();
   const { data: recordData, isLoading: isRecordLoading } = useRecords(companyName, typeReportId);
   const { data: propertyData, isLoading: isPropertyLoading } = useProperties(companyName, typeReportId);
+  const { types, isLoading: isTypeLoading } = useType();
+  const { data: reportProperties, isLoading: isReportLoading } = useProperties(
+    companyName,
+    types?.find((type: any) => type.name === 'Report')?.id
+  );
 
-  if (isRecordLoading || isPropertyLoading) {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  if (isRecordLoading || isPropertyLoading || isTypeLoading || isReportLoading) {
     return <RecordTableSkeleton />;
   }
 
-  if (!recordData && !propertyData) {
+  if (!recordData && !propertyData && !types && !reportProperties) {
     return <ErrorToaster errorMessage='Error loading table ' />;
   }
+
+  const handleCreateReport = async () => {
+    const properties: any = reportProperties?.properties;
+
+    if (!properties) {
+      return;
+    }
+
+    const req = {
+      record_name: reportName,
+      stage_id: '',
+      properties: properties!.map((property: any) => {
+        return {
+          id: property.id,
+          property_name: property.name,
+          property_label: property.label,
+          item_value: ''
+        };
+      })
+    };
+
+    const reportTypeIdIndex = req.properties.findIndex((property: any) => property.property_name === 'ReportTypeId');
+    const reportPropertiesIndex = req.properties.findIndex(
+      (property: any) => property.property_name === 'ReportProperties'
+    );
+
+    req.properties[0].item_value = reportName;
+    req.properties[reportTypeIdIndex].item_value = typeReportId;
+    req.properties[reportPropertiesIndex].item_value = showPropertyIds.join(',');
+
+    try {
+      const res = await recordApi.createRecord(
+        companyName,
+        types?.find((type) => type.name === 'Report')?.id || '',
+        req
+      );
+
+      if (res) {
+        toast({
+          title: 'Report Created',
+          description: 'Report has been created successfully'
+        });
+        queryClient.invalidateQueries(['records']);
+      }
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: 'Error',
+        description: 'Failed to create report',
+        variant: 'destructive'
+      });
+    }
+  };
 
   return (
     <Panel className='m-0 flex h-[calc(100dvh-135px)] flex-col p-0'>
@@ -45,7 +111,9 @@ const CreateReport = () => {
             )}
           </div>
         </div>
-        <Button intent='primary'>Save</Button>
+        <Button intent='primary' onClick={handleCreateReport}>
+          Save
+        </Button>
       </header>
       <div className='flex grow overflow-hidden'>
         <section className='h-full w-[232px] border-r px-8 py-4'>

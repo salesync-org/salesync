@@ -45,7 +45,7 @@ const useType = (defaultCompanyName?: string) => {
       refetchOnWindowFocus: false,
       staleTime: 1000 * 60 * 5,
       keepPreviousData: true,
-      enabled: !!user
+      enabled: !!user && !!companyName
     }
   );
 

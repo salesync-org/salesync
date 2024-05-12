@@ -31,11 +31,11 @@ const SelectReportModal = () => {
   console.log(selectedType);
   return (
     <Modal isOpen={true} onClose={hideModal} className='relative h-[600px]' title='Create Report'>
-      <div className='flex h-full border-t pt-4'>
+      <div className='flex h-[calc(100%-12px)] border-t pt-4'>
         <section className={cn('h-full grow-[2] border-r pr-6', !selectedType && 'w-full')}>
           <SelectReportDataTable selectedType={selectedType} onSelectChange={handleSelectChange} />
         </section>
-        <section className={cn('grow-[1] px-4', !selectedType && 'hidden')}>
+        <section className={cn('h-full grow-[1] px-4', !selectedType && 'hidden')}>
           <SelectReportDetail onDetailClose={onDetailClose} selectedType={selectedType} typeName={selectedType?.name} />
         </section>
       </div>

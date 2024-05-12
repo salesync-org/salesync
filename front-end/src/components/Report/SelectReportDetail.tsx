@@ -1,4 +1,5 @@
-import { X } from 'lucide-react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Search, X } from 'lucide-react';
 import { PrimaryButton } from '../ui';
 import reportIcon from '@/assets/type-icon/report_type.fb93b610c51607e576fc.svg';
 import { standardTypes } from '../ui/Table/TypeTable';
@@ -6,6 +7,8 @@ import useProperties from '@/hooks/type-service/useProperties';
 import { useParams } from 'react-router-dom';
 import LoadingSpinner from '../ui/Loading/LoadingSpinner';
 import { SelectReportType } from './SelectReportModal';
+import { useState } from 'react';
+import { useDebounce } from 'use-debounce';
 
 type SelectReportDetailProps = {
   selectedType?: SelectReportType;
@@ -27,14 +30,15 @@ const SelectReportDetail = ({ selectedType, onDetailClose, typeName }: SelectRep
 
   console.log({ typeProperties });
   return (
-    <div>
+    <div className='flex h-full flex-col'>
       <header className='flex justify-between border-b pb-5'>
         <h2 className='text-2xl font-medium'>Detail</h2>
         <X className='cursor-pointer rounded-sm transition-all hover:bg-slate-200' onClick={onDetailClose} />
       </header>
-      <div className='flex flex-col gap-6 py-3'>
+      <div className='flex h-full grow flex-col gap-6 py-3'>
         <ShortSelectReportDetail name={typeName} />
         <PrimaryButton>Start Report</PrimaryButton>
+        <TypeFields typeProperties={typeProperties} />
       </div>
     </div>
   );
@@ -52,4 +56,43 @@ const ShortSelectReportDetail = ({ name }: { name: string }) => {
   );
 };
 
+const FieldsSearchInput = ({ value, onChange }: { value: string; onChange: (value: string) => void }) => {
+  return (
+    <form className='flex items-center rounded-md border border-gray-200 bg-white px-4 transition-all focus-within:border-[2px] focus-within:border-blue-500'>
+      <Search size={20} />
+      <input
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        type='text'
+        placeholder='Quick lookup'
+        className='w-full border-none px-3 py-2 focus:outline-none'
+      />
+    </form>
+  );
+};
+
+const TypeFields = ({ typeProperties }: { typeProperties: any }) => {
+  const [term, setTerm] = useState('');
+
+  const handleSearchChange = (value: string) => {
+    setTerm(value);
+  };
+
+  const fieldsNumber = typeProperties.properties.length;
+  return (
+    <div className='flex grow flex-col gap-4'>
+      <h3>Fields ({fieldsNumber})</h3>
+      <FieldsSearchInput value={term} onChange={handleSearchChange} />
+      <ul className='flex grow flex-col gap-3 overflow-auto'>
+        {typeProperties.properties.map((property: any) => {
+          return property.label.toLowerCase().includes(term.toLowerCase()) ? (
+            <li key={property.id} className='border px-4 py-3 shadow-sm'>
+              <span>{property.label}</span>
+            </li>
+          ) : null;
+        })}
+      </ul>
+    </div>
+  );
+};
 export default SelectReportDetail;

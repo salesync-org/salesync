@@ -1,28 +1,32 @@
-import { Search } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { useDebounce } from 'use-debounce';
-import { standardTypes } from '../ui/Table/TypeTable';
-import { Table, TableBody, TableCell, TableHeader, TableRow } from '../ui';
 import useType from '@/hooks/type-service/useType';
+import { cn } from '@/utils/utils';
+import { Search } from 'lucide-react';
+import { useState } from 'react';
+import { useDebounce } from 'use-debounce';
 import { RecordTableSkeleton } from '../Records/RecordTable';
+import { Table, TableBody, TableCell, TableHeader, TableRow } from '../ui';
+import { standardTypes } from '../ui/Table/TypeTable';
+import { SelectReportType } from './SelectReportModal';
 
-const SelectReportDataTable = ({ onSelectChange }: { onSelectChange: (typeId: string) => void }) => {
+const SelectReportDataTable = ({
+  selectedType,
+  onSelectChange
+}: {
+  selectedType?: SelectReportType;
+  onSelectChange: (typeId: string, name: string) => void;
+}) => {
   const [search, setSearch] = useState('');
   const [debouncedSearch] = useDebounce(search, 500);
   const handleSearchChange = (value: string) => {
     setSearch(value);
   };
 
-  useEffect(() => {
-    console.log(debouncedSearch);
-  }, [debouncedSearch]);
-
   return (
     <div className='flex h-full flex-col gap-6 pb-4'>
       <h2 className='text-2xl font-medium'>Select a Report Type</h2>
       <SearchInput value={search} onChange={handleSearchChange} />
       <div className='grow overflow-auto'>
-        <ReportTable search={debouncedSearch} onSelectChange={onSelectChange} />
+        <ReportTable search={debouncedSearch} onSelectChange={onSelectChange} selectedTypeId={selectedType?.id} />
       </div>
     </div>
   );
@@ -44,7 +48,15 @@ const SearchInput = ({ value, onChange }: { value: string; onChange: (value: str
   );
 };
 
-const ReportTable = ({ search, onSelectChange }: { search: string; onSelectChange: (typeId: string) => void }) => {
+const ReportTable = ({
+  search,
+  onSelectChange,
+  selectedTypeId
+}: {
+  search: string;
+  onSelectChange: (typeId: string, name: string) => void;
+  selectedTypeId?: string;
+}) => {
   const { types, isLoading } = useType();
 
   if (isLoading) {
@@ -68,8 +80,11 @@ const ReportTable = ({ search, onSelectChange }: { search: string; onSelectChang
           return type.name.toLowerCase().includes(search.toLowerCase()) ? (
             <TableRow
               key={index}
-              className='cursor-pointer transition-all hover:bg-slate-200/60'
-              onClick={() => onSelectChange(type.id)}
+              className={cn(
+                'cursor-pointer transition-all hover:bg-slate-200/60',
+                selectedTypeId === type.id && 'bg-slate-200/60'
+              )}
+              onClick={() => onSelectChange(type.id, type.name)}
             >
               <TableCell className='w-4/12'>{type.name}</TableCell>
               <TableCell className='w-3/12'>{standardTypes.includes(type.name) ? 'Standard' : 'Custom'}</TableCell>

@@ -3,26 +3,41 @@ import { Modal } from '../ui';
 import { useState } from 'react';
 import { cn } from '@/utils/utils';
 import SelectReportDataTable from './SelectReportDataTable';
+import SelectReportDetail from './SelectReportDetail';
+
+export type SelectReportType = {
+  id: string;
+  name: string;
+};
 
 const SelectReportModal = () => {
-  const [selectedTypeId, setSelectedTypeId] = useState<string | null>(null);
+  const [selectedType, setSelectedType] = useState<SelectReportType | undefined>(undefined);
   const {
-    hideModal,
-    store: { modalProps, modalType }
+    hideModal
+    // store: { modalProps, modalType }
   } = useGlobalModalContext();
 
-  const handleSelectChange = (typeId: string) => {
-    setSelectedTypeId(typeId);
+  const handleSelectChange = (typeId: string, name: string) => {
+    setSelectedType({
+      id: typeId,
+      name
+    });
   };
 
-  console.log(selectedTypeId);
+  const onDetailClose = () => {
+    setSelectedType(undefined);
+  };
+
+  console.log(selectedType);
   return (
     <Modal isOpen={true} onClose={hideModal} className='relative h-[600px]' title='Create Report'>
-      <div className='flex h-full'>
-        <section className={cn('h-full grow-[2]', !selectedTypeId && 'w-full')}>
-          <SelectReportDataTable onSelectChange={handleSelectChange} />
+      <div className='flex h-full border-t pt-4'>
+        <section className={cn('h-full grow-[2] border-r pr-6', !selectedType && 'w-full')}>
+          <SelectReportDataTable selectedType={selectedType} onSelectChange={handleSelectChange} />
         </section>
-        <section className={cn('grow-[1] bg-red-500')}></section>
+        <section className={cn('grow-[1] px-4', !selectedType && 'hidden')}>
+          <SelectReportDetail onDetailClose={onDetailClose} selectedType={selectedType} typeName={selectedType?.name} />
+        </section>
       </div>
     </Modal>
   );

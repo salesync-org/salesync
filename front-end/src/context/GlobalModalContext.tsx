@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ConvertModal from '@/components/ConvertModal/ConvertModal';
 import RelationModal from '@/components/Relation/RelationModal';
+import SelectReportModal from '@/components/Report/SelectReportModal';
 import UserModal from '@/components/UserModal/UserModal';
 import RecordModal from '@/pages/Home/RecordModal';
 import React, { createContext, useContext, useState } from 'react';
@@ -9,14 +10,16 @@ export const MODAL_TYPES = {
   CREATE_RECORD_MODAL: 'CREATE_RECORD_MODAL',
   USER_MODAL: 'USER_MODAL',
   CONVERT_MODAL: 'CONVERT_MODAL',
-  RELATION_MODAL: 'RELATION_MODAL'
+  RELATION_MODAL: 'RELATION_MODAL',
+  REPORT_MODAL: 'REPORT_MODAL'
 };
 
 const MODAL_COMPONENTS: any = {
   [MODAL_TYPES.CREATE_RECORD_MODAL]: RecordModal,
   [MODAL_TYPES.USER_MODAL]: UserModal,
   [MODAL_TYPES.CONVERT_MODAL]: ConvertModal,
-  [MODAL_TYPES.RELATION_MODAL]: RelationModal
+  [MODAL_TYPES.RELATION_MODAL]: RelationModal,
+  [MODAL_TYPES.REPORT_MODAL]: SelectReportModal
 };
 
 type GlobalModalContext = {

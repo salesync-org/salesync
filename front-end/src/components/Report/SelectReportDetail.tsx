@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Search, X } from 'lucide-react';
-import { PrimaryButton } from '../ui';
 import reportIcon from '@/assets/type-icon/report_type.fb93b610c51607e576fc.svg';
-import { standardTypes } from '../ui/Table/TypeTable';
+import { useGlobalModalContext } from '@/context/GlobalModalContext';
 import useProperties from '@/hooks/type-service/useProperties';
-import { useParams } from 'react-router-dom';
-import LoadingSpinner from '../ui/Loading/LoadingSpinner';
-import { SelectReportType } from './SelectReportModal';
+import useAuth from '@/hooks/useAuth';
+import { Search, X } from 'lucide-react';
 import { useState } from 'react';
-import { useDebounce } from 'use-debounce';
+import { useNavigate } from 'react-router-dom';
+import { PrimaryButton } from '../ui';
+import LoadingSpinner from '../ui/Loading/LoadingSpinner';
+import { standardTypes } from '../ui/Table/TypeTable';
+import { SelectReportType } from './SelectReportModal';
 
 type SelectReportDetailProps = {
   selectedType?: SelectReportType;
@@ -17,9 +18,11 @@ type SelectReportDetailProps = {
 };
 
 const SelectReportDetail = ({ selectedType, onDetailClose, typeName }: SelectReportDetailProps) => {
-  const { companyName = '' } = useParams();
-
+  const { company } = useAuth();
+  const { hideModal } = useGlobalModalContext();
+  const companyName = company?.name ?? '';
   const { data: typeProperties, isLoading } = useProperties(companyName, selectedType?.id);
+  const navigate = useNavigate();
   if (isLoading) {
     return <LoadingSpinner />;
   }
@@ -37,7 +40,14 @@ const SelectReportDetail = ({ selectedType, onDetailClose, typeName }: SelectRep
       </header>
       <div className='flex h-full grow flex-col gap-6 py-3'>
         <ShortSelectReportDetail name={typeName} />
-        <PrimaryButton>Start Report</PrimaryButton>
+        <PrimaryButton
+          onClick={() => {
+            navigate(`${companyName}/all/report/create-report/${selectedType?.id}`);
+            hideModal();
+          }}
+        >
+          Start Report
+        </PrimaryButton>
         <TypeFields typeProperties={typeProperties} />
       </div>
     </div>

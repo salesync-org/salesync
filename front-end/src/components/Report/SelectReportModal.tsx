@@ -1,4 +1,4 @@
-import { useGlobalModalContext } from '@/context/GlobalModalContext';
+import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 import { Modal } from '../ui';
 import { useState } from 'react';
 import { cn } from '@/utils/utils';
@@ -13,8 +13,8 @@ export type SelectReportType = {
 const SelectReportModal = () => {
   const [selectedType, setSelectedType] = useState<SelectReportType | undefined>(undefined);
   const {
-    hideModal
-    // store: { modalProps, modalType }
+    hideModal,
+    store: { modalType }
   } = useGlobalModalContext();
 
   const handleSelectChange = (typeId: string, name: string) => {
@@ -30,7 +30,12 @@ const SelectReportModal = () => {
 
   console.log(selectedType);
   return (
-    <Modal isOpen={true} onClose={hideModal} className='relative h-[600px]' title='Create Report'>
+    <Modal
+      isOpen={modalType === MODAL_TYPES.REPORT_MODAL}
+      onClose={hideModal}
+      className='relative h-[600px]'
+      title='Create Report'
+    >
       <div className='flex h-[calc(100%-12px)] border-t pt-4'>
         <section className={cn('h-full grow-[2] border-r pr-6', !selectedType && 'w-full')}>
           <SelectReportDataTable selectedType={selectedType} onSelectChange={handleSelectChange} />

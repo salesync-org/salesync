@@ -1,14 +1,13 @@
+import auth from '@/api/auth';
 import typeApi from '@/api/type';
 import { useQuery } from 'react-query';
-import { useParams } from 'react-router-dom';
 import useAuth from '../useAuth';
-import auth from '@/api/auth';
 
 const useType = (defaultCompanyName?: string) => {
   const key = ['types'];
   const { user } = useAuth();
-  const { companyName = defaultCompanyName } = useParams();
-
+  const { company } = useAuth();
+  const companyName = company?.name ?? defaultCompanyName;
   const updateUserTypes = async (oldUser: User, types: Type[]) => {
     let newUser = JSON.parse(JSON.stringify(oldUser));
     const layoutOrder = newUser.settings.layout_order;

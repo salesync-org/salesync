@@ -11,16 +11,16 @@ import { DataTable } from './data-table';
 
 interface RecordTableProps {
   typeId: string;
-  recordFilter: RecordsFilter;
+  recordFilter?: RecordsFilter;
+  showPropertyIds?: string[];
 }
 
-const RecordTable = ({ typeId, recordFilter }: RecordTableProps) => {
+const RecordTable = ({ typeId, recordFilter, showPropertyIds }: RecordTableProps) => {
   console.log(recordFilter);
   const { companyName = '' } = useParams();
 
   const { data: recordData, isLoading: isRecordLoading } = useRecords(companyName, typeId, recordFilter);
   const { data: propertyData, isLoading: isPropertyLoading } = useProperties(companyName, typeId);
-
   if (isRecordLoading || isPropertyLoading) {
     return <RecordTableSkeleton />;
   }
@@ -29,11 +29,18 @@ const RecordTable = ({ typeId, recordFilter }: RecordTableProps) => {
     return <ErrorToaster errorMessage='Error loading table ' />;
   }
 
+  const tempPropertyData = JSON.parse(JSON.stringify(propertyData));
+
+  if (showPropertyIds) {
+    const filteredProperties = tempPropertyData!.properties!.filter((property: any) =>
+      showPropertyIds.includes(property.id)
+    );
+    tempPropertyData!.properties = filteredProperties;
+  }
+
   const records = recordData.records;
   const tableData = formatRecords(records);
-  const columns = createColumns(companyName, propertyData!.properties!, records);
-
-  console.log({ tableData });
+  const columns = createColumns(companyName, tempPropertyData!.properties!, records);
 
   return <div className='px-4 py-2'>{<DataTable columns={columns} data={tableData} />}</div>;
 };

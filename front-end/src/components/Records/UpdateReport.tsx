@@ -1,86 +1,89 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import recordApi from '@/api/record';
+import useRecord from '@/hooks/record-service/useRecord';
 import useRecords from '@/hooks/record-service/useRecords';
 import useProperties from '@/hooks/type-service/useProperties';
 import useType from '@/hooks/type-service/useType';
 import ErrorToaster from '@/pages/Error/ErrorToaster';
+import { cn } from '@/utils/utils';
+import { Pencil } from 'lucide-react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Panel, TextInput } from '../ui';
 import { useToast } from '../ui/Toast';
 import RecordTable, { RecordTableSkeleton } from './RecordTable';
-import { Pencil } from 'lucide-react';
-import { cn } from '@/utils/utils';
 
-const CreateReport = () => {
-  const [reportName, setReportName] = useState('New Report');
+const UpdateReport = () => {
+  const [reportName, setReportName] = useState('');
   const [isUpdateName, setIsUpdateName] = useState(false);
   const [showPropertyIds, setShowPropertyIds] = useState<string[]>([]);
-  const [createLoading, setCreateLoading] = useState(false);
-  const { typeReportId = '' } = useParams();
+  const [typeReportId, setTypeReportId] = useState('');
+  const [updateLoading, setUpdateLoading] = useState(false);
   const { companyName = '' } = useParams();
   const { data: recordData, isLoading: isRecordLoading } = useRecords(companyName, typeReportId);
   const { data: propertyData, isLoading: isPropertyLoading } = useProperties(companyName, typeReportId);
   const { types, isLoading: isTypeLoading } = useType();
-  const { data: reportProperties, isLoading: isReportLoading } = useProperties(
+  const { data: reportProperties, isLoading: isReportTypeLoading } = useProperties(
     companyName,
     types?.find((type: any) => type.name === 'Report')?.id
   );
+  const { reportId = '' } = useParams();
+  const { data: report, isLoading: isReportLoading, status } = useRecord(companyName, reportId);
 
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  if (isRecordLoading || isPropertyLoading || isTypeLoading || isReportLoading) {
+  console.log(report);
+
+  useEffect(() => {
+    if (report) {
+      setReportName(report.source_record.name);
+      setShowPropertyIds(
+        report.source_record.properties
+          ?.find((property: any) => property.property_name === 'ReportProperties')
+          ?.item_value?.split(',') || []
+      );
+      setTypeReportId(
+        report.source_record.properties?.find((property: any) => property.property_name === 'ReportTypeId')?.item_value
+      );
+    }
+  }, [report, status]);
+
+  if (isRecordLoading || isPropertyLoading || isTypeLoading || isReportTypeLoading || isReportLoading) {
     return <RecordTableSkeleton />;
   }
 
-  if (!recordData && !propertyData && !types && !reportProperties) {
+  if (!recordData && !propertyData && !types && !reportProperties && !report) {
     return <ErrorToaster errorMessage='Error loading table ' />;
   }
 
-  const handleCreateReport = async () => {
+  const handleUpdateReport = async () => {
     const properties: any = reportProperties?.properties;
 
     if (!properties) {
       return;
     }
 
-    const req = {
-      record_name: reportName,
-      stage_id: '',
-      properties: properties!.map((property: any) => {
-        return {
-          id: property.id,
-          property_name: property.name,
-          property_label: property.label,
-          item_value: ''
-        };
-      })
-    };
+    const newReport = JSON.parse(JSON.stringify(report));
+    const req = newReport.source_record;
 
-    const reportTypeIdIndex = req.properties.findIndex((property: any) => property.property_name === 'ReportTypeId');
     const reportPropertiesIndex = req.properties.findIndex(
       (property: any) => property.property_name === 'ReportProperties'
     );
 
     req.properties[0].item_value = reportName;
-    req.properties[reportTypeIdIndex].item_value = typeReportId;
     req.properties[reportPropertiesIndex].item_value = showPropertyIds.join(',');
 
     try {
-      setCreateLoading(true);
-      const res = await recordApi.createRecord(
-        companyName,
-        types?.find((type) => type.name === 'Report')?.id || '',
-        req
-      );
+      setUpdateLoading(true);
+      const res = await recordApi.updateRecord(companyName, reportId, req);
 
       if (res) {
         toast({
-          title: 'Report Created',
-          description: 'Report has been created successfully'
+          title: 'Report Updated',
+          description: 'Report has been updated successfully'
         });
         queryClient.invalidateQueries(['records']);
         navigate(`/${companyName}/all/report/${res.id}`);
@@ -89,11 +92,11 @@ const CreateReport = () => {
       console.error(error);
       toast({
         title: 'Error',
-        description: 'Failed to create report',
+        description: 'Failed to update report',
         variant: 'destructive'
       });
     } finally {
-      setCreateLoading(false);
+      setUpdateLoading(false);
     }
   };
 
@@ -113,24 +116,25 @@ const CreateReport = () => {
               <div className='flex items-center gap-2'>
                 <span className='text-xl'>{reportName}</span>
                 <Pencil className='cursor-pointer ' size={12} onClick={() => setIsUpdateName(true)}></Pencil>
-                <span className='rounded-full bg-slate-200/60 px-4 py-1 text-sm font-bold'>{propertyData?.name}</span>
               </div>
             )}
           </div>
         </div>
-        <Button disabled={createLoading} intent='primary' onClick={handleCreateReport}>
-          {createLoading ? 'Processing...' : 'Save'}
+        <Button disabled={updateLoading} intent='primary' onClick={handleUpdateReport}>
+          {updateLoading ? 'Processing...' : 'Save'}
         </Button>
       </header>
       <div className='flex grow overflow-hidden'>
         <section
-          className={cn('h-full w-[232px] border-r px-8 py-4', createLoading && 'pointer-events-none opacity-50')}
+          className={cn('h-full w-[232px] border-r px-8 py-4', updateLoading && 'pointer-events-none opacity-50')}
         >
-          <SelectColumns
-            typeProperties={propertyData}
-            showProperties={showPropertyIds}
-            setShowProperties={setShowPropertyIds}
-          />
+          {propertyData && (
+            <SelectColumns
+              typeProperties={propertyData}
+              showProperties={showPropertyIds}
+              setShowProperties={setShowPropertyIds}
+            />
+          )}
         </section>
         <section>
           {showPropertyIds.length > 0 ? <RecordTable typeId={typeReportId} showPropertyIds={showPropertyIds} /> : null}
@@ -140,13 +144,14 @@ const CreateReport = () => {
   );
 };
 
-const SelectColumns = ({ typeProperties, setShowProperties }: any) => {
+const SelectColumns = ({ typeProperties, setShowProperties, showProperties }: any) => {
+  console.log({ typeProperties });
   const [selects, setSelects] = useState(() => {
     return typeProperties.properties.map((property: any) => {
       return {
         id: property.id,
         name: property.name,
-        selected: true
+        selected: showProperties.includes(property.id)
       };
     });
   });
@@ -236,4 +241,4 @@ const UpdateName = ({
     </form>
   );
 };
-export default CreateReport;
+export default UpdateReport;

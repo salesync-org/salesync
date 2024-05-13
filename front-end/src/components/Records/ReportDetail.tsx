@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import reportIcon from '@/assets/type-icon/report_type.fb93b610c51607e576fc.svg';
 import useRecord from '@/hooks/record-service/useRecord';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Panel } from '../ui';
 import LoadingSpinner from '../ui/Loading/LoadingSpinner';
 import { useToast } from '../ui/Toast';
@@ -11,9 +11,14 @@ const ReportDetail = () => {
   const { reportId = '', companyName = '' } = useParams();
   const { data: record, isLoading: isRecordLoading } = useRecord(companyName, reportId);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   if (isRecordLoading) {
-    return <LoadingSpinner />;
+    return (
+      <div className='h-[120px]'>
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   if (!record) {
@@ -48,7 +53,13 @@ const ReportDetail = () => {
             </div>
           </div>
         </div>
-        <Button intent={'normal'} className='px-5' onClick={() => {}}>
+        <Button
+          intent={'normal'}
+          className='px-5'
+          onClick={() => {
+            navigate(`/${companyName}/all/report/update-report/${reportId}`);
+          }}
+        >
           Edit
         </Button>
       </header>

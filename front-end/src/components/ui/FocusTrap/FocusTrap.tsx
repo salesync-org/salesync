@@ -47,7 +47,7 @@ const FocusTrap: React.FC<FocusTrapProps> = ({ children }) => {
   }, []);
 
   return (
-    <div className='h-full' ref={trapRef}>
+    <div className='h-full max-h-[calc(100vh-75px)]' ref={trapRef}>
       {children}
     </div>
   );

@@ -7,6 +7,7 @@ import PrivateRoute from './pages/PrivateRoute/PrivateRoute';
 import ObjectManager from './pages/Settings/ObjectManager';
 import TypePropertyManager from './pages/Settings/TypePropertyManager';
 const ReportLayout = lazy(() => import('./components/Records/ReportLayout'));
+const ReportDetail = lazy(() => import('./components/Records/ReportDetail'));
 const CreateReport = lazy(() => import('./components/Records/CreateReport'));
 const SettingLayout = lazy(() => import('./pages/Settings/SettingLayout'));
 const PersonalInformationSetting = lazy(() => import('./pages/Settings/PersonalInformationSetting'));
@@ -56,6 +57,7 @@ function App() {
               <Route path='all/:typeId' element={<AllTypes />} />
               <Route path='all/report/' element={<ReportLayout />}>
                 <Route path='create-report/:typeReportId' element={<CreateReport />} />
+                <Route path=':reportId' element={<ReportDetail />} />
               </Route>
               <Route path='record/:recordId' element={<RecordDetail />} />
               <Route path='setting/' element={<SettingLayout />}>

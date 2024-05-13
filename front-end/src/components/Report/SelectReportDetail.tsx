@@ -38,7 +38,7 @@ const SelectReportDetail = ({ selectedType, onDetailClose, typeName }: SelectRep
         <h2 className='text-2xl font-medium'>Detail</h2>
         <X className='cursor-pointer rounded-sm transition-all hover:bg-slate-200' onClick={onDetailClose} />
       </header>
-      <div className='flex h-full grow flex-col gap-6 py-3'>
+      <div className='flex grow flex-col gap-6 overflow-auto py-3'>
         <ShortSelectReportDetail name={typeName} />
         <PrimaryButton
           onClick={() => {
@@ -96,9 +96,11 @@ const TypeFields = ({ typeProperties }: { typeProperties: any }) => {
       <ul className='flex grow flex-col gap-3 overflow-auto'>
         {typeProperties.properties.map((property: any) => {
           return property.label.toLowerCase().includes(term.toLowerCase()) ? (
-            <li key={property.id} className='border px-4 py-3 shadow-sm'>
-              <span>{property.label}</span>
-            </li>
+            <>
+              <li key={property.id} className='border px-4 py-3 shadow-sm'>
+                <span>{property.label}</span>
+              </li>
+            </>
           ) : null;
         })}
       </ul>

@@ -1,16 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import recordApi from '@/api/record';
 import useRecords from '@/hooks/record-service/useRecords';
 import useProperties from '@/hooks/type-service/useProperties';
+import useType from '@/hooks/type-service/useType';
 import ErrorToaster from '@/pages/Error/ErrorToaster';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useQueryClient } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { Button, Panel, TextInput } from '../ui';
-import RecordTable, { RecordTableSkeleton } from './RecordTable';
-import useType from '@/hooks/type-service/useType';
-import useProperty from '@/hooks/type-service/useProperty';
-import recordApi from '@/api/record';
-import { useQueryClient } from 'react-query';
 import { useToast } from '../ui/Toast';
+import RecordTable, { RecordTableSkeleton } from './RecordTable';
 
 const CreateReport = () => {
   const [reportName, setReportName] = useState('New Report');
@@ -92,7 +91,7 @@ const CreateReport = () => {
 
   return (
     <Panel className='m-0 flex h-[calc(100dvh-135px)] flex-col p-0'>
-      <header className='flex min-h-[64px] items-center justify-between border-b px-10 py-4'>
+      <header className='flex min-h-[64px] items-center justify-between border-b px-10 py-6'>
         <div className='flex flex-col'>
           <h2 className='text-lg font-medium'>REPORT</h2>
           <div>

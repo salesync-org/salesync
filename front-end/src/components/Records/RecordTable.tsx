@@ -13,10 +13,10 @@ interface RecordTableProps {
   typeId: string;
   recordFilter?: RecordsFilter;
   showPropertyIds?: string[];
+  className?: string;
 }
 
 const RecordTable = ({ typeId, recordFilter, showPropertyIds }: RecordTableProps) => {
-  console.log(recordFilter);
   const { companyName = '' } = useParams();
 
   const { data: recordData, isLoading: isRecordLoading } = useRecords(companyName, typeId, recordFilter);
@@ -49,7 +49,7 @@ export const RecordTableSkeleton = () => {
   const height = '40px';
   const borderRadius = '4px';
   return (
-    <div className='space-y-1 px-4 py-2'>
+    <div className='min-w-[300px] space-y-1 px-4 py-2'>
       <Skeleton width='100%' height={height} borderRadius={borderRadius} className='bg-slate-400 dark:bg-slate-200' />
       <Skeleton width='100%' height={height} borderRadius={borderRadius} className='bg-slate-200 dark:bg-slate-600' />
       <Skeleton width='100%' height={height} borderRadius={borderRadius} className='bg-slate-200 dark:bg-slate-600' />

@@ -158,11 +158,21 @@ public class TypeServiceImpl implements TypeService {
                 Property.class.getSimpleName(), requestCreatePropertyDto.getPropertyId().toString()
         ));
 
+        //validate request to have all property fields label
+
         Set<UUID> propertyFieldSet = property.getPropertyFields().stream().map(PropertyField::getId).collect(Collectors.toSet());
+
+        Set<String> labelSet = property.getPropertyFields().stream().map(PropertyField::getLabel).collect(Collectors.toSet());
 
         Set<UUID> requestSet = requestCreatePropertyDto.getFields().stream().map(RequestTypePropertyFieldDto::getPropertyFieldId).collect(Collectors.toSet());
 
-        if (!propertyFieldSet.equals(requestSet)) {
+        propertyFieldSet.retainAll(requestSet);
+
+        Set<String> requestLabelSet = property.getPropertyFields().stream().filter(
+                //filtering the property fields that are in the request
+                propertyField -> propertyFieldSet.contains(propertyField.getId())).collect(Collectors.toSet()).stream().map(PropertyField::getLabel).collect(Collectors.toSet());
+
+        if (!labelSet.equals(requestLabelSet)) {
             throw new BadRequestException(
                     "Property fields"
             );

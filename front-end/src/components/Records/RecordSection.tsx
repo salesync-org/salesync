@@ -67,7 +67,11 @@ const RecordSection = ({ type }: RecordSectionProps) => {
             intent='normal'
             zoom={false}
             onClick={() => {
-              showModal(MODAL_TYPES.CREATE_RECORD_MODAL, { typeId, recordFilter });
+              let modal = MODAL_TYPES.CREATE_RECORD_MODAL;
+              if (type.name === 'Report') {
+                modal = MODAL_TYPES.REPORT_MODAL;
+              }
+              showModal(modal, { typeId, recordFilter });
             }}
           >
             New

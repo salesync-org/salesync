@@ -9,7 +9,6 @@ import RecordTabs from '../../components/Records/RecordTabs';
 const AllTypes = () => {
   const { typeId, companyName = '' } = useParams();
   const { types, isLoading } = useType();
-  console.log({ types });
   if (isLoading) {
     return <LoadingSpinner />;
   }
@@ -18,11 +17,7 @@ const AllTypes = () => {
     return null;
   }
 
-  console.log({ types });
-
   if (!typeId && types.length > 0) {
-    console.log('navigate to ' + types?.[0].id);
-    console.log('adsd');
     return <Navigate to={`/${companyName}/all/${types[0].id}`} />;
   }
 

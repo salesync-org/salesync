@@ -24,6 +24,10 @@ export const createColumns = (companyName: string, properties: any[], records: a
       return;
     }
 
+    if (property.label.includes('NotShowing')) {
+      return;
+    }
+
     if (property.name === 'Name') {
       columns.push({
         accessorKey: 'Name',
@@ -37,10 +41,14 @@ export const createColumns = (companyName: string, properties: any[], records: a
           </div>
         ),
         cell: ({ row }: { row: any }) => {
+          let href = `/${companyName}/record/${row.getValue('id')}`;
+          if (property.label === 'Report Name') {
+            href = `/${companyName}/all/report/${row.getValue('id')}`;
+          }
           return (
             <Link
-              to={`/${companyName}/record/${row.getValue('id')}`}
-              className='block w-[200px] items-center align-middle text-sm font-semibold text-blue-500 hover:underline'
+              to={href}
+              className='block min-w-[200px] items-center align-middle text-sm font-semibold text-blue-500 hover:underline'
             >
               {row.getValue('Name')}
             </Link>
@@ -65,6 +73,7 @@ export const createColumns = (companyName: string, properties: any[], records: a
         if (property.name === 'Amount') {
           cellValue = formatCurrency(+cellValue) || '0';
         }
+
         const [currentValue, setCurrentValue] = useState(cellValue);
         const [isUpdating, setIsUpdating] = useState(false);
         const [isLoading, setIsLoading] = useState(false);
@@ -161,7 +170,7 @@ export const createColumns = (companyName: string, properties: any[], records: a
                 ></TextInput>
               </form>
             ) : (
-              <div className='group/item flex h-full items-center justify-between'>
+              <div className='group/item flex h-full min-w-[200px] items-center justify-between'>
                 <span className='text-sm'>{currentValue}</span>
                 <Pencil
                   size='16px'

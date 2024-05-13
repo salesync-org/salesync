@@ -1,6 +1,5 @@
 import NavigationButton from '@/components/NavigationButton/NavigationButton';
 import RecordSection from '@/components/Records/RecordSection';
-import Icon from '@/components/ui/Icon/Icon';
 import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
 import useType from '@/hooks/type-service/useType';
 import { Navigate, useParams } from 'react-router-dom';
@@ -35,7 +34,6 @@ const AllTypes = () => {
         <NavigationButton />
         <h2 className='select-none pl-6 pr-6 leading-6'>All</h2>
         <RecordTabs tabs={layoutTypes} domainName='all' name='salesTabs' />
-        <Icon name='edit' className='ml-auto' />
       </section>
       <section className='h-full flex-grow py-14'>
         <RecordSection type={type} />

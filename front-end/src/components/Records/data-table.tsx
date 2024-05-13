@@ -25,8 +25,8 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
   });
 
   return (
-    <div className='rounded-sm border-[1px] border-button-stroke dark:border-button-stroke-dark'>
-      <Table className=''>
+    <div className='min-h-full rounded-sm border-[1px] border-button-stroke dark:border-button-stroke-dark'>
+      <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow
@@ -38,7 +38,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                   <TableHead
                     key={header.id}
                     className={cn(
-                      'h-8 truncate border-r-2 font-semibold last:border-x-0 hover:bg-button-background-hover dark:hover:bg-button-background-hover-dark',
+                      'h-8 truncate border-r-[1px] font-semibold last:border-x-0 hover:bg-button-background-hover dark:hover:bg-button-background-hover-dark',
                       index === 0 && 'w-0',
                       index === 1 && 'w-12'
                     )}
@@ -55,7 +55,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
-                className='group h-8 h-[40px] transition-all hover:bg-button-background-hover dark:hover:bg-button-background-hover-dark'
+                className='group h-[40px] transition-all hover:bg-button-background-hover dark:hover:bg-button-background-hover-dark'
                 data-state={row.getIsSelected() && 'selected'}
               >
                 {row.getVisibleCells().map((cell) => (

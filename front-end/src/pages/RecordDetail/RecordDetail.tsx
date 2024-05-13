@@ -99,7 +99,6 @@ const RecordDetail = () => {
         <NavigationButton />
         <h2 className='select-none pl-6 pr-6 leading-6'>Sales</h2>
         <RecordTabs tabs={types} name='salesTabs' currentTab={record.source_record.type.name} />
-        <Icon name='edit' className='ml-auto' />
       </section>
       <section className='pt-12'>
         <Panel className='mb-0 flex flex-row items-center justify-between p-2'>
@@ -188,7 +187,7 @@ const RecordDetail = () => {
               </Panel>
             )}
             <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
-              <RecordActivity  relations={record.relations}/>
+              <RecordActivity relations={record.relations} />
             </Panel>
           </section>
 

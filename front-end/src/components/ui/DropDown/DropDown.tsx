@@ -116,7 +116,7 @@ const DropDown: React.FC<DropdownButtonProps> = ({
         </div>
         <DropDownList
           onItemClick={handleOptionClick}
-          className={cn(className)}
+          className={cn(className, 'absolute')}
           onClose={() => {
             setIsOpen(false);
           }}

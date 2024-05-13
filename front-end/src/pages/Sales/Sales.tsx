@@ -1,5 +1,4 @@
 import RecordSection from '@/components/Records/RecordSection';
-import Icon from '@/components/ui/Icon/Icon';
 import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
 import useAuth from '@/hooks/useAuth';
 import { Navigate, useParams } from 'react-router-dom';
@@ -37,7 +36,6 @@ const Sales = () => {
         <NavigationButton />
         <h2 className='select-none pl-6 pr-6 leading-6'>Sales</h2>
         <RecordTabs tabs={types} name='salesTabs' />
-        <Icon name='edit' className='ml-auto' />
       </section>
       <section className='h-full flex-grow py-14'>
         <RecordSection type={type} />

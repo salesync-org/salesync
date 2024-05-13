@@ -4,7 +4,7 @@ import { cn } from 'utils/utils';
 import FocusTrap from 'ui/FocusTrap/FocusTrap';
 import useClickOutside from '@/hooks/useClickOutside';
 
-interface Props {
+export interface ModalProps {
   children: React.ReactNode;
   isOpen: boolean;
   onClose: () => void;
@@ -17,7 +17,7 @@ export const ModalFooter = ({ children, className }: { children: React.ReactNode
   return <div className={cn('flex items-center justify-end space-x-4', className)}>{children}</div>;
 };
 
-const Modal = ({ children, title, isOpen, onClose, className, isStatic = true }: Props) => {
+const Modal = ({ children, title, isOpen, onClose, className, isStatic = true }: ModalProps) => {
   // const handleCloseWhenClickOutside = (e: React.MouseEvent<HTMLDivElement>) => {
   //   if (isStatic) return;
 
@@ -63,36 +63,38 @@ const Modal = ({ children, title, isOpen, onClose, className, isStatic = true }:
             >
               {/* <!-- Modal header --> */}
               <FocusTrap>
-                <div className='flex items-center p-4 md:p-5'>
-                  {/* //header */}
-                  <div className='absolute left-10 right-10 z-10 overflow-x-clip'>
-                    <h3 className='text-ellipsis text-nowrap text-center text-2xl font-bold'>{title}</h3>
-                  </div>
-                  <button
-                    type='button'
-                    className='absolute right-2 z-30 ms-auto inline-flex aspect-square w-8 origin-center items-center justify-center rounded-sm bg-transparent text-sm transition-all duration-100 hover:bg-gray-200 hover:text-gray-900 active:scale-90 dark:hover:bg-gray-600 dark:hover:text-white'
-                    data-modal-hide='default-modal'
-                    onClick={onClose}
-                  >
-                    <svg
-                      className='h-4 w-4'
-                      aria-hidden='true'
-                      xmlns='http://www.w3.org/2000/svg'
-                      fill='none'
-                      viewBox='0 0 14 14'
+                <div className='grid h-[calc(100vh-75px)] grid-rows-[auto_1fr]'>
+                  <div className='col-auto flex h-[2rem] items-center p-4 md:p-5'>
+                    {/* //header */}
+                    <div className='absolute left-10 right-10 z-10 overflow-x-clip'>
+                      <h3 className='text-ellipsis text-nowrap text-center text-2xl font-bold'>{title}</h3>
+                    </div>
+                    <button
+                      type='button'
+                      className='absolute right-2 z-30 ms-auto inline-flex aspect-square w-8 origin-center items-center justify-center rounded-sm bg-transparent text-sm transition-all duration-100 hover:bg-gray-200 hover:text-gray-900 active:scale-90 dark:hover:bg-gray-600 dark:hover:text-white'
+                      data-modal-hide='default-modal'
+                      onClick={onClose}
                     >
-                      <path
-                        stroke='currentColor'
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth='2'
-                        d='m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6'
-                      />
-                    </svg>
-                  </button>
+                      <svg
+                        className='h-4 w-4'
+                        aria-hidden='true'
+                        xmlns='http://www.w3.org/2000/svg'
+                        fill='none'
+                        viewBox='0 0 14 14'
+                      >
+                        <path
+                          stroke='currentColor'
+                          strokeLinecap='round'
+                          strokeLinejoin='round'
+                          strokeWidth='2'
+                          d='m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6'
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  {/* <!-- Modal body --> */}
+                  <div className='row-auto max-h-[calc(100vh-75px-2rem)] space-y-4 p-4 md:p-5'>{children}</div>
                 </div>
-                {/* <!-- Modal body --> */}
-                <div className='h-full space-y-4  p-4 md:p-5'>{children}</div>
               </FocusTrap>
             </div>
           </div>

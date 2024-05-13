@@ -4,6 +4,7 @@ import { ThemeToggle, UserInfo, Search } from './index';
 import { cn } from '@/utils/utils';
 import useAuth from '@/hooks/useAuth';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const Header = ({ className }: { className?: string }) => {
   const { company } = useAuth();
@@ -20,7 +21,7 @@ const Header = ({ className }: { className?: string }) => {
         className
       )}
     >
-      <a className='aspect-square h-10 w-10' href='/cheatsheet'>
+      <Link className='aspect-square h-10 w-10' to={`/${company?.name}/home`}>
         <img
           src={`${import.meta.env.VITE_STORAGE_SERVICE_HOST}/companies/${companyLoaded?.avatar_url === 'default' ? 'default.svg' : company?.avatar_url}?lastmod=${new Date().getTime().toString()}`}
           className=''
@@ -29,7 +30,7 @@ const Header = ({ className }: { className?: string }) => {
             e.currentTarget.src = salesyncIcon;
           }}
         />
-      </a>
+      </Link>
       <Search className='align-middle' />
       <div>
         <div className='justify-right relative flex w-fit align-middle'>

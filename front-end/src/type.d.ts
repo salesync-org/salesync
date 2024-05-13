@@ -6,7 +6,6 @@
 //   destination_type: Type;
 //   destination_label: string;
 // };
-
 type Type = {
   // icon_url: string?;
   // background_color: string?;
@@ -371,4 +370,10 @@ type PropertyResponse = {
   property_name: string;
   property_label: string;
   item_value: string;
+};
+
+type FieldItem = {
+  id: string;
+  item_value: string;
+  property_field: PropertyField;
 };

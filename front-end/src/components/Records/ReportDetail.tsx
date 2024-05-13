@@ -2,10 +2,11 @@
 import reportIcon from '@/assets/type-icon/report_type.fb93b610c51607e576fc.svg';
 import useRecord from '@/hooks/record-service/useRecord';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button, Panel } from '../ui';
+import { Button, ButtonGroup, Panel } from '../ui';
 import LoadingSpinner from '../ui/Loading/LoadingSpinner';
 import { useToast } from '../ui/Toast';
 import RecordTable from './RecordTable';
+import ExportButton from './ExportButton';
 
 const ReportDetail = () => {
   const { reportId = '', companyName = '' } = useParams();
@@ -47,21 +48,24 @@ const ReportDetail = () => {
         <div className='flex items-center gap-3'>
           <img src={reportIcon} alt='icon for report' className='size-12 rounded-md bg-green-500' />
           <div className='flex flex-col'>
-            <h2 className='text-lg font-medium'>REPORT</h2>
+            <h2 className='text-lg font-medium'>Report</h2>
             <div className='flex items-center gap-2'>
               <span className='text-xl'>{record.source_record.name}</span>
             </div>
           </div>
         </div>
-        <Button
-          intent={'normal'}
-          className='px-5'
-          onClick={() => {
-            navigate(`/${companyName}/all/report/update-report/${reportId}`);
-          }}
-        >
-          Edit
-        </Button>
+        <ButtonGroup className='flex'>
+          <ExportButton />
+          <Button
+            intent={'normal'}
+            className='px-5'
+            onClick={() => {
+              navigate(`/${companyName}/all/report/update-report/${reportId}`);
+            }}
+          >
+            Edit
+          </Button>
+        </ButtonGroup>
       </header>
       <div className='flex min-w-full grow overflow-auto'>
         {reportProperties && reportProperties?.length > 0 ? (

@@ -6,6 +6,7 @@ import LoadingSpinner from '../ui/Loading/LoadingSpinner';
 import { Button, DropDownList, Icon } from '../ui';
 import { Pencil } from 'lucide-react';
 import TabLayoutModal from '../TabLayoutModal/TabLayoutModal';
+import useType from '@/hooks/type-service/useType';
 // import { LayoutOrder, Type } from '@/type';
 
 interface RecordTabsProps {
@@ -18,6 +19,7 @@ interface RecordTabsProps {
 
 const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: RecordTabsProps) => {
   const id = useParams().typeId as string;
+  const { types = [] } = useType();
   const companyName = useParams().companyName as string;
   const [isSwap, setIsSwap] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -27,7 +29,6 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
   const { updateUser, user, isLoading, setUser } = useAuth();
   const tabWidth = 100;
   let visibleTabs = Math.max(0, Math.floor(windowWidth / tabWidth) - 3);
-  console.log('visible tab: ' + visibleTabs);
   const tabListShown = tabs.slice(0, visibleTabs);
 
   useEffect(() => {
@@ -111,6 +112,25 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
     setIsDragging(false);
     localStorage.setItem(name, JSON.stringify(tabs));
   };
+
+  const addTypeToList = async (newTypeId: string) => {
+    const newType = types.find((type) => type.id === newTypeId);
+    const newTypeLayout: LayoutType = {
+      type_id: newType?.id ?? '',
+      name: newType?.name ?? ''
+    };
+    const newLayoutOrders = layoutOrders.map((layoutOrder: LayoutOrder) => {
+      if (layoutOrder.name === 'Sales') {
+        return { ...layoutOrder, types: [...layoutOrder.types, newTypeLayout] };
+      }
+      return layoutOrder;
+    });
+    await setUser({ ...user, settings: { ...user.settings, layout_order: newLayoutOrders } });
+  };
+
+  if (tabs.find((tab) => tab.type_id === id) === undefined) {
+    addTypeToList(id);
+  }
 
   return (
     <nav className='relative h-full w-full max-w-[100vw]'>
@@ -200,6 +220,7 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
         <Pencil size='1rem' />
       </Button>
       <TabLayoutModal
+        openingTabId={id}
         isOpen={isEditModalOpen}
         onClose={() => {
           setIsEditModalOpen(false);

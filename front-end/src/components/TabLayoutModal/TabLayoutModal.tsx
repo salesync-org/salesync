@@ -6,16 +6,20 @@ import { DragDropContext, Draggable } from 'react-beautiful-dnd';
 import { StrictModeDroppable } from '../ui/StrictModeDroppable';
 import { Check, GripVertical, Minus, Plus, X } from 'lucide-react';
 import useType from '@/hooks/type-service/useType';
+import { useNavigate, useParams } from 'react-router-dom';
 
 type TabLayoutModalProps = {
   isOpen: boolean;
   onClose: () => void;
+  openingTabId?: string;
   layoutName?: string;
   className?: string;
 };
 
-const TabLayoutModal = ({ isOpen, onClose, layoutName, ...props }: TabLayoutModalProps) => {
+const TabLayoutModal = ({ isOpen, onClose, openingTabId, layoutName, ...props }: TabLayoutModalProps) => {
   const { user, setUser } = useAuth();
+  const { companyName = '' } = useParams();
+  const navigate = useNavigate();
   const { types = [] } = useType();
   const [sectionAdd, setSectionAdd] = useState<string | null>(null);
   const [selectedTab, setSelectedTab] = useState<string>('');
@@ -89,10 +93,14 @@ const TabLayoutModal = ({ isOpen, onClose, layoutName, ...props }: TabLayoutModa
       }
       return layoutOrder;
     });
+    if (openingTabId === typeId) {
+      navigate(`/${companyName}/home`);
+    }
     setUser({ ...user, settings: { ...user.settings, layout_order: newLayoutOrders } });
   };
 
   const handleAddTypeToLayout = (typeId: string) => {
+    if (selectedTab === '') return;
     const newLayoutOrders = layoutOrders.map((layoutOrder) => {
       if (layoutOrder.name === selectedTab) {
         return {
@@ -240,6 +248,7 @@ const TabLayoutModal = ({ isOpen, onClose, layoutName, ...props }: TabLayoutModa
             <PrimaryButton
               onClick={() => {
                 typeAdd !== '' && handleAddTypeToLayout(typeAdd);
+                setTypeAdd('');
               }}
             >
               Save

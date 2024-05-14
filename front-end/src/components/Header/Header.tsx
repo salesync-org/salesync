@@ -23,7 +23,7 @@ const Header = ({ className }: { className?: string }) => {
     >
       <Link className='aspect-square h-10 w-10' to={`/${company?.name}/home`}>
         <img
-          src={`${import.meta.env.VITE_STORAGE_SERVICE_HOST}/companies/${companyLoaded?.avatar_url === 'default' ? 'default.svg' : company?.avatar_url}?lastmod=${new Date().getTime().toString()}`}
+          src={`${import.meta.env.VITE_STORAGE_SERVICE_HOST}/companies/${companyLoaded?.avatar_url === 'default' ? 'default.svg' : company?.avatar_url}?lastmod=${Date.now()}`}
           className=''
           alt='header icon'
           onError={(e) => {

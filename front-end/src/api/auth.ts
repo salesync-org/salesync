@@ -79,7 +79,7 @@ class Auth {
 
     try {
       console.log('Uploading avatar to ' + UPLOAD_API_ENDPOINT);
-      const response = await axios.put(`${UPLOAD_API_ENDPOINT}${companyId}`, avatar, config);
+      const response = await axios.put(`${UPLOAD_API_ENDPOINT}/${companyId}`, avatar, config);
       return response;
     } catch (error) {
       console.error('Non-Axios Error:', error);

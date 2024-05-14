@@ -68,6 +68,12 @@ const DropDown: React.FC<DropdownButtonProps> = ({
     setIsOpen(false);
   }, [listRef]);
 
+  useEffect(() => {
+    if (value === '') {
+      setSelectedOption(defaultValue);
+    }
+  }, [value]);
+
   function handleOptionClick(option: HTMLElement): void {
     const inputNode = option as HTMLInputElement;
     setSelectedOption(inputNode.title);

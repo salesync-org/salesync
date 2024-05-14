@@ -35,7 +35,7 @@ const Sales = () => {
       <section className='fixed left-0 right-0 z-50 flex h-[40px] items-center bg-panel px-6 dark:bg-panel-dark'>
         <NavigationButton />
         <h2 className='select-none pl-6 pr-6 leading-6'>Sales</h2>
-        <RecordTabs tabs={types} name='salesTabs' />
+        <RecordTabs tabs={types} name='salesTabs' currentTab={type?.name} />
       </section>
       <section className='h-full flex-grow py-14'>
         <RecordSection type={type} />

@@ -9,7 +9,7 @@ const UserInfo = () => {
   const { user, logout } = useAuth();
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [name, setName] = useState('Unknown');
-  const [avatar_url, setAvatar] = useState('');
+  const [avatarUrl, setAvatarUrl] = useState(defaultAvatar);
   const navigate = useNavigate();
   const { companyName = '' } = useParams();
 
@@ -17,25 +17,21 @@ const UserInfo = () => {
     const updateInfo = async () => {
       if (user === null) {
         setName('Unknown');
-        setAvatar(defaultAvatar);
       } else {
         setName(`${user.first_name} ${user.last_name}`);
-        // const availability = await isImageShowableHead(avatar_url);
-        if (avatar_url) {
-          setAvatar(
-            `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/avatars/${user.avatar_url}-48.jpg?lastMod=${new Date().getTime()}`
-          );
-        } else {
-          setAvatar(defaultAvatar);
-        }
       }
     };
     updateInfo();
+    setTimeout(() => {
+      setAvatarUrl(
+        `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/avatars/${user?.avatar_url}-48.jpg?lastmod=${Date.now()}`
+      );
+    }, 2000);
   }, [user]);
 
   return (
     <>
-      {
+      {user && (
         <div className='relative flex w-fit space-x-3 pl-2 align-middle'>
           <Button rounded='icon' className='h-10 w-10 p-0' intent='normal' onClick={() => {}}>
             <Bell strokeWidth={'2px'} name='notifications' className='size-[1.5rem]' />
@@ -51,7 +47,7 @@ const UserInfo = () => {
             >
               <img
                 className='w-full rounded-full'
-                src={avatar_url}
+                src={`${import.meta.env.VITE_STORAGE_SERVICE_HOST}/avatars/${user.avatar_url}-48.jpg?lastmod=${Date.now()}`}
                 alt='avatar'
                 onError={(e) => {
                   e.currentTarget.src = defaultAvatar;
@@ -66,8 +62,8 @@ const UserInfo = () => {
               className='right-[.25rem] top-[3rem] mt-0 w-80'
               divide={false}
             >
-              <div className='mb-2 border-b-2 border-button-stroke'>
-                <Item title={name} icon={<img className='w-full rounded-full' src={avatar_url} alt='avatar'></img>} />
+              <div className='mb-2 border-b-[1px] border-button-stroke/50'>
+                <Item title={name} icon={<img className='w-full rounded-full' src={avatarUrl} alt='avatar'></img>} />
               </div>
               <Item
                 className='py-0'
@@ -90,7 +86,7 @@ const UserInfo = () => {
             </DropDownList>
           </div>
         </div>
-      }
+      )}
     </>
   );
 };

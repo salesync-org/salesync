@@ -81,7 +81,7 @@ const RecordChart = () => {
             <h2>Records</h2>
             <p className='mb-4 text-[0.9rem]'>Records owned by me and created in the last 30 days</p>
           </div>
-          <NavLink to={`/${companyName ?? ''}/sales/${types.find((type) => type.name === 'Report')?.id}`}>
+          <NavLink to={`/${companyName ?? ''}/section/sales/${types.find((type) => type.name === 'Report')?.id}`}>
             <Button
               rounded
               className='justify-center rounded-full border-0 border-primary font-[450] text-primary hover:border-2'

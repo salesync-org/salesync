@@ -74,7 +74,7 @@ const RecordDetail = () => {
         await recordApi.deleteRecord(companyName, [record.source_record.id]);
 
         queryClient.invalidateQueries(['records']);
-        navigate(`/${companyName}/sales/${record.source_record.type.id}`);
+        navigate(`/${companyName}/section/sales/${record.source_record.type.id}`);
         toast({
           title: 'Success',
           description: 'Record deleted successfully'

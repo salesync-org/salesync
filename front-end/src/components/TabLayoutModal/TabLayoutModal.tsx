@@ -17,7 +17,7 @@ type TabLayoutModalProps = {
 };
 
 const TabLayoutModal = ({ isOpen, onClose, openingTabId, layoutName, ...props }: TabLayoutModalProps) => {
-  const { user, setUser } = useAuth();
+  const { user, setUser, updateUser } = useAuth();
   const { companyName = '' } = useParams();
   const navigate = useNavigate();
   const { types = [] } = useType();
@@ -49,7 +49,9 @@ const TabLayoutModal = ({ isOpen, onClose, openingTabId, layoutName, ...props }:
   };
 
   const handleUpdateSectionList = debounce(async (sections: LayoutOrder[]) => {
-    await setUser({ ...user, settings: { ...user.settings, layout_order: sections } });
+    const newUser = { ...user, settings: { ...user.settings, layout_order: sections } };
+    await updateUser(companyName, newUser);
+    setUser(newUser);
   }, 500);
 
   const handleOnSectionDragEnd = (result: any) => {
@@ -72,7 +74,9 @@ const TabLayoutModal = ({ isOpen, onClose, openingTabId, layoutName, ...props }:
       }
       return layoutOrder;
     });
-    await setUser({ ...user, settings: { ...user.settings, layout_order: newLayoutOrders } });
+    const newUser = { ...user, settings: { ...user.settings, layout_order: newLayoutOrders } };
+    await updateUser(companyName, newUser);
+    setUser(newUser);
   }, 500);
 
   const handleOnDragEnd = (result: any) => {
@@ -83,7 +87,7 @@ const TabLayoutModal = ({ isOpen, onClose, openingTabId, layoutName, ...props }:
     handleUpdateTypeList(items);
   };
 
-  const handleRemoveTypeFromLayout = (typeId: string) => {
+  const handleRemoveTypeFromLayout = async (typeId: string) => {
     const newLayoutOrders = layoutOrders.map((layoutOrder) => {
       if (layoutOrder.name === selectedTab) {
         return {
@@ -96,27 +100,32 @@ const TabLayoutModal = ({ isOpen, onClose, openingTabId, layoutName, ...props }:
     if (openingTabId === typeId) {
       navigate(`/${companyName}/home`);
     }
-    setUser({ ...user, settings: { ...user.settings, layout_order: newLayoutOrders } });
+    const newUser = { ...user, settings: { ...user.settings, layout_order: newLayoutOrders } };
+    await updateUser(companyName, newUser);
+    setUser(newUser);
   };
 
-  const handleAddTypeToLayout = (typeId: string) => {
-    if (selectedTab === '') return;
-    const newLayoutOrders = layoutOrders.map((layoutOrder) => {
-      if (layoutOrder.name === selectedTab) {
-        return {
-          ...layoutOrder,
-          types: [
-            ...layoutOrder.types,
-            {
-              name: types.find((type) => type.id === typeId)?.name ?? '',
-              type_id: typeId
-            }
-          ]
-        };
+  const handleAddTypeToLayout = async (typeId: string) => {
+    const newType = types.find((type) => type.id === typeId);
+    const newTypeLayout: LayoutType = {
+      type_id: newType?.id ?? '',
+      name: newType?.name ?? ''
+    };
+    console.log('domainName is' + selectedTab);
+    const newLayoutOrders = layoutOrders.map((layoutOrder: LayoutOrder) => {
+      if (layoutOrder.name.toLowerCase() === selectedTab.toLowerCase()) {
+        const newTypes = [...layoutOrder.types, newTypeLayout];
+        return { ...layoutOrder, types: newTypes };
       }
       return layoutOrder;
     });
-    setUser({ ...user, settings: { ...user.settings, layout_order: newLayoutOrders } });
+    const newUser = { ...user, settings: { ...user.settings, layout_order: newLayoutOrders } };
+    await updateUser(companyName, newUser);
+    setUser(newUser);
+
+    if (openingTabId === typeId) {
+      navigate(`/${companyName}/home`);
+    }
   };
 
   return (

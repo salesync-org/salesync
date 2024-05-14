@@ -2,7 +2,7 @@ import { Button, DropDownItem, DropDownList, Item } from '@/components/ui';
 import { ThemeEnum } from '@/constants/enum';
 import useTheme from '@/hooks/useTheme';
 import { cn } from '@/utils/utils';
-import { Eclipse, Moon, Sun } from 'lucide-react';
+import { SystemTheme, Moon, Sun } from '@/components/SaleSyncIcons';
 import { useState } from 'react';
 
 const ThemeToggle = () => {
@@ -12,13 +12,15 @@ const ThemeToggle = () => {
     <div>
       <Button
         rounded='icon'
-        className='h-10 w-10 p-0'
+        className='h-10 w-10 border-text/10 p-0'
         intent={isThemeMenuOpen ? 'primary' : 'normal'}
         onClick={() => {
           setThemeMenuOpen(!isThemeMenuOpen);
         }}
       >
-        {theme == ThemeEnum.LIGHT ? (
+        {isSystemTheme ? (
+          <SystemTheme className={cn('size-[1.5rem]', isThemeMenuOpen && 'text-white')} />
+        ) : theme == ThemeEnum.LIGHT ? (
           <Sun strokeWidth={'2px'} className={cn('size-[1.5rem]', isThemeMenuOpen && 'text-white')} />
         ) : (
           <Moon strokeWidth={'2px'} className={cn('size-[1.5rem]', isThemeMenuOpen && 'text-white')} />
@@ -54,7 +56,7 @@ const ThemeToggle = () => {
         </DropDownItem>
         <DropDownItem title='System Default' value='System Default'>
           <Item
-            icon={<Eclipse strokeWidth={'2px'} className='size-[1.5rem]' />}
+            icon={<SystemTheme strokeWidth={'2px'} className='size-[1.5rem]' />}
             title='System Default'
             selected={isSystemTheme}
             onClick={() => {

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import LoadingSpinner from '../ui/Loading/LoadingSpinner';
 import { Button, DropDownList, Icon } from '../ui';
-import { Pencil } from 'lucide-react';
+import { Pencil } from '@/components/SaleSyncIcons';
 import TabLayoutModal from '../TabLayoutModal/TabLayoutModal';
 import useType from '@/hooks/type-service/useType';
 // import { LayoutOrder, Type } from '@/type';
@@ -39,11 +39,13 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
         setIsSwap(false);
       }
     }, 1000);
-
     return () => clearTimeout(timeout);
   }, [companyName, updateUser, isSwap, user]);
 
   useEffect(() => {
+    if (tabs.find((tab) => tab.type_id === id) === undefined) {
+      addTypeToList(id);
+    }
     window.addEventListener('resize', () => {
       setWindowWidth(window.innerWidth);
     });
@@ -119,18 +121,17 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
       type_id: newType?.id ?? '',
       name: newType?.name ?? ''
     };
+    console.log('domainName is' + domainName);
     const newLayoutOrders = layoutOrders.map((layoutOrder: LayoutOrder) => {
-      if (layoutOrder.name === 'Sales') {
-        return { ...layoutOrder, types: [...layoutOrder.types, newTypeLayout] };
+      if (layoutOrder.name.toLowerCase() === domainName) {
+        const newTypes = [...layoutOrder.types, newTypeLayout];
+        console.log('new types are' + newTypes);
+        return { ...layoutOrder, types: newTypes };
       }
       return layoutOrder;
     });
     await setUser({ ...user, settings: { ...user.settings, layout_order: newLayoutOrders } });
   };
-
-  if (tabs.find((tab) => tab.type_id === id) === undefined) {
-    addTypeToList(id);
-  }
 
   return (
     <nav className='relative h-full w-full max-w-[100vw]'>
@@ -147,7 +148,7 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
               }}
             >
               <NavLink
-                to={`/${companyName}/${domainName}/${tab.type_id}`}
+                to={`/${companyName}/section/${domainName}/${tab.type_id}`}
                 data-index={index}
                 draggable
                 onDragStart={handleDragStart}
@@ -199,7 +200,7 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
                 return (
                   <NavLink
                     key={tab.type_id}
-                    to={`/${companyName}/${domainName}/${tab.type_id}`}
+                    to={`/${companyName}/section/${domainName}/${tab.type_id}`}
                     className='my-1 flex cursor-pointer items-center gap-4 rounded py-2 pl-4 transition-all hover:bg-slate-100/80'
                   >
                     <h3 className='text-base font-normal'>{tab.name}</h3>
@@ -217,7 +218,7 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
           setIsEditModalOpen(true);
         }}
       >
-        <Pencil size='1rem' />
+        <Pencil width='1.2rem' height='1.2rem' />
       </Button>
       <TabLayoutModal
         openingTabId={id}

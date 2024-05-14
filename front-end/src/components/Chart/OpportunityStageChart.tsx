@@ -83,7 +83,7 @@ const OpportunityStageChart = () => {
             <h2>Opportunity</h2>
             <p className='mb-4 text-[0.9rem]'>Opportunities owned by me and created in the last 30 days</p>
           </div>
-          <NavLink to={`/${companyName ?? ''}/sales/${typeId}`}>
+          <NavLink to={`/${companyName ?? ''}/section/sales/${typeId}`}>
             <Button
               rounded
               className='justify-center rounded-full border-0 border-primary font-[450] text-primary hover:border-2'

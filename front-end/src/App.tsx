@@ -54,7 +54,9 @@ function App() {
           <Route path='/:companyName/' element={<PrivateRoute />}>
             <Route element={<ConfigLayout />}>
               <Route path='home' element={<HomeLayout />} />
-              <Route path='sales/:typeId' element={<Sales />} />
+              <Route path='section/home' element={<HomeLayout />} />
+              <Route path='section/:domainName/' element={<Sales />} />
+              <Route path='section/:domainName/:typeId' element={<Sales />} />
               <Route path='all/:typeId' element={<AllTypes />} />
               <Route path='all/report/' element={<ReportLayout />}>
                 <Route path='create-report/:typeReportId' element={<CreateReport />} />

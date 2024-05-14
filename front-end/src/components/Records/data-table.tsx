@@ -3,6 +3,7 @@ import { SortingState, flexRender, getCoreRowModel, getSortedRowModel, useReactT
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/DataTable/table';
 import { cn } from '@/utils/utils';
 import { useState } from 'react';
+import NotFoundImage from '../NotFoundImage/NotFoundImage';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface DataTableProps<TData, _TValue> {
@@ -71,7 +72,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className='h-24 truncate text-center'>
-                No results.
+                <NotFoundImage></NotFoundImage>
               </TableCell>
             </TableRow>
           )}

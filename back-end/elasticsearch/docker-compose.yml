@@ -5,24 +5,51 @@ networks:
 
 services:
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
+    image: elasticsearch:7.17.21
     container_name: elasticsearch
     environment:
-      - xpack.security.enabled=false
+      # - xpack.security.enabled=true
+      # - xpack.security.audit.enabled=true
+      # - xpack.security.authc.api_key.enabled=true
+      # - ELASTIC_PASSWORD=admin
       - "discovery.type=single-node"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ports:
       - "9200:9200"
     networks:
       - elastic
   
+  
   kibana:
-    image: docker.elastic.co/kibana/kibana:8.13.0
+    image: kibana:7.17.21
     container_name: kibana
     environment:
+      # - xpack.security.enabled=true
+      # - ELASTICSEARCH_USERNAME=elastic
+      # - ELASTICSEARCH_PASSWORD=admin
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
     ports:
       - "5601:5601"
     depends_on:
       - elasticsearch
+    networks:
+      - elastic
+    
+  Logstash:
+    image: logstash:7.17.21
+    container_name: logstash
+    restart: unless-stopped
+    volumes:
+      - ./logstash/config:/usr/share/logstash/config
+      - ./postgresql-42.7.3.jar:/usr/share/logstash/bin/postgresql-42.7.3.jar
+    command: logstash -f /usr/share/logstash/config/logstash.conf
+    depends_on:
+      - elasticsearch
+    ports:
+    - '9600:9600'
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m" 
+    extra_hosts:
+    - "host.docker.internal:host-gateway"
     networks:
       - elastic

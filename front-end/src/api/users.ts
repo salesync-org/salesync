@@ -37,7 +37,7 @@ export const uploadAvatar = async (userId: string, avatar: File) => {
 
   try {
     console.log('Uploading avatar to ' + UPLOAD_API_ENDPOINT);
-    const response = await axios.put(`${UPLOAD_API_ENDPOINT}${userId}`, avatar, config);
+    const response = await axios.put(`${UPLOAD_API_ENDPOINT}/${userId}`, avatar, config);
     return response;
   } catch (error) {
     console.error('Non-Axios Error:', error);

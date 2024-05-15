@@ -7,7 +7,12 @@ type LoadingSpinnerProps = {
 
 const LoadingSpinner = ({ className }: LoadingSpinnerProps) => {
   return (
-    <div className={cn('flex h-full w-full items-center justify-center space-x-2 bg-white/80', className)}>
+    <div
+      className={cn(
+        'flex h-full w-full items-center justify-center space-x-2 bg-white/80 dark:bg-panel-dark',
+        className
+      )}
+    >
       <div className='spinner scale-75'>
         <div></div>
         <div></div>

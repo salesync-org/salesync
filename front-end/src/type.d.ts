@@ -22,6 +22,7 @@ type Type = {
 type LayoutType = {
   name: string;
   type_id: string;
+  isPrimitiveType?: boolean;
 };
 
 // type TypeProperty = {
@@ -376,4 +377,12 @@ type FieldItem = {
   id: string;
   item_value: string;
   property_field: PropertyField;
+};
+
+type SettingLayout = {
+  name: string;
+  path?: string;
+  Icon?: any;
+  adminSettingRole: boolean;
+  items?: SettingLayout[];
 };

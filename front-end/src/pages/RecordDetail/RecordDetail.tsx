@@ -74,7 +74,7 @@ const RecordDetail = () => {
         await recordApi.deleteRecord(companyName, [record.source_record.id]);
 
         queryClient.invalidateQueries(['records']);
-        navigate(`/${companyName}/sales/${record.source_record.type.id}`);
+        navigate(`/${companyName}/section/sales/${record.source_record.type.id}`);
         toast({
           title: 'Success',
           description: 'Record deleted successfully'
@@ -98,7 +98,12 @@ const RecordDetail = () => {
       <section className='fixed left-0 right-0 z-50 flex h-[40px] items-center bg-panel px-6 dark:bg-panel-dark'>
         <NavigationButton />
         <h2 className='select-none pl-6 pr-6 leading-6'>Sales</h2>
-        <RecordTabs tabs={types} name='salesTabs' currentTab={record.source_record.type.name} />
+        <RecordTabs
+          tabs={types}
+          name='salesTabs'
+          domainName='sales'
+          currentTab={`${record.source_record.type.name}${recordId.slice(0, 2)}`}
+        />
       </section>
       <section className='pt-12'>
         <Panel className='mb-0 flex flex-row items-center justify-between p-2'>

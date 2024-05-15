@@ -1,12 +1,13 @@
-import { Panel } from '@/components/ui';
+import { Button, Panel } from '@/components/ui';
 import useType from '@/hooks/type-service/useType';
 import { Chart as ChartJS, ArcElement, Tooltip, Title, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
-import { useParams } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import ChartSkeleton from './ChartSkeleton';
 import useStages from '@/hooks/type-service/useStage';
 import useRecords from '@/hooks/record-service/useRecords';
 import { generateChartColor } from '@/utils/utils';
+import { ChevronRight } from 'lucide-react';
 
 ChartJS.register(ArcElement, Tooltip, Title, Legend);
 
@@ -58,6 +59,7 @@ const LeadStageChart = () => {
 
   const options = {
     maintainAspectRatio: false,
+    offset: 8,
     plugins: { legend: { display: true, position: 'right' as const } }
   };
 
@@ -77,10 +79,23 @@ const LeadStageChart = () => {
     ]
   };
   return (
-    <Panel>
-      <section>
-        <h2>Lead</h2>
-        <p className='mb-4'>Leads owned by me and created in the last 30 days</p>
+    <Panel className='m-0'>
+      <section className='flex h-full flex-col'>
+        <div className='justify-bewteen flex'>
+          <div className='w-full'>
+            <h2>Leads</h2>
+            <p className='mb-4 text-[0.9rem]'>Leads owned by me and created in the last 30 days</p>
+          </div>
+          <NavLink to={`/${companyName ?? ''}/section/sales/${types.find((type) => type.name === 'Report')?.id}`}>
+            <Button
+              rounded
+              className='justify-center rounded-full border-0 border-primary font-[450] text-primary hover:border-2'
+            >
+              <p className='text-nowrap'>View Leads</p>
+              <ChevronRight size={'1.4rem'}></ChevronRight>
+            </Button>
+          </NavLink>
+        </div>
         <div className='grid h-max flex-grow place-content-center'>
           {leadNumber === 0 ? <h3>{"You don't have any Leads"}</h3> : <Doughnut data={data} options={options} />}
         </div>

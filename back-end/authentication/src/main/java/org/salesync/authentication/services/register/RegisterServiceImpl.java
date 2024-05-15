@@ -113,6 +113,7 @@ public class RegisterServiceImpl implements RegisterService {
             user.singleAttribute(UserAttributes.SETTINGS, settingsManager.loadStringSettingsFromFile());
             user.setEnabled(true);
             Response response = keycloak.realm(realmName).users().create(user);
+
             UserRepresentation newUser = keycloak.realm(realmName).users().search(newUserDTO.getEmail()).get(0);
             UserResource userResource = keycloak.realm(realmName).users().get(newUser.getId());
             sendEmailVerification(userResource);
@@ -143,8 +144,8 @@ public class RegisterServiceImpl implements RegisterService {
                 .grantType(OAuth2Constants.PASSWORD)
                 .username(logInDTO.getUsername())
                 .password(logInDTO.getPassword())
-                .clientId(AuthenticationClient.APP_ADMIN)
-                .clientSecret(AuthenticationClient.APP_ADMIN)
+                .clientId("admin-cli")
+                // .clientSecret(AuthenticationClient.APP_ADMIN)
                 .build()) {
 
             logger.info("Logging in Sever URL: " + env.getProperty("keycloak.auth-server-url"));

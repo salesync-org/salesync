@@ -1,10 +1,11 @@
 import React, { useRef, useEffect } from 'react';
 
 interface FocusTrapProps {
+  className?: string;
   children: React.ReactNode;
 }
 
-const FocusTrap: React.FC<FocusTrapProps> = ({ children }) => {
+const FocusTrap: React.FC<FocusTrapProps> = ({ className, children }) => {
   const trapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -47,7 +48,7 @@ const FocusTrap: React.FC<FocusTrapProps> = ({ children }) => {
   }, []);
 
   return (
-    <div className='h-full max-h-[calc(100vh-75px)]' ref={trapRef}>
+    <div className={className} ref={trapRef}>
       {children}
     </div>
   );

@@ -33,7 +33,7 @@ const SelectReportModal = () => {
     <Modal
       isOpen={modalType === MODAL_TYPES.REPORT_MODAL}
       onClose={hideModal}
-      className='relative h-[600px]'
+      className='relative h-[500px]'
       title='Create Report'
     >
       <div className='flex h-[calc(100%-12px)] border-t pt-4'>

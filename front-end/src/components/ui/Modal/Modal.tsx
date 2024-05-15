@@ -57,13 +57,13 @@ const Modal = ({ children, title, isOpen, onClose, className, isStatic = true }:
             {/* <!-- Modal content --> */}
             <div
               className={cn(
-                'relative max-h-[calc(100vh-50px)] max-w-[calc(100vw-100px)] rounded-lg bg-panel px-3 py-4 shadow dark:bg-panel-dark',
-                className
+                'relative max-h-[calc(100vh-50px)] max-w-[calc(100vw-100px)] rounded-lg bg-panel px-3 py-4 shadow dark:bg-panel-dark'
+                // className <-- This causes all the problems
               )}
             >
               {/* <!-- Modal header --> */}
               <FocusTrap>
-                <div className='grid h-[calc(100vh-75px)] grid-rows-[auto_1fr]'>
+                <div className='grid max-h-[calc(100vh-75px)] grid-rows-[auto_1fr]'>
                   <div className='col-auto flex h-[2rem] items-center p-4 md:p-5'>
                     {/* //header */}
                     <div className='absolute left-10 right-10 z-10 overflow-x-clip'>
@@ -93,7 +93,9 @@ const Modal = ({ children, title, isOpen, onClose, className, isStatic = true }:
                     </button>
                   </div>
                   {/* <!-- Modal body --> */}
-                  <div className='row-auto max-h-[calc(100vh-75px-2rem)] space-y-4 p-4 md:p-5'>{children}</div>
+                  <div className='row-auto max-h-[calc(100vh-75px-2rem)] space-y-4 p-4 md:p-5'>
+                    <div className={cn('grid h-full grid-cols-[1fr] grid-rows-1', className)}>{children}</div>
+                  </div>
                 </div>
               </FocusTrap>
             </div>

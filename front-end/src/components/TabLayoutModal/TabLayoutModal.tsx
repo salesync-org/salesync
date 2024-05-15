@@ -6,16 +6,20 @@ import { DragDropContext, Draggable } from 'react-beautiful-dnd';
 import { StrictModeDroppable } from '../ui/StrictModeDroppable';
 import { Check, GripVertical, Minus, Plus, X } from 'lucide-react';
 import useType from '@/hooks/type-service/useType';
+import { useNavigate, useParams } from 'react-router-dom';
 
 type TabLayoutModalProps = {
   isOpen: boolean;
   onClose: () => void;
+  openingTabId?: string;
   layoutName?: string;
   className?: string;
 };
 
-const TabLayoutModal = ({ isOpen, onClose, layoutName, ...props }: TabLayoutModalProps) => {
-  const { user, setUser } = useAuth();
+const TabLayoutModal = ({ isOpen, onClose, openingTabId, layoutName, ...props }: TabLayoutModalProps) => {
+  const { user, setUser, updateUser } = useAuth();
+  const { companyName = '' } = useParams();
+  const navigate = useNavigate();
   const { types = [] } = useType();
   const [sectionAdd, setSectionAdd] = useState<string | null>(null);
   const [selectedTab, setSelectedTab] = useState<string>('');
@@ -26,7 +30,7 @@ const TabLayoutModal = ({ isOpen, onClose, layoutName, ...props }: TabLayoutModa
   }
   const layoutOrders = user.settings.layout_order;
   if (layoutName && selectedTab == '') {
-    const layoutOrder = layoutOrders.find((layoutOrder) => layoutOrder.name === layoutName);
+    const layoutOrder = layoutOrders.find((layoutOrder) => layoutOrder.name.toLowerCase() === layoutName.toLowerCase());
     if (layoutOrder) {
       setSelectedTab(layoutOrder.name);
     }
@@ -45,7 +49,9 @@ const TabLayoutModal = ({ isOpen, onClose, layoutName, ...props }: TabLayoutModa
   };
 
   const handleUpdateSectionList = debounce(async (sections: LayoutOrder[]) => {
-    await setUser({ ...user, settings: { ...user.settings, layout_order: sections } });
+    const newUser = { ...user, settings: { ...user.settings, layout_order: sections } };
+    await updateUser(companyName, newUser);
+    setUser(newUser);
   }, 500);
 
   const handleOnSectionDragEnd = (result: any) => {
@@ -68,7 +74,9 @@ const TabLayoutModal = ({ isOpen, onClose, layoutName, ...props }: TabLayoutModa
       }
       return layoutOrder;
     });
-    await setUser({ ...user, settings: { ...user.settings, layout_order: newLayoutOrders } });
+    const newUser = { ...user, settings: { ...user.settings, layout_order: newLayoutOrders } };
+    await updateUser(companyName, newUser);
+    setUser(newUser);
   }, 500);
 
   const handleOnDragEnd = (result: any) => {
@@ -76,39 +84,49 @@ const TabLayoutModal = ({ isOpen, onClose, layoutName, ...props }: TabLayoutModa
     const items = layoutOrders.find((layout) => layout.name === selectedTab)?.types ?? [];
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
-    handleUpdateTypeList(items);
+    handleUpdateTypeList(items.filter((type) => type.isPrimitiveType !== false));
   };
 
-  const handleRemoveTypeFromLayout = (typeId: string) => {
+  const handleRemoveTypeFromLayout = async (typeId: string) => {
     const newLayoutOrders = layoutOrders.map((layoutOrder) => {
       if (layoutOrder.name === selectedTab) {
         return {
           ...layoutOrder,
-          types: layoutOrder.types.filter((type) => type.type_id !== typeId)
+          types: layoutOrder.types.filter((type) => type.type_id !== typeId && type.isPrimitiveType !== false)
         };
       }
       return layoutOrder;
     });
-    setUser({ ...user, settings: { ...user.settings, layout_order: newLayoutOrders } });
+    if (openingTabId === typeId) {
+      navigate(`/${companyName}/home`);
+    }
+    const newUser = { ...user, settings: { ...user.settings, layout_order: newLayoutOrders } };
+    await updateUser(companyName, newUser);
+    setUser(newUser);
   };
 
-  const handleAddTypeToLayout = (typeId: string) => {
-    const newLayoutOrders = layoutOrders.map((layoutOrder) => {
-      if (layoutOrder.name === selectedTab) {
-        return {
-          ...layoutOrder,
-          types: [
-            ...layoutOrder.types,
-            {
-              name: types.find((type) => type.id === typeId)?.name ?? '',
-              type_id: typeId
-            }
-          ]
-        };
+  const handleAddTypeToLayout = async (typeId: string) => {
+    const newType = types.find((type) => type.id === typeId);
+    if (newType === undefined) return;
+    const newTypeLayout: LayoutType = {
+      type_id: newType?.id ?? '',
+      name: newType?.name ?? ''
+    };
+
+    const newLayoutOrders = layoutOrders.map((layoutOrder: LayoutOrder) => {
+      if (layoutOrder.name.toLowerCase() === selectedTab.toLowerCase()) {
+        const newTypes = [...layoutOrder.types.filter((type) => type.isPrimitiveType !== false), newTypeLayout];
+        return { ...layoutOrder, types: newTypes };
       }
       return layoutOrder;
     });
-    setUser({ ...user, settings: { ...user.settings, layout_order: newLayoutOrders } });
+    const newUser = { ...user, settings: { ...user.settings, layout_order: newLayoutOrders } };
+    await updateUser(companyName, newUser);
+    setUser(newUser);
+
+    if (openingTabId === typeId) {
+      navigate(`/${companyName}/home`);
+    }
   };
 
   return (
@@ -240,6 +258,7 @@ const TabLayoutModal = ({ isOpen, onClose, layoutName, ...props }: TabLayoutModa
             <PrimaryButton
               onClick={() => {
                 typeAdd !== '' && handleAddTypeToLayout(typeAdd);
+                setTypeAdd('');
               }}
             >
               Save
@@ -252,7 +271,8 @@ const TabLayoutModal = ({ isOpen, onClose, layoutName, ...props }: TabLayoutModa
                   <ul className='characters' {...provided.droppableProps} ref={provided.innerRef}>
                     {layoutOrders
                       .find((layout) => layout.name === selectedTab)
-                      ?.types.map((type: LayoutType, index) => {
+                      ?.types.filter((type) => type.isPrimitiveType !== false)
+                      .map((type: LayoutType, index) => {
                         return (
                           <Draggable key={type.type_id} draggableId={type.type_id} index={index}>
                             {(provided) => (

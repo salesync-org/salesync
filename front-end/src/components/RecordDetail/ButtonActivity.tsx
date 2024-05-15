@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, ButtonGroup, DropDown, Icon, PrimaryButton, TextButton } from '@/components/ui';
+import { Button, ButtonGroup, Icon, PrimaryButton } from '@/components/ui';
 import React, { useState } from 'react';
 import { cn } from 'utils/utils';
 // import InputRecordRelative from './InputRecordRelative';
@@ -44,8 +44,8 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({
   const [typeActivity, setTypeActivity] = useState(setType()); // Email, Event, Call, Task
   const { recordId = '' } = useParams();
 
-  let isDisabledTriangleButton = false;
-  if (name === 'New Task') isDisabledTriangleButton = true;
+  // let isDisabledTriangleButton = false;
+  // if (name === 'New Task') isDisabledTriangleButton = true;
 
   const { toast } = useToast();
   const location = useLocation();
@@ -124,19 +124,24 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({
           }}
           title={name}
           disabled={disabled} // disable button
+          className={cn('first:rounded-l-md')}
         >
-          <div className='flex items-center'>
-            <Icon name={icon} className={cn('mr-1 rounded p-0.5 text-white', color, className)}></Icon>
+          <div className='flex items-center space-x-2'>
+            <Icon
+              size='1.2rem'
+              name={icon}
+              className={cn('aspect-square rounded p-0.5 text-white', color, className)}
+            ></Icon>
             <span className='text-blue-500 dark:text-link-text-dark'>{name}</span>
           </div>
         </Button>
 
-        <DropDown
+        {/* <DropDown
           defaultValue=''
           value=''
           prefixIcon={<Icon name='arrow_drop_down' size='1' />}
-          className='m-0 p-0'
           disabled={disabled === true ? disabled : isDisabledTriangleButton}
+          className={cn(isDisabledTriangleButton && 'opacity-100', 'm-0 rounded-none rounded-r-md p-0')}
           align='left'
         >
           <div className='h-fit'>
@@ -206,7 +211,7 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({
               </>
             )}
           </div>
-        </DropDown>
+        </DropDown> */}
       </ButtonGroup>
 
       {isPropertiesLoading && <LoadingSpinner className='mt-10' />}

@@ -41,6 +41,11 @@
   background: #8a8787;
 }
 
+::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+  overflow-y: hidden;
+}
+
 :root {
   @apply antialiased;
   font-synthesis: none;
@@ -96,5 +101,14 @@
     font-size: 1rem;
     font-weight: 360;
     line-height: 1.5rem;
+  }
+
+  dialog {
+    min-width: 40%;
+    max-width: 90%;
+    min-height: 60svh;
+    font-family: inherit;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s;
   }
 }

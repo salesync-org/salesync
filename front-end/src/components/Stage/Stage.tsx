@@ -28,9 +28,9 @@ const StageItem = ({
   } else if (isCompleted) {
     colors = 'bg-green-700 text-white group-hover:bg-green-800';
   } else if (isCurrentStage) {
-    colors = 'bg-white text-blue-800';
+    colors = 'bg-white text-blue-800 dark:bg-black/80 dark:text-white';
   } else {
-    colors = 'bg-slate-100 group-hover:bg-slate-300';
+    colors = 'bg-slate-100 group-hover:bg-slate-300 dark:bg-slate-700 dark:text-white';
   }
 
   return (
@@ -60,7 +60,7 @@ const StageItem = ({
 
       <span
         className={cn(
-          'relative z-20 grid place-content-center overflow-hidden transition-all',
+          'relative z-20 grid place-content-center overflow-hidden bg-transparent transition-all',
           isFirst && 'pr-2',
           isLast && 'pl-2',
           colors,
@@ -68,7 +68,13 @@ const StageItem = ({
         )}
       >
         <Icon name='check' className={cn('', (!isCompleted || isChosen) && 'hidden', 'group-hover:hidden')} />
-        <span className={cn('text-xs', isCompleted && 'hidden transition-all group-hover:block', isChosen && 'block')}>
+        <span
+          className={cn(
+            'bg-transparent text-xs',
+            isCompleted && 'hidden transition-all group-hover:block',
+            isChosen && 'block'
+          )}
+        >
           {stage.name}
         </span>
       </span>

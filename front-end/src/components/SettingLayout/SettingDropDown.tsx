@@ -3,10 +3,18 @@ import { useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { ItemSetting } from './ItemSetting';
 
-export const SettingDropDown = ({ title, items }: { title: string; items: { name: string; path: string }[] }) => {
+export const SettingDropDown = ({
+  title,
+  items,
+  adminPermission
+}: {
+  title: string;
+  items: SettingLayout[];
+  adminPermission: boolean;
+}) => {
   const location = useLocation();
   const [open, setOpen] = useState(() => {
-    return items.some((item) => location.pathname.includes(item.path));
+    return items.some((item) => location.pathname.includes(item.path ?? ''));
   });
   const { companyName = '' } = useParams();
 
@@ -32,6 +40,7 @@ export const SettingDropDown = ({ title, items }: { title: string; items: { name
               key={item.name}
               name={item.name}
               href={`/${companyName}/${item.path}`}
+              lock={!(!item.adminSettingRole || adminPermission)}
             />
           ))}
         </div>

@@ -23,7 +23,7 @@ const SelectReportDataTable = ({
 
   return (
     <div className='flex h-full flex-col gap-6 pb-4'>
-      <h2 className='text-2xl font-medium'>Select a Report Type</h2>
+      <h3 className='px-2 text-2xl font-semibold'>Select a Report Type</h3>
       <SearchInput value={search} onChange={handleSearchChange} />
       <div className='grow overflow-auto'>
         <ReportTable search={debouncedSearch} onSelectChange={onSelectChange} selectedTypeId={selectedType?.id} />

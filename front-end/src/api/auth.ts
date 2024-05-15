@@ -12,9 +12,9 @@ class Auth {
   }
 
   async login(companyName: string, email: string, password: string) {
-    const response = await instance.post(`${URL}/${companyName}/login`, {
+    const response = await axios.post(`${URL}/${companyName}/login`, {
       username: email,
-      password
+      password: password,
     });
 
     return response.data;

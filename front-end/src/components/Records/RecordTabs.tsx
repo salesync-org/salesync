@@ -260,7 +260,11 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
                 return (
                   <NavLink
                     key={tab.type_id}
-                    to={`/${companyName}/section/${domainName}/${tab.type_id}`}
+                    to={
+                      tab.isPrimitiveType === false
+                        ? `/${companyName}/record/${tab.type_id}`
+                        : `/${companyName}/section/${domainName}/${tab.type_id}`
+                    }
                     className='my-1 flex cursor-pointer items-center gap-4 rounded py-2 pl-4 transition-all hover:bg-slate-100/80'
                   >
                     <h3 className='text-base font-normal'>{tab.name}</h3>

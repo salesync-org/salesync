@@ -27,6 +27,7 @@ type AuthContext = {
   getCompanyInfo: (companyName: string) => Promise<void>;
   updateCompanyInfo: (companyName: string, companyInfo: CompanyInfo) => Promise<void>;
   getRoles: (companyName: string) => Promise<Role[] | null>;
+  hasPermission: (permission: string) => Promise<boolean>;
   getPermissions: (companyName: string) => Promise<Permission[] | null>;
 };
 
@@ -98,6 +99,16 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }) => {
     const res = await auth.verifyPassword(companyName, email, password);
     return res;
+  };
+
+  const hasPermission = async (permission: string) => {
+    const roles: Role[] = await getRoles(companyName);
+    const userRoles = roles.filter((role) => user?.roles?.includes(role.role_name));
+    const permissions = userRoles.map((role) => role.permissions).flat();
+    console.log('testing hasPermission');
+    console.log(permissions);
+    console.log(permissions.filter((p) => p.permission_name === permission).length);
+    return permissions.filter((p) => p.permission_name === permission).length > 0;
   };
 
   const logout = async () => {
@@ -183,6 +194,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     verifyPassword,
     getCompanyInfo,
     getRoles,
+    hasPermission,
     getPermissions,
     updateCompanyInfo
   };

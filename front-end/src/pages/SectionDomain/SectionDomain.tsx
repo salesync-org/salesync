@@ -38,6 +38,9 @@ const SectionDomain = () => {
   };
 
   const type: LayoutType = findValidType();
+  if (type.name === 'Home') {
+    return <Navigate to={`/${companyName}/home`} />;
+  }
 
   return (
     <div className='flex h-full flex-col'>

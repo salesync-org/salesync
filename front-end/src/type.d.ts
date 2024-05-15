@@ -378,3 +378,11 @@ type FieldItem = {
   item_value: string;
   property_field: PropertyField;
 };
+
+type SettingLayout = {
+  name: string;
+  path?: string;
+  Icon?: any;
+  adminSettingRole: boolean;
+  items?: SettingLayout[];
+};

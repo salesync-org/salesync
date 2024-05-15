@@ -26,7 +26,8 @@ class StageApi {
   async updateStage(companyName: string, stage: Stage) {
     const response = await axios.put(`${URL}/${companyName}/stages`, stage);
     if (response.status === 200) {
-      return response.data;
+      const sequenceUpdateResponse = await axios.put(`${URL}/${companyName}/stages/update-sequence-number`, stage);
+      return sequenceUpdateResponse.data;
     } else {
       throw new Error(`${response.data.message}`);
     }

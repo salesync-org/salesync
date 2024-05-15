@@ -22,6 +22,7 @@ type Type = {
 type LayoutType = {
   name: string;
   type_id: string;
+  isPrimitiveType?: boolean;
 };
 
 // type TypeProperty = {

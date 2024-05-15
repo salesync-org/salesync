@@ -23,7 +23,7 @@ const RoleSetting = lazy(() => import('./pages/Settings/RoleSetting'));
 const Cheatsheet = lazy(() => import('pages/Cheatsheet/Cheatsheet'));
 // const TypeDetail = lazy(() => import('./pages/TypeDetail/TypeDetail'));
 // const TypeManager = lazy(() => import('./pages/TypeManager/TypeManager'));
-const Sales = lazy(() => import('./pages/Sales/Sales'));
+const SectionDomain = lazy(() => import('./pages/SectionDomain/SectionDomain'));
 const SignUp = lazy(() => import('./pages/SignUp/SignUp'));
 const HomeLayout = lazy(() => import('./pages/Home/Home'));
 const LogIn = lazy(() => import('pages/LogIn/LogIn'));
@@ -55,8 +55,8 @@ function App() {
             <Route element={<ConfigLayout />}>
               <Route path='home' element={<HomeLayout />} />
               <Route path='section/home' element={<HomeLayout />} />
-              <Route path='section/:domainName/' element={<Sales />} />
-              <Route path='section/:domainName/:typeId' element={<Sales />} />
+              <Route path='section/:domainName/' element={<SectionDomain />} />
+              <Route path='section/:domainName/:typeId' element={<SectionDomain />} />
               <Route path='all/:typeId' element={<AllTypes />} />
               <Route path='all/report/' element={<ReportLayout />}>
                 <Route path='create-report/:typeReportId' element={<CreateReport />} />

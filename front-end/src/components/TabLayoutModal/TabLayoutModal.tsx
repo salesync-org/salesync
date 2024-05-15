@@ -30,7 +30,7 @@ const TabLayoutModal = ({ isOpen, onClose, openingTabId, layoutName, ...props }:
   }
   const layoutOrders = user.settings.layout_order;
   if (layoutName && selectedTab == '') {
-    const layoutOrder = layoutOrders.find((layoutOrder) => layoutOrder.name === layoutName);
+    const layoutOrder = layoutOrders.find((layoutOrder) => layoutOrder.name.toLowerCase() === layoutName.toLowerCase());
     if (layoutOrder) {
       setSelectedTab(layoutOrder.name);
     }
@@ -84,7 +84,7 @@ const TabLayoutModal = ({ isOpen, onClose, openingTabId, layoutName, ...props }:
     const items = layoutOrders.find((layout) => layout.name === selectedTab)?.types ?? [];
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
-    handleUpdateTypeList(items);
+    handleUpdateTypeList(items.filter((type) => type.isPrimitiveType !== false));
   };
 
   const handleRemoveTypeFromLayout = async (typeId: string) => {
@@ -92,7 +92,7 @@ const TabLayoutModal = ({ isOpen, onClose, openingTabId, layoutName, ...props }:
       if (layoutOrder.name === selectedTab) {
         return {
           ...layoutOrder,
-          types: layoutOrder.types.filter((type) => type.type_id !== typeId)
+          types: layoutOrder.types.filter((type) => type.type_id !== typeId && type.isPrimitiveType !== false)
         };
       }
       return layoutOrder;
@@ -107,14 +107,15 @@ const TabLayoutModal = ({ isOpen, onClose, openingTabId, layoutName, ...props }:
 
   const handleAddTypeToLayout = async (typeId: string) => {
     const newType = types.find((type) => type.id === typeId);
+    if (newType === undefined) return;
     const newTypeLayout: LayoutType = {
       type_id: newType?.id ?? '',
       name: newType?.name ?? ''
     };
-    console.log('domainName is' + selectedTab);
+
     const newLayoutOrders = layoutOrders.map((layoutOrder: LayoutOrder) => {
       if (layoutOrder.name.toLowerCase() === selectedTab.toLowerCase()) {
-        const newTypes = [...layoutOrder.types, newTypeLayout];
+        const newTypes = [...layoutOrder.types.filter((type) => type.isPrimitiveType !== false), newTypeLayout];
         return { ...layoutOrder, types: newTypes };
       }
       return layoutOrder;
@@ -270,7 +271,8 @@ const TabLayoutModal = ({ isOpen, onClose, openingTabId, layoutName, ...props }:
                   <ul className='characters' {...provided.droppableProps} ref={provided.innerRef}>
                     {layoutOrders
                       .find((layout) => layout.name === selectedTab)
-                      ?.types.map((type: LayoutType, index) => {
+                      ?.types.filter((type) => type.isPrimitiveType !== false)
+                      .map((type: LayoutType, index) => {
                         return (
                           <Draggable key={type.type_id} draggableId={type.type_id} index={index}>
                             {(provided) => (

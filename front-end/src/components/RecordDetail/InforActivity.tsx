@@ -90,7 +90,7 @@ const InforActivity: React.FC<InforActivityProps> = ({ className, data, type }) 
             {expand && <Icon name='expand_more' size='1' />}
             {!expand && <Icon name='chevron_right' size='1' />}
           </button>
-          <Icon name={iconName} className={cn('w-fit rounded  p-1 text-white', iconColor)}></Icon>
+          <Icon size='1.2rem' name={iconName} className={cn(' aspect-square rounded p-2 text-white', iconColor)}></Icon>
         </div>
         <div className='flex w-full justify-between pl-4'>
           <TextButton text={subject!} onClick={() => {}} />

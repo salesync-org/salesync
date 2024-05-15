@@ -13,18 +13,15 @@ const RecordActivity = ({ relations }: RecordActivityProps) => {
   // expand: upcoming and overdue
   // expand2: this month
 
-  const [showActivity, setShowActivity] = useState(true);
   const [isButtonActivity, setIsButtonActivity] = useState(false);
 
   const activityRelations = relations.filter(
     (relation) => relation.destination_record.type.template.name === 'Activity'
   );
 
-  const refreshActivity = () => {};
-
   return (
     <div>
-      <div className='flex flex-wrap'>
+      <div className='my-4 flex flex-wrap space-x-2'>
         <ButtonActivity
           name='Email'
           icon='mail'
@@ -55,28 +52,14 @@ const RecordActivity = ({ relations }: RecordActivityProps) => {
         />
       </div>
 
-      <div className='bg z-[10] my-4 flex w-fit rounded px-3'>
-        <Icon name='face_2' className='mr-2 text-blue-500 dark:text-link-text-dark'></Icon>
-        <span>Only show activities with insights</span>
-        <Switch onClick={() => setShowActivity(!showActivity)} checked={false} className='z-10 ml-2'></Switch>
-      </div>
-
-      <div className='flex flex-row-reverse'>
-        <button className='text-blue-500 hover:text-blue-800'>Expand All</button>
-        <span className='m-2'> • </span>
-        <button className='text-blue-500 hover:text-blue-800' onClick={() => refreshActivity}>
-          Refresh
-        </button>
-      </div>
-
       <div>
         <Button
           className='my-2 flex w-full justify-start'
           onClick={() => setExpand(!expand)}
           title='Upcoming & Overdue'
         >
-          {expand && <Icon name='expand_more' size='1' />}
-          {!expand && <Icon name='chevron_right' size='1' />}
+          {expand && <Icon name='expand_more' size='1rem' />}
+          {!expand && <Icon name='chevron_right' size='1rem' />}
           <span className='font-bold'>Upcoming & Overdue</span>
         </Button>
         {expand && (

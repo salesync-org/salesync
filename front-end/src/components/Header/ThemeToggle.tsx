@@ -1,4 +1,4 @@
-import { Button, DropDownItem, DropDownList, Item } from '@/components/ui';
+import { Button, DropDownItem, DropDownList, Item, Tooltip } from '@/components/ui';
 import { ThemeEnum } from '@/constants/enum';
 import useTheme from '@/hooks/useTheme';
 import { cn } from '@/utils/utils';
@@ -12,6 +12,8 @@ const ThemeToggle = () => {
     <div>
       <Button
         rounded='icon'
+        data-tooltip-id='themeToggle'
+        data-tooltip-content='Change Theme'
         className='h-10 w-10 border-text/10 p-0'
         intent={isThemeMenuOpen ? 'primary' : 'normal'}
         onClick={() => {
@@ -26,6 +28,7 @@ const ThemeToggle = () => {
           <Moon strokeWidth={'2px'} className={cn('size-[1.5rem]', isThemeMenuOpen && 'text-white')} />
         )}
       </Button>
+      <Tooltip id='themeToggle' />
       <DropDownList
         open={isThemeMenuOpen}
         onClose={() => {

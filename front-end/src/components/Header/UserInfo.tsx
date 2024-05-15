@@ -1,5 +1,5 @@
 import defaultAvatar from '@/assets/default_avatar.png';
-import { Button, DropDownList, Item } from '@/components/ui';
+import { Button, DropDownList, Item, Tooltip } from '@/components/ui';
 import useAuth from '@/hooks/useAuth';
 import { useEffect, useState } from 'react';
 import { Bell, Settings, LogOut } from '@/components/SaleSyncIcons';
@@ -33,9 +33,17 @@ const UserInfo = () => {
     <>
       {user && (
         <div className='relative flex w-fit space-x-3 pl-2 align-middle'>
-          <Button rounded='icon' className='h-10 w-10 border-text/10 p-0' intent='normal' onClick={() => {}}>
+          <Button
+            data-tooltip-id='viewNotification'
+            data-tooltip-content='Notification'
+            rounded='icon'
+            className='h-10 w-10 border-text/10 p-0'
+            intent='normal'
+            onClick={() => {}}
+          >
             <Bell strokeWidth={'2px'} name='notifications' className='size-[1.5rem]' />
           </Button>
+          <Tooltip id='viewNotification' />
           <div>
             <Button
               rounded='icon'

@@ -10,6 +10,7 @@ import icon from 'assets/type-icon/lead_icon.png';
 import { Filter, Plus, RefreshCw } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { Tooltip } from 'react-tooltip';
 
 interface RecordSectionProps {
   type: Type | LayoutType | null | undefined;
@@ -49,7 +50,7 @@ const RecordSection = ({ type }: RecordSectionProps) => {
 
   return (
     <Panel className='fixed bottom-[10px] left-[10px] right-[10px] top-[108px] m-0 flex h-[calc(100dvh-120px)] max-w-[100vw] flex-col overflow-auto p-4'>
-      <section className='px flex flex-col items-center justify-between pt-4 md:flex-row'>
+      <section className='px z-[100] flex flex-col items-center justify-between pt-4 md:flex-row'>
         <div className='flex items-center gap-2 space-x-2 align-middle'>
           <div className='w-fit cursor-pointer overflow-hidden rounded-sm bg-primary-color'>
             <img className='h-10 w-10' src={icon} alt={`Icon for ${type.name}`} />
@@ -65,12 +66,24 @@ const RecordSection = ({ type }: RecordSectionProps) => {
           <div className='flex items-center space-x-1'>
             <TextInput value={search} onChange={handleSearch} placeholder='Search this list...' prefixIcon='search' />
             <div className='flex space-x-1'>
-              <Button className='aspect-square p-0'>
+              <Button
+                data-tooltip-id='refreshTable'
+                data-tooltip-content='Refresh'
+                data-tooltip-place='top'
+                className='aspect-square p-0'
+              >
                 <RefreshCw size='1rem' />
               </Button>
-              <Button className='aspect-square p-0'>
+              <Tooltip id='refreshTable' />
+              <Button
+                data-tooltip-id='filterTable'
+                data-tooltip-content='Filter'
+                data-tooltip-place='top'
+                className='aspect-square p-0'
+              >
                 <Filter size='1rem' />
               </Button>
+              <Tooltip id='filterTable' />
               <ButtonGroup>
                 <Button
                   intent='normal'

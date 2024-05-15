@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import recordApi from '@/api/record';
-import { Button, Icon, TextInput } from '@/components/ui';
+import { Button, Icon, TextInput, Tooltip } from '@/components/ui';
 import { ActionDropDown } from '@/components/ui/DropDown';
 import { useToast } from '@/components/ui/Toast';
-import { Pencil } from 'lucide-react';
+import { Check, Pencil, X } from 'lucide-react';
 import { ChangeEvent, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { Link } from 'react-router-dom';
@@ -139,26 +139,30 @@ export const createColumns = (companyName: string, properties: any[], records: a
           <div>
             {isUpdating ? (
               <form onSubmit={handleUpdate} className='relative w-full min-w-[250px]'>
-                <div className='absolute right-0 z-10 flex h-full'>
+                <div className='absolute right-0 z-10 flex h-full space-x-1'>
+                  {isLoading === false && (
+                    <Button
+                      className='aspect-square h-10 w-10 select-none rounded-full p-0'
+                      rounded
+                      onClick={() => {
+                        setIsUpdating(false);
+                        setValue(row.getValue(property.name));
+                      }}
+                      intent='normal'
+                      disabled={isLoading}
+                    >
+                      <X size='16px' />
+                    </Button>
+                  )}
                   <Button
-                    className='h-full select-none'
-                    onClick={() => {
-                      setIsUpdating(false);
-                      setValue(row.getValue(property.name));
-                    }}
-                    intent='normal'
-                    disabled={isLoading}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    className='h-full select-none'
+                    className='aspect-square h-10 w-10 select-none rounded-full p-0'
                     type='submit'
+                    rounded
                     disabled={value === row.getValue(property.name) || isLoading}
                     onClick={handleUpdate}
                     intent='primary'
                   >
-                    {isLoading ? 'Updating...' : 'Save'}
+                    {isLoading ? 'Updating...' : <Check size='16px' />}
                   </Button>
                 </div>
                 <TextInput
@@ -173,12 +177,15 @@ export const createColumns = (companyName: string, properties: any[], records: a
               <div className='group/item flex h-full min-w-[200px] items-center justify-between'>
                 <span className='text-sm'>{currentValue}</span>
                 <Pencil
+                  data-tooltip-id='editingCell'
+                  data-tooltip-content='Edit Property'
                   size='16px'
                   className={cn(
                     'cursor-pointer opacity-0 transition-all duration-300 hover:text-primary-color group-hover/item:opacity-100'
                   )}
                   onClick={() => setIsUpdating(!isUpdating)}
                 />
+                <Tooltip id='editingCell' />
               </div>
             )}
           </div>

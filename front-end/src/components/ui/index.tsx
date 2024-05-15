@@ -17,6 +17,7 @@ export { Switch } from './Switch';
 export { Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption } from './Table';
 export { TextInput } from './TextInput';
 export { NumberText } from './NumberText';
+export { ToolTip as Tooltip } from './Tooltip';
 export {
   DropdownMenu,
   DropdownMenuTrigger,

@@ -6,6 +6,7 @@ import App from './App.tsx';
 import AuthProvider from './context/AuthContext.tsx';
 import './index.css';
 import { GlobalModalProvider } from './context/GlobalModalContext.tsx';
+import 'react-tooltip/dist/react-tooltip.css';
 
 const queryClient = new QueryClient();
 

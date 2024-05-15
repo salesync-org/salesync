@@ -3,7 +3,7 @@ import { cn } from '@/utils/utils';
 import { useEffect, useState } from 'react';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import LoadingSpinner from '../ui/Loading/LoadingSpinner';
-import { Button, DropDownList, Icon } from '../ui';
+import { Button, DropDownList, Icon, Tooltip } from '../ui';
 import { Pencil } from '@/components/SaleSyncIcons';
 import TabLayoutModal from '../TabLayoutModal/TabLayoutModal';
 import useType from '@/hooks/type-service/useType';
@@ -277,6 +277,9 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
       </ul>
       <Button
         rounded='icon'
+        data-tooltip-id='edit-layout'
+        data-tooltip-content='Edit Tabs'
+        // data-tooltip-place="top"
         className='absolute right-0 top-[1px] aspect-square rounded-full p-0'
         onClick={() => {
           setIsEditModalOpen(true);
@@ -284,6 +287,7 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
       >
         <Pencil width='1.2rem' height='1.2rem' />
       </Button>
+      <Tooltip id='edit-layout' />
       <TabLayoutModal
         openingTabId={id}
         isOpen={isEditModalOpen}

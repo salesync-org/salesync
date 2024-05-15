@@ -2,7 +2,7 @@ import useAuth from '@/hooks/useAuth';
 import { Grip } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { DropDownList, Icon } from '../ui';
+import { DropDownList, Icon, Tooltip } from '../ui';
 import { cn } from '@/utils/utils';
 // import { LayoutOrder } from '@/type';
 
@@ -18,11 +18,18 @@ const NavigationButton = () => {
   const layoutOrders = user.settings.layout_order;
   return (
     <div>
-      <span className='cursor-pointer' onClick={() => setOpen(!open)}>
+      <span
+        data-tooltip-id='navigate'
+        data-tooltip-content='View Sections'
+        data-tooltip-place='bottom-end'
+        className='cursor-pointer'
+        onClick={() => setOpen(!open)}
+      >
         <div className={cn('aspect-square h-fit w-fit rounded-full p-4', open && 'bg-primary/10')}>
           <Grip {...(open ? { color: '#4194f9' } : {})} />
         </div>
       </span>
+      <Tooltip id='navigate' />
       <DropDownList className='top-[44px] w-[200px] py-3' open={open} onClose={() => setOpen(false)}>
         {layoutOrders.map((layoutOrder: LayoutOrder) => {
           return (

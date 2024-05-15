@@ -1,6 +1,5 @@
 import { cn } from '@/utils/utils';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from 'components/ui';
-import { useState } from 'react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, Tooltip } from 'components/ui';
 import buttonVariants from '../Button/ButtonProps';
 import { ChevronDown } from 'lucide-react';
 
@@ -27,9 +26,14 @@ const ActionDropDown = ({ actions }: ActionDropDownProps) => {
             e.preventDefault();
           }}
         >
-          <div className='flex w-fit items-center justify-center space-x-2'>
+          <div
+            data-tooltip-id='actionDropDown'
+            data-tooltip-content='More Options'
+            className='flex w-fit items-center justify-center space-x-2'
+          >
             <ChevronDown size={'1rem'} />
           </div>
+          <Tooltip id='actionDropDown' />
         </DropdownMenuTrigger>
         <DropdownMenuContent
           className={cn(

@@ -21,4 +21,5 @@ public class CreateRecordRequestDto {
     @IsRequired
     private String recordName;
     private UUID stageId;
+    private UUID typeId;
 }

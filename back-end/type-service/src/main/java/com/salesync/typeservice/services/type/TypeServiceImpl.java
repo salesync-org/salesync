@@ -233,4 +233,34 @@ public class TypeServiceImpl implements TypeService {
             return "Fail to delete property";
         }
     }
+
+    @Override
+    public TypeProperty updateProperty(RequestEditPropertyDto requestEditPropertyDto) {
+
+        TypeProperty typeProperty = typePropertyRepository.findById(requestEditPropertyDto.getId()).orElseThrow(() -> new ObjectNotFoundException(
+                TypeProperty.class.getSimpleName(), requestEditPropertyDto.getId().toString()
+        ));
+
+        typeProperty.setName(requestEditPropertyDto.getName());
+        typeProperty.setLabel(requestEditPropertyDto.getLabel());
+        typeProperty.setSequence(requestEditPropertyDto.getSequence());
+        typeProperty.setDefaultValue(requestEditPropertyDto.getDefaultValue());
+
+        typeProperty.getTypePropertyFields().forEach(
+                typePropertyField -> {
+                    RequestTypePropertyFieldDto requestTypePropertyFieldDto = requestEditPropertyDto.getFields().stream().filter(
+                            requestTypePropertyFieldDto1 -> requestTypePropertyFieldDto1.getPropertyFieldId().equals(typePropertyField.getPropertyField().getId())
+                    ).findFirst().orElseThrow(() -> new ObjectNotFoundException(
+                            "Request type property field", typePropertyField.getPropertyField().getId().toString()
+                    ));
+                    String requestItemValue = requestTypePropertyFieldDto.getItemValue();
+                    typePropertyField.setItemValue(requestItemValue);
+                }
+
+        );
+
+        typePropertyRepository.save(typeProperty);
+
+        return typeProperty;
+    }
 }

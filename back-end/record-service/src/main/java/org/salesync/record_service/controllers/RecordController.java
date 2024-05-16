@@ -41,6 +41,11 @@ public class RecordController {
         return recordService.createRecordByType(realm, requestRecordDto);
     }
 
+    @PostMapping(Route.CREATE_LIST)
+    public ResponseEntity<List<RecordDto>> createListRecord(@PathVariable String realm, @RequestHeader(name = "Authorization") String authorization, @RequestBody List<CreateRecordRequestDto> createRecordRequestDtos) {
+        return ResponseEntity.ok(recordService.createListRecord(realm, authorization, createRecordRequestDtos));
+    }
+
     @PostMapping(Route.RECORD_TYPE_RELATION)
     public RecordTypeRelationDto createRecordTypeRelation(@RequestBody RequestRecordTypeRelationDto requestRecordTypeRelationDto) {
         return recordService.createRecordTypeRelation(requestRecordTypeRelationDto);

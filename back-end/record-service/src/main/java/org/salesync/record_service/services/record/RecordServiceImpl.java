@@ -278,15 +278,9 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public List<RecordDto> createListRecord(String realm,String token, List<CreateRecordRequestDto> createRecordRequestDtos) {
-        return createRecordRequestDtos
-                .stream()
-                .map(createRecordRequestDto -> createRecordByTypeId(
-                        realm,
-                        createRecordRequestDto.getTypeId().toString(),
-                        token,
-                        createRecordRequestDto))
-                .toList();
+    public List<RecordDto> createListRecord(String realm, String token, List<CreateRecordRequestDto> createRecordRequestDtos) {
+        return createRecordRequestDtos.stream().map(createRecordRequestDto -> createRecordByTypeId(
+                realm, createRecordRequestDto.getTypeId().toString(), token, createRecordRequestDto)).toList();
     }
 
     public TypeDto findTypeById(UUID typeId, List<TypeDto> allType) {

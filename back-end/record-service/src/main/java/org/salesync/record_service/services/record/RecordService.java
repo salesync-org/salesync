@@ -34,5 +34,5 @@ public interface RecordService {
 
     RecordDto updateRecordByRecordId(String recordId, String token, RecordDto updateRecordRequestDto);
 
-    List<RecordDto> createListRecord(String realm,String token, List<CreateRecordRequestDto> createRecordRequestDtos);
+    List<RecordDto> createListRecord(String realm, String token, List<CreateRecordRequestDto> createRecordRequestDtos);
 }

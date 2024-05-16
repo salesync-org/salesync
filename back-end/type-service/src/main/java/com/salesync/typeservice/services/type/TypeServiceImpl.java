@@ -246,8 +246,6 @@ public class TypeServiceImpl implements TypeService {
         typeProperty.setSequence(requestEditPropertyDto.getSequence());
         typeProperty.setDefaultValue(requestEditPropertyDto.getDefaultValue());
 
-
-
         typeProperty.getTypePropertyFields().forEach(
                 typePropertyField -> {
                     RequestTypePropertyFieldDto requestTypePropertyFieldDto = requestEditPropertyDto.getFields().stream().filter(

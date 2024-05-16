@@ -1,5 +1,5 @@
 import useAuth from '@/hooks/useAuth';
-import { Grip } from 'lucide-react';
+import { Grip, Info } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { DropDownList, Icon, Tooltip } from '../ui';
@@ -30,7 +30,18 @@ const NavigationButton = () => {
         </div>
       </span>
       <Tooltip show={!open} id='navigate' />
+      <Tooltip id='section-explain' />
       <DropDownList className='top-[44px] w-[200px] py-3' open={open} onClose={() => setOpen(false)}>
+        <div className='flex space-x-2 align-middle'>
+          <h3 className='p-2'>Layout Sections</h3>
+          <Info
+            className='fill:primary self-center'
+            data-tooltip-id='section-explain'
+            data-tooltip-content='Manage types in related sections.'
+            size='1.3rem'
+            data-tooltip-place='left'
+          />
+        </div>
         {layoutOrders.map((layoutOrder: LayoutOrder) => {
           return (
             <Link

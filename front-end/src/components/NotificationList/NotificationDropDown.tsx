@@ -29,8 +29,8 @@ const List = ({ children, triggerRef, open = false, divide = false, className, o
         <div
           ref={menuRef}
           className={cn(
-            ' overflow-y-hidden  ',
-            'fixed right-0 top-[38px] flex max-h-[calc(100vh-38px-1rem)] w-1/4 flex-col align-middle',
+            'overflow-y-hidden',
+            'fixed right-0 top-[38px] flex max-h-[calc(100vh-38px-1rem)] w-1/4 flex-col  align-middle',
             'z-[1000] transition-all duration-100 ease-in-out '
           )}
           {...restProps}
@@ -40,20 +40,21 @@ const List = ({ children, triggerRef, open = false, divide = false, className, o
               width='3rem'
               height='3rem'
               className={cn(
-                'mr-[4.5rem] fill-panel dark:fill-panel-dark',
+                'mr-[4.5rem] fill-button-background dark:fill-button-background-dark',
                 !open && 'hidden',
-                'border-0 stroke-button-stroke stroke-[1px] dark:stroke-button-stroke-dark'
+                'border-0 stroke-button-stroke/60 stroke-[1px] dark:stroke-button-stroke-dark/60'
               )}
             />
           </div>
           <div
             className={cn(
-              'mx-2 mt-6 border-[2px] border-button-stroke pt-2',
-              'h-fit bg-panel shadow-lg shadow-black/10 dark:border-button-stroke-dark dark:bg-panel-dark',
-              'max-h-full overflow-x-hidden rounded-xl px-2'
+              'mx-2 mt-6 flex-shrink border-[2px] border-button-stroke-light/60 dark:border-button-stroke-dark/60',
+              'h-fit bg-button-background-light shadow-lg shadow-black/10 dark:bg-button-background-dark ',
+              'flex max-h-full flex-col overflow-x-hidden rounded-xl p-2'
             )}
           >
-            <div className='min-h-[300px] pb-2'>{children}</div>
+            <h2 className='my-2 p-4 text-[1.7rem]'>Notifications</h2>
+            <div className='max-h-full min-h-[300px] overflow-scroll p-2'>{children}</div>
           </div>
         </div>
       )}

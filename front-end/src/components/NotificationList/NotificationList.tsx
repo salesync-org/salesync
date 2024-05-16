@@ -46,7 +46,6 @@ const NotificationList = () => {
         className='right-[.25rem] top-[3rem] mt-0 w-80'
         divide={false}
       >
-        <h2 className='my-2 p-4 text-[1.7rem]'>Notifications</h2>
         {Array.from({ length: 30 }).map((_, i) => (
           <Item
             key={i}

@@ -386,3 +386,15 @@ type SettingLayout = {
   adminSettingRole: boolean;
   items?: SettingLayout[];
 };
+
+type NotificationMessage = {
+  id: string;
+  sender_id: string;
+  receiver_id: string;
+  title: string;
+  content: string;
+  created_at: Date;
+  is_read: boolean;
+  url: string;
+  action: string;
+}

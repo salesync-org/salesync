@@ -280,7 +280,7 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
         data-tooltip-id='edit-layout'
         data-tooltip-content='Edit Tabs'
         // data-tooltip-place="top"
-        className='absolute right-0 top-[1px] aspect-square rounded-full p-0'
+        className='absolute right-0 top-[1px] aspect-square rounded-full border-0 bg-transparent p-0 dark:bg-transparent'
         onClick={() => {
           setIsEditModalOpen(true);
         }}

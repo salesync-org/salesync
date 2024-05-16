@@ -28,7 +28,7 @@ const ThemeToggle = () => {
           <Moon strokeWidth={'2px'} className={cn('size-[1.5rem]', isThemeMenuOpen && 'text-white')} />
         )}
       </Button>
-      <Tooltip id='themeToggle' />
+      <Tooltip show={!isThemeMenuOpen} id='themeToggle' />
       <DropDownList
         open={isThemeMenuOpen}
         onClose={() => {

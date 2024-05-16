@@ -6,6 +6,7 @@ import useAuth from '@/hooks/useAuth';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Tooltip } from '../ui';
+import NotificationList from '../NotificationList/NotificationList';
 
 const Header = ({ className }: { className?: string }) => {
   const { company } = useAuth();
@@ -40,11 +41,12 @@ const Header = ({ className }: { className?: string }) => {
       <Tooltip id='home-layout' />
       <Search className='align-middle' />
       <div>
-        <div className='justify-right relative flex w-fit align-middle'>
+        <div className='justify-right relative flex w-fit pr-1 align-middle'>
           <div className='flex gap-2'>
             <ThemeToggle />
+            <NotificationList></NotificationList>
+            <UserInfo />
           </div>
-          <UserInfo />
         </div>
       </div>
     </div>

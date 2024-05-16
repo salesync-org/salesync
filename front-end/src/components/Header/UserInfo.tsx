@@ -1,8 +1,8 @@
 import defaultAvatar from '@/assets/default_avatar.png';
-import { Button, DropDownList, Item, Tooltip } from '@/components/ui';
+import { Button, DropDownList, Item } from '@/components/ui';
 import useAuth from '@/hooks/useAuth';
 import { useEffect, useState } from 'react';
-import { Bell, Settings, LogOut } from '@/components/SaleSyncIcons';
+import { Settings, LogOut } from '@/components/SaleSyncIcons';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const UserInfo = () => {
@@ -32,67 +32,54 @@ const UserInfo = () => {
   return (
     <>
       {user && (
-        <div className='relative flex w-fit space-x-3 pl-2 align-middle'>
+        <div className=''>
           <Button
-            data-tooltip-id='viewNotification'
-            data-tooltip-content='Notification'
             rounded='icon'
-            className='h-10 w-10 border-text/10 p-0'
-            intent='normal'
-            onClick={() => {}}
+            className='mx-0 my-0 h-10 w-10 border-0 px-0 py-0'
+            intent='link'
+            onClick={() => {
+              setMenuOpen(!isMenuOpen);
+            }}
           >
-            <Bell strokeWidth={'2px'} name='notifications' className='size-[1.5rem]' />
+            <img
+              className='w-full rounded-full'
+              src={`${import.meta.env.VITE_STORAGE_SERVICE_HOST}/avatars/${user.avatar_url}-48.jpg?lastmod=${Date.now()}`}
+              alt='avatar'
+              onError={(e) => {
+                e.currentTarget.src = defaultAvatar;
+              }}
+            ></img>
           </Button>
-          <Tooltip id='viewNotification' />
-          <div>
-            <Button
-              rounded='icon'
-              className='mx-0 my-0 h-10 w-10 border-0 px-0 py-0'
-              intent='link'
+          <DropDownList
+            open={isMenuOpen}
+            onClose={() => {
+              setMenuOpen(false);
+            }}
+            className='right-[.25rem] top-[3rem] mt-0 w-80'
+            divide={false}
+          >
+            <div className='mb-2 border-b-[1px] border-button-stroke/50 dark:border-button-stroke/30'>
+              <Item title={name} icon={<img className='w-full rounded-full' src={avatarUrl} alt='avatar'></img>} />
+            </div>
+            <Item
+              className='py-0'
+              icon={<Settings name='settings' width='1.4rem' height='1.4rem' />}
+              title='Settings & Administration'
               onClick={() => {
-                setMenuOpen(!isMenuOpen);
+                navigate(`/${companyName}/setting/personal-information`);
               }}
-            >
-              <img
-                className='w-full rounded-full'
-                src={`${import.meta.env.VITE_STORAGE_SERVICE_HOST}/avatars/${user.avatar_url}-48.jpg?lastmod=${Date.now()}`}
-                alt='avatar'
-                onError={(e) => {
-                  e.currentTarget.src = defaultAvatar;
-                }}
-              ></img>
-            </Button>
-            <DropDownList
-              open={isMenuOpen}
-              onClose={() => {
-                setMenuOpen(false);
+            />
+            <Item
+              className='py-0'
+              icon={<LogOut name='logout' width='1.4rem' height='1.4rem' />}
+              title='Log out'
+              onClick={() => {
+                navigate(`/${companyName}/home`);
+                logout();
               }}
-              className='right-[.25rem] top-[3rem] mt-0 w-80'
-              divide={false}
-            >
-              <div className='mb-2 border-b-[1px] border-button-stroke/50 dark:border-button-stroke/30'>
-                <Item title={name} icon={<img className='w-full rounded-full' src={avatarUrl} alt='avatar'></img>} />
-              </div>
-              <Item
-                className='py-0'
-                icon={<Settings name='settings' width='1.4rem' height='1.4rem' />}
-                title='Settings & Administration'
-                onClick={() => {
-                  navigate(`/${companyName}/setting/personal-information`);
-                }}
-              />
-              <Item
-                className='py-0'
-                icon={<LogOut name='logout' width='1.4rem' height='1.4rem' />}
-                title='Log out'
-                onClick={() => {
-                  navigate(`/${companyName}/home`);
-                  logout();
-                }}
-              />
-              <div className='h-2' />
-            </DropDownList>
-          </div>
+            />
+            <div className='h-2' />
+          </DropDownList>
         </div>
       )}
     </>

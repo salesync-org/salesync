@@ -29,4 +29,6 @@ public interface TypeService {
     RelationTypeResponseDto createRelationType(RelationTypeRequestDto relationTypeRequestDto);
 
     String deleteProperty(UUID typePropId);
+
+    TypeProperty updateProperty(RequestEditPropertyDto requestEditPropertyDto);
 }

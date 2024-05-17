@@ -1,5 +1,5 @@
 import { Button, ButtonGroup, DropDownList, Icon, Item, Panel } from '@/components/ui';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 // import { useParams } from 'react-router-dom';
 import recordApi from '@/api/record';
 import InputProperty from '@/components/RecordDetail/InputProperty';
@@ -13,17 +13,15 @@ import useStages from '@/hooks/type-service/useStage';
 import useAuth from '@/hooks/useAuth';
 // import { LayoutOrder, Stage } from '@/type';
 import { formatCurrency, formatRecords } from '@/utils/utils';
-import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useToast } from '@/components/ui/Toast';
 import { useQueryClient } from 'react-query';
-import { OutletContext } from '@/components/Layout/ConfigLayout';
 const iconBaseUrl = `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/system/icons`;
 const customTypeIcon = `${iconBaseUrl}/salesync_custom_type.png`;
 
 const RecordDetail = () => {
   const { showModal } = useGlobalModalContext();
   const { user } = useAuth();
-  const { type, setCurrentTabName }: OutletContext = useOutletContext();
   const [isMenuOpen, setMenuOpen] = useState(false);
 
   const { recordId = '', companyName = '' } = useParams();
@@ -32,15 +30,6 @@ const RecordDetail = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-
-  useEffect(() => {
-    if (!record || !type) {
-      return;
-    }
-    if (type.type_id != record.source_record.type.id) {
-      setCurrentTabName(`${record.source_record.type.name}${recordId.slice(0, 2)}`);
-    }
-  }, [recordId, record, setCurrentTabName, type]);
 
   if (isRecordLoading || isStagesLoading) {
     return <LoadingSpinner />;

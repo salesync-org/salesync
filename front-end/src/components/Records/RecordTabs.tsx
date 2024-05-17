@@ -235,7 +235,7 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
                   cn(
                     'peer flex h-full cursor-pointer items-center gap-1 truncate border-t-[3px] border-transparent bg-clip-border px-3 py-2 transition-all duration-100 ease-in-out',
                     (isActive || tab.name === currentTab) && 'bg-secondary/40 dark:bg-secondary-dark/40',
-                    isActive && tab.isPrimitiveType === false && 'bg-panel-dark/5 dark:bg-panel-light/5',
+                    isActive && tab.isPrimitiveType === false && 'border-0 bg-panel-dark/5 dark:bg-panel-light/5',
                     'hover:border-b-2 hover:border-b-primary hover:bg-secondary/30 focus:border-b-0 active:border-b-0 dark:hover:bg-secondary-dark/30',
                     tab.isPrimitiveType === false &&
                       'hover:border-b-panel-dark hover:bg-panel-dark/10  dark:hover:border-b-panel-light dark:hover:bg-panel-light/20',

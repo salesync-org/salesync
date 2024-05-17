@@ -124,12 +124,23 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const updateUser = useCallback(
     async (companyName: string, updatedUser: User) => {
-      try {
-        const res = await auth.updateUser(companyName, updatedUser);
+      const layoutOrders = updatedUser.settings.layout_order.map((layoutOrder) => {
+        const filteredLayoutOrderTypes = layoutOrder.types.filter((type) => {
+          // Don't save to server if the tab is a record tab but user didn't pin it
+          return !(type.isPrimitiveType === false && type.saved === false);
+        });
+        return { ...layoutOrder, types: filteredLayoutOrderTypes };
+      });
 
-        if (res) {
-          setUser(updatedUser);
-        }
+      try {
+        const res = await auth.updateUser(companyName, {
+          ...updatedUser,
+          settings: { ...updatedUser.settings, layout_order: layoutOrders }
+        });
+
+        // if (res) {
+        //   setUser(updatedUser);
+        // }
       } catch (error) {
         console.error(error);
       }

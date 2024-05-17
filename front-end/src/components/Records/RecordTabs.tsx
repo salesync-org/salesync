@@ -7,7 +7,7 @@ import { Button, DropDownList, Icon, Tooltip } from '../ui';
 import { Pencil } from '@/components/SaleSyncIcons';
 import TabLayoutModal from '../TabLayoutModal/TabLayoutModal';
 import useType from '@/hooks/type-service/useType';
-import { X } from 'lucide-react';
+import { PinIcon, X } from 'lucide-react';
 // import { LayoutOrder, Type } from '@/type';
 
 interface RecordTabsProps {
@@ -19,7 +19,7 @@ interface RecordTabsProps {
 }
 
 const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: RecordTabsProps) => {
-  const id = useParams().typeId as string;
+  const { typeId = '' } = useParams();
   const { types = [] } = useType();
   const companyName = useParams().companyName as string;
   const { recordId } = useParams();
@@ -37,18 +37,21 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
   useEffect(() => {
     const timeout = setTimeout(async () => {
       if (user && isSwap) {
-        await updateUser(companyName, user);
-
+        updateUser(companyName, user);
         setIsSwap(false);
       }
     }, 1000);
     return () => clearTimeout(timeout);
-  }, [companyName, updateUser, isSwap, user]);
+  }, [companyName, updateUser, isSwap, user, typeId]);
 
   useEffect(() => {
-    if (tabs.find((tab) => tab.type_id === id) === undefined) {
-      addTypeToList(id);
+    if (tabs.find((tab) => tab.type_id === recordId) === undefined) {
+      console.log('add type to list');
+      addTypeToList(recordId);
     }
+  }, [recordId]);
+
+  useEffect(() => {
     window.addEventListener('resize', () => {
       setWindowWidth(window.innerWidth);
     });
@@ -71,6 +74,10 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
   const saleLayoutIndex = layoutOrders.findIndex(
     (layoutOrder: LayoutOrder) => layoutOrder.name.toLowerCase() === domainName.toLowerCase()
   );
+
+  const updateUserAsync = async (newUser: User) => {
+    await updateUser(companyName, newUser);
+  };
 
   const handleDragStart = (e: React.DragEvent<HTMLAnchorElement>) => {
     e.currentTarget.classList.add('opacity-0');
@@ -120,18 +127,22 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
     localStorage.setItem(name, JSON.stringify(tabs));
   };
 
-  const addTypeToList = async (newTypeId: string) => {
+  const addTypeToList = async (newTypeId: string | null | undefined) => {
+    if (!newTypeId) {
+      return;
+    }
     const newType = types.find((type) => type.id === newTypeId);
     let newTypeLayout: LayoutType;
 
     if (newType === undefined) {
-      if (recordId) {
+      if (newTypeId) {
         newTypeLayout = {
-          type_id: recordId,
-          name: currentTab ?? `Record${recordId.slice(0, 2)}`,
-          isPrimitiveType: false
+          type_id: newTypeId,
+          name: currentTab ?? `Record${newTypeId.slice(0, 2)}`,
+          isPrimitiveType: false,
+          saved: false
         };
-        if (tabs.find((tab) => tab.isPrimitiveType == false && tab.type_id === recordId)) {
+        if (tabs.find((tab) => tab.isPrimitiveType == false && tab.type_id === newTypeId)) {
           return;
         }
       } else {
@@ -140,7 +151,9 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
     } else {
       newTypeLayout = {
         type_id: newType?.id ?? '',
-        name: newType?.name ?? ''
+        name: newType?.name ?? '',
+        isPrimitiveType: false,
+        saved: false
       };
     }
     const newLayoutOrders = layoutOrders.map((layoutOrder: LayoutOrder) => {
@@ -153,19 +166,42 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
     setUser({ ...user, settings: { ...user.settings, layout_order: newLayoutOrders } });
   };
 
-  const removeRecordTab = (recordId: string) => {
+  const removeRecordTab = async (newTypeId: string) => {
     const newLayoutOrders = layoutOrders.map((layoutOrder) => {
-      if (layoutOrder.name.toLowerCase() === 'sales') {
+      if (layoutOrder.name.toLowerCase() === domainName) {
         return {
           ...layoutOrder,
-          types: layoutOrder.types.filter((type) => type.type_id !== recordId)
+          types: layoutOrder.types.filter((type) => type.type_id !== newTypeId)
         };
       }
       return layoutOrder;
     });
-    navigate(`/${companyName}/section/${domainName}/${tabs[0].type_id}`);
+    if (newTypeId === recordId || newTypeId === typeId) {
+      navigate(`/${companyName}/section/${domainName}/${tabs[0].type_id}`);
+    }
     const newUser = { ...user, settings: { ...user.settings, layout_order: newLayoutOrders } };
     setUser(newUser);
+
+    updateUserAsync(newUser);
+  };
+
+  const pinRecordTab = async (newTypeId: string) => {
+    const newLayoutOrders = layoutOrders.map((layoutOrder) => {
+      if (layoutOrder.name.toLowerCase() === domainName) {
+        const newTypes = layoutOrder.types.map((type) => {
+          if (type.type_id === newTypeId) {
+            return { ...type, isPrimitiveType: false, saved: true };
+          }
+          return type;
+        });
+        return { ...layoutOrder, types: newTypes };
+      }
+      return layoutOrder;
+    });
+    const newUser = { ...user, settings: { ...user.settings, layout_order: newLayoutOrders } };
+    setUser(newUser);
+
+    updateUserAsync(newUser);
   };
 
   return (
@@ -185,7 +221,7 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
               <NavLink
                 to={
                   tab.isPrimitiveType === false
-                    ? `/${companyName}/record/${tab.type_id}`
+                    ? `/${companyName}/section/${domainName}/record/${tab.type_id}`
                     : `/${companyName}/section/${domainName}/${tab.type_id}`
                 }
                 data-index={index}
@@ -197,7 +233,7 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
                 style={{ width: tabWidth }}
                 className={({ isActive }) =>
                   cn(
-                    'flex h-full cursor-pointer items-center gap-1 truncate border-t-[3px] border-transparent bg-clip-border px-3 py-2 transition-all duration-100 ease-in-out',
+                    'peer flex h-full cursor-pointer items-center gap-1 truncate border-t-[3px] border-transparent bg-clip-border px-3 py-2 transition-all duration-100 ease-in-out',
                     (isActive || tab.name === currentTab) && 'bg-secondary/40 dark:bg-secondary-dark/40',
                     isActive && tab.isPrimitiveType === false && 'bg-panel-dark/5 dark:bg-panel-light/5',
                     'hover:border-b-2 hover:border-b-primary hover:bg-secondary/30 focus:border-b-0 active:border-b-0 dark:hover:bg-secondary-dark/30',
@@ -207,7 +243,7 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
                   )
                 }
               >
-                {((tab.isPrimitiveType != false && tab.type_id === id) ||
+                {((tab.isPrimitiveType != false && tab.type_id === typeId) ||
                   (tab.isPrimitiveType != false && tab.name === currentTab) ||
                   (tab.isPrimitiveType === false && tab.type_id === recordId)) && (
                   <span
@@ -218,19 +254,37 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
                   ></span>
                 )}
                 <p className='peer w-full overflow-hidden text-ellipsis text-center'>{tab.name}</p>
-                {tab.isPrimitiveType === false && tab.type_id === recordId && (
-                  <Button
-                    rounded
-                    className={cn(
-                      'aspect-square h-6 w-0 rounded-full p-0 opacity-0',
-                      'hover:w-6 hover:opacity-100 peer-hover:w-6 peer-hover:opacity-100'
+                {tab.isPrimitiveType === false && (
+                  <div className='group absolute bottom-2 right-2 top-3 flex w-full justify-end align-middle'>
+                    {!tab.saved && (
+                      <Button
+                        rounded
+                        className={cn(
+                          'aspect-square h-6 rounded-full p-0 opacity-0 group-hover:opacity-100',
+                          'hover:w-6 hover:opacity-100 peer-hover:w-6 '
+                        )}
+                        onClick={async (e) => {
+                          e.preventDefault();
+                          await pinRecordTab(tab.type_id);
+                        }}
+                      >
+                        <PinIcon size={'.9rem'}></PinIcon>
+                      </Button>
                     )}
-                    onClick={() => {
-                      removeRecordTab(recordId);
-                    }}
-                  >
-                    <X size={'.9rem'}></X>
-                  </Button>
+                    <Button
+                      rounded
+                      className={cn(
+                        'aspect-square h-6 rounded-full p-0  opacity-0 group-hover:opacity-100',
+                        'hover:w-6 hover:opacity-100 peer-hover:w-6'
+                      )}
+                      onClick={async (e) => {
+                        e.preventDefault();
+                        await removeRecordTab(tab.type_id);
+                      }}
+                    >
+                      <X size={'.9rem'}></X>
+                    </Button>
+                  </div>
                 )}
               </NavLink>
             </li>
@@ -262,7 +316,7 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
                     key={tab.type_id}
                     to={
                       tab.isPrimitiveType === false
-                        ? `/${companyName}/record/${tab.type_id}`
+                        ? `/${companyName}/section/${domainName}/record/${tab.type_id}`
                         : `/${companyName}/section/${domainName}/${tab.type_id}`
                     }
                     className='my-1 flex cursor-pointer items-center gap-4 rounded py-2 pl-4 transition-all hover:bg-slate-100/80'
@@ -289,7 +343,7 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
       </Button>
       <Tooltip id='edit-layout' />
       <TabLayoutModal
-        openingTabId={id}
+        openingTabId={recordId ?? typeId}
         isOpen={isEditModalOpen}
         onClose={() => {
           setIsEditModalOpen(false);

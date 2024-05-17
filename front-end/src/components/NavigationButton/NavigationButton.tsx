@@ -46,7 +46,13 @@ const NavigationButton = () => {
           return (
             <Link
               key={layoutOrder.name}
-              to={`/${companyName}/section/${layoutOrder.name.toLowerCase()}/${layoutOrder.name.toLowerCase() === 'sales' ? layoutOrders.find((view) => view.name.toLowerCase() === 'sales')?.types[0].type_id : ''}`}
+              to={
+                layoutOrder.name === 'Home'
+                  ? `/${companyName}/section/home`
+                  : layoutOrder?.types[0].type_id
+                    ? `/${companyName}/section/${layoutOrder.name.toLowerCase().replace(' ', '')}/${layoutOrder?.types[0].type_id}`
+                    : `/${companyName}/section/home`
+              }
               className='my-1 flex cursor-pointer items-center gap-4 rounded px-2 py-2 transition-all hover:bg-slate-100/80 dark:hover:bg-secondary/10'
             >
               <Icon

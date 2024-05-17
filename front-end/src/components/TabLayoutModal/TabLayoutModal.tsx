@@ -50,8 +50,8 @@ const TabLayoutModal = ({ isOpen, onClose, openingTabId, layoutName, ...props }:
 
   const handleUpdateSectionList = debounce(async (sections: LayoutOrder[]) => {
     const newUser = { ...user, settings: { ...user.settings, layout_order: sections } };
-    await updateUser(companyName, newUser);
     setUser(newUser);
+    await updateUser(companyName, newUser);
   }, 500);
 
   const handleOnSectionDragEnd = (result: any) => {
@@ -84,7 +84,7 @@ const TabLayoutModal = ({ isOpen, onClose, openingTabId, layoutName, ...props }:
     const items = layoutOrders.find((layout) => layout.name === selectedTab)?.types ?? [];
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
-    handleUpdateTypeList(items.filter((type) => type.isPrimitiveType !== false));
+    handleUpdateTypeList(items.filter((type) => !(type.isPrimitiveType === false && type.saved === false)));
   };
 
   const handleRemoveTypeFromLayout = async (typeId: string) => {
@@ -98,7 +98,7 @@ const TabLayoutModal = ({ isOpen, onClose, openingTabId, layoutName, ...props }:
       return layoutOrder;
     });
     if (openingTabId === typeId) {
-      navigate(`/${companyName}/home`);
+      navigate(`/${companyName}/section/home`);
     }
     const newUser = { ...user, settings: { ...user.settings, layout_order: newLayoutOrders } };
     await updateUser(companyName, newUser);
@@ -115,7 +115,10 @@ const TabLayoutModal = ({ isOpen, onClose, openingTabId, layoutName, ...props }:
 
     const newLayoutOrders = layoutOrders.map((layoutOrder: LayoutOrder) => {
       if (layoutOrder.name.toLowerCase() === selectedTab.toLowerCase()) {
-        const newTypes = [...layoutOrder.types.filter((type) => type.isPrimitiveType !== false), newTypeLayout];
+        const newTypes = [
+          ...layoutOrder.types.filter((type) => type.type_id !== typeId && type.isPrimitiveType !== false),
+          newTypeLayout
+        ];
         return { ...layoutOrder, types: newTypes };
       }
       return layoutOrder;
@@ -125,7 +128,7 @@ const TabLayoutModal = ({ isOpen, onClose, openingTabId, layoutName, ...props }:
     setUser(newUser);
 
     if (openingTabId === typeId) {
-      navigate(`/${companyName}/home`);
+      navigate(`/${companyName}/section/home`);
     }
   };
 
@@ -139,7 +142,7 @@ const TabLayoutModal = ({ isOpen, onClose, openingTabId, layoutName, ...props }:
               <StrictModeDroppable droppableId='characters'>
                 {(provided) => (
                   <ul className='characters' {...provided.droppableProps} ref={provided.innerRef}>
-                    {layoutOrders.map((layoutOrder: LayoutOrder, index) => {
+                    {layoutOrders.map((layoutOrder: LayoutOrder, index: number) => {
                       return (
                         <Draggable key={layoutOrder.name} draggableId={layoutOrder.name} index={index}>
                           {(provided) => (
@@ -271,7 +274,7 @@ const TabLayoutModal = ({ isOpen, onClose, openingTabId, layoutName, ...props }:
                   <ul className='characters' {...provided.droppableProps} ref={provided.innerRef}>
                     {layoutOrders
                       .find((layout) => layout.name === selectedTab)
-                      ?.types.filter((type) => type.isPrimitiveType !== false)
+                      ?.types.filter((type) => !(type.isPrimitiveType === false && type.saved === false))
                       .map((type: LayoutType, index) => {
                         return (
                           <Draggable key={type.type_id} draggableId={type.type_id} index={index}>

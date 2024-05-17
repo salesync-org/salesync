@@ -158,7 +158,7 @@ const SignUp = () => {
       });
 
       const formattedCompanyName = formatCompanyName(data.company);
-      navigate(`/${formattedCompanyName}/home`);
+      navigate(`/${formattedCompanyName}/section/home`);
     } catch (error) {
       console.error(error);
       toast({

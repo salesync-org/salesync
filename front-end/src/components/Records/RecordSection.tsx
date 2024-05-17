@@ -6,19 +6,22 @@ import Panel from '@/components/ui/Panel/Panel';
 import TextInput from '@/components/ui/TextInput/TextInput';
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 // import { Type } from '@/type';
-import icon from 'assets/type-icon/lead_icon.png';
 import { Filter, Plus, RefreshCw } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Tooltip } from 'react-tooltip';
+// const iconBaseUrl = `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/system/icons`;
 
 interface RecordSectionProps {
   type: Type | LayoutType | null | undefined;
 }
 
+// const customTypeIcon = `${iconBaseUrl}/salesync_custom_type.png`;
+
 const RecordSection = ({ type }: RecordSectionProps) => {
   const { showModal } = useGlobalModalContext();
   const { typeId } = useParams();
+  // const icon = `${iconBaseUrl}/salesync_${type?.name.toLowerCase() || 'custom_type'}.png`;
   const [search, setSearch] = useState('');
 
   useEffect(() => {
@@ -52,8 +55,15 @@ const RecordSection = ({ type }: RecordSectionProps) => {
     <Panel className='fixed bottom-[10px] left-[10px] right-[10px] top-[108px] m-0 flex h-[calc(100dvh-120px)] max-w-[100vw] flex-col overflow-auto p-4'>
       <section className='px z-[100] flex flex-col items-center justify-between pt-4 md:flex-row'>
         <div className='flex items-center gap-2 space-x-2 align-middle'>
-          <div className='w-fit cursor-pointer overflow-hidden rounded-sm bg-primary-color'>
-            <img className='h-10 w-10' src={icon} alt={`Icon for ${type.name}`} />
+          <div className='w-fit cursor-pointer overflow-hidden rounded-sm'>
+            {/* <img
+              className='h-10 w-10'
+              src={icon}
+              alt={`Icon for ${type.name}`}
+              onError={(e) => {
+                e.currentTarget.src = customTypeIcon;
+              }}
+            /> */}
           </div>
           <div>
             <h5 className='leading-[10px]'>{type.name}</h5>

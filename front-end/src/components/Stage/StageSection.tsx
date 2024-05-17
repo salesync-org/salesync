@@ -169,7 +169,7 @@ const StageSection = ({ stages, currentStage, updateRecord }: StageSectionProps)
     return (
       <Button intent='primary' className='py-0' onClick={handleMarkStatusAsComplete}>
         <Icon name='check' />
-        <span className='text-xs'>Mark Status as Complete</span>
+        <span className='text-[0.8rem]'>Mark Status as Complete</span>
       </Button>
     );
   };

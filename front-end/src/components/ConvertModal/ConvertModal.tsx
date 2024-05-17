@@ -6,7 +6,7 @@ import useType from '@/hooks/type-service/useType';
 import { convertTypePropertyToCurrentData } from '@/utils/utils';
 import { useEffect, useState } from 'react';
 import { useQueryClient } from 'react-query';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Modal, ModalFooter, PrimaryButton } from '../ui';
 import LoadingSpinner from '../ui/Loading/LoadingSpinner';
 import LoadingSpinnerSmall from '../ui/Loading/LoadingSpinnerSmall';
@@ -45,6 +45,7 @@ const ConvertModal = () => {
   } = useGlobalModalContext();
   const { recordId, companyName } = modalProps;
   const navigate = useNavigate();
+  const { domainName = 'sales' } = useParams();
 
   useEffect(() => {
     const handleConvert = async () => {
@@ -68,7 +69,7 @@ const ConvertModal = () => {
             await recordApi.deleteRecord(companyName, [recordId]);
             queryClient.invalidateQueries(['records']);
 
-            navigate(`/${companyName}/record/${contact.id}`);
+            navigate(`/${companyName}/section/${domainName}/record/${contact.id}`);
             hideModal();
           }
         } catch (error: any) {
@@ -105,7 +106,7 @@ const ConvertModal = () => {
     companyName,
     types.find((type) => type.name === 'Account')?.id
   );
-  
+
   if (isTypesLoading || isContactLoading || isOpportunityLoading || isAccountLoading) {
     return <LoadingSpinner />;
   }

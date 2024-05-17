@@ -23,6 +23,7 @@ type LayoutType = {
   name: string;
   type_id: string;
   isPrimitiveType?: boolean;
+  saved?: boolean;
 };
 
 // type TypeProperty = {

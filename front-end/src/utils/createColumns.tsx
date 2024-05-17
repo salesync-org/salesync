@@ -7,10 +7,11 @@ import { useToast } from '@/components/ui/Toast';
 import { Check, Pencil, X } from 'lucide-react';
 import { ChangeEvent, useState } from 'react';
 import { useQueryClient } from 'react-query';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { cn, formatCurrency } from './utils';
 
 export const createColumns = (companyName: string, properties: any[], records: any[]) => {
+  const { domainName } = useParams();
   const columns: any = [
     {
       accessorKey: 'id',
@@ -41,7 +42,7 @@ export const createColumns = (companyName: string, properties: any[], records: a
           </div>
         ),
         cell: ({ row }: { row: any }) => {
-          let href = `/${companyName}/record/${row.getValue('id')}`;
+          let href = `/${companyName}/section/${domainName}/record/${row.getValue('id')}`;
           if (property.label === 'Report Name') {
             href = `/${companyName}/all/report/${row.getValue('id')}`;
           }

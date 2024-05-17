@@ -1,21 +1,21 @@
 import LeadStageChart from '@/components/Chart/LeadStageChart';
 import OpportunityStageChart from '@/components/Chart/OpportunityStageChart';
 import RecordChart from '@/components/Chart/RecordChart';
-import NavigationButton from '@/components/NavigationButton/NavigationButton';
 import { Panel } from '@/components/ui';
+import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
 import useAuth from '@/hooks/useAuth';
 import { cn } from '@/utils/utils';
 const HomeLayout = () => {
-  const { user } = useAuth();
-  if (user === null) {
-    return null;
+  const { user, isLoading } = useAuth();
+  if (isLoading || !user) {
+    return (
+      <Panel>
+        <LoadingSpinner></LoadingSpinner>
+      </Panel>
+    );
   }
   return (
     <div className='h-full'>
-      <section className='fixed left-0 right-0 top-[56px] z-50 flex h-[38px] items-center bg-panel px-6 dark:bg-panel-dark'>
-        <NavigationButton />
-        <h2 className='select-none pl-6 pr-6 leading-6'>Home</h2>
-      </section>
       <section className={cn('grid h-full flex-grow grid-cols-1 gap-3 pb-3 pl-3 pr-3 pt-[3.5rem] md:grid-cols-2')}>
         <Panel className='m-0 flex justify-center space-x-2 bg-transparent text-on-primary shadow-none dark:bg-transparent'>
           {user.avatar_url && (

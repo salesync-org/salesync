@@ -30,7 +30,7 @@ const List = ({ children, triggerRef, open = false, divide = false, className, o
           ref={menuRef}
           className={cn(
             'overflow-y-hidden',
-            'fixed right-0 top-[38px] flex max-h-[calc(100vh-38px-1rem)] w-1/4 flex-col  align-middle',
+            'fixed right-0 top-[38px] flex max-h-[calc(100vh-38px-1rem)] w-1/4 min-w-[300px] flex-col  align-middle',
             'z-[1000] transition-all duration-100 ease-in-out '
           )}
           {...restProps}

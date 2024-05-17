@@ -1,11 +1,9 @@
 import { Button, ButtonGroup, DropDownList, Icon, Item, Panel } from '@/components/ui';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // import { useParams } from 'react-router-dom';
 import recordApi from '@/api/record';
-import NavigationButton from '@/components/NavigationButton/NavigationButton';
 import InputProperty from '@/components/RecordDetail/InputProperty';
 import RecordActivity from '@/components/RecordDetail/RecordActivity';
-import RecordTabs from '@/components/Records/RecordTabs';
 import RelationSections from '@/components/Relation/RelationSections';
 import StageSection from '@/components/Stage/StageSection';
 import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
@@ -15,22 +13,34 @@ import useStages from '@/hooks/type-service/useStage';
 import useAuth from '@/hooks/useAuth';
 // import { LayoutOrder, Stage } from '@/type';
 import { formatCurrency, formatRecords } from '@/utils/utils';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { useToast } from '@/components/ui/Toast';
 import { useQueryClient } from 'react-query';
+import { OutletContext } from '@/components/Layout/ConfigLayout';
+const iconBaseUrl = `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/system/icons`;
+const customTypeIcon = `${iconBaseUrl}/salesync_custom_type.png`;
 
 const RecordDetail = () => {
+  const { showModal } = useGlobalModalContext();
+  const { user } = useAuth();
+  const { type, setCurrentTabName }: OutletContext = useOutletContext();
   const [isMenuOpen, setMenuOpen] = useState(false);
 
   const { recordId = '', companyName = '' } = useParams();
   const { data: record, isLoading: isRecordLoading } = useRecord(companyName, recordId);
   const { data: stages, isLoading: isStagesLoading } = useStages(companyName, record?.source_record?.type.id);
-  const { showModal } = useGlobalModalContext();
   const { toast } = useToast();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { user } = useAuth();
+  useEffect(() => {
+    if (!record || !type) {
+      return;
+    }
+    if (type.type_id != record.source_record.type.id) {
+      setCurrentTabName(`${record.source_record.type.name}${recordId.slice(0, 2)}`);
+    }
+  }, [recordId, record, setCurrentTabName, type]);
 
   if (isRecordLoading || isStagesLoading) {
     return <LoadingSpinner />;
@@ -90,12 +100,9 @@ const RecordDetail = () => {
     }
   };
 
-  const types =
-    user.settings.layout_order.find((layoutOrder: LayoutOrder) => layoutOrder.name === 'Sales')?.types ?? [];
-
   return (
     <div className='flex flex-col'>
-      <section className='fixed left-0 right-0 z-50 flex h-[40px] items-center bg-panel px-6 dark:bg-panel-dark'>
+      {/* <section className='fixed left-0 right-0 z-50 flex h-[40px] items-center bg-panel px-6 dark:bg-panel-dark'>
         <NavigationButton />
         <h2 className='select-none pl-6 pr-6 leading-6'>Sales</h2>
         <RecordTabs
@@ -104,14 +111,17 @@ const RecordDetail = () => {
           domainName='sales'
           currentTab={`${record.source_record.type.name}${recordId.slice(0, 2)}`}
         />
-      </section>
+      </section> */}
       <section className='pt-12'>
         <Panel className='mb-0 flex flex-row items-center justify-between p-2'>
           <div className='flex flex-row items-center'>
             <img
-              className='mx-2 h-[32px] w-[32px] rounded-sm bg-blue-500'
-              src='https://momentum-enterprise-925.my.salesforce.com/img/icon/t4v35/standard/lead_120.png'
-              alt=''
+              className='mx-2 h-[32px] w-[32px] rounded-sm'
+              src={`${iconBaseUrl}/salesync_${record.source_record.type.name.toLowerCase()}.png`}
+              alt='Type Icon'
+              onError={(e) => {
+                e.currentTarget.src = customTypeIcon;
+              }}
             />
             <div className='flex flex-col'>
               <div className=''>{record.source_record.type.name}</div>

@@ -1,18 +1,21 @@
 import { cn } from '@/utils/utils';
 import { NavLink } from 'react-router-dom';
 import { Lock } from 'lucide-react';
+import LoadingSpinnerSmall from '../ui/Loading/LoadingSpinnerSmall';
 
 export const ItemSetting = ({
   name,
   href,
   className,
   lock,
+  loading,
   activeClassName
 }: {
   name: string;
   href: string;
   className?: string;
   lock?: boolean;
+  loading?: boolean;
   activeClassName?: string;
 }) => {
   return (
@@ -27,12 +30,16 @@ export const ItemSetting = ({
       }
       to={href}
     >
-      <div className='flex justify-between'>
+      <div className='flex justify-between align-middle'>
         <div className='text-sm font-medium'>{name}</div>
-        {lock && (
-          <div className='ml-auto'>
-            <Lock size={'1rem'} />
-          </div>
+        {loading ? (
+          <LoadingSpinnerSmall className='h-[1.2rem] w-[1.2rem] opacity-60 ' />
+        ) : (
+          lock && (
+            <div className='ml-auto'>
+              <Lock size={'1rem'} />
+            </div>
+          )
         )}
       </div>
     </NavLink>

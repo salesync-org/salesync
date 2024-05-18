@@ -11,8 +11,14 @@ const AVATAR_URL = `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/avatars/`;
 
 const NotificationList = () => {
   const ref = useRef<HTMLButtonElement>(null);
-  const { notifications, newMessageCount, clearNewNotificationCount, fetchNotifications, readAllMessage, readMessage } =
-    useNotification();
+  const {
+    notifications,
+    newMessageCount,
+    clearNewNotificationCount,
+    fetchNotifications,
+    // readAllMessage,
+    readMessage
+  } = useNotification();
   const [open, setOpen] = useState(false);
   const [newMessageString, setNewMessageString] = useState<string>('0');
   const { user, getSimpleUser } = useAuth();

@@ -1,11 +1,11 @@
 import { Button, Panel } from '@/components/ui';
 import useRecords from '@/hooks/record-service/useRecords';
 import useType from '@/hooks/type-service/useType';
-import { ArcElement, Chart as ChartJS, Interaction, Legend, Title, Tooltip } from 'chart.js';
+import { ArcElement, Chart as ChartJS, Legend, Title, Tooltip } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import ChartSkeleton from './ChartSkeleton';
 import { NavLink, useParams } from 'react-router-dom';
-import { BarChartBig, ChevronRight } from 'lucide-react';
+import { BarChartBig } from 'lucide-react';
 
 ChartJS.register(ArcElement, Tooltip, Title, Legend);
 

@@ -231,10 +231,10 @@ const RoleSetting = () => {
           setRoleModal(null);
           resetPermissions();
         }}
-        className='mx-auto h-[500px] w-3/4'
+        className='mx-auto w-full'
         title={isRoleModalOpen?.role_id ? 'Edit Role' : 'Create New Role'}
       >
-        <form className=''>
+        <form className='w-full'>
           <div className='grid-col-1 grid h-[350px]'>
             <div className='grid h-[320px] grid-cols-5 place-content-center gap-10 overflow-scroll'>
               <div className='col-span-3 flex flex-col gap-2 '>
@@ -297,7 +297,7 @@ const RoleSetting = () => {
               </div>
             </div>
 
-            <ModalFooter className='mt-8'>
+            <ModalFooter className='mt-8 w-full'>
               <Button
                 onClick={() => {
                   setRoleModal(null);

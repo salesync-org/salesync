@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Icon, PrimaryButton } from '@/components/ui';
+import { Button, Icon } from '@/components/ui';
 import { useState } from 'react';
 import ButtonActivity from './ButtonActivity';
 import InforActivity from './InforActivity';
@@ -10,7 +10,7 @@ type RecordActivityProps = {
 };
 
 const RecordActivity = ({ relations }: RecordActivityProps) => {
-  const [expand, setExpand] = useState(false);
+  const [expand, setExpand] = useState(true);
   // expand: upcoming and overdue
   // expand2: this month
 
@@ -47,7 +47,7 @@ const RecordActivity = ({ relations }: RecordActivityProps) => {
         <ButtonActivity
           name='New Task'
           icon='checklist'
-          color='bg-green-400'
+          color='bg-green-600'
           disabled={isButtonActivity}
           setDisabled={setIsButtonActivity}
         />
@@ -102,9 +102,9 @@ const RecordActivity = ({ relations }: RecordActivityProps) => {
           </>
         )}
       </div>
-      <PrimaryButton className='mx-auto mb-12 mt-4' onClick={() => {}}>
+      {/* <PrimaryButton className='mx-auto mb-12 mt-4' onClick={() => {}}>
         <span>Show All Activities</span>
-      </PrimaryButton>
+      </PrimaryButton> */}
     </div>
   );
 };

@@ -29,7 +29,7 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [isMoreOpen, setIsMoreOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const { updateUser, user, isLoading, setUser } = useAuth();
+  const { updateUserSettings, user, isLoading, setUser } = useAuth();
   const tabWidth = 100;
   let visibleTabs = Math.max(0, Math.floor(windowWidth / tabWidth) - 3);
   const tabListShown = tabs.slice(0, visibleTabs);
@@ -37,12 +37,12 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
   useEffect(() => {
     const timeout = setTimeout(async () => {
       if (user && isSwap) {
-        updateUser(companyName, user);
+        updateUserSettings(companyName, user);
         setIsSwap(false);
       }
     }, 1000);
     return () => clearTimeout(timeout);
-  }, [companyName, updateUser, isSwap, user, typeId]);
+  }, [companyName, updateUserSettings, isSwap, user, typeId]);
 
   useEffect(() => {
     if (tabs.find((tab) => tab.type_id === recordId) === undefined) {
@@ -76,7 +76,7 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
   );
 
   const updateUserAsync = async (newUser: User) => {
-    await updateUser(companyName, newUser);
+    await updateUserSettings(companyName, newUser);
   };
 
   const handleDragStart = (e: React.DragEvent<HTMLAnchorElement>) => {

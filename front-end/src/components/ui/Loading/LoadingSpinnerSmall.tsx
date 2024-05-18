@@ -7,6 +7,7 @@ const LoadingSpinnerSmall = ({ className = '' }: { className?: string }) => {
       height='24'
       viewBox='0 0 24 24'
       xmlns='http://www.w3.org/2000/svg'
+      fill='currentColor'
       className={cn('animate-spin transition-all', className)}
     >
       <path

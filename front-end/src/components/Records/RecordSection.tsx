@@ -10,18 +10,18 @@ import { Filter, Plus, RefreshCw } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Tooltip } from 'react-tooltip';
-// const iconBaseUrl = `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/system/icons`;
+const iconBaseUrl = `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/system/icons`;
 
 interface RecordSectionProps {
   type: Type | LayoutType | null | undefined;
 }
 
-// const customTypeIcon = `${iconBaseUrl}/salesync_custom_type.png`;
+const customTypeIcon = `${iconBaseUrl}/salesync_custom_type.png`;
 
 const RecordSection = ({ type }: RecordSectionProps) => {
   const { showModal } = useGlobalModalContext();
   const { typeId } = useParams();
-  // const icon = `${iconBaseUrl}/salesync_${type?.name.toLowerCase() || 'custom_type'}.png`;
+  const icon = `${iconBaseUrl}/salesync_${type?.name.toLowerCase() || 'custom_type'}.png`;
   const [search, setSearch] = useState('');
 
   useEffect(() => {
@@ -56,14 +56,14 @@ const RecordSection = ({ type }: RecordSectionProps) => {
       <section className='px z-[100] flex flex-col items-center justify-between pt-4 md:flex-row'>
         <div className='flex items-center gap-2 space-x-2 align-middle'>
           <div className='w-fit cursor-pointer overflow-hidden rounded-sm'>
-            {/* <img
+            <img
               className='h-10 w-10'
               src={icon}
               alt={`Icon for ${type.name}`}
               onError={(e) => {
                 e.currentTarget.src = customTypeIcon;
               }}
-            /> */}
+            />
           </div>
           <div>
             <h5 className='leading-[10px]'>{type.name}</h5>

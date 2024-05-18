@@ -47,7 +47,7 @@ const NavigationButton = () => {
             <Link
               key={layoutOrder.name}
               to={
-                layoutOrder.name === 'Home'
+                layoutOrder.name === 'Home' || layoutOrder.types.length === 0
                   ? `/${companyName}/section/home`
                   : layoutOrder?.types[0].type_id
                     ? `/${companyName}/section/${layoutOrder.name.toLowerCase().replace(' ', '')}/${layoutOrder?.types[0].type_id}`

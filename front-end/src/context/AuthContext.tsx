@@ -1,9 +1,11 @@
 import auth from '@/api/auth';
 import { loadPermimssions, loadRoles } from '@/api/roles';
+import { getUsers } from '@/api/users';
 // import { SignUpInfo, TokenResponse, User } from '@/type';
 import { useState, createContext, useEffect, Dispatch, useCallback } from 'react';
 
 type AuthContext = {
+  users: SimpleUser[] | null;
   user: User | null;
   company: CompanyInfo | null;
   setUser: Dispatch<React.SetStateAction<User | null>>;
@@ -27,6 +29,7 @@ type AuthContext = {
   getCompanyInfo: (companyName: string) => Promise<void>;
   updateCompanyInfo: (companyName: string, companyInfo: CompanyInfo) => Promise<void>;
   getRoles: (companyName: string) => Promise<Role[] | null>;
+  getSimpleUser: (userId: string) => SimpleUser | undefined;
   hasPermission: (permission: string) => Promise<boolean>;
   getPermissions: (companyName: string) => Promise<Permission[] | null>;
 };
@@ -35,6 +38,7 @@ export const AuthContext = createContext<AuthContext | null>(null);
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [users, setUsers] = useState<SimpleUser[] | null>(null);
   const [company, setCompany] = useState<CompanyInfo | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -65,8 +69,13 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setIsLoading(false);
       }
     };
+    const loadUsers = async () => {
+      const companyUsers = await getUsers(companyName);
+      setUsers(companyUsers);
+    };
 
     authenticated();
+    loadUsers();
   }, [companyName]);
 
   const signUp = async (signUpInfo: SignUpInfo) => {
@@ -153,6 +162,10 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(user);
   };
 
+  const getSimpleUser = (userId: string): SimpleUser | undefined => {
+    return users?.find((user) => user.user_id === userId);
+  };
+
   const changePassword = async (companyName: string, password: string) => {
     const res = await auth.changePassword(companyName, user?.user_id ?? '', password);
     return res;
@@ -192,6 +205,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const value = {
     user,
+    users,
     isLoading,
     isAuthenticated,
     company,
@@ -207,6 +221,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     getRoles,
     hasPermission,
     getPermissions,
+    getSimpleUser,
     updateCompanyInfo
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

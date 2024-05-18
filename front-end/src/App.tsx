@@ -31,7 +31,6 @@ const VerifyEmail = lazy(() => import('pages/VerifyEmail/VerifyEmail'));
 const ChangePassword = lazy(() => import('pages/ChangePassword/ChangePassword'));
 const ForgotPassword = lazy(() => import('pages/LogIn/ForgotPassword'));
 const RecordDetail = lazy(() => import('./pages/RecordDetail/RecordDetail'));
-const AllTypes = lazy(() => import('./pages/AllTypes/AllTypes'));
 
 function App() {
   return (
@@ -53,17 +52,17 @@ function App() {
           <Route path='/:companyName/login' element={<LogIn />}></Route>
           <Route path='/:companyName/' element={<PrivateRoute />}>
             <Route element={<ConfigLayout />}>
-              <Route path='home' element={<HomeLayout />} />
+              <Route path='' element={<Navigate to='/section/home' />} />
+              <Route path='home' element={<Navigate to='/section/home' />} />
               <Route path='section/home' element={<HomeLayout />} />
               <Route path='section/:domainName/' element={<SectionDomain />} />
               <Route path='section/:domainName/:typeId' element={<SectionDomain />} />
-              <Route path='all/:typeId' element={<AllTypes />} />
               <Route path='all/report/' element={<ReportLayout />}>
                 <Route path='create-report/:typeReportId' element={<CreateReport />} />
                 <Route path='update-report/:reportId' element={<UpdateReport />} />
                 <Route path=':reportId' element={<ReportDetail />} />
               </Route>
-              <Route path='record/:recordId' element={<RecordDetail />} />
+              <Route path='section/:domainName/record/:recordId' element={<RecordDetail />} />
               <Route path='setting/' element={<SettingLayout />}>
                 <Route path='personal-information' element={<PersonalInformationSetting />} />
                 <Route path='company-information' element={<CompanyInformationSetting />} />

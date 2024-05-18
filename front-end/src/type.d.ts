@@ -23,6 +23,7 @@ type LayoutType = {
   name: string;
   type_id: string;
   isPrimitiveType?: boolean;
+  saved?: boolean;
 };
 
 // type TypeProperty = {
@@ -386,3 +387,15 @@ type SettingLayout = {
   adminSettingRole: boolean;
   items?: SettingLayout[];
 };
+
+type NotificationMessage = {
+  "id": string,
+  "title": string,
+  "content": string,
+  "url": string,
+  "action": string,
+  "sender_id": string,
+  "receiver_id": string,
+  "created_at": Date,
+  "is_read": boolean
+}

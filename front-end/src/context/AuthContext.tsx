@@ -1,9 +1,11 @@
 import auth from '@/api/auth';
 import { loadPermimssions, loadRoles } from '@/api/roles';
+import { getUsers } from '@/api/users';
 // import { SignUpInfo, TokenResponse, User } from '@/type';
 import { useState, createContext, useEffect, Dispatch, useCallback } from 'react';
 
 type AuthContext = {
+  users: SimpleUser[] | null;
   user: User | null;
   company: CompanyInfo | null;
   setUser: Dispatch<React.SetStateAction<User | null>>;
@@ -27,6 +29,7 @@ type AuthContext = {
   getCompanyInfo: (companyName: string) => Promise<void>;
   updateCompanyInfo: (companyName: string, companyInfo: CompanyInfo) => Promise<void>;
   getRoles: (companyName: string) => Promise<Role[] | null>;
+  getSimpleUser: (userId: string) => SimpleUser | undefined;
   hasPermission: (permission: string) => Promise<boolean>;
   getPermissions: (companyName: string) => Promise<Permission[] | null>;
 };
@@ -35,6 +38,7 @@ export const AuthContext = createContext<AuthContext | null>(null);
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [users, setUsers] = useState<SimpleUser[] | null>(null);
   const [company, setCompany] = useState<CompanyInfo | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -65,8 +69,13 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setIsLoading(false);
       }
     };
+    const loadUsers = async () => {
+      const companyUsers = await getUsers(companyName);
+      setUsers(companyUsers);
+    };
 
     authenticated();
+    loadUsers();
   }, [companyName]);
 
   const signUp = async (signUpInfo: SignUpInfo) => {
@@ -124,12 +133,23 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const updateUser = useCallback(
     async (companyName: string, updatedUser: User) => {
-      try {
-        const res = await auth.updateUser(companyName, updatedUser);
+      const layoutOrders = updatedUser.settings.layout_order.map((layoutOrder) => {
+        const filteredLayoutOrderTypes = layoutOrder.types.filter((type) => {
+          // Don't save to server if the tab is a record tab but user didn't pin it
+          return !(type.isPrimitiveType === false && type.saved === false);
+        });
+        return { ...layoutOrder, types: filteredLayoutOrderTypes };
+      });
 
-        if (res) {
-          setUser(updatedUser);
-        }
+      try {
+        const res = await auth.updateUser(companyName, {
+          ...updatedUser,
+          settings: { ...updatedUser.settings, layout_order: layoutOrders }
+        });
+
+        // if (res) {
+        //   setUser(updatedUser);
+        // }
       } catch (error) {
         console.error(error);
       }
@@ -140,6 +160,10 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const reloadUser = async () => {
     const user = companyName && companyName.length > 0 ? await auth.getUser(companyName) : null;
     setUser(user);
+  };
+
+  const getSimpleUser = (userId: string): SimpleUser | undefined => {
+    return users?.find((user) => user.user_id === userId);
   };
 
   const changePassword = async (companyName: string, password: string) => {
@@ -181,6 +205,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const value = {
     user,
+    users,
     isLoading,
     isAuthenticated,
     company,
@@ -196,6 +221,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     getRoles,
     hasPermission,
     getPermissions,
+    getSimpleUser,
     updateCompanyInfo
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

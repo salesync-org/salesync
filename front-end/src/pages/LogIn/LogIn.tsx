@@ -66,7 +66,7 @@ const LogIn = () => {
         description: 'You have successfully logged in'
       });
 
-      navigate(searchParams.get('redirectUrl') ?? `/${data.alias}/home`);
+      navigate(searchParams.get('redirectUrl') ?? `/${data.alias}/section/home`);
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {

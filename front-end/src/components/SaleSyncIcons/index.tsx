@@ -5,5 +5,6 @@ import Bell from './Bell';
 import LogOut from './LogOut';
 import Settings from './Settings';
 import Pencil from './Pencil';
+import Triangle from './Triangle';
 
-export { Moon, Sun, SystemTheme, Bell, LogOut, Settings, Pencil };
+export { Moon, Sun, SystemTheme, Bell, LogOut, Settings, Pencil, Triangle };

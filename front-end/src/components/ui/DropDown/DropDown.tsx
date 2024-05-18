@@ -15,7 +15,6 @@ interface DropdownButtonProps {
   header?: string;
   showHeader?: boolean;
   isError?: boolean;
-  rounded?: boolean;
   setError?: Dispatch<React.SetStateAction<boolean>>;
   disabled?: boolean;
   divide?: boolean;
@@ -31,7 +30,6 @@ const DropDown: React.FC<DropdownButtonProps> = ({
   onValueChange = () => {},
   defaultValue = 'Select a value',
   header,
-  rounded,
   prefixIcon,
   suffixIcon = null,
   isError = false,
@@ -70,12 +68,6 @@ const DropDown: React.FC<DropdownButtonProps> = ({
     setIsOpen(false);
   }, [listRef]);
 
-  useEffect(() => {
-    if (value === '') {
-      setSelectedOption(defaultValue);
-    }
-  }, [value]);
-
   function handleOptionClick(option: HTMLElement): void {
     const inputNode = option as HTMLInputElement;
     setSelectedOption(inputNode.title);
@@ -93,7 +85,7 @@ const DropDown: React.FC<DropdownButtonProps> = ({
         <div className='h-fit'>
           <Button
             // header={header}
-            rounded={rounded}
+            // showHeader={showHeader}
             headerClassName={cn(isError && textErrorClassName)}
             className={cn(isError && 'border-red-400 ring-1 ring-red-300', className)}
             disabled={disabled}
@@ -124,7 +116,7 @@ const DropDown: React.FC<DropdownButtonProps> = ({
         </div>
         <DropDownList
           onItemClick={handleOptionClick}
-          className={cn(className, 'absolute')}
+          className={cn(className)}
           onClose={() => {
             setIsOpen(false);
           }}

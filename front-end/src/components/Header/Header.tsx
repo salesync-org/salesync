@@ -4,9 +4,6 @@ import { ThemeToggle, UserInfo, Search } from './index';
 import { cn } from '@/utils/utils';
 import useAuth from '@/hooks/useAuth';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Tooltip } from '../ui';
-import NotificationList from '../NotificationList/NotificationList';
 
 const Header = ({ className }: { className?: string }) => {
   const { company } = useAuth();
@@ -23,30 +20,23 @@ const Header = ({ className }: { className?: string }) => {
         className
       )}
     >
-      <Link
-        data-tooltip-id='home-layout'
-        data-tooltip-content='Home'
-        className='aspect-square h-10 w-10'
-        to={`/${company?.name}/section/home`}
-      >
+      <a className='aspect-square h-10 w-10' href='/cheatsheet'>
         <img
-          src={`${import.meta.env.VITE_STORAGE_SERVICE_HOST}/companies/${companyLoaded?.avatar_url === 'default' ? 'default.svg' : company?.avatar_url}?lastmod=${Date.now()}`}
+          src={`${import.meta.env.VITE_STORAGE_SERVICE_HOST}/companies/${companyLoaded?.avatar_url === 'default' ? 'default.svg' : company?.avatar_url}?lastmod=${new Date().getTime().toString()}`}
           className=''
           alt='header icon'
           onError={(e) => {
             e.currentTarget.src = salesyncIcon;
           }}
         />
-      </Link>
-      <Tooltip id='home-layout' />
+      </a>
       <Search className='align-middle' />
       <div>
-        <div className='justify-right relative flex w-fit pr-1 align-middle'>
+        <div className='justify-right relative flex w-fit align-middle'>
           <div className='flex gap-2'>
             <ThemeToggle />
-            <NotificationList></NotificationList>
-            <UserInfo />
           </div>
+          <UserInfo />
         </div>
       </div>
     </div>

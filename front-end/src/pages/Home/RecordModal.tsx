@@ -147,7 +147,7 @@ const RecordModal = () => {
       className='relative h-[600px]'
       title={`${isUpdateForm ? 'Update' : 'Create'} ${typeProperty.name}`}
     >
-      <div className='overflow-y-auto'>
+      <div className='h-[488px] overflow-y-auto'>
         {isPropertiesLoading || isStagesLoading ? (
           <LoadingSpinner className='mt-10' />
         ) : (

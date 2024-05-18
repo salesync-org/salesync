@@ -10,10 +10,10 @@ const InputProperty: React.FC<InputPropertyProps> = ({ name, value }) => {
   return (
     <div className='px-4 py-1'>
       <div>
-        <span className='font-medium'>{name}</span>
+        <span className='text-xs font-medium'>{name}</span>
       </div>
 
-      <div className='flex justify-between border-b border-input-stroke py-1 dark:border-input-stroke-dark'>
+      <div className='flex justify-between border-b py-1'>
         {name === 'Lead Owner' && (
           <>
             <div className='flex justify-start '>

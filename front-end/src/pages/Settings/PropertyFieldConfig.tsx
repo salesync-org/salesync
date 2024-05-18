@@ -15,6 +15,8 @@ type PropertyFieldConfigProps = PropertyFieldFormData & {
 };
 
 const PropertyFieldConfig = ({
+  name,
+  label,
   // sequence = 1,
   default_value,
   fields: propertyFields,
@@ -50,7 +52,25 @@ const PropertyFieldConfig = ({
     setGroupedFields(groupedPropertyFields);
   }, [propertyFields]);
   return (
-    <div className='w-full pb-4'>
+    <div className='w-full'>
+      <TextInput
+        header='Name'
+        name={'name'}
+        value={name ?? ''}
+        onChange={(e) => {
+          updateFields({ name: e.target.value });
+        }}
+        className='w-full'
+      />
+      <TextInput
+        header='Label'
+        name={'label'}
+        value={label ?? ''}
+        onChange={(e) => {
+          updateFields({ label: e.target.value });
+        }}
+        className='w-full'
+      />
       <TextInput name={'default_value'} defaultValue={default_value} readOnly className='hidden w-full' />
       <input type='number' defaultValue={1} name='sequence' className='hidden'></input>
       {

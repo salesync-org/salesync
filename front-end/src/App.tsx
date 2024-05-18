@@ -6,10 +6,6 @@ import { Toaster } from './components/ui/Toast';
 import PrivateRoute from './pages/PrivateRoute/PrivateRoute';
 import ObjectManager from './pages/Settings/ObjectManager';
 import TypePropertyManager from './pages/Settings/TypePropertyManager';
-const UpdateReport = lazy(() => import('./components/Records/UpdateReport'));
-const ReportLayout = lazy(() => import('./components/Records/ReportLayout'));
-const ReportDetail = lazy(() => import('./components/Records/ReportDetail'));
-const CreateReport = lazy(() => import('./components/Records/CreateReport'));
 const SettingLayout = lazy(() => import('./pages/Settings/SettingLayout'));
 const PersonalInformationSetting = lazy(() => import('./pages/Settings/PersonalInformationSetting'));
 const UserSetting = lazy(() => import('./pages/Settings/UserSetting'));
@@ -23,7 +19,7 @@ const RoleSetting = lazy(() => import('./pages/Settings/RoleSetting'));
 const Cheatsheet = lazy(() => import('pages/Cheatsheet/Cheatsheet'));
 // const TypeDetail = lazy(() => import('./pages/TypeDetail/TypeDetail'));
 // const TypeManager = lazy(() => import('./pages/TypeManager/TypeManager'));
-const SectionDomain = lazy(() => import('./pages/SectionDomain/SectionDomain'));
+const Sales = lazy(() => import('./pages/Sales/Sales'));
 const SignUp = lazy(() => import('./pages/SignUp/SignUp'));
 const HomeLayout = lazy(() => import('./pages/Home/Home'));
 const LogIn = lazy(() => import('pages/LogIn/LogIn'));
@@ -31,6 +27,7 @@ const VerifyEmail = lazy(() => import('pages/VerifyEmail/VerifyEmail'));
 const ChangePassword = lazy(() => import('pages/ChangePassword/ChangePassword'));
 const ForgotPassword = lazy(() => import('pages/LogIn/ForgotPassword'));
 const RecordDetail = lazy(() => import('./pages/RecordDetail/RecordDetail'));
+const AllTypes = lazy(() => import('./pages/AllTypes/AllTypes'));
 
 function App() {
   return (
@@ -49,20 +46,12 @@ function App() {
           <Route path='/cheatsheet' element={<Cheatsheet />} />
           <Route path='/sign-up' element={<SignUp />} />
           <Route path='/forgot-password' element={<ForgotPassword />}></Route>
-          <Route path='/:companyName/login' element={<LogIn />}></Route>
           <Route path='/:companyName/' element={<PrivateRoute />}>
             <Route element={<ConfigLayout />}>
-              <Route path='' element={<Navigate to='/section/home' />} />
-              <Route path='home' element={<Navigate to='/section/home' />} />
-              <Route path='section/home' element={<HomeLayout />} />
-              <Route path='section/:domainName/' element={<SectionDomain />} />
-              <Route path='section/:domainName/:typeId' element={<SectionDomain />} />
-              <Route path='all/report/' element={<ReportLayout />}>
-                <Route path='create-report/:typeReportId' element={<CreateReport />} />
-                <Route path='update-report/:reportId' element={<UpdateReport />} />
-                <Route path=':reportId' element={<ReportDetail />} />
-              </Route>
-              <Route path='section/:domainName/record/:recordId' element={<RecordDetail />} />
+              <Route path='home' element={<HomeLayout />} />
+              <Route path='sales/:typeId' element={<Sales />} />
+              <Route path='all/:typeId' element={<AllTypes />} />
+              <Route path='record/:recordId' element={<RecordDetail />} />
               <Route path='setting/' element={<SettingLayout />}>
                 <Route path='personal-information' element={<PersonalInformationSetting />} />
                 <Route path='company-information' element={<CompanyInformationSetting />} />
@@ -76,6 +65,7 @@ function App() {
               {/* <Route path='*' element={<Sales />} /> */}
             </Route>
           </Route>
+          <Route path='/:companyName/login' element={<LogIn />}></Route>
           <Route path='/realms/:companyName/login-actions/action-token' element={<VerifyEmail />}></Route>
           <Route path='/:companyName/:userId/change-password' element={<ChangePassword />}></Route>
           <Route path='*' element={<div>Oops</div>} />

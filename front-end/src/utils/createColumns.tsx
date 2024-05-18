@@ -1,17 +1,16 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import recordApi from '@/api/record';
-import { Button, Icon, TextInput, Tooltip } from '@/components/ui';
+import { Button, Icon, TextInput } from '@/components/ui';
 import { ActionDropDown } from '@/components/ui/DropDown';
 import { useToast } from '@/components/ui/Toast';
-import { Check, Pencil, X } from 'lucide-react';
+import { Pencil } from 'lucide-react';
 import { ChangeEvent, useState } from 'react';
 import { useQueryClient } from 'react-query';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { cn, formatCurrency } from './utils';
 
 export const createColumns = (companyName: string, properties: any[], records: any[]) => {
-  const { domainName } = useParams();
   const columns: any = [
     {
       accessorKey: 'id',
@@ -22,10 +21,6 @@ export const createColumns = (companyName: string, properties: any[], records: a
 
   properties.forEach((property) => {
     if (!property.name) {
-      return;
-    }
-
-    if (property.label.includes('NotShowing')) {
       return;
     }
 
@@ -42,14 +37,10 @@ export const createColumns = (companyName: string, properties: any[], records: a
           </div>
         ),
         cell: ({ row }: { row: any }) => {
-          let href = `/${companyName}/section/${domainName}/record/${row.getValue('id')}`;
-          if (property.label === 'Report Name') {
-            href = `/${companyName}/all/report/${row.getValue('id')}`;
-          }
           return (
             <Link
-              to={href}
-              className='block min-w-[200px] items-center align-middle text-sm font-semibold text-blue-500 hover:underline'
+              to={`/${companyName}/record/${row.getValue('id')}`}
+              className='block w-[200px] items-center align-middle text-sm font-semibold text-blue-500 hover:underline'
             >
               {row.getValue('Name')}
             </Link>
@@ -74,7 +65,6 @@ export const createColumns = (companyName: string, properties: any[], records: a
         if (property.name === 'Amount') {
           cellValue = formatCurrency(+cellValue) || '0';
         }
-
         const [currentValue, setCurrentValue] = useState(cellValue);
         const [isUpdating, setIsUpdating] = useState(false);
         const [isLoading, setIsLoading] = useState(false);
@@ -140,30 +130,26 @@ export const createColumns = (companyName: string, properties: any[], records: a
           <div>
             {isUpdating ? (
               <form onSubmit={handleUpdate} className='relative w-full min-w-[250px]'>
-                <div className='absolute right-0 z-10 flex h-full space-x-1'>
-                  {isLoading === false && (
-                    <Button
-                      className='aspect-square h-10 w-10 select-none rounded-full p-0'
-                      rounded
-                      onClick={() => {
-                        setIsUpdating(false);
-                        setValue(row.getValue(property.name));
-                      }}
-                      intent='normal'
-                      disabled={isLoading}
-                    >
-                      <X size='16px' />
-                    </Button>
-                  )}
+                <div className='absolute right-0 z-10 flex h-full'>
                   <Button
-                    className='aspect-square h-10 w-10 select-none rounded-full p-0'
+                    className='h-full select-none'
+                    onClick={() => {
+                      setIsUpdating(false);
+                      setValue(row.getValue(property.name));
+                    }}
+                    intent='normal'
+                    disabled={isLoading}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    className='h-full select-none'
                     type='submit'
-                    rounded
                     disabled={value === row.getValue(property.name) || isLoading}
                     onClick={handleUpdate}
                     intent='primary'
                   >
-                    {isLoading ? 'Updating...' : <Check size='16px' />}
+                    {isLoading ? 'Updating...' : 'Save'}
                   </Button>
                 </div>
                 <TextInput
@@ -175,18 +161,15 @@ export const createColumns = (companyName: string, properties: any[], records: a
                 ></TextInput>
               </form>
             ) : (
-              <div className='group/item flex h-full min-w-[200px] items-center justify-between'>
+              <div className='group/item flex h-full items-center justify-between'>
                 <span className='text-sm'>{currentValue}</span>
                 <Pencil
-                  data-tooltip-id='editingCell'
-                  data-tooltip-content='Edit Property'
                   size='16px'
                   className={cn(
                     'cursor-pointer opacity-0 transition-all duration-300 hover:text-primary-color group-hover/item:opacity-100'
                   )}
                   onClick={() => setIsUpdating(!isUpdating)}
                 />
-                <Tooltip id='editingCell' />
               </div>
             )}
           </div>

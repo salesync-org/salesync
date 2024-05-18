@@ -1,7 +1,7 @@
 import { Button, Panel, TextInput } from '@/components/ui';
 import useAuth from '@/hooks/useAuth';
 import { cn } from '@/utils/utils';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useToast } from '@/components/ui/Toast';
 import Auth from '@/api/auth';
@@ -13,6 +13,7 @@ const CompanyInfomationSetting = () => {
   const { company, updateCompanyInfo } = useAuth();
   const [isUpdating, setUpdatingStatus] = useState(false);
   const [editAvatarHovered, setEditAvatarHovered] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState('');
   const [companyLoaded, setCompanyLoadedInfo] = useState<CompanyInfo>(
     company
       ? company
@@ -26,12 +27,14 @@ const CompanyInfomationSetting = () => {
         }
   );
   const { toast } = useToast();
-  let avatarUrl;
-  if (!company) {
-    return null;
-  } else {
-    avatarUrl = `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/companies/${companyLoaded.avatar_url === 'default' ? 'default.svg' : companyLoaded.avatar_url}`;
-  }
+
+  useEffect(() => {
+    if (companyLoaded.avatar_url) {
+      setAvatarUrl(
+        `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/companies/${companyLoaded.avatar_url === 'default' ? 'default.svg' : companyLoaded.avatar_url}`
+      );
+    }
+  }, [company]);
 
   const editableFields = {
     company_id: null,
@@ -50,16 +53,25 @@ const CompanyInfomationSetting = () => {
   const handleFileUpload = async (file: File) => {
     if (companyLoaded.company_id != undefined) {
       setUpdatingStatus(true);
+      console.log('file name  was: ' + file.name);
+      const fileName = `avatar_${companyLoaded.company_id}.${file.name.split('.').pop()}`;
+      console.log('Company name file: ' + fileName);
       Auth.uploadCompanyAvatar(`avatar_${companyLoaded.company_id}`, file).then(async (res) => {
         if (res && res.status === 200) {
           const newCompany = { ...companyLoaded, avatar_url: `avatar_${companyLoaded.company_id}` };
           setCompanyLoadedInfo(newCompany);
+          console.log('Loaded: ' + newCompany);
           await updateCompanyInfo(companyName ?? '', newCompany).then(() => {
             toast({
               title: 'Success',
               description: 'Reload to see your avatar take effect.'
             });
             setUpdatingStatus(false);
+            setTimeout(() => {
+              setAvatarUrl(
+                `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/companies/${newCompany?.avatar_url === 'default' ? 'default.svg' : newCompany?.avatar_url}`
+              );
+            }, 2000);
           });
         }
       });
@@ -89,13 +101,12 @@ const CompanyInfomationSetting = () => {
               <div className='w-full border-b-2 border-button-stroke-light py-4 dark:border-button-stroke-dark'></div>
             </div>
             <div className='w-full'>
-              {company &&
+              {companyLoaded &&
                 Object.entries(companyLoaded).map(([fieldName, fieldValue]) => {
                   if (editableFields[fieldName as keyof typeof editableFields] !== null) {
                     return (
                       <div key={fieldName.toString()}>
                         <TextInput
-                          key={`${fieldName.toString()}-input`}
                           header={fieldName
                             .split('_')
                             .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -109,6 +120,8 @@ const CompanyInfomationSetting = () => {
                         />
                       </div>
                     );
+                  } else {
+                    return <></>;
                   }
                 })}
             </div>
@@ -119,15 +132,17 @@ const CompanyInfomationSetting = () => {
               <div className='w-full border-b-2 border-button-stroke-light py-4 dark:border-button-stroke-dark'></div>
             </div>
             <div className='aspect-square w-64 overflow-clip rounded-sm'>
-              <img src={`${avatarUrl}?lastmod=${Date.now()}`} />
+              <img src={`${avatarUrl}?lastmod=${new Date().getTime().toString()}`} />
             </div>
             <div className='dark:panel-dark absolute bottom-1 right-2'>
               <Button
                 rounded
                 onMouseEnter={(_) => {
+                  console.log('Hovering');
                   setEditAvatarHovered(true);
                 }}
                 onMouseLeave={(_) => {
+                  console.log('Stop Hovering');
                   setEditAvatarHovered(false);
                 }}
                 className={cn(

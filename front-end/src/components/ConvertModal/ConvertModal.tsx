@@ -4,9 +4,9 @@ import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext
 import useProperties from '@/hooks/type-service/useProperties';
 import useType from '@/hooks/type-service/useType';
 import { convertTypePropertyToCurrentData } from '@/utils/utils';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQueryClient } from 'react-query';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button, Modal, ModalFooter, PrimaryButton } from '../ui';
 import LoadingSpinner from '../ui/Loading/LoadingSpinner';
 import LoadingSpinnerSmall from '../ui/Loading/LoadingSpinnerSmall';
@@ -32,7 +32,6 @@ const ConvertModal = () => {
     opportunityCheckStatus: 'create',
     accountCheckStatus: 'create'
   });
-  const { setIsLoading, isLoading } = useGlobalModalContext();
   const [contact, setContact] = useState<RecordPropertyResponse | null>(null);
   const [opportunity, setOpportunity] = useState<RecordPropertyResponse | null>(null);
   const [account, setAccount] = useState<RecordPropertyResponse | null>(null);
@@ -46,18 +45,6 @@ const ConvertModal = () => {
   } = useGlobalModalContext();
   const { recordId, companyName } = modalProps;
   const navigate = useNavigate();
-  const { domainName = 'sales' } = useParams();
-  const contentRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!isLoading) {
-      return;
-    }
-    // If the modal has been rendered
-    if (contentRef.current) {
-      setIsLoading(false);
-    }
-  }, [contentRef, loading]);
 
   useEffect(() => {
     const handleConvert = async () => {
@@ -81,7 +68,7 @@ const ConvertModal = () => {
             await recordApi.deleteRecord(companyName, [recordId]);
             queryClient.invalidateQueries(['records']);
 
-            navigate(`/${companyName}/section/${domainName}/record/${contact.id}`);
+            navigate(`/${companyName}/record/${contact.id}`);
             hideModal();
           }
         } catch (error: any) {
@@ -118,7 +105,7 @@ const ConvertModal = () => {
     companyName,
     types.find((type) => type.name === 'Account')?.id
   );
-
+  
   if (isTypesLoading || isContactLoading || isOpportunityLoading || isAccountLoading) {
     return <LoadingSpinner />;
   }
@@ -170,7 +157,7 @@ const ConvertModal = () => {
       className='mx-auto h-[600px] w-[1024px] max-w-[calc(100vw-12px)] overflow-y-hidden'
       title='Convert Lead'
     >
-      <div ref={contentRef} className='flex h-[482px] w-full flex-col gap-2 overflow-y-auto pb-[72px]'>
+      <div className='flex h-[482px] w-full flex-col gap-2 overflow-y-auto pb-[72px]'>
         <ConvertSection
           typeProperties={contactProperties}
           formId={TYPE_FORM_ID.CONTACT}

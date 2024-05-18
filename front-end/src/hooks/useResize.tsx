@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-function useResize(ref: React.RefObject<HTMLElement>, isActive: boolean) {
+function useResize(ref : React.RefObject<HTMLElement>, isActive:boolean) {
   const [aboveSpace, setAboveSpace] = useState(0);
   const [belowSpace, setBelowSpace] = useState(0);
 
@@ -29,10 +29,10 @@ function useResize(ref: React.RefObject<HTMLElement>, isActive: boolean) {
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('scroll', handleResize);
-    };
+    }
   }, [isActive]);
 
-  return [aboveSpace, belowSpace];
+  return [ aboveSpace, belowSpace ];
 }
 
 export default useResize;

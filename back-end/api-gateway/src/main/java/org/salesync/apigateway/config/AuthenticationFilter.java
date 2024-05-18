@@ -44,14 +44,15 @@ public class AuthenticationFilter implements GatewayFilter {
             return exchange.getResponse().setComplete();
         }
         String url = MessageFormat.format(validateUserUrlTemplate, authServerUrl, pathParams.get("realm"));
-        TokenDto token = restTemplate().defaultHeader(HttpHeaders.AUTHORIZATION, authHeader).build().getForObject(url,
-                TokenDto.class);
-        if (token == null || token.getToken() == null) {
+        TokenDto token = restTemplate().defaultHeader(HttpHeaders.AUTHORIZATION, authHeader).build().getForObject(url, TokenDto.class);
+        if(token == null || token.getToken() == null) {
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
             return exchange.getResponse().setComplete();
         }
         String newToken = prefixToken + token.getToken();
-        request.mutate().header(HttpHeaders.AUTHORIZATION, newToken).build();
+        request.mutate()
+                .header(HttpHeaders.AUTHORIZATION, newToken)
+                .build();
         exchange.getAttributes().put(ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR, request.getURI());
 
         return chain.filter(exchange.mutate().request(request).build());

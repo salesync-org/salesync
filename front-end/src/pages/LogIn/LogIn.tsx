@@ -12,7 +12,7 @@ import { z } from 'zod';
 const loginSchema = z.object({
   alias: z.string().min(1, 'Invalid company alias'),
   username: z.string().email('Invalid email'),
-  password: z.string()
+  password: z.string().min(3, 'Password must be at least 3 characters')
 });
 
 type LoginSchemaType = z.infer<typeof loginSchema>;
@@ -66,7 +66,7 @@ const LogIn = () => {
         description: 'You have successfully logged in'
       });
 
-      navigate(searchParams.get('redirectUrl') ?? `/${data.alias}/section/home`);
+      navigate(searchParams.get('redirectUrl') ?? `/${data.alias}/home`);
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {

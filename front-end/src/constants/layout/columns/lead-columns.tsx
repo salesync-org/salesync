@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ColumnDef } from '@tanstack/react-table';
 import Icon from '../../../components/ui/Icon/Icon';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Checkbox } from 'components/ui';
 
 export type LeadColumns = {
@@ -16,7 +16,6 @@ export type LeadColumns = {
 };
 
 export const createTableLayout = (companyName: string) => {
-  const { domainName = '' } = useParams();
   const leadColumns: ColumnDef<LeadColumns>[] = [
     {
       accessorKey: 'id',
@@ -58,7 +57,7 @@ export const createTableLayout = (companyName: string) => {
       cell: ({ row }) => {
         return (
           <Link
-            to={`/${companyName}/section/${domainName}/record/${row.getValue('id')}`}
+            to={`/${companyName}/record/${row.getValue('id')}`}
             className='block w-full items-center align-middle text-blue-500 hover:underline'
           >
             {row.getValue('name')}
@@ -142,7 +141,7 @@ export const createTableLayout = (companyName: string) => {
       id: 'actions',
       header: '',
       cell: () => (
-        <div className='m-1 flex aspect-square w-8 cursor-pointer items-center justify-center rounded-[4px] border border-button-stroke dark:border-button-stroke-dark '>
+        <div className='flex aspect-square w-8 cursor-pointer items-center justify-center rounded-[4px] border border-button-stroke m-1 dark:border-button-stroke-dark '>
           <Icon name='arrow_drop_down' size='32px' />
         </div>
       )

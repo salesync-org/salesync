@@ -10,8 +10,6 @@ import java.util.UUID;
 public interface TypeService {
     TypeDTO createType(String companyName, TypeDTO typeDTO);
 
-    void initializeStandardTypes(String companyName);
-
     TypeDTO getType(UUID typeId);
 
     List<TypeDTO> getAllType(String companyName);
@@ -29,6 +27,4 @@ public interface TypeService {
     RelationTypeResponseDto createRelationType(RelationTypeRequestDto relationTypeRequestDto);
 
     String deleteProperty(UUID typePropId);
-
-    TypeProperty updateProperty(RequestEditPropertyDto requestEditPropertyDto);
 }

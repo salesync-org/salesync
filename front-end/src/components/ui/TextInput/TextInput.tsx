@@ -2,7 +2,6 @@ import React, { ChangeEvent, FocusEvent } from 'react';
 import { Icon } from '@/components/ui';
 import { cn } from 'utils/utils';
 import { RegisterOptions, FieldValues, FieldName } from 'react-hook-form';
-import { Search } from 'lucide-react';
 
 type TextInputProps = {
   value?: string;
@@ -110,7 +109,7 @@ const TextInput: React.FC<TextInputProps> = ({
         />
         <div className='relative flex h-full items-center justify-start rounded px-4'>
           <div className=' absolute bottom-0 top-0 flex w-4 items-center'>
-            {prefixIcon && (prefixIcon !== 'search' ? <Icon className='' name={prefixIcon} /> : <Search size={20} />)}
+            {prefixIcon && <Icon className='' name={prefixIcon} />}
           </div>
         </div>
 

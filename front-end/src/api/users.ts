@@ -37,7 +37,7 @@ export const uploadAvatar = async (userId: string, avatar: File) => {
 
   try {
     console.log('Uploading avatar to ' + UPLOAD_API_ENDPOINT);
-    const response = await axios.put(`${UPLOAD_API_ENDPOINT}/${userId}`, avatar, config);
+    const response = await axios.put(`${UPLOAD_API_ENDPOINT}${userId}`, avatar, config);
     return response;
   } catch (error) {
     console.error('Non-Axios Error:', error);
@@ -70,16 +70,6 @@ export const getUsers = async (realmId: string) => {
     return response.data;
   } catch (error) {
     console.error('Error getting users:', error);
-    throw error;
-  }
-};
-
-export const getSimpleUser = async (realmId: string, userId: string) => {
-  try {
-    const response = await instance.get(`${BASE_URL}/${realmId}/user/${userId}`);
-    return response.data as SimpleUser;
-  } catch (error) {
-    console.error('Error getting user:', error);
     throw error;
   }
 };

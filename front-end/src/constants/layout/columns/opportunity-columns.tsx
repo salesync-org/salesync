@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ColumnDef } from '@tanstack/react-table';
 import Icon from '../../../components/ui/Icon/Icon';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Checkbox } from 'components/ui';
 import { formatCurrency } from '@/utils/utils';
 
@@ -16,7 +16,6 @@ export type OpportunityColumns = {
 };
 
 export const createTableLayout = (companyName: string): ColumnDef<OpportunityColumns>[] => {
-  const { domainName = '' } = useParams();
   const opportunityColumns: ColumnDef<OpportunityColumns>[] = [
     {
       accessorKey: 'id',
@@ -58,7 +57,7 @@ export const createTableLayout = (companyName: string): ColumnDef<OpportunityCol
       cell: ({ row }) => {
         return (
           <Link
-            to={`/${companyName}/section/${domainName}/record/${row.getValue('id')}`}
+            to={`/${companyName}/record/${row.getValue('id')}`}
             className='block w-full items-center align-middle text-blue-500 hover:underline'
           >
             {row.getValue('opportunityName')}
@@ -80,7 +79,7 @@ export const createTableLayout = (companyName: string): ColumnDef<OpportunityCol
       cell: ({ row }) => {
         return (
           <Link
-            to={`/${companyName}/section/${domainName}/record/${row.getValue('id')}`}
+            to={`/${companyName}/record/${row.getValue('id')}`}
             className='block w-full items-center align-middle text-blue-500 hover:underline'
           >
             {row.getValue('accountName')}

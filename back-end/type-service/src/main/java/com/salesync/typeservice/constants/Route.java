@@ -10,7 +10,6 @@ public final class Route {
         public static final String DELETE_PROPERTY = "/delete-property/{typePropId}";
         public static final String TYPE_DETAILS = "/details/{typeId}";
         public static final String CREATE_TYPE_RELATION = "/create-type-relation";
-        public static final String UPDATE_PROPERTY = "/update-property";
     }
 
     public static final class Relation {

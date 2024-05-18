@@ -59,11 +59,6 @@ public class TypeServiceImpl implements TypeService {
     }
 
     @Override
-    public void initializeStandardTypes(String companyName) {
-        typeRepository.initializeCompany(companyName);
-    }
-
-    @Override
     public TypeDTO getType(UUID typeId) {
         Type type = typeRepository.findById(typeId).orElseThrow(() -> new ObjectNotFoundException(
                 Type.class.getSimpleName(), typeId.toString()
@@ -158,21 +153,11 @@ public class TypeServiceImpl implements TypeService {
                 Property.class.getSimpleName(), requestCreatePropertyDto.getPropertyId().toString()
         ));
 
-        //validate request to have all property fields label
-
         Set<UUID> propertyFieldSet = property.getPropertyFields().stream().map(PropertyField::getId).collect(Collectors.toSet());
-
-        Set<String> labelSet = property.getPropertyFields().stream().map(PropertyField::getLabel).collect(Collectors.toSet());
 
         Set<UUID> requestSet = requestCreatePropertyDto.getFields().stream().map(RequestTypePropertyFieldDto::getPropertyFieldId).collect(Collectors.toSet());
 
-        propertyFieldSet.retainAll(requestSet);
-
-        Set<String> requestLabelSet = property.getPropertyFields().stream().filter(
-                //filtering the property fields that are in the request
-                propertyField -> propertyFieldSet.contains(propertyField.getId())).collect(Collectors.toSet()).stream().map(PropertyField::getLabel).collect(Collectors.toSet());
-
-        if (!labelSet.equals(requestLabelSet)) {
+        if (!propertyFieldSet.equals(requestSet)) {
             throw new BadRequestException(
                     "Property fields"
             );
@@ -232,35 +217,5 @@ public class TypeServiceImpl implements TypeService {
         } catch (ObjectNotFoundException e) {
             return "Fail to delete property";
         }
-    }
-
-    @Override
-    public TypeProperty updateProperty(RequestEditPropertyDto requestEditPropertyDto) {
-
-        TypeProperty typeProperty = typePropertyRepository.findById(requestEditPropertyDto.getId()).orElseThrow(() -> new ObjectNotFoundException(
-                TypeProperty.class.getSimpleName(), requestEditPropertyDto.getId().toString()
-        ));
-
-        typeProperty.setName(requestEditPropertyDto.getName());
-        typeProperty.setLabel(requestEditPropertyDto.getLabel());
-        typeProperty.setSequence(requestEditPropertyDto.getSequence());
-        typeProperty.setDefaultValue(requestEditPropertyDto.getDefaultValue());
-
-        typeProperty.getTypePropertyFields().forEach(
-                typePropertyField -> {
-                    RequestTypePropertyFieldDto requestTypePropertyFieldDto = requestEditPropertyDto.getFields().stream().filter(
-                            requestTypePropertyFieldDto1 -> requestTypePropertyFieldDto1.getPropertyFieldId().equals(typePropertyField.getPropertyField().getId())
-                    ).findFirst().orElseThrow(() -> new ObjectNotFoundException(
-                            "Request type property field", typePropertyField.getPropertyField().getId().toString()
-                    ));
-                    String requestItemValue = requestTypePropertyFieldDto.getItemValue();
-                    typePropertyField.setItemValue(requestItemValue);
-                }
-
-        );
-
-        typePropertyRepository.save(typeProperty);
-
-        return typeProperty;
     }
 }

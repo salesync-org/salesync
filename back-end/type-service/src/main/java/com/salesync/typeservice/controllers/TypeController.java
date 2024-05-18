@@ -62,11 +62,6 @@ public class TypeController {
         return ResponseEntity.ok(typeService.createProperty(requestCreatePropertyDto));
     }
 
-    @PutMapping(Route.Type.UPDATE_PROPERTY)
-    public ResponseEntity<TypeProperty> updateProperty(@RequestBody RequestEditPropertyDto requestEditPropertyDto) {
-        return ResponseEntity.ok(typeService.updateProperty(requestEditPropertyDto));
-    }
-
     @PostMapping(Route.Type.CREATE_TYPE_RELATION)
     public ResponseEntity<RelationTypeResponseDto> createRelationType(@Valid @RequestBody RelationTypeRequestDto request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(typeService.createRelationType(request));

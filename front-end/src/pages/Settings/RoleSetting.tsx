@@ -167,24 +167,22 @@ const RoleSetting = () => {
                           role.role_name !== `default-roles-${companyName}` && (
                             <TableRow key={role.role_id}>
                               <TableCell>
-                                <td>
-                                  <div className='w-fit'>
-                                    <div className='my-2 text-[1.2rem] font-semibold text-primary-bold dark:text-secondary-light'>
-                                      {role.role_name}
-                                    </div>
-                                    <div className=' flex w-fit flex-wrap space-x-2'>
-                                      {role.permissions &&
-                                        role.permissions.map((permission) => (
-                                          <div
-                                            key={permission.permission_id}
-                                            className='my-2 mr-1 w-fit text-ellipsis text-nowrap rounded-full bg-gray-200 px-3 py-1 text-xs dark:bg-slate-600'
-                                          >
-                                            {permission.permission_name}
-                                          </div>
-                                        ))}
-                                    </div>
+                                <div className='w-fit'>
+                                  <div className='my-2 text-[1.2rem] font-semibold text-primary-bold dark:text-secondary-light'>
+                                    {role.role_name}
                                   </div>
-                                </td>
+                                  <div className=' flex w-fit flex-wrap space-x-2'>
+                                    {role.permissions &&
+                                      role.permissions.map((permission) => (
+                                        <div
+                                          key={permission.permission_id}
+                                          className='my-2 mr-1 w-fit text-ellipsis text-nowrap rounded-full bg-gray-200 px-3 py-1 text-xs dark:bg-slate-600'
+                                        >
+                                          {permission.permission_name}
+                                        </div>
+                                      ))}
+                                  </div>
+                                </div>
                               </TableCell>
                               <TableCell>{role.description ?? 'No Description'}</TableCell>
                               <TableCell>
@@ -231,10 +229,10 @@ const RoleSetting = () => {
           setRoleModal(null);
           resetPermissions();
         }}
-        className='mx-auto w-full'
+        className='mx-auto h-[500px] w-3/4'
         title={isRoleModalOpen?.role_id ? 'Edit Role' : 'Create New Role'}
       >
-        <form className='w-full'>
+        <form className=''>
           <div className='grid-col-1 grid h-[350px]'>
             <div className='grid h-[320px] grid-cols-5 place-content-center gap-10 overflow-scroll'>
               <div className='col-span-3 flex flex-col gap-2 '>
@@ -297,7 +295,7 @@ const RoleSetting = () => {
               </div>
             </div>
 
-            <ModalFooter className='mt-8 w-full'>
+            <ModalFooter className='mt-8'>
               <Button
                 onClick={() => {
                   setRoleModal(null);

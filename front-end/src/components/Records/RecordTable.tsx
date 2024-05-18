@@ -11,16 +11,16 @@ import { DataTable } from './data-table';
 
 interface RecordTableProps {
   typeId: string;
-  recordFilter?: RecordsFilter;
-  showPropertyIds?: string[];
-  className?: string;
+  recordFilter: RecordsFilter;
 }
 
-const RecordTable = ({ typeId, recordFilter, showPropertyIds }: RecordTableProps) => {
+const RecordTable = ({ typeId, recordFilter }: RecordTableProps) => {
+  console.log(recordFilter);
   const { companyName = '' } = useParams();
 
   const { data: recordData, isLoading: isRecordLoading } = useRecords(companyName, typeId, recordFilter);
   const { data: propertyData, isLoading: isPropertyLoading } = useProperties(companyName, typeId);
+
   if (isRecordLoading || isPropertyLoading) {
     return <RecordTableSkeleton />;
   }
@@ -29,27 +29,20 @@ const RecordTable = ({ typeId, recordFilter, showPropertyIds }: RecordTableProps
     return <ErrorToaster errorMessage='Error loading table ' />;
   }
 
-  const tempPropertyData = JSON.parse(JSON.stringify(propertyData));
-
-  if (showPropertyIds) {
-    const filteredProperties = tempPropertyData!.properties!.filter((property: any) =>
-      showPropertyIds.includes(property.id)
-    );
-    tempPropertyData!.properties = filteredProperties;
-  }
-
   const records = recordData.records;
   const tableData = formatRecords(records);
-  const columns = createColumns(companyName, tempPropertyData!.properties!, records);
+  const columns = createColumns(companyName, propertyData!.properties!, records);
 
-  return <div className='h-full px-4 py-2'>{<DataTable columns={columns} data={tableData} />}</div>;
+  console.log({ tableData });
+
+  return <div className='px-4 py-2'>{<DataTable columns={columns} data={tableData} />}</div>;
 };
 
-export const RecordTableSkeleton = () => {
+const RecordTableSkeleton = () => {
   const height = '40px';
   const borderRadius = '4px';
   return (
-    <div className='min-w-[300px] space-y-1 px-4 py-2'>
+    <div className='space-y-1 px-4 py-2'>
       <Skeleton width='100%' height={height} borderRadius={borderRadius} className='bg-slate-400 dark:bg-slate-200' />
       <Skeleton width='100%' height={height} borderRadius={borderRadius} className='bg-slate-200 dark:bg-slate-600' />
       <Skeleton width='100%' height={height} borderRadius={borderRadius} className='bg-slate-200 dark:bg-slate-600' />

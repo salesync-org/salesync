@@ -3,18 +3,10 @@ import { useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { ItemSetting } from './ItemSetting';
 
-export const SettingDropDown = ({
-  title,
-  items,
-  adminPermission
-}: {
-  title: string;
-  items: SettingLayout[];
-  adminPermission: boolean | null;
-}) => {
+export const SettingDropDown = ({ title, items }: { title: string; items: { name: string; path: string }[] }) => {
   const location = useLocation();
   const [open, setOpen] = useState(() => {
-    return items.some((item) => location.pathname.includes(item.path ?? ''));
+    return items.some((item) => location.pathname.includes(item.path));
   });
   const { companyName = '' } = useParams();
 
@@ -33,15 +25,13 @@ export const SettingDropDown = ({
       </div>
       {open && (
         <div className='flex flex-col'>
-          {items.map((item, _) => (
+          {items.map((item, index) => (
             <ItemSetting
               className='pl-12'
               activeClassName='pl-[40px]'
-              key={item.name}
+              key={index}
               name={item.name}
               href={`/${companyName}/${item.path}`}
-              lock={!(!item.adminSettingRole || adminPermission)}
-              loading={item.adminSettingRole == null}
             />
           ))}
         </div>

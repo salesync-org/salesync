@@ -7,7 +7,7 @@ const NotFoundImage = () => {
         <img className='h-56 w-56 dark:hidden' src={notFoundLight}></img>
         <img className='hidden h-56 w-56 dark:block' src={notFoundDark}></img>
       </div>
-      <p className='-my-4 w-full text-center opacity-50'>Nothing's Here</p>
+      <p className='-my-4 w-full text-center opacity-50'>Nothing Here</p>
     </div>
   );
 };

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, ButtonGroup, Icon, PrimaryButton } from '@/components/ui';
+import { Button, ButtonGroup, DropDown, Icon, PrimaryButton, TextButton } from '@/components/ui';
 import React, { useState } from 'react';
 import { cn } from 'utils/utils';
 // import InputRecordRelative from './InputRecordRelative';
@@ -44,8 +44,8 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({
   const [typeActivity, setTypeActivity] = useState(setType()); // Email, Event, Call, Task
   const { recordId = '' } = useParams();
 
-  // let isDisabledTriangleButton = false;
-  // if (name === 'New Task') isDisabledTriangleButton = true;
+  let isDisabledTriangleButton = false;
+  if (name === 'New Task') isDisabledTriangleButton = true;
 
   const { toast } = useToast();
   const location = useLocation();
@@ -124,18 +124,89 @@ const ButtonActivity: React.FC<ButtonActivityProps> = ({
           }}
           title={name}
           disabled={disabled} // disable button
-          className={cn('first:rounded-l-md')}
         >
-          <div className='flex items-center space-x-2'>
-            {/* <img className={cn('aspect-square w-[1.8rem] rounded p-0.5 ', className)} src={icon} alt='Type Icon' /> */}
-            <Icon
-              size='1rem'
-              name={icon}
-              className={cn('aspect-square rounded p-[0.3rem] text-white', color, className)}
-            ></Icon>
-            <span className=''>{name}</span>
+          <div className='flex items-center'>
+            <Icon name={icon} className={cn('mr-1 rounded p-0.5 text-white', color, className)}></Icon>
+            <span className='text-blue-500 dark:text-link-text-dark'>{name}</span>
           </div>
         </Button>
+
+        <DropDown
+          defaultValue=''
+          value=''
+          prefixIcon={<Icon name='arrow_drop_down' size='1' />}
+          className='m-0 p-0'
+          disabled={disabled === true ? disabled : isDisabledTriangleButton}
+          align='left'
+        >
+          <div className='h-fit'>
+            {name === 'Email' && (
+              <>
+                <Button
+                  className='flex w-full justify-start border-0 border-button-background dark:border-button-background-dark'
+                  onClick={() => {
+                    setTypeActivity('Task');
+                    setIsOpen(true);
+                  }}
+                >
+                  <Icon name='checklist' className='mr-1'></Icon>
+                  <span className='text-nowrap'>Add Email to To Do List</span>
+                </Button>
+                <hr />
+                <div className='p-3'>
+                  <p className='font-bold'>Email</p>
+                  <TextButton
+                    onClick={() => {
+                      setTypeActivity('Email');
+                      setIsOpen(true);
+                    }}
+                    text='trantoan@gmail.com'
+                  ></TextButton>
+                </div>
+                <hr />
+                <Button
+                  className='flex w-full justify-start border-0 border-button-background dark:border-button-background-dark'
+                  onClick={() => {}}
+                >
+                  <Icon name='settings' className='mr-1'></Icon>
+                  <span className='text-nowrap'>Set My Email Preferences</span>
+                </Button>
+              </>
+            )}
+
+            {name === 'New Event' && (
+              <>
+                <Button
+                  className='flex w-full justify-start border-0 border-button-background dark:border-button-background-dark'
+                  onClick={() => {}}
+                >
+                  <Icon name='open_in_new' className='mr-1'></Icon>
+                  <span className='text-nowrap'>View Calendar</span>
+                </Button>
+              </>
+            )}
+
+            {name === 'Log a Call' && (
+              <>
+                <Button
+                  className='flex w-full justify-start border-0 border-button-background dark:border-button-background-dark'
+                  onClick={() => {
+                    setTypeActivity('Task');
+                    setIsOpen(true);
+                  }}
+                >
+                  <Icon name='checklist' className='mr-1'></Icon>
+                  <span className='text-nowrap'>Add Call to To Do List</span>
+                </Button>
+                <hr />
+                <div className='p-3'>
+                  <p className='font-bold'>Call</p>
+                  <TextButton onClick={() => {}} text='0123456789'></TextButton>
+                </div>
+              </>
+            )}
+          </div>
+        </DropDown>
       </ButtonGroup>
 
       {isPropertiesLoading && <LoadingSpinner className='mt-10' />}

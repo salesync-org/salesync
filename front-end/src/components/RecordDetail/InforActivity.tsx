@@ -57,6 +57,10 @@ const InforActivity: React.FC<InforActivityProps> = ({ className, data, type }) 
         const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
         const day = dateObject.getDate().toString().padStart(2, '0');
 
+        if (isNaN(Number(year)) || isNaN(Number(month)) || isNaN(Number(day))) {
+          return '';
+        }
+
         return `${day}-${month}-${year}`;
       } catch (error) {
         return 'Invalid datetime format';
@@ -85,15 +89,19 @@ const InforActivity: React.FC<InforActivityProps> = ({ className, data, type }) 
   return (
     <div className={cn('my-2', className)}>
       <div className='flex justify-between'>
-        <div className='flex w-16'>
+        <div className='flex w-16 justify-center align-middle'>
           <button onClick={() => setExpand(!expand)}>
-            {expand && <Icon name='expand_more' size='1' />}
-            {!expand && <Icon name='chevron_right' size='1' />}
+            {expand && <Icon name='expand_more' size='1.4rem' />}
+            {!expand && <Icon name='chevron_right' size='1.4rem' />}
           </button>
-          <Icon size='1.2rem' name={iconName} className={cn(' aspect-square rounded p-2 text-white', iconColor)}></Icon>
+          <Icon
+            size='1.2rem'
+            name={iconName}
+            className={cn(' flex aspect-square justify-center rounded p-2 align-middle text-white', iconColor)}
+          ></Icon>
         </div>
         <div className='flex w-full justify-between pl-4'>
-          <TextButton text={subject!} onClick={() => {}} />
+          <TextButton className='font-semibold' text={subject!} onClick={() => {}} />
           <div className='flex items-center'>
             {/* {type === 'Event' && <span className='mr-1'>{`${timeStart} |`}</span>} */}
             {/* <span className='mr-3'>{`${dateStart}`}</span> */}

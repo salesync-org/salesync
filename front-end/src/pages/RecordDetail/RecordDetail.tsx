@@ -16,6 +16,7 @@ import { cn, formatCurrency, formatRecords } from '@/utils/utils';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useToast } from '@/components/ui/Toast';
 import { useQueryClient } from 'react-query';
+import LoadingSpinnerSmall from '@/components/ui/Loading/LoadingSpinnerSmall';
 const iconBaseUrl = `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/system/icons`;
 const customTypeIcon = `${iconBaseUrl}/salesync_custom_type.png`;
 
@@ -24,7 +25,7 @@ const templateLayoutClassName: Record<string, string> = {
 };
 
 const RecordDetail = () => {
-  const { showModal } = useGlobalModalContext();
+  const { showModal, isLoading, setIsLoading } = useGlobalModalContext();
   const { user } = useAuth();
   const [isMenuOpen, setMenuOpen] = useState(false);
 
@@ -93,26 +94,12 @@ const RecordDetail = () => {
     }
   };
 
-  const types =
-    user.settings.layout_order.find((layoutOrder: LayoutOrder) => layoutOrder.name === 'Sales')?.types ?? [];
-
-  console.log(record);
   const templateName = record.source_record.type.template.name ?? '';
   const templateClassName = templateLayoutClassName[templateName] ?? '';
   const shouldShowActivity = templateName !== 'Activity';
 
   return (
     <div className='flex flex-col'>
-      {/* <section className='fixed left-0 right-0 z-50 flex h-[40px] items-center bg-panel px-6 dark:bg-panel-dark'>
-        <NavigationButton />
-        <h2 className='select-none pl-6 pr-6 leading-6'>Sales</h2>
-        <RecordTabs
-          tabs={types}
-          name='salesTabs'
-          domainName='sales'
-          currentTab={`${record.source_record.type.name}${recordId.slice(0, 2)}`}
-        />
-      </section> */}
       <section className='pt-12'>
         <Panel className='mb-0 flex flex-row items-center justify-between p-2'>
           <div className='flex flex-row items-center'>
@@ -150,9 +137,13 @@ const RecordDetail = () => {
               <Button
                 intent='normal'
                 zoom={false}
-                onClick={() => showModal(MODAL_TYPES.CONVERT_MODAL, { recordId: record.source_record.id, companyName })}
+                onClick={() => {
+                  setIsLoading(true);
+                  showModal(MODAL_TYPES.CONVERT_MODAL, { recordId: record.source_record.id, companyName });
+                }}
               >
-                Convert
+                <LoadingSpinnerSmall className={cn('hidden h-[1rem] w-[1rem]', isLoading && 'block')} />
+                <p>Convert</p>
               </Button>
             )}
             <DropDownList

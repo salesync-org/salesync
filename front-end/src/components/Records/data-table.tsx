@@ -26,7 +26,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
   });
 
   return (
-    <div className='min-h-full rounded-sm border-[1px] border-button-stroke dark:border-button-stroke-dark'>
+    <div className='min-h-full overflow-scroll rounded-sm border-[1px] border-button-stroke dark:border-button-stroke-dark'>
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

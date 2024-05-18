@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import { Button, Icon } from '../ui';
 import { useToast } from '../ui/Toast';
 import Stages from './Stages';
+import LoadingSpinnerSmall from '../ui/Loading/LoadingSpinnerSmall';
 
 interface StageSectionProps {
   stages: Stage[];
@@ -142,7 +143,7 @@ const StageSection = ({ stages, currentStage, updateRecord }: StageSectionProps)
     if (loading) {
       return (
         <Button intent='primary' disabled={loading} className='py-0'>
-          <Icon name='check' />
+          <LoadingSpinnerSmall className='h-4 w-4 text-on-primary' />
           <span className='text-xs'>Setting stage...</span>
         </Button>
       );

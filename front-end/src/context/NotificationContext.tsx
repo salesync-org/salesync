@@ -3,6 +3,7 @@ import { Stomp } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import useAuth from '@/hooks/useAuth';
 import instance from '@/api/axiosConfig';
+import { useParams } from 'react-router-dom';
 
 type NotificationContext = {
   notifications: NotificationMessage[];
@@ -17,6 +18,7 @@ const websocketHost = import.meta.env.VITE_NOTIFICATION_HOST;
 const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
   const [notifications, setNotifications] = useState<NotificationMessage[]>([]);
   const [newMessageCount, setNewMessageCount] = useState<number>(0);
+  const { companyName = '' } = useParams();
   const { user } = useAuth();
 
   useEffect(() => {
@@ -48,7 +50,7 @@ const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
     return () => {
       stompClient.disconnect();
     };
-  }, [user]);
+  }, [user, companyName]);
 
   const clearNewNotificationCount = () => {
     setNewMessageCount(0);

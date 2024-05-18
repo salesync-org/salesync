@@ -26,6 +26,7 @@ type AuthContext = {
   reloadUser: () => Promise<void>;
   changePassword: (companyName: string, password: string) => Promise<void>;
   updateUser: (companyName: string, updatedUser: User) => Promise<void>;
+  updateUserSettings: (companyName: string, updatedUser: User) => Promise<void>;
   getCompanyInfo: (companyName: string) => Promise<void>;
   updateCompanyInfo: (companyName: string, companyInfo: CompanyInfo) => Promise<void>;
   getRoles: (companyName: string) => Promise<Role[] | null>;
@@ -133,6 +134,23 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const updateUser = useCallback(
     async (companyName: string, updatedUser: User) => {
+      try {
+        const res = await auth.updateUser(companyName, {
+          ...updatedUser
+        });
+
+        if (res) {
+          setUser(updatedUser);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [setUser]
+  );
+
+  const updateUserSettings = useCallback(
+    async (companyName: string, updatedUser: User) => {
       const layoutOrders = updatedUser.settings.layout_order.map((layoutOrder) => {
         const filteredLayoutOrderTypes = layoutOrder.types.filter((type) => {
           // Don't save to server if the tab is a record tab but user didn't pin it
@@ -142,7 +160,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
 
       try {
-        const res = await auth.updateUser(companyName, {
+        await auth.updateUser(companyName, {
           ...updatedUser,
           settings: { ...updatedUser.settings, layout_order: layoutOrders }
         });
@@ -214,6 +232,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     logout,
     signUp,
     updateUser,
+    updateUserSettings,
     reloadUser,
     changePassword,
     verifyPassword,

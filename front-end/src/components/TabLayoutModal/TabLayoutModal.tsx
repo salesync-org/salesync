@@ -17,7 +17,7 @@ type TabLayoutModalProps = {
 };
 
 const TabLayoutModal = ({ isOpen, onClose, openingTabId, layoutName, ...props }: TabLayoutModalProps) => {
-  const { user, setUser, updateUser } = useAuth();
+  const { user, setUser, updateUserSettings } = useAuth();
   const { companyName = '' } = useParams();
   const navigate = useNavigate();
   const { types = [] } = useType();
@@ -51,7 +51,7 @@ const TabLayoutModal = ({ isOpen, onClose, openingTabId, layoutName, ...props }:
   const handleUpdateSectionList = debounce(async (sections: LayoutOrder[]) => {
     const newUser = { ...user, settings: { ...user.settings, layout_order: sections } };
     setUser(newUser);
-    await updateUser(companyName, newUser);
+    await updateUserSettings(companyName, newUser);
   }, 500);
 
   const handleOnSectionDragEnd = (result: any) => {
@@ -75,7 +75,7 @@ const TabLayoutModal = ({ isOpen, onClose, openingTabId, layoutName, ...props }:
       return layoutOrder;
     });
     const newUser = { ...user, settings: { ...user.settings, layout_order: newLayoutOrders } };
-    await updateUser(companyName, newUser);
+    await updateUserSettings(companyName, newUser);
     setUser(newUser);
   }, 500);
 
@@ -101,7 +101,7 @@ const TabLayoutModal = ({ isOpen, onClose, openingTabId, layoutName, ...props }:
       navigate(`/${companyName}/section/home`);
     }
     const newUser = { ...user, settings: { ...user.settings, layout_order: newLayoutOrders } };
-    await updateUser(companyName, newUser);
+    await updateUserSettings(companyName, newUser);
     setUser(newUser);
   };
 
@@ -124,7 +124,7 @@ const TabLayoutModal = ({ isOpen, onClose, openingTabId, layoutName, ...props }:
       return layoutOrder;
     });
     const newUser = { ...user, settings: { ...user.settings, layout_order: newLayoutOrders } };
-    await updateUser(companyName, newUser);
+    await updateUserSettings(companyName, newUser);
     setUser(newUser);
 
     if (openingTabId === typeId) {

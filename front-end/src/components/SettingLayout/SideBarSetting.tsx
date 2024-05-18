@@ -5,7 +5,7 @@ import { ItemSetting } from './ItemSetting';
 
 type SidebarSettingProps = {
   settings: SettingLayout[];
-  adminPermission: boolean;
+  adminPermission: boolean | null;
 };
 
 export const SidebarSetting = ({ settings, adminPermission }: SidebarSettingProps) => {
@@ -24,6 +24,7 @@ export const SidebarSetting = ({ settings, adminPermission }: SidebarSettingProp
                     name={setting.name}
                     href={`/${companyName}/${setting.path}`}
                     lock={!(!setting.adminSettingRole || adminPermission)}
+                    loading={adminPermission == null}
                   />
                 )}
               </div>

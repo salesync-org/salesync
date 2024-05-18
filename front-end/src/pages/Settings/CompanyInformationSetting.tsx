@@ -10,7 +10,7 @@ import { Pencil } from 'lucide-react';
 
 const CompanyInfomationSetting = () => {
   const { companyName } = useParams();
-  const { company, updateCompanyInfo, reloadCompanyInfo } = useAuth();
+  const { company, updateCompanyInfo } = useAuth();
   const [isUpdating, setUpdatingStatus] = useState(false);
   const [editAvatarHovered, setEditAvatarHovered] = useState(false);
   const [companyLoaded, setCompanyLoadedInfo] = useState<CompanyInfo>(
@@ -59,7 +59,6 @@ const CompanyInfomationSetting = () => {
               title: 'Success',
               description: 'Reload to see your avatar take effect.'
             });
-            reloadCompanyInfo();
             setUpdatingStatus(false);
           });
         }

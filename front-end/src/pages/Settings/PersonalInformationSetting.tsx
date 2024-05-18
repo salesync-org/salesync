@@ -15,9 +15,8 @@ const PersonalInfomationSetting = () => {
   const [userLoaded, setUserInfo] = useState({ ...user });
   const { toast } = useToast();
   const [isUpdating, setUpdatingStatus] = useState(false);
-  const [avatarUrl, setAvatarUrl] = useState(
-    `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/avatars/${user?.avatar_url}-256.jpg`
-  );
+  const avatarUrl = `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/avatars/${user?.avatar_url}-256.jpg`;
+
   const editableFields = {
     first_name: true,
     last_name: true,
@@ -31,7 +30,6 @@ const PersonalInfomationSetting = () => {
     roles: null,
     permissions: null
   };
-  console.log(user);
 
   const handleOnChange = ({ field, value }: { field: string; value: string }) => {
     setUserInfo((prev) => ({ ...prev, [field]: value }));
@@ -42,18 +40,15 @@ const PersonalInfomationSetting = () => {
       uploadAvatar(`avatar_${userLoaded.user_id}`, file).then(async (res) => {
         if (res && res.status === 200) {
           const newUser = { ...userLoaded, avatar_url: `avatar_${userLoaded.user_id}` };
+          console.log(newUser);
           setUserInfo(newUser);
-          console.log('Loaded: ' + newUser);
           await updateUser(companyName ?? '', newUser as User).then(() => {
             toast({
               title: 'Success',
-              description: 'Reload to see your avatar take effect.'
+              description: 'It takes a few minutes for your avatar to take effect.'
             });
             setUpdatingStatus(false);
-            setTimeout(() => {
-              reloadUser();
-              setAvatarUrl(`${import.meta.env.VITE_STORAGE_SERVICE_HOST}/avatars/${user?.avatar_url}-256.jpg`);
-            }, 2000);
+            reloadUser();
           });
         }
       });
@@ -88,6 +83,7 @@ const PersonalInfomationSetting = () => {
                     return (
                       <div key={fieldName.toString()}>
                         <TextInput
+                          key={`${fieldName.toString()}-input`}
                           header={fieldName
                             .split('_')
                             .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -101,8 +97,6 @@ const PersonalInfomationSetting = () => {
                         />
                       </div>
                     );
-                  } else {
-                    return <></>;
                   }
                 })}
             </div>
@@ -113,17 +107,15 @@ const PersonalInfomationSetting = () => {
               <div className='w-full border-b-2 border-button-stroke-light py-4 dark:border-button-stroke-dark'></div>
             </div>
             <div className='aspect-square w-64 overflow-clip rounded-full'>
-              <img src={`${avatarUrl}?lastmod=${new Date().getTime().toString()}`} />
+              {user && <img src={`${avatarUrl}?lastmod=${Date.now()}`} />}
             </div>
             <div className='dark:panel-dark absolute bottom-1 right-2'>
               <Button
                 rounded
                 onMouseEnter={(_) => {
-                  console.log('Hovering');
                   setEditAvatarHovered(true);
                 }}
                 onMouseLeave={(_) => {
-                  console.log('Stop Hovering');
                   setEditAvatarHovered(false);
                 }}
                 className={cn(

@@ -1,23 +1,21 @@
-import { Panel } from '@/components/ui';
+import { Button, Panel } from '@/components/ui';
 import useType from '@/hooks/type-service/useType';
 import { Chart as ChartJS, ArcElement, Tooltip, Title, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
-import { useParams } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import ChartSkeleton from './ChartSkeleton';
 import useStages from '@/hooks/type-service/useStage';
 import useRecords from '@/hooks/record-service/useRecords';
 import { generateChartColor } from '@/utils/utils';
+import { ChevronRight } from 'lucide-react';
 
 ChartJS.register(ArcElement, Tooltip, Title, Legend);
 
 const OpportunityStageChart = () => {
   const { types = [], isLoading: isTypesLoading } = useType();
   const { companyName = '' } = useParams();
-
-  const { data: opportunityStages, isLoading: opportunityStageLoading } = useStages(
-    companyName,
-    Array.isArray(types) ? types.find((type) => type.name === 'Opportunity')?.id || '' : ''
-  );
+  const typeId = Array.isArray(types) ? types.find((type) => type.name === 'Opportunity')?.id || '' : '';
+  const { data: opportunityStages, isLoading: opportunityStageLoading } = useStages(companyName, typeId);
 
   const { data: opportunityRecords, isLoading: opportunityLoading } = useRecords(
     companyName,
@@ -58,7 +56,8 @@ const OpportunityStageChart = () => {
 
   const options = {
     maintainAspectRatio: false,
-    plugins: { legend: { display: true, position: 'right' as const } }
+    offset: 8,
+    plugins: { legend: { display: true, position: 'right' as const, title: { text: '3' } } }
   };
 
   const { backgroundColor, borderColor } = generateChartColor(labels.length);
@@ -77,10 +76,23 @@ const OpportunityStageChart = () => {
     ]
   };
   return (
-    <Panel>
+    <Panel className='m-0'>
       <section>
-        <h2>Opportunity</h2>
-        <p className='mb-4'>Opportunities owned by me and created in the last 30 days</p>
+        <div className='justify-bewteen flex'>
+          <div className='w-full'>
+            <h2>Opportunity</h2>
+            <p className='mb-4 text-[0.9rem]'>Opportunities owned by me and created in the last 30 days</p>
+          </div>
+          <NavLink to={`/${companyName ?? ''}/section/sales/${typeId}`}>
+            <Button
+              rounded
+              className='justify-center rounded-full border-0 border-primary font-[450] text-primary hover:border-2'
+            >
+              <p className='text-nowrap'>View Opportunities</p>
+              <ChevronRight size={'1.4rem'}></ChevronRight>
+            </Button>
+          </NavLink>
+        </div>
         <div className='grid h-max flex-grow place-content-center'>
           {opportunityNumber === 0 ? (
             <h3>{"You don't have any Opportunities"}</h3>

@@ -15,20 +15,24 @@ import { cn } from '@/utils/utils';
 import buttonVariants from '../Button/ButtonProps';
 import LoadingSpinner from '../Loading/LoadingSpinner';
 
-const standardTypes = [
-  'Lead',
-  'Contact',
-  'Opportunity',
+export const standardTypes = [
   'Account',
-  'Task',
-  'Event',
-  'Deal',
   'Campaign',
-  'Invoice',
-  'Quote',
-  'Product',
+  'Call',
   'Case',
-  'Contract'
+  'Contact',
+  'Contract',
+  'Deal',
+  'Email',
+  'Event',
+  'Invoice',
+  'Lead',
+  'Opportunity',
+  'Order',
+  'Product',
+  'PriceBook',
+  'Quote',
+  'Task'
 ];
 
 const TypeTable = ({ types }: { types: Type[] }) => {
@@ -80,7 +84,7 @@ const TypeTable = ({ types }: { types: Type[] }) => {
                           <DropdownMenuSeparator className='border-[.2px] border-input-stroke-light px-2 dark:border-input-stroke-dark' />
                           <DropdownMenuGroup>
                             <DropdownMenuItem
-                              onClick={(_) => {
+                              onClick={() => {
                                 navigate(`/${companyName}/setting/object-manager/${type.id}?tab=properties`);
                               }}
                             >
@@ -90,7 +94,7 @@ const TypeTable = ({ types }: { types: Type[] }) => {
                               </div>
                             </DropdownMenuItem>
                             <DropdownMenuItem
-                              onClick={(_) => {
+                              onClick={() => {
                                 navigate(`/${companyName}/setting/object-manager/${type.id}?tab=relations`);
                               }}
                             >
@@ -101,7 +105,7 @@ const TypeTable = ({ types }: { types: Type[] }) => {
                             </DropdownMenuItem>
                             {type.template && type.template.name === 'StageObject' && (
                               <DropdownMenuItem
-                                onClick={(_) => {
+                                onClick={() => {
                                   navigate(`/${companyName}/setting/object-manager/${type.id}?tab=stages`);
                                 }}
                               >

@@ -6,6 +6,8 @@ import App from './App.tsx';
 import AuthProvider from './context/AuthContext.tsx';
 import './index.css';
 import { GlobalModalProvider } from './context/GlobalModalContext.tsx';
+import 'react-tooltip/dist/react-tooltip.css';
+import NotificationProvider from './context/NotificationContext.tsx';
 
 const queryClient = new QueryClient();
 
@@ -21,11 +23,13 @@ enableMocking().then(() => {
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <BrowserRouter>
-            <GlobalModalProvider>
-              <App />
-            </GlobalModalProvider>
-          </BrowserRouter>
+          <NotificationProvider>
+            <BrowserRouter>
+              <GlobalModalProvider>
+                <App />
+              </GlobalModalProvider>
+            </BrowserRouter>
+          </NotificationProvider>
         </AuthProvider>
       </QueryClientProvider>
     </React.StrictMode>

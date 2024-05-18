@@ -1,5 +1,7 @@
-import { Button, DropDownList, Icon, Item } from 'components/ui';
-import { useState } from 'react';
+import { cn } from '@/utils/utils';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, Tooltip } from 'components/ui';
+import buttonVariants from '../Button/ButtonProps';
+import { ChevronDown } from 'lucide-react';
 
 type Action = {
   title: string;
@@ -11,34 +13,42 @@ type ActionDropDownProps = {
 };
 
 const ActionDropDown = ({ actions }: ActionDropDownProps) => {
-  const [isMenuOpen, setMenuOpen] = useState(false);
   return (
-    <div className='relative'>
-      <Button
-        zoom={false}
-        intent='normal'
-        className='grid size-8 place-content-center p-0'
-        onClick={(e) => {
-          e.preventDefault();
-          setMenuOpen(true);
-        }}
-      >
-        <Icon name='arrow_drop_down' className='text-3xl'></Icon>
-      </Button>
-      <DropDownList
-        open={isMenuOpen}
-        onClose={() => {
-          setMenuOpen(false);
-        }}
-        align='right'
-        className='absolute right-[-50%] top-[32px] mt-0'
-        divide={false}
-      >
-        {actions.map((action) => (
-          <Item key={action.title} title={action.title} onClick={action.action} className='text-left' />
-        ))}
-      </DropDownList>
-    </div>
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          className={cn(
+            buttonVariants({ intent: 'normal', rounded: 'normal', zoom: true }),
+            'rounded border-2 border-button-stroke px-4 py-2 dark:border-button-stroke-dark',
+            'grid size-8 place-content-center p-0'
+          )}
+          onClick={(e) => {
+            e.preventDefault();
+          }}
+        >
+          <div
+            data-tooltip-id='actionDropDown'
+            data-tooltip-content='More Options'
+            className='flex w-fit items-center justify-center space-x-2'
+          >
+            <ChevronDown size={'1rem'} />
+          </div>
+          <Tooltip id='actionDropDown' />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          className={cn(
+            'hover:bg-dark w-56 bg-button-background-light dark:bg-button-background-dark',
+            'border-2 border-button-stroke-light/60 dark:border-button-stroke-dark/60'
+          )}
+        >
+          {actions.map((action) => (
+            <DropdownMenuItem key={action.title} title={action.title} onClick={action.action}>
+              {action.title}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
   );
 };
 export default ActionDropDown;

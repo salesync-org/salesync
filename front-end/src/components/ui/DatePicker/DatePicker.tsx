@@ -6,6 +6,7 @@ import { format } from 'date-fns';
 // import { textErrorClassName } from '../ErrorText/ErrorText';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
+import './style.css';
 import useClickOutside from '@/hooks/useClickOutside';
 
 interface DatePickerProps {
@@ -42,7 +43,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
   });
   const [isOpen, setIsOpen] = useState(false);
 
-  const [dateValue, setDateValue] = useState(value ?? format(new Date(), 'yyyy/MM/dd'));
+  const [dateValue, setDateValue] = useState(value && value !== '' ? value : format(new Date(), 'yyyy/MM/dd'));
   const [selected, setSelected] = useState<Date>();
   useEffect(() => {
     if (selected) {
@@ -87,7 +88,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
             !isOpen && 'hidden'
           )}
         >
-          <DayPicker mode='single' className='' selected={selected} onSelect={setSelected} />
+          <DayPicker mode='single' selected={selected} onSelect={setSelected} />
         </div>
       </div>
       <div

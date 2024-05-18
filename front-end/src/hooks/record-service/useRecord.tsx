@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 
 const useRecord = (companyName: string, recordId: string) => {
   const key = ['record', recordId];
-  const { data, error, isLoading } = useQuery(
+  const { data, error, isLoading, status } = useQuery(
     key,
     async () => {
       return recordApi.getRecordDetail(companyName, recordId);
@@ -20,6 +20,6 @@ const useRecord = (companyName: string, recordId: string) => {
     console.error('Error fetching records:', error);
   }
 
-  return { data, error, isLoading, key };
+  return { data, error, isLoading, key, status };
 };
 export default useRecord;

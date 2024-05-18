@@ -40,6 +40,8 @@ export const formatRecords = (records: RecordResponse[]) => {
     formattedRecords.push(formattedRecord);
   }
 
+  localStorage.setItem('records', JSON.stringify(formattedRecords));
+
   return formattedRecords;
 };
 

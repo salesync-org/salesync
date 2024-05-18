@@ -1,0 +1,5 @@
+pipeline:
+  batch:
+    delay: 50
+    size: 125
+xpack.monitoring.enabled: false

@@ -1,4 +1,5 @@
 import { cn } from '@/utils/utils';
+import './style.css';
 
 type LoadingSpinnerProps = {
   className?: string;
@@ -6,16 +7,23 @@ type LoadingSpinnerProps = {
 
 const LoadingSpinner = ({ className }: LoadingSpinnerProps) => {
   return (
-    <div className={cn('flex h-full w-full items-center justify-center space-x-2 bg-white/80', className)}>
-      <div className='animate-ping'>
-        <div className='grid animate-spin grid-cols-3 gap-y-1'>
-          <div className='relative left-[-6px] top-[-1px] h-2 w-2 animate-pulse rounded-full bg-primary-color'></div>
-          <div className='relative top-[-10px] h-2 w-2 animate-pulse rounded-full bg-primary-color'></div>
-          <div className='relative right-[-6px] top-[-1px] h-2 w-2 animate-pulse rounded-full bg-primary-color'></div>
-          <div className='relative bottom-[-1px] left-[-6px] h-2 w-2 animate-pulse rounded-full bg-primary-color'></div>
-          <div className='relative bottom-[-10px] h-2 w-2 animate-pulse rounded-full bg-primary-color'></div>
-          <div className='relative bottom-[-1px] right-[-6px] h-2 w-2 animate-pulse rounded-full bg-primary-color'></div>
-        </div>
+    <div
+      className={cn(
+        'flex h-full w-full items-center justify-center space-x-2 bg-white/80 dark:bg-panel-dark',
+        className
+      )}
+    >
+      <div className='spinner scale-75'>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
       </div>
     </div>
   );

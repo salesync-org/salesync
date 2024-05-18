@@ -1,30 +1,28 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Icon, PrimaryButton, Switch } from '@/components/ui';
+import { Button, Icon } from '@/components/ui';
 import { useState } from 'react';
 import ButtonActivity from './ButtonActivity';
 import InforActivity from './InforActivity';
+// const iconBaseUrl = `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/system/icons`;
 
 type RecordActivityProps = {
   relations: any[];
 };
 
 const RecordActivity = ({ relations }: RecordActivityProps) => {
-  const [expand, setExpand] = useState(false);
+  const [expand, setExpand] = useState(true);
   // expand: upcoming and overdue
   // expand2: this month
 
-  const [showActivity, setShowActivity] = useState(true);
   const [isButtonActivity, setIsButtonActivity] = useState(false);
 
   const activityRelations = relations.filter(
     (relation) => relation.destination_record.type.template.name === 'Activity'
   );
 
-  const refreshActivity = () => {};
-
   return (
     <div>
-      <div className='flex flex-wrap'>
+      <div className='my-4 flex flex-wrap space-x-2'>
         <ButtonActivity
           name='Email'
           icon='mail'
@@ -49,24 +47,37 @@ const RecordActivity = ({ relations }: RecordActivityProps) => {
         <ButtonActivity
           name='New Task'
           icon='checklist'
-          color='bg-green-400'
+          color='bg-green-600'
           disabled={isButtonActivity}
           setDisabled={setIsButtonActivity}
         />
-      </div>
-
-      <div className='bg z-[10] my-4 flex w-fit rounded px-3'>
-        <Icon name='face_2' className='mr-2 text-blue-500 dark:text-link-text-dark'></Icon>
-        <span>Only show activities with insights</span>
-        <Switch onClick={() => setShowActivity(!showActivity)} checked={false} className='z-10 ml-2'></Switch>
-      </div>
-
-      <div className='flex flex-row-reverse'>
-        <button className='text-blue-500 hover:text-blue-800'>Expand All</button>
-        <span className='m-2'> • </span>
-        <button className='text-blue-500 hover:text-blue-800' onClick={() => refreshActivity}>
-          Refresh
-        </button>
+        {/* <ButtonActivity
+          name='Email'
+          icon={`${iconBaseUrl}/salesync_email.png`}
+          color='bg-neutral-400'
+          disabled={isButtonActivity}
+          setDisabled={setIsButtonActivity}
+        />
+        <ButtonActivity
+          name='New Event'
+          icon={`${iconBaseUrl}/salesync_event.png`}
+          color='bg-purple-400'
+          disabled={isButtonActivity}
+          setDisabled={setIsButtonActivity}
+        />
+        <ButtonActivity
+          name='Log a Call'
+          icon={`${iconBaseUrl}/salesync_call.png`}
+          color='bg-teal-600'
+          disabled={isButtonActivity}
+          setDisabled={setIsButtonActivity}
+        />
+        <ButtonActivity
+          name='New Task'
+          icon={`${iconBaseUrl}/salesync_task.png`}
+          color='bg-green-400'
+          disabled={isButtonActivity}
+          setDisabled={setIsButtonActivity} */}
       </div>
 
       <div>
@@ -75,8 +86,8 @@ const RecordActivity = ({ relations }: RecordActivityProps) => {
           onClick={() => setExpand(!expand)}
           title='Upcoming & Overdue'
         >
-          {expand && <Icon name='expand_more' size='1' />}
-          {!expand && <Icon name='chevron_right' size='1' />}
+          {expand && <Icon name='expand_more' size='1rem' />}
+          {!expand && <Icon name='chevron_right' size='1rem' />}
           <span className='font-bold'>Upcoming & Overdue</span>
         </Button>
         {expand && (
@@ -91,9 +102,9 @@ const RecordActivity = ({ relations }: RecordActivityProps) => {
           </>
         )}
       </div>
-      <PrimaryButton className='mx-auto mb-12 mt-4' onClick={() => {}}>
+      {/* <PrimaryButton className='mx-auto mb-12 mt-4' onClick={() => {}}>
         <span>Show All Activities</span>
-      </PrimaryButton>
+      </PrimaryButton> */}
     </div>
   );
 };

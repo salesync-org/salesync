@@ -13,8 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Configuration
-public class CorsConfig
-{
+public class CorsConfig {
     @Bean
     CorsWebFilter corsWebFilter() {
         CorsConfiguration corsConfig = new CorsConfiguration();
@@ -23,8 +22,7 @@ public class CorsConfig
         corsConfig.setAllowedMethods(List.of("PUT", "DELETE", "GET", "POST"));
         corsConfig.setAllowedHeaders(List.of("*"));
 
-        UrlBasedCorsConfigurationSource source =
-                new UrlBasedCorsConfigurationSource();
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfig);
 
         return new CorsWebFilter(source);

@@ -3,6 +3,7 @@ import { SortingState, flexRender, getCoreRowModel, getSortedRowModel, useReactT
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/DataTable/table';
 import { cn } from '@/utils/utils';
 import { useState } from 'react';
+import NotFoundImage from '../NotFoundImage/NotFoundImage';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface DataTableProps<TData, _TValue> {
@@ -25,8 +26,8 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
   });
 
   return (
-    <div className='rounded-sm border-[1px] border-button-stroke dark:border-button-stroke-dark'>
-      <Table className=''>
+    <div className='min-h-full overflow-scroll rounded-sm border-[1px] border-button-stroke dark:border-button-stroke-dark'>
+      <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow
@@ -38,7 +39,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                   <TableHead
                     key={header.id}
                     className={cn(
-                      'h-8 truncate border-r-2 font-semibold last:border-x-0 hover:bg-button-background-hover dark:hover:bg-button-background-hover-dark',
+                      'h-8 truncate border-r-[1px] font-semibold last:border-x-0 hover:bg-button-background-hover dark:hover:bg-button-background-hover-dark',
                       index === 0 && 'w-0',
                       index === 1 && 'w-12'
                     )}
@@ -55,7 +56,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
-                className='group h-8 h-[40px] transition-all hover:bg-button-background-hover dark:hover:bg-button-background-hover-dark'
+                className='group h-[40px] transition-all hover:bg-button-background-hover dark:hover:bg-button-background-hover-dark'
                 data-state={row.getIsSelected() && 'selected'}
               >
                 {row.getVisibleCells().map((cell) => (
@@ -71,7 +72,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className='h-24 truncate text-center'>
-                No results.
+                <NotFoundImage></NotFoundImage>
               </TableCell>
             </TableRow>
           )}

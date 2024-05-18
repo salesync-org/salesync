@@ -5,7 +5,7 @@ const CompanyName = () => {
   const { companyName = '' } = useParams();
 
   if (location.pathname.endsWith(companyName)) {
-    return <Navigate to={`/${companyName}/home`} />;
+    return <Navigate to={`/${companyName}/section/home`} />;
   }
   return <Outlet />;
 };

@@ -1,3 +1,4 @@
+import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
 import useAuth from '@/hooks/useAuth';
 import { Navigate, Outlet, useLocation, useParams } from 'react-router-dom';
 
@@ -7,7 +8,11 @@ const PrivateRoute = () => {
   const location = useLocation();
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className='h-screen'>
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   if (!isAuthenticated) {

@@ -12,12 +12,16 @@ import useRecord from '@/hooks/record-service/useRecord';
 import useStages from '@/hooks/type-service/useStage';
 import useAuth from '@/hooks/useAuth';
 // import { LayoutOrder, Stage } from '@/type';
-import { formatCurrency, formatRecords } from '@/utils/utils';
+import { cn, formatCurrency, formatRecords } from '@/utils/utils';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useToast } from '@/components/ui/Toast';
 import { useQueryClient } from 'react-query';
 const iconBaseUrl = `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/system/icons`;
 const customTypeIcon = `${iconBaseUrl}/salesync_custom_type.png`;
+
+const templateLayoutClassName: Record<string, string> = {
+  Activity: 'col-span-3'
+};
 
 const RecordDetail = () => {
   const { showModal } = useGlobalModalContext();
@@ -88,6 +92,14 @@ const RecordDetail = () => {
       }
     }
   };
+
+  const types =
+    user.settings.layout_order.find((layoutOrder: LayoutOrder) => layoutOrder.name === 'Sales')?.types ?? [];
+
+  console.log(record);
+  const templateName = record.source_record.type.template.name ?? '';
+  const templateClassName = templateLayoutClassName[templateName] ?? '';
+  const shouldShowActivity = templateName !== 'Activity';
 
   return (
     <div className='flex flex-col'>
@@ -165,7 +177,7 @@ const RecordDetail = () => {
 
         {/* record contain  */}
         <div className='grid grid-cols-4 md:grid-cols-4'>
-          <Panel className='col-span-1 mr-0 h-fit p-4'>
+          <Panel className={cn('col-span-1 mr-0 h-fit p-4', templateClassName)}>
             {formattedRecord &&
               Object.keys(formattedRecord).map((key) => {
                 if (key === 'id') return null;
@@ -177,24 +189,25 @@ const RecordDetail = () => {
                 return <InputProperty key={key} name={key} value={value} />;
               })}
           </Panel>
-          <section className='col-span-2'>
-            {stages && stages.length > 0 && (
+          {shouldShowActivity && (
+            <section className='col-span-2'>
+              {stages && stages.length > 0 && (
+                <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
+                  <div className='px-4'>
+                    <StageSection
+                      stages={mapStages}
+                      currentStage={currentStage}
+                      updateRecord={updateRecord}
+                      recordId={record.source_record.id}
+                    />
+                  </div>
+                </Panel>
+              )}
               <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
-                <div className='px-4'>
-                  <StageSection
-                    stages={mapStages}
-                    currentStage={currentStage}
-                    updateRecord={updateRecord}
-                    recordId={record.source_record.id}
-                  />
-                </div>
+                <RecordActivity relations={record.relations} />
               </Panel>
-            )}
-            <Panel className='order-3 col-span-2 h-fit p-4 md:order-none md:mr-0'>
-              <RecordActivity relations={record.relations} />
-            </Panel>
-          </section>
-
+            </section>
+          )}
           <section className='col-span-1'>
             <RelationSections relations={record.relations} typeId={record.source_record.type.id} />
           </section>

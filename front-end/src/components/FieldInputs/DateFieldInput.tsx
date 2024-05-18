@@ -17,9 +17,9 @@ const DateFieldInput = ({ label, name, propertyFields, updateFields }: DateField
         name={name}
         value={value}
         className='w-1/2'
-        onValueChange={(e) => {
-          updateFields([{ ...propertyFields[0], default_value: value }]);
-          setValue(e);
+        onValueChange={(s) => {
+          updateFields([{ ...propertyFields[0], default_value: s }]);
+          setValue(s);
         }}
       />
     </>

@@ -13,6 +13,8 @@ public final class Route {
 
     public static final String RECORD_TYPE_RELATION = "/create-record-type-relation";
 
+    public static final String CREATE_LIST = "/create-list";
+
     public static final String UPDATE_STAGE = "/update-stage";
 
     public static final String LIST_RECORD_TYPE_RELATION = "/list-record-type-relation/{sourceRecordId}";

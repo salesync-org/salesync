@@ -24,7 +24,7 @@ export class ErrorBoundary extends React.Component<any, { hasError: boolean; err
         <section className='fixed bottom-0 right-0 rounded-md bg-red-500 p-10'>
           <h1 className='text-xl text-white'>{this.state.errorInfo}</h1>
           <Button intent='primary' className='mx-auto'>
-            <Link to={'/home'}>Go back to Hame</Link>
+            <Link to={'/section/home'}>Go back to Hame</Link>
           </Button>
         </section>
       );

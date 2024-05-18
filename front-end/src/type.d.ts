@@ -6,7 +6,6 @@
 //   destination_type: Type;
 //   destination_label: string;
 // };
-
 type Type = {
   // icon_url: string?;
   // background_color: string?;
@@ -23,6 +22,8 @@ type Type = {
 type LayoutType = {
   name: string;
   type_id: string;
+  isPrimitiveType?: boolean;
+  saved?: boolean;
 };
 
 // type TypeProperty = {
@@ -372,3 +373,29 @@ type PropertyResponse = {
   property_label: string;
   item_value: string;
 };
+
+type FieldItem = {
+  id: string;
+  item_value: string;
+  property_field: PropertyField;
+};
+
+type SettingLayout = {
+  name: string;
+  path?: string;
+  Icon?: any;
+  adminSettingRole: boolean;
+  items?: SettingLayout[];
+};
+
+type NotificationMessage = {
+  "id": string,
+  "title": string,
+  "content": string,
+  "url": string,
+  "action": string,
+  "sender_id": string,
+  "receiver_id": string,
+  "created_at": Date,
+  "is_read": boolean
+}

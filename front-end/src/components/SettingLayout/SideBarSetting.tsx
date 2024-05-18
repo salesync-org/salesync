@@ -2,25 +2,30 @@ import { useParams } from 'react-router-dom';
 import { Panel } from '../ui';
 import { SettingDropDown } from './SettingDropDown';
 import { ItemSetting } from './ItemSetting';
-import { Setting } from '@/pages/Settings/SettingLayout';
 
 type SidebarSettingProps = {
-  settings: Setting[];
+  settings: SettingLayout[];
+  adminPermission: boolean | null;
 };
 
-export const SidebarSetting = ({ settings }: SidebarSettingProps) => {
+export const SidebarSetting = ({ settings, adminPermission }: SidebarSettingProps) => {
   const { companyName = '' } = useParams();
   return (
     <Panel className='m-0 h-full w-[284px] bg-panel px-0 py-4 dark:bg-panel-dark'>
       <div className='flex flex-col'>
-        {settings.map((setting: Setting) => {
+        {settings.map((setting: SettingLayout) => {
           return (
             <div key={setting.name}>
               <div className='flex flex-col'>
                 {setting.items ? (
-                  <SettingDropDown title={setting.name} items={setting.items} />
+                  <SettingDropDown title={setting.name} items={setting.items} adminPermission={adminPermission} />
                 ) : (
-                  <ItemSetting name={setting.name} href={`/${companyName}/${setting.path}`} />
+                  <ItemSetting
+                    name={setting.name}
+                    href={`/${companyName}/${setting.path}`}
+                    lock={!(!setting.adminSettingRole || adminPermission)}
+                    loading={adminPermission == null}
+                  />
                 )}
               </div>
             </div>

@@ -54,12 +54,7 @@ const AssignRoleToUserModal = ({ isOpen, onClose, role, users }: AssignRoleToUse
   };
 
   return (
-    <Modal
-      title={`Assign ${role!.role_name}`}
-      isOpen={isOpen}
-      onClose={onClose}
-      className='mx-auto h-[400px] w-[400px] '
-    >
+    <Modal title={`Assign ${role!.role_name}`} isOpen={isOpen} onClose={onClose} className='w-full px-4'>
       <div className='grid grid-cols-1'>
         <div className='h-[250px] overflow-y-scroll rounded-sm'>
           {visibleUsers.map((user, index) => (
@@ -77,9 +72,17 @@ const AssignRoleToUserModal = ({ isOpen, onClose, role, users }: AssignRoleToUse
                 <Button
                   rounded
                   onClick={() => {
+                    setVisibleUsers((prev) => {
+                      return prev.map((u) => {
+                        if (u.user.user_id === user.user.user_id) {
+                          return { user: u.user, isSet: null };
+                        }
+                        return u;
+                      });
+                    });
                     handleAssignRole(user.user);
                   }}
-                  disabled={user.isSet == true}
+                  disabled={visibleUsers.findIndex((u) => u.isSet === null) != -1}
                   className='rounded-full'
                 >
                   {user.isSet == null ? (

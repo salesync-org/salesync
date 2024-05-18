@@ -274,7 +274,16 @@ public class RecordServiceImpl implements RecordService {
             recordEntity.getRecordProperties().add(recordTypeProperty);
         }
 
+        String userId = tokenService.extractClaim(token.split(" ")[1], claims -> claims.get("userId", String.class));
+        rabbitMQProducer.sendMessage("record", MessageDto.builder().content("${" + userId + "} Updated " + recordEntity.getName()).title("Record Updated").createdAt(new Date()).action("update").isRead(false).url("/record/" + recordEntity.getId()).senderId(UUID.fromString(userId)).receiverId(recordEntity.getUserId()).build());
+
         return recordMapper.recordToRecordDto(recordRepository.save(recordEntity));
+    }
+
+    @Override
+    public List<RecordDto> createListRecord(String realm, String token, List<CreateRecordRequestDto> createRecordRequestDtos) {
+        return createRecordRequestDtos.stream().map(createRecordRequestDto -> createRecordByTypeId(
+                realm, createRecordRequestDto.getTypeId().toString(), token, createRecordRequestDto)).toList();
     }
 
     public TypeDto findTypeById(UUID typeId, List<TypeDto> allType) {

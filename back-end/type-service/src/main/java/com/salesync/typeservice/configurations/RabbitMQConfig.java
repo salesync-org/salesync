@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfig {
 
     @Bean
-    public Queue recordQueue() {
+    public Queue typeQueue() {
         return new Queue("type-queue", true, false, false);
     }
 
@@ -21,8 +21,8 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public Binding binding(Queue recordQueue, Exchange exchange) {
-        return BindingBuilder.bind(recordQueue).to(exchange).with("type").noargs();
+    public Binding binding(Queue typeQueue, Exchange exchange) {
+        return BindingBuilder.bind(typeQueue).to(exchange).with("type").noargs();
     }
 
     @Bean

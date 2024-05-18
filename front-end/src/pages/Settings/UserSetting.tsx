@@ -39,8 +39,8 @@ const UserSetting = () => {
     const user: NewUser = {
       email: email,
       role: profile,
-      first_name: 'Unknown',
-      last_name: 'Name',
+      first_name: email.slice(0, email.indexOf('@')),
+      last_name: '',
       job_title: 'None',
       phone: 'None'
     };

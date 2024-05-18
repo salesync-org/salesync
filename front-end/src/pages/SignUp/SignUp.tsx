@@ -158,7 +158,7 @@ const SignUp = () => {
       });
 
       const formattedCompanyName = formatCompanyName(data.company);
-      navigate(`/${formattedCompanyName}/home`);
+      navigate(`/${formattedCompanyName}/section/home`);
     } catch (error) {
       console.error(error);
       toast({
@@ -351,9 +351,9 @@ const SignUp = () => {
                     ></Checkbox>
                     <label htmlFor='agreePolicy' className='ml-2 block'>
                       <span>I agree to the </span>
-                      <a href='' className='text-blue-500'>
+                      <Link to='#' className='text-blue-500'>
                         Main Services Agreement.
-                      </a>
+                      </Link>
                     </label>
                   </div>
                   {errorCheck1 && (

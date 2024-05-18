@@ -4,6 +4,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { Checkbox, DropDown, DropDownItem, ErrorText, Item, TextArea, TextInput } from '../ui';
 import { ScreenLoading } from '../ui/Loading/LoadingSpinner';
 import { useEffect } from 'react';
+import PickList from './PickList';
 
 type RecordFormProps = {
   currentData?: Record<string, string>;
@@ -168,6 +169,26 @@ const RecordForm = ({ currentData = {}, onSubmit, stages, typeProperty, formId =
                 ></Checkbox>
               </div>
             );
+          }}
+        />
+      ),
+      PickList: (
+        <Controller
+          control={control}
+          name={property.name}
+          render={({ field: { value, onChange } }) => {
+            const fields: FieldItem[] = property.fields;
+            const items = fields
+              .find((field) => field.property_field.label === 'Values (Separated by lines)')
+              ?.item_value.split('\n');
+
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            useEffect(() => {
+              const defaultValue = fields.find((field) => field.property_field.label === 'Default Value')?.item_value;
+              setValue(property.name, value || defaultValue || '');
+              // eslint-disable-next-line react-hooks/exhaustive-deps
+            }, []);
+            return <PickList value={value} onChange={onChange} items={items} />;
           }}
         />
       )

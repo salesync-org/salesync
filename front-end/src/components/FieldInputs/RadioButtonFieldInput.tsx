@@ -1,5 +1,4 @@
 import { cn } from '@/utils/utils';
-import { useState } from 'react';
 
 type RadioButtonFieldInputProps = {
   name: string;
@@ -8,42 +7,51 @@ type RadioButtonFieldInputProps = {
   updateFields: (propertyFields: PropertyField[]) => void;
 };
 
-const RadioButotnFieldInput = ({ label, name, propertyFields, updateFields }: RadioButtonFieldInputProps) => {
-  const [propertyFieldLoaded, setPropertyField] = useState<PropertyField>(propertyFields[0]);
+const RadioButtonFieldInput = ({ label, name, propertyFields, updateFields }: RadioButtonFieldInputProps) => {
   const updateFieldArray = (value: string) => {
-    const newPropertyField = propertyFields.find((propertyField) => {
-      return propertyField.item_value === value;
+    const updatedPropertyFields = propertyFields.map((propertyField) => {
+      return {
+        ...propertyField,
+        default_value: propertyField.item_value === value ? 'true' : 'false'
+      };
     });
-    if (newPropertyField) {
-      newPropertyField.default_value = 'true';
-      updateFields([newPropertyField]);
-    }
-    setPropertyField(newPropertyField!);
+    updateFields(updatedPropertyFields);
   };
   return (
     <>
-      {label && <p className={cn('my-1')}>{label}</p>}
-      {propertyFields.map((propertyField) => {
-        return (
-          <div className='my-2 flex space-x-2'>
-            <input
-              key={propertyField.item_value}
-              name={name}
-              id={'propertyId' + propertyField.id}
-              checked={propertyField.default_value === propertyFieldLoaded.default_value}
-              onChange={(e) => {
-                updateFieldArray(e.target.value);
-              }}
-              type='radio'
-            ></input>
-            <label htmlFor={'propertyId' + propertyField.id} className='w-full'>
-              {propertyField.item_value}
-            </label>
-          </div>
-        );
-      })}
+      {label && <p className={cn('')}>{label}</p>}
+      <div className='flex space-x-4'>
+        {propertyFields.map((propertyField) => {
+          return (
+            <div className='my-2 flex space-x-2' key={propertyField.item_value}>
+              <input
+                key={propertyField.item_value}
+                value={propertyField.item_value ?? ''}
+                name={name}
+                id={'propertyId' + propertyField.id}
+                checked={
+                  propertyField.default_value ===
+                  (propertyFields.find((field) => field.default_value === 'true') ?? propertyFields[0]).default_value
+                }
+                onChange={() => {}}
+                onClick={() => {
+                  updateFieldArray(propertyField.item_value ?? '');
+                }}
+                type='radio'
+              ></input>
+              <label
+                key={`${propertyField.item_value}-label`}
+                htmlFor={'propertyId' + propertyField.id}
+                className='w-full'
+              >
+                {propertyField.item_value}
+              </label>
+            </div>
+          );
+        })}
+      </div>
     </>
   );
 };
 
-export default RadioButotnFieldInput;
+export default RadioButtonFieldInput;

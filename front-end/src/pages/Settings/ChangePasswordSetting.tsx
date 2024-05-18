@@ -1,4 +1,4 @@
-import { Button, Panel, TextInput } from '@/components/ui';
+import { Button, ErrorText, Panel, TextInput } from '@/components/ui';
 import useAuth from '@/hooks/useAuth';
 import { cn } from '@/utils/utils';
 import { useParams } from 'react-router-dom';
@@ -9,28 +9,35 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import LoadingSpinnerSmall from '@/components/ui/Loading/LoadingSpinnerSmall';
 
+const changePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(1, 'Please input your current password'),
+    password: z
+      .string()
+      .min(8, 'Password must contain at least eight characters')
+      .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
+      .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+      .regex(/\d/, 'Password must contain at least one number')
+      .regex(/[^a-zA-Z0-9]/, 'Password must contain at least one special character'),
+    confirmPassword: z.string().min(1, 'Please confirm your password')
+  })
+  .superRefine(({ confirmPassword, password }, ctx) => {
+    if (confirmPassword !== password) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'The passwords did not match',
+        path: ['confirmPassword']
+      });
+    }
+  });
+type ChangePasswordSchemaType = z.infer<typeof changePasswordSchema>;
+
 const ChangePasswordSetting = () => {
   const { companyName } = useParams();
   const { user, verifyPassword } = useAuth();
-  const changePasswordSchema = z
-    .object({
-      currentPassword: z.string().min(3, 'Password must be at least 3 characters'),
-      password: z.string().min(3, 'Password must be at least 3 characters'),
-      confirmPassword: z.string().min(3, 'Password must be at least 3 characters')
-    })
-    .superRefine(({ confirmPassword, password }, ctx) => {
-      if (confirmPassword !== password) {
-        ctx.addIssue({
-          code: 'custom',
-          message: 'The passwords did not match',
-          path: ['confirmPassword']
-        });
-      }
-    });
 
   const { toast } = useToast();
 
-  type ChangePasswordSchemaType = z.infer<typeof changePasswordSchema>;
   const {
     register,
     handleSubmit,
@@ -66,6 +73,7 @@ const ChangePasswordSetting = () => {
           });
         }
       } else {
+        //
       }
     }
   };
@@ -83,28 +91,36 @@ const ChangePasswordSetting = () => {
               <div className='w-3/4'>
                 <input type='text' tabIndex={-1} className='h-0 w-0 py-0'></input>
                 <TextInput
-                  isPassword={true}
+                  type='password'
                   header={'Current Password'}
                   register={register}
                   name='currentPassword'
                   className='w-full'
+                  isError={!!errors.currentPassword}
                 />
+                {errors.currentPassword && (
+                  <ErrorText className='mt-1' text={errors.currentPassword.message}></ErrorText>
+                )}
                 <TextInput
-                  isPassword={true}
+                  type='password'
                   header={'New Password'}
                   register={register}
                   name='password'
                   className='w-full'
                   isError={!!errors.password}
                 />
+                {errors.password && <ErrorText className='mt-1' text={errors.password.message}></ErrorText>}
                 <TextInput
-                  isPassword={true}
+                  type='password'
                   header={'Confirm Password'}
                   register={register}
                   name='confirmPassword'
                   className='w-full'
                   isError={!!errors.confirmPassword}
                 />
+                {errors.confirmPassword && (
+                  <ErrorText className='mt-1' text={errors.confirmPassword.message}></ErrorText>
+                )}
               </div>
             </div>
           </div>

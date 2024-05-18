@@ -11,6 +11,16 @@ function useClickOutside<T extends HTMLElement = HTMLElement>(refList: React.Ref
           break;
         }
       }
+      let eventTarget = event.target as HTMLElement;
+      while (eventTarget && eventTarget !== document.body) {
+        if (eventTarget === document.body) {
+          break;
+        }
+        if (eventTarget.classList.contains('toast-here')) {
+          return;
+        }
+        eventTarget = eventTarget.parentElement as HTMLElement;
+      }
       if (!refClicked) {
         callback();
       }

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ColumnDef } from '@tanstack/react-table';
 import Icon from '../../../components/ui/Icon/Icon';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Checkbox } from 'components/ui';
 
 export type ContactColumns = {
@@ -14,6 +14,7 @@ export type ContactColumns = {
 };
 
 export const createTableLayout = (companyName: string) => {
+  const { domainName = '' } = useParams();
   const contactColumns: ColumnDef<ContactColumns>[] = [
     {
       accessorKey: 'id',
@@ -55,7 +56,7 @@ export const createTableLayout = (companyName: string) => {
       cell: ({ row }) => {
         return (
           <Link
-            to={`/${companyName}/record/${row.getValue('id')}`}
+            to={`/${companyName}/section/${domainName}/record/${row.getValue('id')}`}
             className='block w-full items-center align-middle text-blue-500 hover:underline'
           >
             {row.getValue('name')}
@@ -77,7 +78,7 @@ export const createTableLayout = (companyName: string) => {
       cell: ({ row }) => {
         return (
           <Link
-            to={`/${companyName}/record/${row.getValue('id')}`}
+            to={`/${companyName}/section/${domainName}/record/${row.getValue('id')}`}
             className='block w-full items-center align-middle text-blue-500 hover:underline'
           >
             {row.getValue('accountName')}

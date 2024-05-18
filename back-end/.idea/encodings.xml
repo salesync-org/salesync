@@ -4,6 +4,8 @@
     <file url="file://$PROJECT_DIR$/api-gateway/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/authentication/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/authentication/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/keycloak/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/keycloak/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/message-queue/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/notification-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/record-service/src/main/java" charset="UTF-8" />

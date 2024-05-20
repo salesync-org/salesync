@@ -15,8 +15,10 @@ const ToggleButton = ({ onToggle, isToggled, rest, children, className }: Toggle
       type='button'
       onClick={onToggle}
       className={cn(
-        'duration-1 00 rounded-full border-2 border-primary-bold/40 bg-transparent px-4 py-2 font-medium text-primary-bold transition-all ',
-        isToggled ? 'bg-primary text-on-primary' : 'hover:bg-primary-bold/20',
+        'duration-1 00 rounded-full border-2 border-primary-bold/40 bg-transparent px-4 py-2 font-medium text-primary-bold transition-all dark:border-secondary dark:text-secondary ',
+        isToggled
+          ? 'bg-primary text-on-primary dark:border-primary'
+          : 'hover:bg-primary-bold/20 dark:hover:bg-primary-bold/50',
         className
       )}
       {...rest}

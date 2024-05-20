@@ -244,6 +244,7 @@ public class RegisterServiceImpl implements RegisterService {
         }
         company.setAvatarUrl(updateCompanyInfoDto.getAvatarUrl());
         company.setPhone(updateCompanyInfoDto.getPhone());
+        company.setDescription(updateCompanyInfoDto.getDescription());
         company.setAddress(updateCompanyInfoDto.getAddress());
         company.setTaxCode(updateCompanyInfoDto.getTaxCode());
         companyRepository.save(company);
@@ -268,6 +269,7 @@ public class RegisterServiceImpl implements RegisterService {
         companyInfoDto.setCompanyId(company.getCompanyId().toString());
         companyInfoDto.setPhone(company.getPhone());
         companyInfoDto.setAddress(company.getAddress());
+        companyInfoDto.setDescription(company.getDescription());
         companyInfoDto.setTaxCode(company.getTaxCode());
         companyInfoDto.setName(company.getName());
         companyInfoDto.setAvatarUrl(company.getAvatarUrl());

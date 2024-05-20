@@ -301,16 +301,18 @@ BEGIN
    CALL assign_template(get_id('template_id', 'template', 'Object'), get_type_id('PriceBook', target_company_name));
    CALL assign_template(get_id('template_id', 'template', 'Object'), get_type_id('Quote', target_company_name));
    CALL assign_template(get_id('template_id', 'template', 'Activity'), get_type_id('Task', target_company_name));
-   CALL assign_template(get_id('template_id', 'template', 'Object'), get_type_id('Report', target_company_name));
+--    CALL assign_template(get_id('template_id', 'template', 'Object'), get_type_id('Report', target_company_name));
 
    CALL add_type_property(get_type_id('Lead', target_company_name), get_id('property_id', 'property', 'Text'), 'First Name', 'First Name', 'First Name of the person', 'true', 1);
    CALL add_type_property(get_type_id('Lead', target_company_name), get_id('property_id', 'property', 'Text'), 'Last Name', 'Last Name', 'Last Name of the person', 'true', 1);
    CALL add_type_property(get_type_id('Lead', target_company_name), get_id('property_id', 'property', 'Email'), 'Email', 'Email', 'Email of the person', 'true', 1);
    CALL add_type_property(get_type_id('Lead', target_company_name), get_id('property_id', 'property', 'Phone'), 'Phone', 'Phone', 'Phone of the person', 'true', 1);
    CALL add_type_property(get_type_id('Lead', target_company_name), get_id('property_id', 'property', 'Text'), 'Address', 'Address', 'Address of the person', 'true', 1);
+   CALL add_type_property(get_type_id('Report', target_company_name), get_id('property_id', 'property', 'Text'), 'ReportName', 'Report Name', 'Name of the report', 'true', 1);
    CALL add_type_property(get_type_id('Report', target_company_name), get_id('property_id', 'property', 'TextArea'), 'ReportDescription', 'Description', 'More details about this report', 'true', 1);
    CALL add_type_property(get_type_id('Report', target_company_name), get_id('property_id', 'property', 'Text'), 'ReportTypeId', 'ReportTypeIdNotShowing', 'The object type of the report.', 'true', 1);
    CALL add_type_property(get_type_id('Report', target_company_name), get_id('property_id', 'property', 'Text'), 'ReportProperties', 'ReportPropertiesNotShowing', 'The properties of the report.', 'true', 1);
+
 
     CALL assign_relation('Account', 'Account', 'One-to-Many', 'Contact', 'Contact', target_company_name);
     CALL assign_relation('Account', 'Account', 'One-to-Many', 'Opportunity', 'Opportunity', target_company_name);

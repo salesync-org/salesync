@@ -10,6 +10,9 @@ import { Filter, Plus, RefreshCw } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Tooltip } from 'react-tooltip';
+import LoadingSpinnerSmall from '../ui/Loading/LoadingSpinnerSmall';
+import useRecords, { RecordsQueryResponse } from '@/hooks/record-service/useRecords';
+import useProperties, { PropertiesQueryResponse } from '@/hooks/type-service/useProperties';
 const iconBaseUrl = `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/system/icons`;
 
 interface RecordSectionProps {
@@ -19,11 +22,16 @@ interface RecordSectionProps {
 const customTypeIcon = `${iconBaseUrl}/salesync_custom_type.png`;
 
 const RecordSection = ({ type }: RecordSectionProps) => {
-  const { showModal } = useGlobalModalContext();
-  const { typeId } = useParams();
-  const icon = `${iconBaseUrl}/salesync_${type?.name.toLowerCase() || 'custom_type'}.png`;
+  const { typeId = '' } = useParams();
+  const { companyName = '' } = useParams();
   const [search, setSearch] = useState('');
-
+  const [recordFilter, setRecordFilter] = useState<RecordsFilter>({
+    searchTerm: '',
+    isAsc: false,
+    propertyName: null,
+    currentPage: 1,
+    pageSize: 3000
+  });
   useEffect(() => {
     const timer = setTimeout(() => {
       // setDebounceSearch(search);
@@ -34,14 +42,11 @@ const RecordSection = ({ type }: RecordSectionProps) => {
       clearTimeout(timer);
     };
   }, [search]);
+  const { showModal, isLoading } = useGlobalModalContext();
 
-  const [recordFilter, setRecordFilter] = useState<RecordsFilter>({
-    searchTerm: '',
-    isAsc: false,
-    propertyName: null,
-    currentPage: 1,
-    pageSize: 3000
-  });
+  const icon = `${iconBaseUrl}/salesync_${type?.name.toLowerCase() || 'custom_type'}.png`;
+  const recordsQuery: RecordsQueryResponse = useRecords(companyName, typeId, recordFilter);
+  const propertiesQuery: PropertiesQueryResponse = useProperties(companyName, typeId);
 
   if (!type || !typeId) {
     return null;
@@ -80,6 +85,9 @@ const RecordSection = ({ type }: RecordSectionProps) => {
                 data-tooltip-id='refreshTable'
                 data-tooltip-content='Refresh'
                 data-tooltip-place='top'
+                onClick={async () => {
+                  await recordsQuery.refetch();
+                }}
                 className='aspect-square p-0'
               >
                 <RefreshCw size='1rem' />
@@ -107,7 +115,11 @@ const RecordSection = ({ type }: RecordSectionProps) => {
                     showModal(modal, { typeId, recordFilter });
                   }}
                 >
-                  <Plus size='1rem' />
+                  {isLoading ? (
+                    <LoadingSpinnerSmall className='h-[1.2rem] w-[1.2rem]'></LoadingSpinnerSmall>
+                  ) : (
+                    <Plus size='1rem' />
+                  )}
                   <p>New</p>
                 </Button>
               </ButtonGroup>
@@ -116,7 +128,12 @@ const RecordSection = ({ type }: RecordSectionProps) => {
         </section>
       </section>
       <div className='-mx-4 mt-4 flex-grow'>
-        <RecordTable typeId={typeId} recordFilter={recordFilter} />
+        <RecordTable
+          recordsQuery={recordsQuery}
+          propertiesQuery={propertiesQuery}
+          typeId={typeId}
+          recordFilter={recordFilter}
+        />
       </div>
     </Panel>
   );

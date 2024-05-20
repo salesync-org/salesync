@@ -21,6 +21,7 @@ const CompanyInfomationSetting = () => {
           name: '',
           avatar_url: '',
           address: '',
+          description: '',
           phone: '',
           tax_code: ''
         }
@@ -39,6 +40,7 @@ const CompanyInfomationSetting = () => {
     name: false,
     avatar_url: null,
     address: true,
+    description: true,
     phone: true,
     tax_code: true
   };

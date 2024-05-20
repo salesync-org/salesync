@@ -200,6 +200,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setCompany({
         name: companyInfo.name,
         address: companyInfo.address,
+        description: companyInfo.description,
         phone: companyInfo.phone,
         tax_code: companyInfo.tax_code,
         avatar_url: companyInfo.avatar_url,

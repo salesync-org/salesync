@@ -70,8 +70,14 @@ type TypePropertyDetail = {
     propertyFields: [];
   };
   default_value: string;
-  fields: [];
+  fields: TypePropertyFieldDetail[];
 };
+
+type TypePropertyFieldDetail = {
+  id: string;
+  item_value: string;
+  property_field: PropertyField;
+}
 
 type PropertyField = {
   id: string;
@@ -354,6 +360,7 @@ type CompanyInfo = {
   name: string;
   avatar_url: string;
   address: string;
+  description: string;
   phone: string;
   tax_code: string;
 };

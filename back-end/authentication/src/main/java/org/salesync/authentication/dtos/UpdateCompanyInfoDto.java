@@ -16,6 +16,7 @@ public class UpdateCompanyInfoDto {
     private String companyId;
     private String avatarUrl;
     private String address;
+    private String description;
     private String phone;
     private String taxCode;
 }

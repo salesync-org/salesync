@@ -50,6 +50,7 @@ export const GlobalModalProvider: React.FC<{ children: React.ReactNode }> = ({ c
   const { modalType, modalProps } = store;
 
   const showModal = (modalType: string, modalProps: any = {}) => {
+    setIsLoading(true);
     setStore({
       ...store,
       modalType,

@@ -59,6 +59,7 @@ class Auth {
       company_name: companyInfo.name,
       avatar_url: companyInfo.avatar_url,
       address: companyInfo.address,
+      description: companyInfo.description,
       phone: companyInfo.phone,
       tax_code: companyInfo.tax_code
     });

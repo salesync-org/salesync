@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -40,7 +42,9 @@ public class NotificationServiceImpl implements INotificationService {
 
     @Override
     public List<MessageDto> getUnreadNotificationsByReceiverId(UUID receiverId) {
-        return messageRepository.findAllByReceiverIdAndIsReadEquals(receiverId,false).stream().map(messageMapper::entityToDto).toList();
+        return messageRepository.findAllByReceiverIdAndIsReadEquals(receiverId,false).stream().map(messageMapper::entityToDto)
+            .sorted(Comparator.reverseOrder())
+            .collect(Collectors.toList());
     }
 
     @Override
@@ -53,11 +57,13 @@ public class NotificationServiceImpl implements INotificationService {
         }
         return null;
     }
-
-    @Override
-    public List<MessageDto> getNotificationsByReceiverId(UUID receiverId) {
-        return messageRepository.findAllByReceiverId(receiverId).stream().map(messageMapper::entityToDto).toList();
-    }
+@Override
+public List<MessageDto> getNotificationsByReceiverId(UUID receiverId) {
+    return messageRepository.findAllByReceiverId(receiverId).stream()
+            .map(messageMapper::entityToDto)
+            .sorted(Comparator.reverseOrder())
+            .collect(Collectors.toList());
+}
 
     @Override
     public List<MessageDto> setAllNotificationsAsReadByReceiverId(UUID receiverId) {

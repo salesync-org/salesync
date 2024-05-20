@@ -15,15 +15,6 @@ interface StageSectionProps {
   updateRecord: (handleUpdate: Function) => unknown;
 }
 
-const lastStages = {
-  lead: {
-    id: '5',
-    name: 'Converted',
-    title: 'Select Convert Status',
-    modalName: MODAL_TYPES.CONVERT_MODAL
-  }
-};
-
 const StageSection = ({ stages, currentStage, updateRecord }: StageSectionProps) => {
   const [stageIdChosen, setStageIdChosen] = useState(currentStage);
   const [loading, setLoading] = useState(false);
@@ -35,20 +26,11 @@ const StageSection = ({ stages, currentStage, updateRecord }: StageSectionProps)
   const { toast } = useToast();
   const { recordId = '' } = useParams();
   const queryClient = useQueryClient();
-  const { showModal } = useGlobalModalContext();
+  const { showModal, isLoading, setIsLoading } = useGlobalModalContext();
   const { companyName = '' } = useParams();
 
-  const lastStage = lastStages['lead'];
-  const updatedStages = useMemo(
-    () => [
-      ...stages,
-      {
-        id: lastStage.id,
-        name: lastStage.name
-      }
-    ],
-    [lastStage.id, lastStage.name, stages]
-  );
+  const lastStage = stages.at(-1);
+  const updatedStages = useMemo(() => [...stages], [stages]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleUpdate = (oldRecord: any) => {
@@ -122,7 +104,8 @@ const StageSection = ({ stages, currentStage, updateRecord }: StageSectionProps)
   };
 
   const handleSelectStatus = () => {
-    showModal(lastStage.modalName, { recordId, companyName });
+    setIsLoading(true);
+    showModal(MODAL_TYPES.CONVERT_MODAL, { recordId, companyName });
   };
 
   const stageIdChosenIndex = useMemo(
@@ -152,8 +135,8 @@ const StageSection = ({ stages, currentStage, updateRecord }: StageSectionProps)
     if (isLastStage) {
       return (
         <Button intent='primary' className='py-0' onClick={handleSelectStatus}>
-          <Icon name='check' />
-          <span className='text-xs'>{lastStage.title}</span>
+          {isLoading ? <LoadingSpinnerSmall className='h-4 w-4 text-on-primary' /> : <Icon name='check' />}
+          <span className='text-xs'>{lastStage?.name}</span>
         </Button>
       );
     }

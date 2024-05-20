@@ -21,7 +21,6 @@ const TypeRelationTable = ({ relationList }: TypeRelationProps) => {
               <TableCell className='font-semibold'>Relation</TableCell>
               <TableCell className='font-semibold'>Destination Label</TableCell>
               <TableCell className='font-semibold'>Destination Type</TableCell>
-              <TableCell className=''></TableCell>
             </TableRow>
           </TableHeader>
           <TableBody className='h-full overflow-y-scroll'>
@@ -34,19 +33,6 @@ const TypeRelationTable = ({ relationList }: TypeRelationProps) => {
                     <TableCell className='w-1/5'>{relation.relation ? relation.relation.name : ''}</TableCell>
                     <TableCell className='w-1/5'>{relation.destination_type_label ?? ''}</TableCell>
                     <TableCell className='w-1/5'>{relation.destination_type.name ?? ''}</TableCell>
-                    <TableCell className='w-1/5'>
-                      <div className='flex w-full justify-end'>
-                        <Button
-                          rounded
-                          className='aspect-square rounded-full p-0'
-                          onClick={(_) => {
-                            // onPropertyDelete(property.id);
-                          }}
-                        >
-                          <Pencil size={'1rem'}></Pencil>
-                        </Button>
-                      </div>
-                    </TableCell>
                   </TableRow>
                 );
               })

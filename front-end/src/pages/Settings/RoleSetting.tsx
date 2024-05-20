@@ -235,9 +235,9 @@ const RoleSetting = () => {
         title={isRoleModalOpen?.role_id ? 'Edit Role' : 'Create New Role'}
       >
         <form className='w-full'>
-          <div className='grid-col-1 grid h-[350px]'>
-            <div className='grid h-[320px] grid-cols-5 place-content-center gap-10 overflow-scroll'>
-              <div className='col-span-3 flex flex-col gap-2 '>
+          <div className='grid-col-1 grid h-full max-h-full'>
+            <div className='grid grid-cols-5 gap-10 overflow-scroll'>
+              <div className='col-span-3 flex flex-col gap-2'>
                 <div className='mb-2 flex items-baseline'>
                   <h3 className='min-w-[100px]'>Role Details</h3>
                   <div className='w-full border-b-2 border-button-stroke-light py-4 dark:border-button-stroke-dark'></div>

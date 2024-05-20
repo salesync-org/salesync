@@ -233,6 +233,32 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE PROCEDURE assign_relation(
+    from_type text,
+    from_type_label text,
+    relation_name text,
+    to_type_label text,
+    to_type text,
+    company_name text,
+)
+AS $$
+DECLARE
+BEGIN
+    INSERT INTO public.type_relation(destination_id,
+    destination_label,
+    relation_id,
+    source_id,
+    source_type_label) VALUES
+    (get_type_id(from_type, company_name), from_type_label, get_id('relation_id', 'relation', relation_name), get_type_id(to_type, company_name), to_type_label);
+    INSERT INTO public.type_relation(destination_id,
+    destination_label,
+    relation_id,
+    source_id,
+    source_type_label) VALUES
+    (get_type_id(to_type, company_name), to_type_label, get_id('inverse_relation_id', 'relation', relation_name), get_type_id(from_type, company_name), from_type_label);
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE PROCEDURE init_company(
     target_company_name TEXT
 )
@@ -255,7 +281,8 @@ BEGIN
     ('Product', target_company_name),
     ('PriceBook', target_company_name),
     ('Quote', target_company_name),
-    ('Task', target_company_name);
+    ('Task', target_company_name),
+    ('Report', target_company_name);
 
    CALL assign_template(get_id('template_id', 'template', 'Group'), get_type_id('Account', target_company_name));
    CALL assign_template(get_id('template_id', 'template', 'Object'), get_type_id('Campaign', target_company_name));
@@ -274,12 +301,44 @@ BEGIN
    CALL assign_template(get_id('template_id', 'template', 'Object'), get_type_id('PriceBook', target_company_name));
    CALL assign_template(get_id('template_id', 'template', 'Object'), get_type_id('Quote', target_company_name));
    CALL assign_template(get_id('template_id', 'template', 'Activity'), get_type_id('Task', target_company_name));
+   CALL assign_template(get_id('template_id', 'template', 'Object'), get_type_id('Report', target_company_name));
 
    CALL add_type_property(get_type_id('Lead', target_company_name), get_id('property_id', 'property', 'Text'), 'First Name', 'First Name', 'First Name of the person', 'true', 1);
    CALL add_type_property(get_type_id('Lead', target_company_name), get_id('property_id', 'property', 'Text'), 'Last Name', 'Last Name', 'Last Name of the person', 'true', 1);
    CALL add_type_property(get_type_id('Lead', target_company_name), get_id('property_id', 'property', 'Email'), 'Email', 'Email', 'Email of the person', 'true', 1);
    CALL add_type_property(get_type_id('Lead', target_company_name), get_id('property_id', 'property', 'Phone'), 'Phone', 'Phone', 'Phone of the person', 'true', 1);
    CALL add_type_property(get_type_id('Lead', target_company_name), get_id('property_id', 'property', 'Text'), 'Address', 'Address', 'Address of the person', 'true', 1);
+   CALL add_type_property(get_type_id('Report', target_company_name), get_id('property_id', 'property', 'TextArea'), 'ReportDescription', 'Description', 'More details about this report', 'true', 1);
+   CALL add_type_property(get_type_id('Report', target_company_name), get_id('property_id', 'property', 'Text'), 'ReportTypeId', 'ReportTypeIdNotShowing', 'The object type of the report.', 'true', 1);
+   CALL add_type_property(get_type_id('Report', target_company_name), get_id('property_id', 'property', 'Text'), 'ReportProperties', 'ReportPropertiesNotShowing', 'The properties of the report.', 'true', 1);
+
+    CALL assign_relation('Account', 'Account', 'One-to-Many', 'Contact', 'Contact', target_company_name);
+    CALL assign_relation('Account', 'Account', 'One-to-Many', 'Opportunity', 'Opportunity', target_company_name);
+    CALL assign_relation('Account', 'Account', 'One-to-Many', 'Case', 'Case', target_company_name);
+    CALL assign_relation('Account', 'Account', 'One-to-Many', 'Contract', 'Contract', target_company_name);
+    CALL assign_relation('Account', 'Account', 'One-to-Many', 'Deal', 'Deal', target_company_name);
+    CALL assign_relation('Account', 'Account', 'One-to-Many', 'Invoice', 'Invoice', target_company_name);
+    CALL assign_relation('Account', 'Account', 'One-to-Many', 'Order', 'Order', target_company_name);
+    CALL assign_relation('Account', 'Account', 'One-to-Many', 'Product', 'Product', target_company_name);
+    CALL assign_relation('Account', 'Account', 'One-to-Many', 'Quote', 'Quote', target_company_name);
+    CALL assign_relation('Account', 'Account', 'One-to-Many', 'Task', 'Task', target_company_name);
+    CALL assign_relation('Account', 'Account', 'One-to-Many', 'Call', 'Call', target_company_name);
+    CALL assign_relation('Account', 'Account', 'One-to-Many', 'Email', 'Email', target_company_name);
+    CALL assign_relation('Account', 'Account', 'One-to-Many', 'Event', 'Event', target_company_name);
+    CALL assign_relation('Contact', 'Contact', 'One-to-Many', 'Task', 'Task', target_company_name);
+    CALL assign_relation('Contact', 'Contact', 'One-to-Many', 'Call', 'Call', target_company_name);
+    CALL assign_relation('Contact', 'Contact', 'One-to-Many', 'Email', 'Email', target_company_name);
+    CALL assign_relation('Contact', 'Contact', 'One-to-Many', 'Event', 'Event', target_company_name);
+    CALL assign_relation('Lead', 'Lead', 'One-to-Many', 'Task', 'Task', target_company_name);
+    CALL assign_relation('Lead', 'Lead', 'One-to-Many', 'Call', 'Call', target_company_name);
+    CALL assign_relation('Lead', 'Lead', 'One-to-Many', 'Email', 'Email', target_company_name);
+    CALL assign_relation('Lead', 'Lead', 'One-to-Many', 'Event', 'Event', target_company_name);
+    CALL assign_relation('Opportunity', 'Opportunity', 'One-to-Many', 'Task', 'Task', target_company_name);
+    CALL assign_relation('Opportunity', 'Opportunity', 'One-to-Many', 'Call', 'Call', target_company_name);
+    CALL assign_relation('Opportunity', 'Opportunity', 'One-to-Many', 'Email', 'Email', target_company_name);
+    CALL assign_relation('Opportunity', 'Opportunity', 'One-to-Many', 'Event', 'Event', target_company_name);
+    CALL assign_relation('Contact', 'Contact', 'One-to-Many', 'Opportunity', 'Opportunity', target_company_name);
+
 
    INSERT INTO stage (name, type_id, sequence_number) VALUES
     ('Unqualified', get_type_id('Lead', target_company_name), 1),

@@ -1,4 +1,4 @@
-import { RecordsFilter } from '@/api/record';
+import recordApi, { RecordsFilter } from '@/api/record';
 import RecordTable from '@/components/Records/RecordTable';
 import { ButtonGroup } from '@/components/ui';
 import Button from '@/components/ui/Button/Button';
@@ -11,6 +11,8 @@ import { Filter, Plus, RefreshCw } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Tooltip } from 'react-tooltip';
+import { useToast } from '../ui/Toast';
+import { useQueryClient } from 'react-query';
 
 interface RecordSectionProps {
   type: Type | LayoutType | null | undefined;
@@ -18,8 +20,10 @@ interface RecordSectionProps {
 
 const RecordSection = ({ type }: RecordSectionProps) => {
   const { showModal } = useGlobalModalContext();
-  const { typeId } = useParams();
+  const { typeId, companyName = '' } = useParams();
   const [search, setSearch] = useState('');
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -47,6 +51,31 @@ const RecordSection = ({ type }: RecordSectionProps) => {
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
   };
+
+  const handleDeleteList = async () => {
+    const rowSelection = localStorage.getItem('rowSelection') ? JSON.parse(localStorage.getItem('rowSelection')!) : [];
+
+    try {
+      await recordApi.deleteRecord(companyName, rowSelection);
+
+      toast({
+        title: 'Success',
+        description: 'Record(s) deleted successfully'
+      });
+      queryClient.invalidateQueries(['records', typeId]);
+      localStorage.removeItem('rowSelection');
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: 'Error',
+        description: 'Delete failed. Please try again later.',
+        variant: 'destructive'
+      });
+    }
+  };
+
+  const row = localStorage.getItem('rowSelection') ? JSON.parse(localStorage.getItem('rowSelection')!) : [];
+  console.log(row);
 
   return (
     <Panel className='fixed bottom-[10px] left-[10px] right-[10px] top-[108px] m-0 flex h-[calc(100dvh-120px)] max-w-[100vw] flex-col overflow-auto p-4'>
@@ -85,6 +114,9 @@ const RecordSection = ({ type }: RecordSectionProps) => {
               </Button>
               <Tooltip id='filterTable' />
               <ButtonGroup>
+                <Button intent='normal' zoom={false} className='space-x-2' onClick={handleDeleteList}>
+                  <p>Delete</p>
+                </Button>
                 <Button
                   intent='normal'
                   zoom={false}

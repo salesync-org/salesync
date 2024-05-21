@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import recordApi from '@/api/record';
-import { Button, Icon, TextInput, Tooltip } from '@/components/ui';
+import { Button, Checkbox, Icon, TextInput, Tooltip } from '@/components/ui';
 import { ActionDropDown } from '@/components/ui/DropDown';
 import { useToast } from '@/components/ui/Toast';
 import { Check, Pencil, X } from 'lucide-react';
@@ -16,6 +16,30 @@ export const createColumns = (companyName: string, properties: any[], records: a
       accessorKey: 'id',
       header: '',
       cell: () => <span className='select-none text-xs'></span>
+    },
+    {
+      id: 'select',
+      header: ({ table }: any) => (
+        <Checkbox
+          checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
+          onCheckedChange={(value) => {
+            table.toggleAllPageRowsSelected(!!value);
+          }}
+          aria-label='Select all'
+        />
+      ),
+      cell: ({ row }: any) => {
+        // console.log(row.getIsSelected());
+        return (
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label='Select row'
+          />
+        );
+      },
+      enableSorting: false,
+      enableHiding: false
     }
   ];
 

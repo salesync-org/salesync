@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { SortingState, flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/DataTable/table';
 import { cn } from '@/utils/utils';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import NotFoundImage from '../NotFoundImage/NotFoundImage';
+import { useParams } from 'react-router-dom';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface DataTableProps<TData, _TValue> {
@@ -14,14 +16,35 @@ interface DataTableProps<TData, _TValue> {
 
 export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
+  const [rowSelection, setRowSelection] = useState({});
+  const { typeId = '' } = useParams();
+
+  useEffect(() => {
+    const storeRowInLocalStorage = () => {
+      const result = Object.keys(rowSelection).map((key: any) => {
+        return (data[key] as any).id;
+      });
+
+      localStorage.setItem('rowSelection', JSON.stringify(result));
+    };
+
+    storeRowInLocalStorage();
+  }, [data, rowSelection]);
+
+  useEffect(() => {
+    localStorage.removeItem('rowSelection');
+    setRowSelection({});
+  }, [typeId]);
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    onRowSelectionChange: setRowSelection,
     state: {
-      sorting
+      sorting,
+      rowSelection
     }
   });
 
@@ -54,18 +77,9 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                className='group h-[40px] transition-all hover:bg-button-background-hover dark:hover:bg-button-background-hover-dark'
-                data-state={row.getIsSelected() && 'selected'}
-              >
+              <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell
-                    className='h-8 py-0 leading-5 transition-all hover:bg-secondary-light/40 dark:hover:bg-secondary-dark/40'
-                    key={cell.id}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
+                  <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                 ))}
               </TableRow>
             ))

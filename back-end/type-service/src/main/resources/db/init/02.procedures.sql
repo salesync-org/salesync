@@ -239,7 +239,7 @@ CREATE OR REPLACE PROCEDURE assign_relation(
     relation_name text,
     to_type_label text,
     to_type text,
-    company_name text,
+    company_name text
 )
 AS $$
 DECLARE

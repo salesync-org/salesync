@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -56,16 +57,31 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public ListRecordsResponseDto getFilteredRecords(ListRecordsRequestDto requestDto, String companyName) {
+
+        List<String> roles = SecurityContextHelper.getContextAuthorities();
+        System.out.println(roles);
+
         Pageable pageRequest = PageRequest.of(requestDto.getCurrentPage() - 1, requestDto.getPageSize());
         Page<Record> page;
         if (requestDto.getPropertyName() != null) {
-            page = recordRepository.getFilteredRecord(
-                    UUID.fromString(SecurityContextHelper.getContextUserId()), requestDto.getPropertyName(), requestDto.getTypeId(), requestDto.getSearchTerm(), requestDto.isAsc(), pageRequest, companyName
-            );
+            if (roles.contains("read-all"))
+                page = recordRepository.getAllFilteredRecord(
+                        UUID.fromString(SecurityContextHelper.getContextUserId()), requestDto.getPropertyName(), requestDto.getTypeId(), requestDto.getSearchTerm(), requestDto.isAsc(), pageRequest, companyName
+                );
+            else if (roles.contains("read-own"))
+                page = recordRepository.getOwnFilteredRecord(
+                        UUID.fromString(SecurityContextHelper.getContextUserId()), requestDto.getPropertyName(), requestDto.getTypeId(), requestDto.getSearchTerm(), requestDto.isAsc(), pageRequest, companyName
+                ); else page= null;
         } else {
-            page = recordRepository.getFilteredRecordsAndOrderByName(
-                    UUID.fromString(SecurityContextHelper.getContextUserId()), requestDto.getTypeId(), requestDto.getSearchTerm(), requestDto.isAsc(), pageRequest, companyName
-            );
+
+            if (roles.contains("read-all"))
+                page = recordRepository.getAllFilteredRecordsAndOrderByName(
+                        UUID.fromString(SecurityContextHelper.getContextUserId()), requestDto.getTypeId(), requestDto.getSearchTerm(), requestDto.isAsc(), pageRequest, companyName
+                );
+            else if (roles.contains("read-own"))
+                page = recordRepository.getOwnFilteredRecordsAndOrderByName(
+                        UUID.fromString(SecurityContextHelper.getContextUserId()), requestDto.getTypeId(), requestDto.getSearchTerm(), requestDto.isAsc(), pageRequest, companyName
+                ); else page= null;
         }
         List<RecordDto> recordDtos = page.getContent().stream().map(recordMapper::recordToRecordDto).toList();
 

@@ -138,7 +138,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const res = await auth.updateUser(companyName, {
           ...updatedUser
         });
-
         if (res) {
           setUser(updatedUser);
         }

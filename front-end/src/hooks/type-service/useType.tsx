@@ -5,7 +5,7 @@ import useAuth from '../useAuth';
 
 const useType = (defaultCompanyName?: string) => {
   const key = ['types'];
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const { company } = useAuth();
   const companyName = company?.name ?? defaultCompanyName;
   const queryClient = useQueryClient();
@@ -28,7 +28,7 @@ const useType = (defaultCompanyName?: string) => {
 
     console.log({ newUser });
 
-    await auth.updateUser(companyName ?? '', newUser);
+    await updateUser(companyName ?? '', newUser);
   };
 
   const { data, error, isLoading } = useQuery<Type[]>(
@@ -48,10 +48,10 @@ const useType = (defaultCompanyName?: string) => {
       refetchOnWindowFocus: false,
       staleTime: 1000 * 60 * 5,
       keepPreviousData: false,
-      enabled: !!user && !!companyName,
-      onSuccess: () => {
-        queryClient.invalidateQueries(key);
-      }
+      enabled: !!user && !!companyName
+      // onSuccess: () => {
+      //   queryClient.invalidateQueries(key);
+      // }
     }
   );
 

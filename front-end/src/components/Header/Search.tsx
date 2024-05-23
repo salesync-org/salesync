@@ -1,16 +1,22 @@
 import { cn } from '@/utils/utils';
 import { TextInput, Button, Icon } from '@/components/ui';
 import { useState } from 'react';
+import SearchHint from './SearchHint';
 
 const Search = ({ className }: { className?: string }) => {
   const [isSearchOpen, setSearchOpen] = useState(false);
+  const [isShowHint, setIsShowHint] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   return (
     <div
       className={cn(
-        'z-40 mx-2 flex h-full w-full items-center justify-center align-middle',
+        'relative z-40 mx-2 flex h-full w-full items-center justify-center align-middle',
         isSearchOpen && 'fixed inset-0 space-x-4 bg-panel-light px-4 py-2 backdrop-blur-lg dark:bg-panel-dark',
         className
       )}
+      onBlur={(e) => {
+        e.relatedTarget === null && setIsShowHint(false);
+      }}
     >
       <TextInput
         placeholder='Search for anything'
@@ -20,7 +26,11 @@ const Search = ({ className }: { className?: string }) => {
           isSearchOpen ? 'visible z-50 w-[75%]' : 'invisible'
         )}
         prefixIcon='search'
+        onFocus={() => {
+          setIsShowHint(true);
+        }}
       />
+      {isShowHint && <SearchHint searchHint={searchTerm} />}
       <div className={cn('z-40 flex w-full justify-start sm:invisible', isSearchOpen && 'justify-end')}>
         <Button
           rounded='icon'

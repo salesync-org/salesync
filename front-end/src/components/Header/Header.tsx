@@ -11,7 +11,6 @@ import NotificationList from '../NotificationList/NotificationList';
 const Header = ({ className }: { className?: string }) => {
   const { company } = useAuth();
   const [companyLoaded, setCompany] = useState(company);
-
   useEffect(() => {
     setCompany(company);
   }, [company]);

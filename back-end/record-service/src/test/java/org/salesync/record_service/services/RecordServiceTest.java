@@ -56,7 +56,7 @@ public class RecordServiceTest {
         ), pageRequest, 2);
 
         Mockito.when(
-                recordRepository.getFilteredRecord(
+                recordRepository.getAllFilteredRecord(
                         userId, listRecordsRequestDto.getPropertyName(), listRecordsRequestDto.getTypeId(), listRecordsRequestDto.getSearchTerm(), listRecordsRequestDto.isAsc(), pageRequest, companyName
                 )
         ).thenReturn(

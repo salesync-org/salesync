@@ -144,7 +144,7 @@ public class RegisterServiceImpl implements RegisterService {
                 .grantType(OAuth2Constants.PASSWORD)
                 .username(logInDTO.getUsername())
                 .password(logInDTO.getPassword())
-                .clientId("admin-cli")
+                .clientId(AuthenticationClient.APP_ADMIN)
                 // .clientSecret(AuthenticationClient.APP_ADMIN)
                 .build()) {
 
@@ -306,16 +306,25 @@ public class RegisterServiceImpl implements RegisterService {
         }
     }
 
+    // private ClientRepresentation getNewClientRepresentation() {
+    //     ClientRepresentation clientRepresentation = new ClientRepresentation();
+    //     clientRepresentation.setClientId(AuthenticationClient.APP_ADMIN);
+    //     clientRepresentation.setPublicClient(false);
+    //     clientRepresentation.setAuthorizationServicesEnabled(false);
+    //     clientRepresentation.setDirectAccessGrantsEnabled(true);
+    //     CredentialRepresentation credential = new CredentialRepresentation();
+    //     credential.setType(CredentialRepresentation.SECRET);
+    //     credential.setValue(AuthenticationClient.APP_ADMIN_ID);
+    //     clientRepresentation.setSecret(credential.getValue());
+    //     return clientRepresentation;
+    // }
+
     private ClientRepresentation getNewClientRepresentation() {
         ClientRepresentation clientRepresentation = new ClientRepresentation();
         clientRepresentation.setClientId(AuthenticationClient.APP_ADMIN);
         clientRepresentation.setPublicClient(false);
         clientRepresentation.setAuthorizationServicesEnabled(false);
         clientRepresentation.setDirectAccessGrantsEnabled(true);
-        CredentialRepresentation credential = new CredentialRepresentation();
-        credential.setType(CredentialRepresentation.SECRET);
-        credential.setValue(AuthenticationClient.APP_ADMIN_ID);
-        clientRepresentation.setSecret(credential.getValue());
         return clientRepresentation;
     }
 

@@ -71,7 +71,8 @@ public class RecordServiceImpl implements RecordService {
             else if (roles.contains("read-own"))
                 page = recordRepository.getOwnFilteredRecord(
                         UUID.fromString(SecurityContextHelper.getContextUserId()), requestDto.getPropertyName(), requestDto.getTypeId(), requestDto.getSearchTerm(), requestDto.isAsc(), pageRequest, companyName
-                ); else page= null;
+                );
+            else page = null;
         } else {
 
             if (roles.contains("read-all"))
@@ -81,7 +82,8 @@ public class RecordServiceImpl implements RecordService {
             else if (roles.contains("read-own"))
                 page = recordRepository.getOwnFilteredRecordsAndOrderByName(
                         UUID.fromString(SecurityContextHelper.getContextUserId()), requestDto.getTypeId(), requestDto.getSearchTerm(), requestDto.isAsc(), pageRequest, companyName
-                ); else page= null;
+                );
+            else page = null;
         }
         List<RecordDto> recordDtos = page.getContent().stream().map(recordMapper::recordToRecordDto).toList();
 

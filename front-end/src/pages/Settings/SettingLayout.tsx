@@ -8,6 +8,7 @@ import { cn } from '@/utils/utils';
 import { Building, Layers, Settings, User } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Outlet, useLocation, useParams } from 'react-router-dom';
+import noPermissionImage from '@/assets/system/no_permission.png';
 
 const settings: SettingLayout[] = [
   {
@@ -144,7 +145,8 @@ const SettingLayout = () => {
             ) : !settingPathObject?.adminSettingRole ? (
               <Outlet />
             ) : adminPermission == false ? (
-              <Panel className='mx-0 h-full'>
+              <Panel className='mx-0 flex h-full flex-col justify-center overflow-auto'>
+                <img src={noPermissionImage} className='h-2/3 min-h-[200px] self-center'></img>
                 <div className='w-full text-center text-xl font-semibold'>
                   You don't have sufficient permissions to view this page.
                 </div>

@@ -150,9 +150,9 @@ const LogIn = () => {
                   {isSubmitting ? 'Logging in...' : 'Log In'}
                 </PrimaryButton>
 
-                <div className='mt-4 flex'>
-                  <Link to='/forgot-password' className='text-sm text-primary dark:text-secondary'>
-                    Forgot Your Password?
+                <div className='mt-4 flex justify-center'>
+                  <Link to='/sign-up' className='text-sm text-primary dark:text-secondary lg:hidden'>
+                    Or sign up now
                   </Link>
                 </div>
               </form>

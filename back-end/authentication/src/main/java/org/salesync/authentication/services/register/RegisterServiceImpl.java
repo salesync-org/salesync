@@ -103,9 +103,9 @@ public class RegisterServiceImpl implements RegisterService {
             logger.info(String.format("Starting Register User in %s...", realmName));
             UserRepresentation user = new UserRepresentation();
             user.setEmail(newUserDTO.getEmail());
-            user.setUsername(newUserDTO.getEmail());
-            user.setFirstName(newUserDTO.getFirstName());
-            user.setLastName(newUserDTO.getLastName());
+            user.setUsername(newUserDTO.getEmail().isEmpty() ? "Undefined" : newUserDTO.getEmail());
+            user.setFirstName(newUserDTO.getFirstName().isEmpty() ? "Undefined" : newUserDTO.getFirstName());
+            user.setLastName(newUserDTO.getLastName().isEmpty() ? "Undefined" : newUserDTO.getLastName());
             user.singleAttribute(UserAttributes.JOB_TITLE, newUserDTO.getJobTitle());
             user.singleAttribute(UserAttributes.AVATAR, UserAttributes.DEFAULT_AVATAR_NAME);
             user.singleAttribute(UserAttributes.PHONE, newUserDTO.getPhone());
@@ -144,8 +144,8 @@ public class RegisterServiceImpl implements RegisterService {
                 .grantType(OAuth2Constants.PASSWORD)
                 .username(logInDTO.getUsername())
                 .password(logInDTO.getPassword())
-                .clientId("admin-cli")
-                // .clientSecret(AuthenticationClient.APP_ADMIN)
+                .clientId(AuthenticationClient.APP_ADMIN)
+                .clientSecret(AuthenticationClient.APP_ADMIN_ID)
                 .build()) {
 
             logger.info("Logging in Sever URL: " + env.getProperty("keycloak.auth-server-url"));
@@ -184,7 +184,7 @@ public class RegisterServiceImpl implements RegisterService {
         logger.info("Finish logging out.");
         return Response.ok().build();
     }
-
+    
     @Override
     public VerifyEmailResponseDto verifyEmail(String token) {
         try {
@@ -286,11 +286,12 @@ public class RegisterServiceImpl implements RegisterService {
             realmRepresentation.setEnabled(true);
             realmRepresentation.setEmailTheme("salesync");
             realmRepresentation.setAccessTokenLifespan(1800);
+            realmRepresentation.setClients(List.of(getNewClientRepresentation()));
             keycloak.realms().create(realmRepresentation);
             logger.info(String.format("Created Realm with name: %s", realmName));
             RealmResource realmResource = keycloak.realm(realmName);
             createDefaultRoles(realmResource);
-            keycloak.realm(realmName).clients().create(getNewClientRepresentation());
+            logger.info(String.format("Added new client successfully."));
             createAttribute(realmResource, UserAttributes.AVATAR, UserAttributes.AVATAR_LABEL);
             createAttribute(realmResource, UserAttributes.JOB_TITLE, UserAttributes.JOB_TITLE_LABEL);
             createAttribute(realmResource, UserAttributes.PHONE, UserAttributes.PHONE_LABEL);
@@ -306,18 +307,29 @@ public class RegisterServiceImpl implements RegisterService {
         }
     }
 
-    private ClientRepresentation getNewClientRepresentation() {
-        ClientRepresentation clientRepresentation = new ClientRepresentation();
-        clientRepresentation.setClientId(AuthenticationClient.APP_ADMIN);
-        clientRepresentation.setPublicClient(false);
-        clientRepresentation.setAuthorizationServicesEnabled(false);
-        clientRepresentation.setDirectAccessGrantsEnabled(true);
-        CredentialRepresentation credential = new CredentialRepresentation();
-        credential.setType(CredentialRepresentation.SECRET);
-        credential.setValue(AuthenticationClient.APP_ADMIN_ID);
-        clientRepresentation.setSecret(credential.getValue());
-        return clientRepresentation;
-    }
+private ClientRepresentation getNewClientRepresentation() {
+    ClientRepresentation clientRepresentation = new ClientRepresentation();
+    clientRepresentation.setClientId(AuthenticationClient.APP_ADMIN);
+    clientRepresentation.setPublicClient(false);
+    clientRepresentation.setAuthorizationServicesEnabled(true);
+    clientRepresentation.setDirectAccessGrantsEnabled(true);
+
+    CredentialRepresentation credential = new CredentialRepresentation();
+    credential.setType(CredentialRepresentation.SECRET);
+    credential.setValue(AuthenticationClient.APP_ADMIN_ID);
+    clientRepresentation.setSecret(credential.getValue());
+
+    return clientRepresentation;
+}
+
+    // private ClientRepresentation getNewClientRepresentation() {
+    //     ClientRepresentation clientRepresentation = new ClientRepresentation();
+    //     clientRepresentation.setClientId(AuthenticationClient.APP_ADMIN);
+    //     clientRepresentation.setPublicClient(true);
+    //     clientRepresentation.setAuthorizationServicesEnabled(false);
+    //     clientRepresentation.setDirectAccessGrantsEnabled(true);
+    //     return clientRepresentation;
+    // }
 
 
     private void addEmailConfiguration(RealmResource realmResource) {

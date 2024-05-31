@@ -8,13 +8,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.keycloak.representations.AccessTokenResponse;
 
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class VerifyEmailResponseDto  extends AccessTokenResponse {
+public class VerifyEmailResponseDto extends AccessTokenResponse {
     private String firstName = "";
     private String lastName = "";
     private String realmName = "";

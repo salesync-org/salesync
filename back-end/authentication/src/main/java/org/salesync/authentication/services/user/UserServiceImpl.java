@@ -2,13 +2,11 @@ package org.salesync.authentication.services.user;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.TokenVerifier;
 import org.keycloak.admin.client.Keycloak;
-import org.keycloak.admin.client.resource.KeyResource;
-import org.keycloak.admin.client.resource.RealmResource;
-import org.keycloak.admin.client.resource.RoleResource;
-import org.keycloak.admin.client.resource.UsersResource;
+import org.keycloak.admin.client.resource.*;
 import org.keycloak.authorization.client.AuthorizationDeniedException;
 import org.keycloak.crypto.KeyUse;
 import org.keycloak.representations.AccessToken;
@@ -44,9 +42,7 @@ public class UserServiceImpl implements UserService {
         try {
             RealmResource realmResource = keycloak.realm(realmName);
             PublicKey publicKey = KeyConverter.convertStringToPublicKey(getKey(realmResource));
-            AccessToken token = TokenVerifier.create(accessToken, AccessToken.class)
-                    .publicKey(publicKey)
-                    .verify()
+            AccessToken token = TokenVerifier.create(accessToken, AccessToken.class).publicKey(publicKey).verify()
                     .getToken();
             if (token.isActive()) {
                 String userId = token.getSubject();
@@ -63,10 +59,10 @@ public class UserServiceImpl implements UserService {
         try {
             RealmResource realmResource = keycloak.realm(realmName);
             PublicKey publicKey = KeyConverter.convertStringToPublicKey(getKey(realmResource));
-            AccessToken token = TokenVerifier.create(accessToken, AccessToken.class)
-                    .publicKey(publicKey) // Set your RSA Public Key
-                    .verify()
-                    .getToken();
+            AccessToken token = TokenVerifier.create(accessToken, AccessToken.class).publicKey(publicKey) // Set your
+                                                                                                          // RSA Public
+                                                                                                          // Key
+                    .verify().getToken();
             if (token.isActive()) {
                 String userId = token.getSubject();
                 UserRepresentation user = realmResource.users().get(userId).toRepresentation();
@@ -76,7 +72,8 @@ public class UserServiceImpl implements UserService {
                 attributes.put(UserAttributes.AVATAR, List.of(userDto.getAvatarUrl()));
                 attributes.put(UserAttributes.JOB_TITLE, List.of(userDto.getJobTitle()));
                 attributes.put(UserAttributes.PHONE, List.of(userDto.getPhone()));
-                attributes.put(UserAttributes.SETTINGS, List.of(new SettingsManager().updatedSettingsString(userDto.getSettings())));
+                attributes.put(UserAttributes.SETTINGS,
+                        List.of(new SettingsManager().updatedSettingsString(userDto.getSettings())));
                 user.setAttributes(attributes);
                 realmResource.users().get(userId).update(user);
                 return loadUser(realmResource, userId);
@@ -92,10 +89,10 @@ public class UserServiceImpl implements UserService {
         try {
             RealmResource realmResource = keycloak.realm(realmName);
             PublicKey publicKey = KeyConverter.convertStringToPublicKey(getKey(realmResource));
-            AccessToken token = TokenVerifier.create(accessToken, AccessToken.class)
-                    .publicKey(publicKey) // Set your RSA Public Key
-                    .verify()
-                    .getToken();
+            AccessToken token = TokenVerifier.create(accessToken, AccessToken.class).publicKey(publicKey) // Set your
+                                                                                                          // RSA Public
+                                                                                                          // Key
+                    .verify().getToken();
             if (token.isActive()) {
                 String userId = token.getSubject();
                 UserRepresentation user = realmResource.users().get(userId).toRepresentation();
@@ -116,9 +113,7 @@ public class UserServiceImpl implements UserService {
         try {
             RealmResource realmResource = keycloak.realm(realmName);
             PublicKey publicKey = KeyConverter.convertStringToPublicKey(getKey(realmResource));
-            AccessToken token = TokenVerifier.create(accessToken, AccessToken.class)
-                    .publicKey(publicKey)
-                    .verify()
+            AccessToken token = TokenVerifier.create(accessToken, AccessToken.class).publicKey(publicKey).verify()
                     .getToken();
             if (token.isActive()) {
                 String responseToken = generateToken(loadDetailUser(realmResource, token.getSubject()));
@@ -149,6 +144,22 @@ public class UserServiceImpl implements UserService {
             throw new AuthorizationDeniedException(e);
         }
         return null;
+    }
+
+    @Override
+    public Response deactiveUser(String realmName, String userId, String token) {
+        try {
+            if (verifyToken(token)) {
+                RealmResource realmResource = keycloak.realm(realmName);
+                UserResource userResource = realmResource.users().get(userId);
+                UserRepresentation user = userResource.toRepresentation();
+                user.setEnabled(false);
+                userResource.update(user);
+            }
+            return Response.ok().build();
+        } catch (Exception e) {
+            throw new AuthorizationDeniedException(e);
+        }
     }
 
     @Override
@@ -211,7 +222,8 @@ public class UserServiceImpl implements UserService {
             List<RoleRepresentation> roleMappings = realmResource.users().get(userId).roles().realmLevel().listAll();
             List<String> roles = new ArrayList<>();
             List<String> permissions = new ArrayList<>();
-            logger.info("Loading " + roleMappings.size() + " Roles For User: " + userDto.getUserName() + " with userId: " + userDto.getUserId());
+            logger.info("Loading " + roleMappings.size() + " Roles For User: " + userDto.getUserName()
+                    + " with userId: " + userDto.getUserId());
             for (RoleRepresentation roleRepresentation : roleMappings) {
                 String roleName = roleRepresentation.getName();
                 roles.add(roleName);
@@ -233,35 +245,25 @@ public class UserServiceImpl implements UserService {
     }
 
     public String generateToken(UserDetailDto userDetails) {
-        Algorithm algorithm = Algorithm.RSA256(
-                (RSAPublicKey) keyStore.loadPublicKey(),
+        Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) keyStore.loadPublicKey(),
                 (RSAPrivateKey) keyStore.loadPrivateKey());
-        return JWT.create()
-                .withClaim("userId", userDetails.getUserId())
-                .withClaim("roles", userDetails.getRoles())
-                .withClaim("permissions", userDetails.getPermissions())
-                .withSubject(userDetails.getUserName())
+        return JWT.create().withClaim("userId", userDetails.getUserId()).withClaim("roles", userDetails.getRoles())
+                .withClaim("permissions", userDetails.getPermissions()).withSubject(userDetails.getUserName())
                 .withIssuedAt(new Date(System.currentTimeMillis()))
                 .withExpiresAt(new Date(System.currentTimeMillis()
-                        + Long.parseLong(Objects.requireNonNull(
-                                env.getProperty("jwt.expiration.ms")))))
-                        .sign(algorithm);
+                        + Long.parseLong(Objects.requireNonNull(env.getProperty("jwt.expiration.ms")))))
+                .sign(algorithm);
     }
+
     @Override
     public String generateVerifyToken(String userId, String userName, String email, String realmName) {
-        Algorithm algorithm = Algorithm.RSA256(
-                (RSAPublicKey) keyStore.loadPublicKey(),
+        Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) keyStore.loadPublicKey(),
                 (RSAPrivateKey) keyStore.loadPrivateKey());
-        return JWT.create()
-                .withClaim("userId", userId)
-                .withClaim("userName", userName)
-                .withClaim("email", email)
-                .withClaim("realmName", realmName)
-                .withSubject(userName)
+        return JWT.create().withClaim("userId", userId).withClaim("userName", userName).withClaim("email", email)
+                .withClaim("realmName", realmName).withSubject(userName)
                 .withIssuedAt(new Date(System.currentTimeMillis()))
                 .withExpiresAt(new Date(System.currentTimeMillis()
-                        + Long.parseLong(Objects.requireNonNull(
-                        env.getProperty("jwt.expiration.ms")))))
+                        + Long.parseLong(Objects.requireNonNull(env.getProperty("jwt.expiration.ms")))))
                 .sign(algorithm);
     }
 
@@ -270,9 +272,7 @@ public class UserServiceImpl implements UserService {
         try {
             RealmResource realmResource = keycloak.realm(realmName);
             PublicKey publicKey = KeyConverter.convertStringToPublicKey(getKey(realmResource));
-            AccessToken token = TokenVerifier.create(accessToken, AccessToken.class)
-                    .publicKey(publicKey)
-                    .verify()
+            AccessToken token = TokenVerifier.create(accessToken, AccessToken.class).publicKey(publicKey).verify()
                     .getToken();
             logger.info("Getting Users");
             if (!token.isActive()) {
@@ -295,7 +295,8 @@ public class UserServiceImpl implements UserService {
                 }
                 return users;
             }
-            logger.info("The current user doesn't have the required permissions to get users. Needing role: " + AuthenticationInfo.ADMIN_SETTINGS_PERMISSION);
+            logger.info("The current user doesn't have the required permissions to get users. Needing role: "
+                    + AuthenticationInfo.ADMIN_SETTINGS_PERMISSION);
             return null;
         } catch (Exception e) {
             e.printStackTrace();
@@ -316,12 +317,9 @@ public class UserServiceImpl implements UserService {
 
     private boolean verifyToken(String token) {
         try {
-            Algorithm algorithm = Algorithm.RSA256(
-                    (RSAPublicKey) keyStore.loadPublicKey(),
+            Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) keyStore.loadPublicKey(),
                     (RSAPrivateKey) keyStore.loadPrivateKey());
-            JWT.require(algorithm)
-                    .build()
-                    .verify(token);
+            JWT.require(algorithm).build().verify(token);
             return true;
         } catch (Exception e) {
             return false;
@@ -349,9 +347,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean isUserInRole(RealmResource realmResource,
-                                 String userId,
-                                 String roleName) {
+    public boolean isUserInRole(RealmResource realmResource, String userId, String roleName) {
         logger.info("Checking if user is in role: " + roleName + " with userId: " + userId);
         List<RoleRepresentation> roleMappings = realmResource.users().get(userId).roles().realmLevel().listAll();
         for (RoleRepresentation roleRepresentation : roleMappings) {

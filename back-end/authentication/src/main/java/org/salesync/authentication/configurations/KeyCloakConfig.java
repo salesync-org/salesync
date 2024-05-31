@@ -14,12 +14,8 @@ public class KeyCloakConfig {
 
     @Bean
     public Keycloak getKeycloakInstance() {
-        return Keycloak.getInstance(
-                env.getProperty("keycloak.auth-server-url"),
-                env.getProperty("keycloak.realm"),
-                env.getProperty("keycloak-config.username"),
-                env.getProperty("keycloak-config.password"),
-                env.getProperty("keycloak.resource")
-        );
+        return Keycloak.getInstance(env.getProperty("keycloak.auth-server-url"), env.getProperty("keycloak.realm"),
+                env.getProperty("keycloak-config.username"), env.getProperty("keycloak-config.password"),
+                env.getProperty("keycloak.resource"));
     }
 }

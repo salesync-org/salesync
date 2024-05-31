@@ -35,7 +35,6 @@ public class RoleServiceImpl implements RoleService {
         this.userService = userService;
     }
 
-
     @Override
     public List<RoleDto> getCompositeRoles(String realmName, String token) {
         try {
@@ -44,17 +43,16 @@ public class RoleServiceImpl implements RoleService {
                 List<RoleDto> roleDtoList = new ArrayList<>();
                 List<RoleRepresentation> roleRepresentationList = realmResource.roles().list();
                 for (RoleRepresentation roleRepresentation : roleRepresentationList) {
-                    if (!roleRepresentation.isComposite() ||
-                        roleRepresentation.getName().equals("offline_access") ||
-                            roleRepresentation.getName().equals("uma_authorization")) {
+                    if (!roleRepresentation.isComposite() || roleRepresentation.getName().equals("offline_access")
+                            || roleRepresentation.getName().equals("uma_authorization")) {
                         continue;
                     }
                     roleDtoList.add(getRoleDto(realmResource.roles().get(roleRepresentation.getName())));
                 }
                 return roleDtoList;
             } else {
-                throw HttpClientErrorException.Unauthorized.create(
-                        HttpStatusCode.valueOf(HttpStatus.SC_UNAUTHORIZED), "Unauthorized", null, null, null);
+                throw HttpClientErrorException.Unauthorized.create(HttpStatusCode.valueOf(HttpStatus.SC_UNAUTHORIZED),
+                        "Unauthorized", null, null, null);
             }
         } catch (HttpClientErrorException.Unauthorized e) {
             logger.error("Unauthorized access");
@@ -74,8 +72,7 @@ public class RoleServiceImpl implements RoleService {
                 RealmResource realmResource = keycloak.realm(realmName);
                 return getRoleDto(realmResource.roles().get(roleName));
             } else {
-                throw HttpClientErrorException.Unauthorized.create(
-                        HttpStatusCode.valueOf(HttpStatus.SC_UNAUTHORIZED),
+                throw HttpClientErrorException.Unauthorized.create(HttpStatusCode.valueOf(HttpStatus.SC_UNAUTHORIZED),
                         "Unauthorized", null, null, null);
             }
         } catch (HttpClientErrorException.Unauthorized e) {
@@ -97,18 +94,15 @@ public class RoleServiceImpl implements RoleService {
                 List<PermissionDto> permissionList = new ArrayList<>();
                 List<RoleRepresentation> roleRepresentationList = realmResource.roles().list();
                 for (RoleRepresentation roleRepresentation : roleRepresentationList) {
-                    if (roleRepresentation.isComposite() ||
-                            roleRepresentation.getName().equals("offline_access") ||
-                            roleRepresentation.getName().equals("uma_authorization")) {
+                    if (roleRepresentation.isComposite() || roleRepresentation.getName().equals("offline_access")
+                            || roleRepresentation.getName().equals("uma_authorization")) {
                         continue;
                     }
-                    permissionList.add(getPermissionDto(realmResource.roles().
-                            get(roleRepresentation.getName())));
+                    permissionList.add(getPermissionDto(realmResource.roles().get(roleRepresentation.getName())));
                 }
                 return permissionList;
             } else {
-                throw HttpClientErrorException.Unauthorized.create(
-                        HttpStatusCode.valueOf(HttpStatus.SC_UNAUTHORIZED),
+                throw HttpClientErrorException.Unauthorized.create(HttpStatusCode.valueOf(HttpStatus.SC_UNAUTHORIZED),
                         "Unauthorized", null, null, null);
             }
         } catch (HttpClientErrorException.Unauthorized e) {
@@ -135,8 +129,7 @@ public class RoleServiceImpl implements RoleService {
                 roleResource.addComposites(permissionRoles.stream().toList());
                 return getRoleDto(roleResource);
             } else {
-                throw HttpClientErrorException.Unauthorized.create(
-                        HttpStatusCode.valueOf(HttpStatus.SC_UNAUTHORIZED),
+                throw HttpClientErrorException.Unauthorized.create(HttpStatusCode.valueOf(HttpStatus.SC_UNAUTHORIZED),
                         "Unauthorized", null, null, null);
             }
         } catch (HttpClientErrorException.Unauthorized e) {
@@ -161,7 +154,8 @@ public class RoleServiceImpl implements RoleService {
             realmResource.roles().create(roleRepresentation);
             RoleResource roleResource = realmResource.roles().get(newRoleDto.getRoleName());
             for (PermissionDto permissionDto : newRoleDto.getPermissions()) {
-                roleResource.addComposites(Collections.singletonList(realmResource.roles().get(permissionDto.getPermissionName()).toRepresentation()));
+                roleResource.addComposites(Collections.singletonList(
+                        realmResource.roles().get(permissionDto.getPermissionName()).toRepresentation()));
             }
             return getRoleDto(realmResource.roles().get(roleRepresentation.getName()));
         } catch (Exception e) {
@@ -194,9 +188,8 @@ public class RoleServiceImpl implements RoleService {
     private Set<PermissionDto> getRolePermissions(Set<RoleRepresentation> roleRepresentations) {
         Set<PermissionDto> permissions = new HashSet<>();
         for (RoleRepresentation roleRepresentation : roleRepresentations) {
-            if (roleRepresentation.isComposite() ||
-                    roleRepresentation.getName().equals("offline_access") ||
-                    roleRepresentation.getName().equals("uma_authorization")) {
+            if (roleRepresentation.isComposite() || roleRepresentation.getName().equals("offline_access")
+                    || roleRepresentation.getName().equals("uma_authorization")) {
                 continue;
             }
             PermissionDto permissionDto = new PermissionDto();
@@ -214,21 +207,22 @@ public class RoleServiceImpl implements RoleService {
             logger.info(String.format("Adding role %s to user.", roleName));
             RealmResource realmResource = keycloak.realm(realmName);
             PublicKey publicKey = KeyConverter.convertStringToPublicKey(userService.getKey(realmResource));
-            AccessToken token = TokenVerifier.create(accessToken, AccessToken.class)
-                    .publicKey(publicKey)
-                    .verify()
+            AccessToken token = TokenVerifier.create(accessToken, AccessToken.class).publicKey(publicKey).verify()
                     .getToken();
-            if (token.isActive() && userService.isUserInRole(realmResource, token.getSubject(), AuthenticationInfo.ADMIN_SETTINGS_PERMISSION) &&
-                    realmResource.roles().get(roleName) != null) {
+            if (token.isActive()
+                    && userService.isUserInRole(realmResource, token.getSubject(),
+                            AuthenticationInfo.ADMIN_SETTINGS_PERMISSION)
+                    && realmResource.roles().get(roleName) != null) {
                 UserRepresentation userRepresentation = realmResource.users().get(userId).toRepresentation();
-                List<RoleRepresentation> roleMappings = realmResource.users().get(userId).roles().realmLevel().listAll();
+                List<RoleRepresentation> roleMappings = realmResource.users().get(userId).roles().realmLevel()
+                        .listAll();
                 realmResource.users().get(userId).roles().realmLevel().remove(roleMappings);
-                realmResource.users().get(userId).roles().realmLevel().add(Collections.singletonList(realmResource.roles().get(roleName).toRepresentation()));
+                realmResource.users().get(userId).roles().realmLevel()
+                        .add(Collections.singletonList(realmResource.roles().get(roleName).toRepresentation()));
                 realmResource.users().get(userId).update(userRepresentation);
                 return userService.getUser(realmName, userId);
             } else {
-                throw HttpClientErrorException.Unauthorized.create(
-                        HttpStatusCode.valueOf(HttpStatus.SC_UNAUTHORIZED),
+                throw HttpClientErrorException.Unauthorized.create(HttpStatusCode.valueOf(HttpStatus.SC_UNAUTHORIZED),
                         "Unauthorized", null, null, null);
             }
         } catch (HttpClientErrorException.Unauthorized e) {

@@ -10,8 +10,7 @@ public class KeyConverter {
         try {
             // Remove the header, footer and whitespace
             String normalizedKey = pemEncodedKey.replace("-----BEGIN PUBLIC KEY-----", "")
-                    .replace("-----END PUBLIC KEY-----", "")
-                    .replaceAll("\\s", "");
+                    .replace("-----END PUBLIC KEY-----", "").replaceAll("\\s", "");
 
             // Decode the Base64 key data
             byte[] keyBytes = Base64.getDecoder().decode(normalizedKey);

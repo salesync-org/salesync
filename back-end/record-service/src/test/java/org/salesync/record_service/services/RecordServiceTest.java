@@ -66,7 +66,7 @@ public class RecordServiceTest {
                 SecurityContextHelper.getContextUserId()
         ).thenReturn(userId.toString());
         // when
-        ListRecordsResponseDto listRecordsResponseDto = recordService.getAllFilteredRecords(listRecordsRequestDto, companyName);
+        ListRecordsResponseDto listRecordsResponseDto = recordService.getFilteredRecords(listRecordsRequestDto, companyName);
         // then
         Assert.assertNotNull(listRecordsResponseDto);
         Assert.assertEquals(2, listRecordsResponseDto.getRecords().size());

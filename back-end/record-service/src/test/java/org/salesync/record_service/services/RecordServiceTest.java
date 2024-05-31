@@ -56,7 +56,7 @@ public class RecordServiceTest {
         ), pageRequest, 2);
 
         Mockito.when(
-                recordRepository.getFilteredRecord(
+                recordRepository.getAllFilteredRecord(
                         userId, listRecordsRequestDto.getPropertyName(), listRecordsRequestDto.getTypeId(), listRecordsRequestDto.getSearchTerm(), listRecordsRequestDto.isAsc(), pageRequest, companyName
                 )
         ).thenReturn(
@@ -66,7 +66,7 @@ public class RecordServiceTest {
                 SecurityContextHelper.getContextUserId()
         ).thenReturn(userId.toString());
         // when
-        ListRecordsResponseDto listRecordsResponseDto = recordService.getFilteredRecords(listRecordsRequestDto, companyName);
+        ListRecordsResponseDto listRecordsResponseDto = recordService.getAllFilteredRecords(listRecordsRequestDto, companyName);
         // then
         Assert.assertNotNull(listRecordsResponseDto);
         Assert.assertEquals(2, listRecordsResponseDto.getRecords().size());

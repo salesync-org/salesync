@@ -1,29 +1,21 @@
-import { cn } from '@/utils/utils';
-import { TextInput, Button, Icon } from '@/components/ui';
-import { useEffect, useRef, useState } from 'react';
-import SearchHint from './SearchHint';
+import { Button, Icon, TextInput } from '@/components/ui';
 import useClickOutside from '@/hooks/useClickOutside';
+import { cn } from '@/utils/utils';
+import { useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { useDebounce } from 'use-debounce';
+import SearchHint from './SearchHint';
 
 const Search = ({ className }: { className?: string }) => {
   const [isSearchOpen, setSearchOpen] = useState(false);
   const [isShowHint, setIsShowHint] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
   const searchRef = useRef<HTMLDivElement>(null);
   useClickOutside([searchRef], () => {
     setIsShowHint(false);
     setSearchOpen(false);
   });
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      // setRecordFilter({ ...recordFilter, searchTerm: search });
-    }, 500);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [searchTerm]);
 
   return (
     <div
@@ -33,9 +25,6 @@ const Search = ({ className }: { className?: string }) => {
         className
       )}
       ref={searchRef}
-      // onBlur={(e) => {
-      //   e.relatedTarget === null && setIsShowHint(false);
-      // }}
     >
       <TextInput
         placeholder='Search for anything'
@@ -45,11 +34,15 @@ const Search = ({ className }: { className?: string }) => {
           isSearchOpen ? 'visible z-50 w-[75%]' : 'invisible'
         )}
         prefixIcon='search'
+        value={searchTerm}
+        onChange={(e) => {
+          setSearchTerm(e.target.value);
+        }}
         onFocus={() => {
           setIsShowHint(true);
         }}
       />
-      {isShowHint && <SearchHint searchHint={searchTerm} />}
+      {isShowHint && <SearchHint searchHint={debouncedSearchTerm} />}
       <div className={cn('z-40 flex w-full justify-start sm:invisible', isSearchOpen && 'justify-end')}>
         <Button
           rounded='icon'

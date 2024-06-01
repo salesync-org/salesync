@@ -70,7 +70,7 @@ type OutputRecord = {
   properties: OutputProperty[];
 };
 
-type OutputData = {
+export type OutputData = {
   records: OutputRecord[];
   total_size: number;
   page_size: number;
@@ -104,7 +104,7 @@ function mapData(input: InputData): OutputData {
 
 class RecordApi {
   async getRecords(companyName: string, typeId: string, recordFilter: RecordsFilter) {
-    const response = await axios.post(`${ELASTIC_HOST}/records/_search?size=${1000}`, {
+    const response = await axios.post(`${URL}/${companyName}/records/elasticsearch`, {
       query: {
         bool: {
           must: [
@@ -132,15 +132,28 @@ class RecordApi {
     return mapData(response.data);
   }
 
-  async getAllRecords(companyName: string) {
-    const response = await axios.post(`${ELASTIC_HOST}/records/_search?size=${1000}`, {
+  async getAllRecords(companyName: string, recordFilter: RecordsFilter) {
+    const response = await axios.post(`${URL}/${companyName}/records/elasticsearch`, {
       query: {
-        match: {
-          company_name: companyName
+        bool: {
+          must: [
+            {
+              match: {
+                company_name: companyName
+              }
+            },
+            {
+              query_string: {
+                query: recordFilter.searchTerm ? `*${recordFilter.searchTerm}*` : '*',
+                fields: ['name', 'properties.item_value'],
+                default_operator: 'AND'
+              }
+            }
+          ]
         }
       }
     });
-    return response.data;
+    return mapData(response.data);
   }
 
   async getRecordDetails(recordId: string) {

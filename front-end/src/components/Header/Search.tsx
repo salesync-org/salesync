@@ -3,7 +3,7 @@ import { TextInput, Button, Icon } from '@/components/ui';
 import { useEffect, useRef, useState } from 'react';
 import SearchHint from './SearchHint';
 import useClickOutside from '@/hooks/useClickOutside';
-import { set } from 'date-fns';
+import { useDebounce } from 'use-debounce';
 
 const Search = ({ className }: { className?: string }) => {
   const [isSearchOpen, setSearchOpen] = useState(false);
@@ -14,6 +14,16 @@ const Search = ({ className }: { className?: string }) => {
     setIsShowHint(false);
     setSearchOpen(false);
   });
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      // setRecordFilter({ ...recordFilter, searchTerm: search });
+    }, 500);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [searchTerm]);
 
   return (
     <div

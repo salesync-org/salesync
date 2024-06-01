@@ -25,8 +25,6 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
     }
   });
 
-  console.log({ columns, data });
-
   return (
     <div className='min-h-full overflow-scroll rounded-sm border-[1px] border-button-stroke dark:border-button-stroke-dark'>
       <Table>
@@ -62,7 +60,6 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                 data-state={row.getIsSelected() && 'selected'}
               >
                 {row.getVisibleCells().map((cell) => {
-                  console.log({ cell, value: cell.getValue() });
                   return (
                     <TableCell
                       className='h-8 py-0 leading-5 transition-all hover:bg-secondary-light/40 dark:hover:bg-secondary-dark/40'

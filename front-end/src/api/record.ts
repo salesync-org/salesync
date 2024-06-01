@@ -104,18 +104,28 @@ function mapData(input: InputData): OutputData {
 
 class RecordApi {
   async getRecords(companyName: string, typeId: string, recordFilter: RecordsFilter) {
-    // const response = await axios.post(`${URL}/${companyName}/records/list`, {
-    //   type_id: typeId,
-    //   search_term: recordFilter.searchTerm,
-    //   is_asc: recordFilter.isAsc,
-    //   property_name: recordFilter.propertyName,
-    //   current_page: recordFilter.currentPage,
-    //   page_size: recordFilter.pageSize
-    // });
     const response = await axios.post(`${ELASTIC_HOST}/records/_search?size=${1000}`, {
       query: {
         bool: {
-          must: [{ match: { company_name: companyName } }, { match: { type_id: typeId } }]
+          must: [
+            {
+              match: {
+                company_name: companyName
+              }
+            },
+            {
+              match: {
+                type_id: typeId
+              }
+            },
+            {
+              query_string: {
+                query: recordFilter.searchTerm ? `*${recordFilter.searchTerm}*` : '*',
+                fields: ['name', 'properties.item_value'],
+                default_operator: 'AND'
+              }
+            }
+          ]
         }
       }
     });

@@ -1,6 +1,6 @@
 pipeline:
   batch:
-    size: 500
+    size: 1000
   workers: 4
 xpack:
   monitoring:

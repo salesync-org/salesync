@@ -18,4 +18,6 @@ public final class Route {
     public static final String UPDATE_STAGE = "/update-stage";
 
     public static final String LIST_RECORD_TYPE_RELATION = "/list-record-type-relation/{sourceRecordId}";
+
+    public static final String ELASTICSEARCH = "/elasticsearch";
 }

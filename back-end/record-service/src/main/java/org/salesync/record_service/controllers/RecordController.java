@@ -1,5 +1,7 @@
 package org.salesync.record_service.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.salesync.record_service.constants.Route;
@@ -11,6 +13,7 @@ import org.salesync.record_service.services.record.RecordService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -80,5 +83,10 @@ public class RecordController {
     @PutMapping(Route.RECORD_ID + Route.UPDATE)
     public ResponseEntity<RecordDto> updateRecordByRecordId(@PathVariable String recordId, @RequestHeader(name = "Authorization") String authorization, @RequestBody RecordDto updateRecordRequestDto) {
         return ResponseEntity.ok(recordService.updateRecordByRecordId(recordId, authorization, updateRecordRequestDto));
+    }
+
+    @PostMapping(Route.ELASTICSEARCH)
+    public ResponseEntity<Object> getRecordInElasticsearch(HttpServletRequest request) throws IOException {
+        return ResponseEntity.ok(recordService.getRecordInElasticsearch(request));
     }
 }

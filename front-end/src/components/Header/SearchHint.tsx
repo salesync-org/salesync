@@ -18,7 +18,7 @@ const SearchHint = ({ searchHint }: SearchHintProps) => {
         isAsc: null,
         propertyName: null,
         currentPage: 1,
-        pageSize: 300
+        pageSize: 5
       };
       const res = await recordApi.getAllRecords(companyName, recordFilters);
 

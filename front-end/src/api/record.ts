@@ -133,7 +133,10 @@ class RecordApi {
   }
 
   async getAllRecords(companyName: string, recordFilter: RecordsFilter) {
-    const response = await axios.post(`${URL}/${companyName}/records/elasticsearch`, {
+    const from = (recordFilter.currentPage - 1) * recordFilter.pageSize;
+    const response = await axios.post(`${URL}/${companyName}/records/elasticsearch?from=1&to=2`, {
+      from,
+      size: recordFilter.pageSize,
       query: {
         bool: {
           must: [

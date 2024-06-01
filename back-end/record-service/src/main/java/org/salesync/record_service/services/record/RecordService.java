@@ -1,11 +1,13 @@
 package org.salesync.record_service.services.record;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.salesync.record_service.dtos.*;
 import org.salesync.record_service.dtos.record_type_relation_dto.ListRecordTypeRelationsDto;
 import org.salesync.record_service.dtos.record_type_relation_dto.RecordTypeRelationDto;
 import org.salesync.record_service.dtos.record_type_relation_dto.RequestRecordTypeRelationDto;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,4 +37,6 @@ public interface RecordService {
     RecordDto updateRecordByRecordId(String recordId, String token, RecordDto updateRecordRequestDto);
 
     List<RecordDto> createListRecord(String realm, String token, List<CreateRecordRequestDto> createRecordRequestDtos);
+
+    Object getRecordInElasticsearch(HttpServletRequest request) throws IOException;
 }

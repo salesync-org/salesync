@@ -70,7 +70,7 @@ export const createColumns = (companyName: string, properties: any[], records: a
         </div>
       ),
       cell: ({ row, cell }: { row: any; cell: any }) => {
-        <CellRender row={row} cell={cell} property={property} records={records} />;
+        return <CellRender row={row} cell={cell} property={property} records={records} />;
       }
     });
   });
@@ -79,7 +79,7 @@ export const createColumns = (companyName: string, properties: any[], records: a
     accessorKey: 'actions',
     header: '',
     cell: ({ row }: { row: any }) => {
-      <ActionCell row={row} />;
+      return <ActionCell row={row} />;
     }
   });
 
@@ -193,7 +193,7 @@ const CellRender = ({ row, cell, property, records }: { row: any; cell: any; pro
         </form>
       ) : (
         <div className='group/item flex h-full min-w-[200px] items-center justify-between'>
-          <span className='text-sm'>{currentValue}</span>
+          <span className='text-sm'>{currentValue} poioipoi</span>
           <Pencil
             data-tooltip-id='editingCell'
             data-tooltip-content='Edit Property'

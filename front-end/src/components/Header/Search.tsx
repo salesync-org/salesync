@@ -1,12 +1,20 @@
 import { cn } from '@/utils/utils';
 import { TextInput, Button, Icon } from '@/components/ui';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import SearchHint from './SearchHint';
+import useClickOutside from '@/hooks/useClickOutside';
+import { set } from 'date-fns';
 
 const Search = ({ className }: { className?: string }) => {
   const [isSearchOpen, setSearchOpen] = useState(false);
   const [isShowHint, setIsShowHint] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const searchRef = useRef<HTMLDivElement>(null);
+  useClickOutside([searchRef], () => {
+    setIsShowHint(false);
+    setSearchOpen(false);
+  });
+
   return (
     <div
       className={cn(
@@ -14,9 +22,10 @@ const Search = ({ className }: { className?: string }) => {
         isSearchOpen && 'fixed inset-0 space-x-4 bg-panel-light px-4 py-2 backdrop-blur-lg dark:bg-panel-dark',
         className
       )}
-      onBlur={(e) => {
-        e.relatedTarget === null && setIsShowHint(false);
-      }}
+      ref={searchRef}
+      // onBlur={(e) => {
+      //   e.relatedTarget === null && setIsShowHint(false);
+      // }}
     >
       <TextInput
         placeholder='Search for anything'

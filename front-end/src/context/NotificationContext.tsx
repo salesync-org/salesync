@@ -71,7 +71,7 @@ const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
       return;
     }
     const response = await instance.get(`${websocketHost}/notifications/${user.user_id}`);
-    if (response) {
+    if (response.status === 200) {
       const data: NotificationMessage[] = response.data;
       setNotifications([...data]);
       let newMessageCount = 0;
@@ -89,7 +89,7 @@ const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
       return;
     }
     const response = await instance.put(`${websocketHost}/notifications/set-all-read/${user.user_id}`);
-    if (response) {
+    if (response.status === 200) {
       const data: NotificationMessage[] = response.data;
       setNotifications((prev) => {
         return prev.map((notification) => {
@@ -107,7 +107,7 @@ const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
       return;
     }
     const response = await instance.put(`${websocketHost}/notifications/set-read/${notificationId}`);
-    if (response) {
+    if (response.status === 200) {
       setNotifications((prev) => {
         return prev.map((prevNotification) => {
           if (prevNotification.id === notificationId) {

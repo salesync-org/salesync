@@ -2,6 +2,7 @@ import instance from './axiosConfig';
 const BASE_URL = `${import.meta.env.VITE_GATEWAY_HOST}`;
 
 class TypeApi {
+
   async getAllTypes(companyName: string) {
     const res = await instance.get(`${BASE_URL}/${companyName}/types`);
     return res.data;
@@ -54,6 +55,11 @@ class TypeApi {
 
   async createTypeRelation(companyName: string, data: TypeRelation) {
     const res = await instance.post(`${BASE_URL}/${companyName}/types/create-relation`, data);
+    return res.data;
+  }
+
+  async updateTypeProperty(companyName: string, data: any) {
+    const res = await instance.put(`${BASE_URL}/${companyName}/types/update-property`, data);
     return res.data;
   }
 }

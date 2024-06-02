@@ -5,7 +5,7 @@ networks:
 
 services:
   elasticsearch:
-    image: elasticsearch:7.17.21
+    image: elasticsearch:7.17.20
     container_name: elasticsearch
     environment:
       # - xpack.security.enabled=true
@@ -14,6 +14,10 @@ services:
       # - ELASTIC_PASSWORD=admin
       - "discovery.type=single-node"
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "http.cors.enabled=true"
+      - "http.cors.allow-origin=*"
+      - "http.cors.allow-headers=X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization"
+      - "http.cors.allow-credentials=true"
     ports:
       - "9200:9200"
     networks:
@@ -21,7 +25,7 @@ services:
   
   
   kibana:
-    image: kibana:7.17.21
+    image: kibana:7.17.20
     container_name: kibana
     environment:
       # - xpack.security.enabled=true
@@ -36,7 +40,7 @@ services:
       - elastic
     
   Logstash:
-    image: logstash:7.17.21
+    image: logstash:7.17.20
     container_name: logstash
     restart: unless-stopped
     volumes:

@@ -1,7 +1,9 @@
 package org.salesync.authentication.constants;
 
 public final class UserAttributes {
-    private UserAttributes() { }
+    private UserAttributes() {
+    }
+
     public static final String PHONE = "phone";
     public static final String PHONE_LABEL = "Phone";
     public static final String JOB_TITLE = "jobTitle";

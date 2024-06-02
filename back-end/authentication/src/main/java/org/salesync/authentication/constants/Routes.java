@@ -1,9 +1,11 @@
 package org.salesync.authentication.constants;
 
 public final class Routes {
-    private Routes() { }
+    private Routes() {
+    }
+
     public static final String REALM = "/{realmName}";
-//    public static final String USER = "/user";
+    // public static final String USER = "/user";
     public static final String USER_DETAIL = "/user/{userId}";
     public static final String USERS = "/users";
     public static final String USER_VALIDATE = "/user/validate";

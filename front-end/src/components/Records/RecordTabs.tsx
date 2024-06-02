@@ -46,7 +46,6 @@ const RecordTabs = ({ tabs = [], name, domainName = 'sales', currentTab }: Recor
 
   useEffect(() => {
     if (tabs.find((tab) => tab.type_id === recordId) === undefined) {
-      console.log('add type to list');
       addTypeToList(recordId);
     }
   }, [recordId]);

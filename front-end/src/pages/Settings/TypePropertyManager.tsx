@@ -18,7 +18,6 @@ import CreateTypeRelationModal from '@/components/CreateTypeRelationModal/Create
 import TypePropertyTable from '@/components/ui/Table/TypePropertyTable';
 import TypeRelationTable from '@/components/ui/Table/TypeRelationTable';
 import StageSetting from './StageSetting';
-import { useQueryClient } from 'react-query';
 
 const TypePropertyManager = () => {
   const { companyName, typeId } = useParams();
@@ -33,18 +32,17 @@ const TypePropertyManager = () => {
     return searchParams.get('search') || '';
   });
   const debouncedSearch = useDebounce(search, 500);
-  const queryClient = useQueryClient();
+  const fetchData = async () => {
+    const properties = await typeApi.loadTypeDetail(companyName ?? '', typeId ?? '');
+    const relations = await typeApi.getTypeRelations(companyName ?? '', typeId ?? '');
+    setTypeProperties(properties);
+    setPropertySearchResult(properties.properties);
+    setTypeRelations(relations);
+    setRelationSearchResult(relations);
+  };
 
   useEffect(() => {
     // Fetch sample data
-    const fetchData = async () => {
-      const properties = await typeApi.loadTypeDetail(companyName ?? '', typeId ?? '');
-      const relations = await typeApi.getTypeRelations(companyName ?? '', typeId ?? '');
-      setTypeProperties(properties);
-      setPropertySearchResult(properties.properties);
-      setTypeRelations(relations);
-      setRelationSearchResult(relations);
-    };
 
     fetchData();
   }, [companyName, typeId]);
@@ -124,7 +122,7 @@ const TypePropertyManager = () => {
               })}
             </div>
           </div>
-          {searchParams.get('tab') == 'properties' && (
+          {(searchParams.get('tab') == 'properties' || searchParams.get('tab') === null) && (
             <>
               <div className='my-2 flex h-fit flex-row justify-between'>
                 <div className='flex-grow'>
@@ -153,6 +151,13 @@ const TypePropertyManager = () => {
                   onPropertyDelete={async (id) => {
                     await typeApi.deleteTypeProperty(companyName ?? '', id);
                     setPropertySearchResult((prev) => prev.filter((item) => item.id !== id));
+                  }}
+                  onPropertyEdit={async (property) => {
+                    if (property === null) {
+                      return;
+                    }
+                    await typeApi.updateTypeProperty(companyName ?? '', property);
+                    fetchData();
                   }}
                 />
               </div>
@@ -202,7 +207,7 @@ const TypePropertyManager = () => {
             if (res) {
               setTypeRelations((prev) => [...(prev ?? []), typeRelation]);
               setRelationSearchResult((prev) => [...prev, typeRelation]);
-              queryClient.invalidateQueries(['type-relation', typeId]);
+              await fetchData();
             }
             setCreateRelation(false);
           }}

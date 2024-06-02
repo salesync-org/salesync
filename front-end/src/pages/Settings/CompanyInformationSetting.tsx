@@ -21,17 +21,13 @@ const CompanyInfomationSetting = () => {
           name: '',
           avatar_url: '',
           address: '',
+          description: '',
           phone: '',
           tax_code: ''
         }
   );
   const { toast } = useToast();
-  let avatarUrl;
-  if (!company) {
-    return null;
-  } else {
-    avatarUrl = `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/companies/${companyLoaded.avatar_url === 'default' ? 'default.svg' : companyLoaded.avatar_url}`;
-  }
+  const avatarUrl = `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/companies/${companyLoaded.avatar_url === 'default' ? 'default.svg' : companyLoaded.avatar_url}`;
 
   const editableFields = {
     company_id: null,
@@ -39,6 +35,7 @@ const CompanyInfomationSetting = () => {
     name: false,
     avatar_url: null,
     address: true,
+    description: true,
     phone: true,
     tax_code: true
   };

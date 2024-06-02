@@ -1,6 +1,15 @@
 import recordApi, { RecordsFilter } from '@/api/record';
 import { useQuery } from 'react-query';
 
+export type RecordsQueryResponse = {
+  data: any;
+  error: any;
+  isLoading: any;
+  isRefetching: any;
+  key: any;
+  refetch: any;
+};
+
 const useRecords = (
   companyName: string,
   typeId: string,
@@ -13,7 +22,7 @@ const useRecords = (
   }
 ) => {
   const key = ['records', typeId, recordFilter];
-  const { data, error, isLoading } = useQuery(
+  const { data, error, isLoading, refetch, isRefetching } = useQuery(
     key,
     async () => {
       return recordApi.getRecords(companyName, typeId, recordFilter);
@@ -30,6 +39,7 @@ const useRecords = (
     console.error('Error fetching records:', error);
   }
 
-  return { data, error, isLoading, key };
+  const returnResponse: RecordsQueryResponse = { data, error, isLoading, isRefetching, key, refetch };
+  return returnResponse;
 };
 export default useRecords;

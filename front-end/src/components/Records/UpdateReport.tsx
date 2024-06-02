@@ -20,7 +20,7 @@ const UpdateReport = () => {
   const [showPropertyIds, setShowPropertyIds] = useState<string[]>([]);
   const [typeReportId, setTypeReportId] = useState('');
   const [updateLoading, setUpdateLoading] = useState(false);
-  const { companyName = '' } = useParams();
+  const { companyName = '', domainName = '' } = useParams();
   const { data: recordData, isLoading: isRecordLoading } = useRecords(companyName, typeReportId);
   const { data: propertyData, isLoading: isPropertyLoading } = useProperties(companyName, typeReportId);
   const { types, isLoading: isTypeLoading } = useType();
@@ -86,7 +86,7 @@ const UpdateReport = () => {
           description: 'Report has been updated successfully'
         });
         queryClient.invalidateQueries(['records']);
-        navigate(`/${companyName}/all/report/${res.id}`);
+        navigate(`/${companyName}/section/${domainName}/report/${res.id}`);
       }
     } catch (error) {
       console.error(error);

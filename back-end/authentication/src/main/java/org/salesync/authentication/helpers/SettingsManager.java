@@ -15,14 +15,14 @@ public class SettingsManager {
     private static final String SETTINGS_FILE_PATH = "default_settings.json";
 
     public String loadStringSettingsFromFile() {
-    try {
-        Resource resource = new ClassPathResource("db/" + SETTINGS_FILE_PATH);
-        InputStream inputStream = resource.getInputStream();
+        try {
+            Resource resource = new ClassPathResource("db/" + SETTINGS_FILE_PATH);
+            InputStream inputStream = resource.getInputStream();
 
-        ObjectMapper mapper = new ObjectMapper();
+            ObjectMapper mapper = new ObjectMapper();
             return mapper.writeValueAsString(mapper.readTree(inputStream));
         } catch (IOException e) {
-	    e.printStackTrace();
+            e.printStackTrace();
             return "{}";
         }
     }
@@ -40,7 +40,6 @@ public class SettingsManager {
             return null;
         }
     }
-
 
     public JsonNode parseSettings(String settingsString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();

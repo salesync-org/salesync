@@ -1,11 +1,10 @@
-import auth from '@/api/auth';
 import typeApi from '@/api/type';
 import { useQuery } from 'react-query';
 import useAuth from '../useAuth';
 
 const useType = (defaultCompanyName?: string) => {
   const key = ['types'];
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const { company } = useAuth();
   const companyName = company?.name ?? defaultCompanyName;
   const updateUserTypes = async (oldUser: User, types: Type[]) => {
@@ -27,7 +26,7 @@ const useType = (defaultCompanyName?: string) => {
 
     console.log({ newUser });
 
-    await auth.updateUser(companyName ?? '', newUser);
+    await updateUser(companyName ?? '', newUser);
   };
 
   const { data, error, isLoading } = useQuery<Type[]>(
@@ -36,7 +35,9 @@ const useType = (defaultCompanyName?: string) => {
       const res = await typeApi.getAllTypes(companyName ?? '');
 
       if (user) {
-        updateUserTypes(user, res);
+        if (user.settings.layout_order[1].types[0].type_id.startsWith('1111')) {
+          updateUserTypes(user, res);
+        }
       }
 
       return res;
@@ -44,8 +45,11 @@ const useType = (defaultCompanyName?: string) => {
     {
       refetchOnWindowFocus: false,
       staleTime: 1000 * 60 * 5,
-      keepPreviousData: true,
+      keepPreviousData: false,
       enabled: !!user && !!companyName
+      // onSuccess: () => {
+      //   queryClient.invalidateQueries(key);
+      // }
     }
   );
 

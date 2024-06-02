@@ -56,12 +56,12 @@ function App() {
               <Route path='home' element={<Navigate to='/section/home' />} />
               <Route path='section/home' element={<HomeLayout />} />
               <Route path='section/:domainName/' element={<SectionDomain />} />
-              <Route path='section/:domainName/:typeId' element={<SectionDomain />} />
-              <Route path='all/report/' element={<ReportLayout />}>
+              <Route path='section/:domainName/report/' element={<ReportLayout />}>
                 <Route path='create-report/:typeReportId' element={<CreateReport />} />
                 <Route path='update-report/:reportId' element={<UpdateReport />} />
                 <Route path=':reportId' element={<ReportDetail />} />
               </Route>
+              <Route path='section/:domainName/:typeId' element={<SectionDomain />} />
               <Route path='section/:domainName/record/:recordId' element={<RecordDetail />} />
               <Route path='setting/' element={<SettingLayout />}>
                 <Route path='personal-information' element={<PersonalInformationSetting />} />

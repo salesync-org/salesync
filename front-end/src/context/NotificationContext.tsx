@@ -22,6 +22,16 @@ const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuth();
 
   useEffect(() => {
+    let newMessageCount = 0;
+    notifications.forEach((notification) => {
+      if (!notification.is_read) {
+        newMessageCount++;
+      }
+    });
+    setNewMessageCount(newMessageCount);
+  }, [notifications]);
+
+  useEffect(() => {
     if (!user) return;
     const username = user.user_id; // Get the username for user-specific subscription
     const socket = new SockJS(websocketHost + '/notifications-websocket');

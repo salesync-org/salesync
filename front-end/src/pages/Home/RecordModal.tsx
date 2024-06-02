@@ -144,7 +144,7 @@ const RecordModal = () => {
     <Modal
       isOpen={modalType === MODAL_TYPES.CREATE_RECORD_MODAL}
       onClose={hideModal}
-      className='relative h-[600px]'
+      className=''
       title={`${isUpdateForm ? 'Update' : 'Create'} ${typeProperty.name}`}
     >
       <div className='overflow-y-auto'>
@@ -160,7 +160,7 @@ const RecordModal = () => {
           />
         )}
       </div>
-      <Panel className='absolute bottom-0 left-0 right-0 m-0 -mt-4 flex h-10 items-center justify-center bg-gray-100 bg-opacity-90 px-3  py-10 shadow-inner'>
+      <Panel className=' m-0 flex h-10 items-center justify-center bg-gray-100 bg-opacity-90 px-3  py-10 shadow-inner'>
         <ModalFooter className='m-0 '>
           <Button onClick={hideModal}>Cancel</Button>
           <PrimaryButton form={formId} type='submit'>

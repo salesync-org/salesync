@@ -17,6 +17,7 @@ public class CompanyInfoDto {
     private String name;
     private String avatarUrl;
     private String address;
+    private String description;
     private String phone;
     private String taxCode;
 }

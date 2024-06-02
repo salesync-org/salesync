@@ -5,7 +5,7 @@ import useProperties from '@/hooks/type-service/useProperties';
 import useAuth from '@/hooks/useAuth';
 import { Search, X } from 'lucide-react';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { PrimaryButton } from '../ui';
 import LoadingSpinner from '../ui/Loading/LoadingSpinner';
 import { standardTypes } from '../ui/Table/TypeTable';
@@ -21,6 +21,7 @@ const SelectReportDetail = ({ selectedType, onDetailClose, typeName }: SelectRep
   const { company } = useAuth();
   const { hideModal } = useGlobalModalContext();
   const companyName = company?.name ?? '';
+  const { domainName = 'sales' } = useParams();
   const { data: typeProperties, isLoading } = useProperties(companyName, selectedType?.id);
   const navigate = useNavigate();
   if (isLoading) {
@@ -42,7 +43,7 @@ const SelectReportDetail = ({ selectedType, onDetailClose, typeName }: SelectRep
         <ShortSelectReportDetail name={typeName} />
         <PrimaryButton
           onClick={() => {
-            navigate(`${companyName}/all/report/create-report/${selectedType?.id}`);
+            navigate(`${companyName}/section/${domainName}/report/create-report/${selectedType?.id}`);
             hideModal();
           }}
         >

@@ -1,9 +1,10 @@
-import { Checkbox, ErrorText, Panel, PrimaryButton, TextInput } from '@/components/ui';
+import { ErrorText, Panel, PrimaryButton, TextInput } from '@/components/ui';
 import { useToast } from '@/components/ui/Toast';
 import useAuth from '@/hooks/useAuth';
 import { cn } from '@/utils/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import salesyncLogo from 'assets/salesync_logo.png';
+import salesyncIcon from 'assets/salesync_icon.png';
 import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
@@ -22,6 +23,10 @@ const LogIn = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  if (localStorage.getItem('theme') === 'dark' || document.documentElement.classList.contains('dark')) {
+    document.documentElement.classList.remove('dark');
+    localStorage.setItem('theme', 'light');
+  }
   const { companyName = '' } = useParams();
   const checkListIconLink = 'https://salesync.s3.ap-southeast-2.amazonaws.com/system/checklist_icon.svg';
   const {
@@ -84,14 +89,25 @@ const LogIn = () => {
   };
 
   return (
-    <div className='h-full overflow-auto bg-white/80 bg-cover'>
+    <div className='h-full overflow-auto bg-white/80 bg-cover dark:bg-primary/60'>
       <div className='grid w-full md:grid-cols-1 lg:grid-cols-2'>
         <section ref={loginRef} className='flex min-h-screen w-full flex-col  items-center justify-between'>
           <div className='min-[calc(100%-10px)] mx-auto my-auto w-full grid-cols-1'>
             <div className='mt-5 flex h-fit w-full items-center justify-center'>
               <img
                 src={salesyncLogo}
-                className={cn('w-[340px] object-contain', 'transition-all duration-200 ease-in-out hover:scale-105')}
+                className={cn(
+                  'w-[340px] object-contain dark:hidden',
+                  'transition-all duration-200 ease-in-out hover:scale-105'
+                )}
+                alt='header icon'
+              />
+              <img
+                src={salesyncIcon}
+                className={cn(
+                  'hidden w-[80px] object-contain dark:block',
+                  'transition-all duration-200 ease-in-out hover:scale-105'
+                )}
                 alt='header icon'
               />
             </div>
@@ -133,22 +149,18 @@ const LogIn = () => {
                 <PrimaryButton className='mt-5 h-12 w-full' type='submit' disabled={isSubmitting}>
                   {isSubmitting ? 'Logging in...' : 'Log In'}
                 </PrimaryButton>
-                <div className='mt-4 flex items-center'>
-                  <Checkbox id='agreeRemember' />
-                  <label htmlFor='agreeRemember' className='ml-2'>
-                    {' '}
-                    Remember me
-                  </label>
-                </div>
-                <div className='mt-4 flex'>
-                  <Link to='/forgot-password' className='text-sm text-blue-500'>
-                    Forgot Your Password?
+
+                <div className='mt-4 flex justify-center'>
+                  <Link to='/sign-up' className='text-sm text-primary dark:text-secondary lg:hidden'>
+                    Or sign up now
                   </Link>
                 </div>
               </form>
             </Panel>
           </div>
-          <div className='mx-auto mb-4 w-full text-center text-sm'>©2024 SaleSync, Inc. All rights reserved.</div>
+          <div className='mx-auto mb-4 w-full text-center text-sm dark:text-text-light'>
+            ©2024 SaleSync, Inc. All rights reserved.
+          </div>
         </section>
         <section
           ref={signupRef}

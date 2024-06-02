@@ -38,6 +38,11 @@ public class Company {
     @JsonIgnore
     private String address;
 
+    @JsonProperty("description")
+    @Column(name = "description")
+    @JsonIgnore
+    private String description;
+
     @JsonProperty("phone")
     @Column(name = "phone")
     @JsonIgnore

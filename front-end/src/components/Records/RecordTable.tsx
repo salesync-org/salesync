@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { RecordsFilter } from '@/api/record';
 import useRecords from '@/hooks/record-service/useRecords';
+import { RecordsQueryResponse } from '@/hooks/record-service/useRecords';
 import useProperties from '@/hooks/type-service/useProperties';
+import { PropertiesQueryResponse } from '@/hooks/type-service/useProperties';
 import ErrorToaster from '@/pages/Error/ErrorToaster';
 import { createColumns } from '@/utils/createColumns';
 import { formatRecords } from '@/utils/utils';
@@ -13,23 +15,33 @@ interface RecordTableProps {
   typeId: string;
   recordFilter?: RecordsFilter;
   showPropertyIds?: string[];
+  recordsQuery?: RecordsQueryResponse;
+  propertiesQuery?: PropertiesQueryResponse;
   className?: string;
 }
 
-const RecordTable = ({ typeId, recordFilter, showPropertyIds }: RecordTableProps) => {
+const RecordTable = ({ typeId, recordFilter, showPropertyIds, recordsQuery, propertiesQuery }: RecordTableProps) => {
   const { companyName = '' } = useParams();
 
-  const { data: recordData, isLoading: isRecordLoading } = useRecords(companyName, typeId, recordFilter);
-  const { data: propertyData, isLoading: isPropertyLoading } = useProperties(companyName, typeId);
-  if (isRecordLoading || isPropertyLoading) {
-    return <RecordTableSkeleton />;
+  if (!recordsQuery) {
+    recordsQuery = useRecords(companyName, typeId, recordFilter);
   }
 
-  if (!recordData && !propertyData) {
+  if (!propertiesQuery) {
+    propertiesQuery = useProperties(companyName, typeId);
+  }
+
+  if (!recordsQuery || !propertiesQuery) {
     return <ErrorToaster errorMessage='Error loading table ' />;
   }
 
-  const tempPropertyData = JSON.parse(JSON.stringify(propertyData));
+  if (recordsQuery.isLoading || propertiesQuery.isLoading || recordsQuery.isRefetching) {
+    return <RecordTableSkeleton />;
+  }
+  if (!recordsQuery.data || !propertiesQuery.data) {
+    return <ErrorToaster errorMessage='Error loading table ' />;
+  }
+  const tempPropertyData = JSON.parse(JSON.stringify(propertiesQuery.data));
 
   if (showPropertyIds) {
     const filteredProperties = tempPropertyData!.properties!.filter((property: any) =>
@@ -38,11 +50,15 @@ const RecordTable = ({ typeId, recordFilter, showPropertyIds }: RecordTableProps
     tempPropertyData!.properties = filteredProperties;
   }
 
-  const records = recordData.records;
+  const records = recordsQuery.data.records;
   const tableData = formatRecords(records);
   const columns = createColumns(companyName, tempPropertyData!.properties!, records);
 
-  return <div className='h-full px-4 py-2'>{<DataTable columns={columns} data={tableData} />}</div>;
+  return (
+    <div className='h-full px-4 py-2'>
+      <DataTable columns={columns} data={tableData} />
+    </div>
+  );
 };
 
 export const RecordTableSkeleton = () => {

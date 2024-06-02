@@ -2,7 +2,6 @@ import axios from './axiosConfig';
 import { TYPE_SERVICE_URL } from '@/constants/api';
 
 const URL = import.meta.env.VITE_GATEWAY_HOST;
-const ELASTIC_HOST = import.meta.env.VITE_ELASTIC_SEARCH_HOST;
 export type RecordsFilter = {
   searchTerm: string;
   isAsc: boolean | null;

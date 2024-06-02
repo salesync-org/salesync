@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { cn } from '@/utils/utils';
 import { Controller, useForm } from 'react-hook-form';
-import { Checkbox, DropDown, DropDownItem, ErrorText, Item, TextArea, TextInput } from '../ui';
+import { Checkbox, ErrorText, TextArea, TextInput } from '../ui';
 import { ScreenLoading } from '../ui/Loading/LoadingSpinner';
 import { useEffect } from 'react';
 import PickList from './PickList';

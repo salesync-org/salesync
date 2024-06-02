@@ -1,6 +1,5 @@
-import auth from '@/api/auth';
 import typeApi from '@/api/type';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery } from 'react-query';
 import useAuth from '../useAuth';
 
 const useType = (defaultCompanyName?: string) => {
@@ -8,7 +7,6 @@ const useType = (defaultCompanyName?: string) => {
   const { user, updateUser } = useAuth();
   const { company } = useAuth();
   const companyName = company?.name ?? defaultCompanyName;
-  const queryClient = useQueryClient();
   const updateUserTypes = async (oldUser: User, types: Type[]) => {
     let newUser = JSON.parse(JSON.stringify(oldUser));
     const layoutOrder = newUser.settings.layout_order;

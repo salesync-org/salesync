@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import recordApi, { RecordsFilter } from '@/api/record';
+import { cn } from '@/utils/utils';
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 
 type SearchHintProps = {
+  isSearchOpen: boolean;
   searchHint: string;
 };
 
-const SearchHint = ({ searchHint }: SearchHintProps) => {
+const SearchHint = ({ isSearchOpen, searchHint }: SearchHintProps) => {
   const { companyName = '' } = useParams();
   const [records, setRecords] = useState<any>(undefined);
 
@@ -28,7 +30,12 @@ const SearchHint = ({ searchHint }: SearchHintProps) => {
     fetchRecords();
   }, [searchHint, companyName]);
   return (
-    <div className='absolute w-[60%] rounded-md bg-white py-4 shadow-sm md:top-12'>
+    <div
+      className={cn(
+        'absolute rounded-md border-[2px] border-button-stroke-light/60 bg-button-background-light py-4 shadow-lg shadow-black/10 dark:border-button-stroke-dark/60 dark:bg-button-background-dark sm:visible sm:w-5/12 md:top-9 md:w-1/2 ',
+        isSearchOpen ? 'visible z-50 w-[75%] translate-y-[110%]' : 'invisible'
+      )}
+    >
       {records?.records.map((record: any) => <SearchCard record={record} key={record.id} />)}
     </div>
   );

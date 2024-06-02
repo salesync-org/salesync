@@ -18,8 +18,7 @@ const CreateReport = () => {
   const [isUpdateName, setIsUpdateName] = useState(false);
   const [showPropertyIds, setShowPropertyIds] = useState<string[]>([]);
   const [createLoading, setCreateLoading] = useState(false);
-  const { typeReportId = '' } = useParams();
-  const { companyName = '' } = useParams();
+  const { typeReportId = '', companyName = '', domainName = '' } = useParams();
   const { data: recordData, isLoading: isRecordLoading } = useRecords(companyName, typeReportId);
   const { data: propertyData, isLoading: isPropertyLoading } = useProperties(companyName, typeReportId);
   const { types, isLoading: isTypeLoading } = useType();
@@ -83,7 +82,7 @@ const CreateReport = () => {
           description: 'Report has been created successfully'
         });
         queryClient.invalidateQueries(['records']);
-        navigate(`/${companyName}/all/report/${res.id}`);
+        navigate(`/${companyName}/section/${domainName}/report/${res.id}`);
       }
     } catch (error) {
       console.error(error);

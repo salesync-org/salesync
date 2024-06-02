@@ -28,6 +28,7 @@ const RecordSection = ({ type }: RecordSectionProps) => {
   const [search, setSearch] = useState('');
   const [canCreate, setCanCreate] = useState(false);
   const { hasPermission } = useAuth();
+
   const [recordFilter, setRecordFilter] = useState<RecordsFilter>({
     searchTerm: '',
     isAsc: false,
@@ -46,7 +47,13 @@ const RecordSection = ({ type }: RecordSectionProps) => {
     };
   }, [search]);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const checkPermission = async () => {
+      const canCreate = await hasPermission('create');
+      setCanCreate(canCreate);
+    };
+    checkPermission();
+  }, []);
 
   const { showModal, isLoading } = useGlobalModalContext();
 
@@ -108,7 +115,7 @@ const RecordSection = ({ type }: RecordSectionProps) => {
                 <Filter size='1rem' />
               </Button>
               <Tooltip id='filterTable' />
-              {hasPermission('create') && (
+              {canCreate && (
                 <ButtonGroup>
                   <Button
                     intent='normal'

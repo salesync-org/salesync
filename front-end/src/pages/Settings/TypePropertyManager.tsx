@@ -18,7 +18,6 @@ import CreateTypeRelationModal from '@/components/CreateTypeRelationModal/Create
 import TypePropertyTable from '@/components/ui/Table/TypePropertyTable';
 import TypeRelationTable from '@/components/ui/Table/TypeRelationTable';
 import StageSetting from './StageSetting';
-import { useQueryClient } from 'react-query';
 
 const TypePropertyManager = () => {
   const { companyName, typeId } = useParams();
@@ -33,7 +32,6 @@ const TypePropertyManager = () => {
     return searchParams.get('search') || '';
   });
   const debouncedSearch = useDebounce(search, 500);
-  const queryClient = useQueryClient();
   const fetchData = async () => {
     const properties = await typeApi.loadTypeDetail(companyName ?? '', typeId ?? '');
     const relations = await typeApi.getTypeRelations(companyName ?? '', typeId ?? '');

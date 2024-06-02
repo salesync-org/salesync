@@ -9,7 +9,7 @@ import RecordTable from './RecordTable';
 import ExportButton from './ExportButton';
 
 const ReportDetail = () => {
-  const { reportId = '', companyName = '' } = useParams();
+  const { reportId = '', companyName = '', domainName = '' } = useParams();
   const { data: record, isLoading: isRecordLoading } = useRecord(companyName, reportId);
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -60,7 +60,7 @@ const ReportDetail = () => {
             intent={'normal'}
             className='px-5'
             onClick={() => {
-              navigate(`/${companyName}/all/report/update-report/${reportId}`);
+              navigate(`/${companyName}/section/${domainName}/report/update-report/${reportId}`);
             }}
           >
             Edit

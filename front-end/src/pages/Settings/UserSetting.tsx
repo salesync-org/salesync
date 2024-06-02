@@ -5,7 +5,6 @@ import { useLocation, useParams } from 'react-router-dom';
 import { createUser, getUsers } from '@/api/users';
 import { loadRoles } from '@/api/roles';
 import UserTable from '@/components/ui/Table/UserTable';
-import { set } from 'date-fns';
 import LoadingSpinnerSmall from '@/components/ui/Loading/LoadingSpinnerSmall';
 
 const blankUser = {

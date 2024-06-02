@@ -5,7 +5,6 @@ import NavigationButton from '../NavigationButton/NavigationButton';
 import RecordTabs from '../Records/RecordTabs';
 import useAuth from '@/hooks/useAuth';
 import LoadingSpinner from '../ui/Loading/LoadingSpinner';
-import { useEffect } from 'react';
 
 export type OutletContext = {
   type: LayoutType | undefined;

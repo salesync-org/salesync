@@ -50,13 +50,15 @@ const RecordTable = ({ typeId, recordFilter, showPropertyIds, recordsQuery, prop
     tempPropertyData!.properties = filteredProperties;
   }
 
-  console.log(recordsQuery);
-
   const records = recordsQuery.data.records;
   const tableData = formatRecords(records);
   const columns = createColumns(companyName, tempPropertyData!.properties!, records);
 
-  return <div className='h-full px-4 py-2'>{<DataTable columns={columns} data={tableData} />}</div>;
+  return (
+    <div className='h-full px-4 py-2'>
+      <DataTable columns={columns} data={tableData} />
+    </div>
+  );
 };
 
 export const RecordTableSkeleton = () => {

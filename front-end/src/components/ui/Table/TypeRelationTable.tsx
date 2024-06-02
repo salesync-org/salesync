@@ -1,9 +1,7 @@
 // import { Type } from '@/type';
 import NotFoundImage from '@/components/NotFoundImage/NotFoundImage';
-import { Button } from '../Button';
 import LoadingSpinner from '../Loading/LoadingSpinner';
 import { Table, TableHeader, TableRow, TableBody, TableCell } from './Table';
-import { Pencil } from 'lucide-react';
 
 type TypeRelationProps = {
   relationList: TypeRelation[] | null;

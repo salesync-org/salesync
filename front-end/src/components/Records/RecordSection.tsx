@@ -13,6 +13,7 @@ import { Tooltip } from 'react-tooltip';
 import LoadingSpinnerSmall from '../ui/Loading/LoadingSpinnerSmall';
 import useRecords, { RecordsQueryResponse } from '@/hooks/record-service/useRecords';
 import useProperties, { PropertiesQueryResponse } from '@/hooks/type-service/useProperties';
+import useAuth from '@/hooks/useAuth';
 const iconBaseUrl = `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/system/icons`;
 
 interface RecordSectionProps {
@@ -25,6 +26,9 @@ const RecordSection = ({ type }: RecordSectionProps) => {
   const { typeId = '' } = useParams();
   const { companyName = '' } = useParams();
   const [search, setSearch] = useState('');
+  const [canCreate, setCanCreate] = useState(false);
+  const { hasPermission } = useAuth();
+
   const [recordFilter, setRecordFilter] = useState<RecordsFilter>({
     searchTerm: '',
     isAsc: false,
@@ -42,6 +46,15 @@ const RecordSection = ({ type }: RecordSectionProps) => {
       clearTimeout(timer);
     };
   }, [search]);
+
+  useEffect(() => {
+    const checkPermission = async () => {
+      const canCreate = await hasPermission('create');
+      setCanCreate(canCreate);
+    };
+    checkPermission();
+  }, []);
+
   const { showModal, isLoading } = useGlobalModalContext();
 
   const icon = `${iconBaseUrl}/salesync_${type?.name.toLowerCase() || 'custom_type'}.png`;
@@ -102,27 +115,29 @@ const RecordSection = ({ type }: RecordSectionProps) => {
                 <Filter size='1rem' />
               </Button>
               <Tooltip id='filterTable' />
-              <ButtonGroup>
-                <Button
-                  intent='normal'
-                  zoom={false}
-                  className='space-x-2'
-                  onClick={() => {
-                    let modal = MODAL_TYPES.CREATE_RECORD_MODAL;
-                    if (type.name === 'Report') {
-                      modal = MODAL_TYPES.REPORT_MODAL;
-                    }
-                    showModal(modal, { typeId, recordFilter });
-                  }}
-                >
-                  {isLoading ? (
-                    <LoadingSpinnerSmall className='h-[1.2rem] w-[1.2rem]'></LoadingSpinnerSmall>
-                  ) : (
-                    <Plus size='1rem' />
-                  )}
-                  <p>New</p>
-                </Button>
-              </ButtonGroup>
+              {canCreate && (
+                <ButtonGroup>
+                  <Button
+                    intent='normal'
+                    zoom={false}
+                    className='space-x-2'
+                    onClick={() => {
+                      let modal = MODAL_TYPES.CREATE_RECORD_MODAL;
+                      if (type.name === 'Report') {
+                        modal = MODAL_TYPES.REPORT_MODAL;
+                      }
+                      showModal(modal, { typeId, recordFilter });
+                    }}
+                  >
+                    {isLoading ? (
+                      <LoadingSpinnerSmall className='h-[1.2rem] w-[1.2rem]'></LoadingSpinnerSmall>
+                    ) : (
+                      <Plus size='1rem' />
+                    )}
+                    <p>New</p>
+                  </Button>
+                </ButtonGroup>
+              )}
             </div>
           </div>
         </section>

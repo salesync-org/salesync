@@ -193,7 +193,7 @@ const CellRender = ({ row, cell, property, records }: { row: any; cell: any; pro
         </form>
       ) : (
         <div className='group/item flex h-full min-w-[200px] items-center justify-between'>
-          <span className='text-sm'>{currentValue} poioipoi</span>
+          <span className='text-sm'>{currentValue}</span>
           <Pencil
             data-tooltip-id='editingCell'
             data-tooltip-content='Edit Property'

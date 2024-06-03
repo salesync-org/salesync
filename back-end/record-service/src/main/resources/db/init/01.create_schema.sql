@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS public.record
     name      text,
     company_name text,
     version   bigint        DEFAULT 0,
+    deleted boolean default false,
     CONSTRAINT pk_record PRIMARY KEY (record_id)
 );
 
@@ -23,6 +24,7 @@ CREATE TABLE IF NOT EXISTS public.record_type_property
     record_type_property_label text,
     item_value                 text,
     version                    bigint        DEFAULT 0,
+    deleted 				boolean DEFAULT FALSE,
     CONSTRAINT pk_record_type_property PRIMARY KEY (record_type_property_id),
     CONSTRAINT fk_record_type_property_record FOREIGN KEY (record_id)
         REFERENCES public.record (record_id) MATCH SIMPLE

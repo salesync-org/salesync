@@ -361,7 +361,7 @@ public class RecordServiceImpl implements RecordService {
 
         }
 
-        return restTemplateBuilder.build().postForObject("http://localhost:9200/records/_search", requestBodyMap, Object.class);
+        return restTemplateBuilder.build().postForObject("http://record.salesync.org:9200/records/_search", requestBodyMap, Object.class);
     }
 
     public TypeDto findTypeById(UUID typeId, List<TypeDto> allType) {

@@ -3,6 +3,7 @@ package org.salesync.record_service.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "record")
 @AttributeOverride(name = "id", column = @Column(name = "record_id"))
+@SQLRestriction("deleted=false")
 public class Record extends BaseEntity {
     private String name;
     private UUID userId;
@@ -40,4 +42,6 @@ public class Record extends BaseEntity {
 
     @OneToOne(mappedBy = "record", cascade = CascadeType.ALL)
     private RecordStage recordStage;
+
+    private boolean deleted = Boolean.FALSE;
 }

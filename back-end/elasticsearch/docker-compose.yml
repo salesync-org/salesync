@@ -23,21 +23,6 @@ services:
     networks:
       - elastic
 
-  kibana:
-    image: kibana:7.17.20
-    container_name: kibana
-    environment:
-      # - xpack.security.enabled=true
-      # - ELASTICSEARCH_USERNAME=elastic
-      # - ELASTICSEARCH_PASSWORD=admin
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-    ports:
-      - "5601:5601"
-    depends_on:
-      - elasticsearch
-    networks:
-      - elastic
-
   Logstash:
     image: logstash:7.17.20
     container_name: logstash
@@ -50,8 +35,20 @@ services:
       - elasticsearch
     ports:
       - "9600:9600"
-    environment:
-      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    env_file:
+      - path: ./.env
+        required: true # default
+      - path: ./.local.env
+        required: false
+    # environment:
+    #   LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    #   LOGSTASH_OUTPUT_HOST: ${LOGSTASH_OUTPUT_HOST}
+    #   LOGSTASH_OUTPUT_PORT: ${LOGSTASH_OUTPUT_PORT}
+    #   LOGSTASH_DB_HOST: ${LOGSTASH_DB_HOST}
+    #   LOGSTASH_DB_PORT: ${LOGSTASH_DB_PORT}
+    #   LOGSTASH_DB_NAME: ${LOGSTASH_DB_NAME}
+    #   LOGSTASH_DB_USER: ${LOGSTASH_DB_USER}
+    #   LOGSTASH_DB_PASSWORD: ${LOGSTASH_DB_PASSWORD}
     extra_hosts:
       - "host.docker.internal:host-gateway"
     networks:

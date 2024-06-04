@@ -47,6 +47,7 @@ import org.salesync.record_service.repositories.RecordTypeRelationRepository;
 import org.salesync.record_service.repositories.RecordTypeRepository;
 import org.salesync.record_service.services.token.TokenService;
 import org.salesync.record_service.utils.SecurityContextHelper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
@@ -65,7 +66,6 @@ import org.springframework.web.client.RestTemplate;
 @Service
 @RequiredArgsConstructor
 @Transactional(rollbackFor = Throwable.class)
-@Builder
 public class RecordServiceImpl implements RecordService {
 
     private final RecordRepository recordRepository;
@@ -81,6 +81,9 @@ public class RecordServiceImpl implements RecordService {
     private final RabbitMQProducer rabbitMQProducer;
     private final TokenService tokenService;
     private final RestTemplateBuilder restTemplateBuilder;
+
+    @Value("${elasticsearch.url}")
+    private String elasticsearchUrl;
 
     @Override
     public ListRecordsResponseDto getFilteredRecords(ListRecordsRequestDto requestDto, String companyName) {
@@ -189,7 +192,11 @@ public class RecordServiceImpl implements RecordService {
             if (!userContextId.equals(record.getUserId().toString())) {
                 throw new AccessDeniedException("You are not allowed to delete this record");
             }
-            recordRepository.delete(record);
+            record.getRecordProperties().forEach(properties -> {
+                properties.setDeleted(true);
+            });
+            record.setDeleted(true);
+            recordRepository.save(record);
         });
 
     }
@@ -348,10 +355,17 @@ public class RecordServiceImpl implements RecordService {
         // Convert JSON string to Object
         Map requestBodyMap = objectMapper.readValue(requestBody, Map.class);
 
+        // Get the 'query.bool.must' part of the JSON
+        List<Object> mustList = (List<Object>) ((Map<String, Object>) ((Map<String, Object>) requestBodyMap.get("query")).get("bool")).get("must");
+
+        // Create the new JSON object to add
+        Map<String, Object> deletedMatch = Map.of("match", Map.of("deleted", false));
+
+        mustList.add(deletedMatch);
+
         if (!permissions.contains(PermissionType.READ_ALL.getPermission())) {
 
-            // Get the 'query.bool.must' part of the JSON
-            List<Object> mustList = (List<Object>) ((Map<String, Object>) ((Map<String, Object>) requestBodyMap.get("query")).get("bool")).get("must");
+
 
             // Create the new JSON object to add
             Map<String, Object> newUserMatch = Map.of("match", Map.of("user_id", userId));
@@ -361,7 +375,7 @@ public class RecordServiceImpl implements RecordService {
 
         }
 
-        return restTemplateBuilder.build().postForObject("http://record.salesync.org:9200/records/_search", requestBodyMap, Object.class);
+        return restTemplateBuilder.build().postForObject(elasticsearchUrl, requestBodyMap, Object.class);
     }
 
     public TypeDto findTypeById(UUID typeId, List<TypeDto> allType) {

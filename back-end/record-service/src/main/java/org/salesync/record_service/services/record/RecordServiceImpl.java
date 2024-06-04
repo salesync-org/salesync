@@ -343,9 +343,8 @@ public class RecordServiceImpl implements RecordService {
     public Object getRecordInElasticsearch(HttpServletRequest request) throws IOException {
         List<String> permissions = SecurityContextHelper.getContextAuthorities();
         String userId = SecurityContextHelper.getContextUserId();
-        if (!"POST".equalsIgnoreCase(request.getMethod()))
-        {
-           return null;
+        if (!"POST".equalsIgnoreCase(request.getMethod())) {
+            return null;
         }
         // Read the request body using InputStream
         InputStream inputStream = request.getInputStream();

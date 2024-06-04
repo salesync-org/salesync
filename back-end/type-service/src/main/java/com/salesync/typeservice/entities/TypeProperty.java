@@ -32,7 +32,6 @@ public class TypeProperty extends BaseEntity {
     @JoinColumn(name = "type_id")
     private Type type;
 
-    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "property_id")
     private Property property;
 

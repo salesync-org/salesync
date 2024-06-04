@@ -1,4 +1,4 @@
-version: '3'
+# version: '3'
 
 networks:
   elastic:
@@ -22,8 +22,7 @@ services:
       - "9200:9200"
     networks:
       - elastic
-  
-    
+
   Logstash:
     image: logstash:7.17.20
     container_name: logstash
@@ -35,14 +34,14 @@ services:
     depends_on:
       - elasticsearch
     ports:
-    - '9600:9600'
+      - "9600:9600"
     env_file:
       - path: ./.env
         required: true # default
       - path: ./.local.env
         required: false
     # environment:
-    #   LS_JAVA_OPTS: "-Xmx256m -Xms256m" 
+    #   LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     #   LOGSTASH_OUTPUT_HOST: ${LOGSTASH_OUTPUT_HOST}
     #   LOGSTASH_OUTPUT_PORT: ${LOGSTASH_OUTPUT_PORT}
     #   LOGSTASH_DB_HOST: ${LOGSTASH_DB_HOST}
@@ -51,6 +50,6 @@ services:
     #   LOGSTASH_DB_USER: ${LOGSTASH_DB_USER}
     #   LOGSTASH_DB_PASSWORD: ${LOGSTASH_DB_PASSWORD}
     extra_hosts:
-    - "host.docker.internal:host-gateway"
+      - "host.docker.internal:host-gateway"
     networks:
       - elastic

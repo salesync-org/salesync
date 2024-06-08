@@ -17,11 +17,9 @@ public class RecordTypeRelation extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "source_record_id")
-
     private Record sourceRecord;
 
     @ManyToOne
-
     @JoinColumn(name = "destination_record_id")
     private Record destinationRecord;
 

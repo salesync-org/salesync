@@ -4,14 +4,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.salesync.record_service.components.RabbitMQProducer;
 import org.salesync.record_service.constants.Message;
@@ -44,7 +45,6 @@ import org.salesync.record_service.repositories.RecordRepository;
 import org.salesync.record_service.repositories.RecordStageRepository;
 import org.salesync.record_service.repositories.RecordTypePropertyRepository;
 import org.salesync.record_service.repositories.RecordTypeRelationRepository;
-import org.salesync.record_service.repositories.RecordTypeRepository;
 import org.salesync.record_service.services.token.TokenService;
 import org.salesync.record_service.utils.SecurityContextHelper;
 import org.springframework.beans.factory.annotation.Value;
@@ -69,7 +69,6 @@ import org.springframework.web.client.RestTemplate;
 public class RecordServiceImpl implements RecordService {
 
     private final RecordRepository recordRepository;
-    private final RecordTypeRepository recordTypeRepository;
     private final RecordTypePropertyRepository recordTypePropertyRepository;
     private final RecordTypeRelationRepository recordTypeRelationRepository;
     private final RecordStageRepository recordStageRepository;
@@ -89,35 +88,34 @@ public class RecordServiceImpl implements RecordService {
     public ListRecordsResponseDto getFilteredRecords(ListRecordsRequestDto requestDto, String companyName) {
 
         List<String> roles = SecurityContextHelper.getContextAuthorities();
-        System.out.println(roles);
 
         Pageable pageRequest = PageRequest.of(requestDto.getCurrentPage() - 1, requestDto.getPageSize());
-        Page<Record> page;
+        Page<Record> page = null;
         if (requestDto.getPropertyName() != null) {
-            if (roles.contains("read-all"))
+            if (roles.contains("read-all")) {
                 page = recordRepository.getAllFilteredRecord(
                         UUID.fromString(SecurityContextHelper.getContextUserId()), requestDto.getPropertyName(), requestDto.getTypeId(), requestDto.getSearchTerm(), requestDto.isAsc(), pageRequest, companyName
                 );
-            else if (roles.contains("read-own"))
+            } else if (roles.contains("read-own")) {
                 page = recordRepository.getOwnFilteredRecord(
                         UUID.fromString(SecurityContextHelper.getContextUserId()), requestDto.getPropertyName(), requestDto.getTypeId(), requestDto.getSearchTerm(), requestDto.isAsc(), pageRequest, companyName
                 );
-            else page = null;
+            }
         } else {
 
-            if (roles.contains("read-all"))
+            if (roles.contains("read-all")) {
                 page = recordRepository.getAllFilteredRecordsAndOrderByName(
                         UUID.fromString(SecurityContextHelper.getContextUserId()), requestDto.getTypeId(), requestDto.getSearchTerm(), requestDto.isAsc(), pageRequest, companyName
                 );
-            else if (roles.contains("read-own"))
+            } else if (roles.contains("read-own")) {
                 page = recordRepository.getOwnFilteredRecordsAndOrderByName(
                         UUID.fromString(SecurityContextHelper.getContextUserId()), requestDto.getTypeId(), requestDto.getSearchTerm(), requestDto.isAsc(), pageRequest, companyName
                 );
-            else page = null;
+            }
         }
-        List<RecordDto> recordDtos = page.getContent().stream().map(recordMapper::recordToRecordDto).toList();
+        final List<RecordDto> recordDtos = page != null ? page.getContent().stream().map(recordMapper::recordToRecordDto).toList() : Collections.emptyList();
 
-        return ListRecordsResponseDto.builder().records(recordDtos).totalSize(page.getTotalElements()).pageSize(page.getSize()).currentPage(page.getNumber() + 1).build();
+        return ListRecordsResponseDto.builder().records(recordDtos).totalSize(Optional.ofNullable(page).map(Page::getTotalElements).orElse(0L)).pageSize(Optional.ofNullable(page).map(Page::getSize).orElse(0)).currentPage(Optional.ofNullable(page).map(Page::getNumber).orElse(0) + 1).build();
     }
 
     @Override
@@ -204,7 +202,8 @@ public class RecordServiceImpl implements RecordService {
     @Override
     public ListRecordTypeRelationsDto getListRecordTypeRelationsById(UUID sourceRecordId, String token, String realm) {
 
-        List<RecordTypeRelation> listRecordTypeRelations = recordTypeRelationRepository.findBySourceRecordId(sourceRecordId);
+        List<RecordTypeRelation> listRecordTypeRelations = recordTypeRelationRepository.findBySourceRecordId(
+                sourceRecordId);
         RecordDto sourceRecordDto;
         Record sourceRecord;
 
@@ -238,9 +237,11 @@ public class RecordServiceImpl implements RecordService {
 
         return ListRecordTypeRelationsDto.builder().sourceRecord(sourceRecordDto).relations(
                 listRecordTypeRelations.stream().map(recordTypeRelation -> {
-                    RecordDto destinationRecordDto = recordMapper.recordToRecordDto(recordTypeRelation.getDestinationRecord());
-                    TypeDto typeDto = findTypeById(recordTypeRelation.getDestinationRecord().getRecordType().getTypeId(), allType);
-//                            System.out.println(recordTypeRelation.getDestinationRecord().getId());
+                    RecordDto destinationRecordDto = recordMapper.recordToRecordDto(
+                            recordTypeRelation.getDestinationRecord());
+                    TypeDto typeDto = findTypeById(
+                            recordTypeRelation.getDestinationRecord().getRecordType().getTypeId(), allType);
+                    //                            System.out.println(recordTypeRelation.getDestinationRecord().getId());
 
                     RelationItemDto item = relationItemMapper.recordTypeRelationToRelationItemDto(recordTypeRelation);
                     destinationRecordDto.setType(typeDto);
@@ -356,7 +357,8 @@ public class RecordServiceImpl implements RecordService {
         Map requestBodyMap = objectMapper.readValue(requestBody, Map.class);
 
         // Get the 'query.bool.must' part of the JSON
-        List<Object> mustList = (List<Object>) ((Map<String, Object>) ((Map<String, Object>) requestBodyMap.get("query")).get("bool")).get("must");
+        List<Object> mustList = (List<Object>) ((Map<String, Object>) ((Map<String, Object>) requestBodyMap.get(
+                "query")).get("bool")).get("must");
 
         // Create the new JSON object to add
         Map<String, Object> deletedMatch = Map.of("match", Map.of("deleted", false));
@@ -364,8 +366,6 @@ public class RecordServiceImpl implements RecordService {
         mustList.add(deletedMatch);
 
         if (!permissions.contains(PermissionType.READ_ALL.getPermission())) {
-
-
 
             // Create the new JSON object to add
             Map<String, Object> newUserMatch = Map.of("match", Map.of("user_id", userId));

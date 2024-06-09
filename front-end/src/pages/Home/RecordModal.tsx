@@ -10,7 +10,6 @@ import { useQueryClient } from 'react-query';
 import { useLocation } from 'react-router-dom';
 import ErrorToaster from '../Error/ErrorToaster';
 import { useState } from 'react';
-import { delay } from 'msw';
 
 const RecordModal = () => {
   const {

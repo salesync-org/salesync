@@ -102,14 +102,14 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
         </TableHeader>
         <TableBody>
           {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
+            table.getRowModel().rows.map((row: any) => (
               <>
                 <TableRow
                   key={row.id}
                   className='group h-[40px] transition-all hover:bg-button-background-hover dark:hover:bg-button-background-hover-dark'
                   data-state={row.getIsSelected() && 'selected'}
                 >
-                  {row.getVisibleCells().map((cell) => {
+                  {row.getVisibleCells().map((cell: any) => {
                     return (
                       <TableCell
                         className='h-8 py-0 leading-5 transition-all hover:bg-secondary-light/40 dark:hover:bg-secondary-dark/40'

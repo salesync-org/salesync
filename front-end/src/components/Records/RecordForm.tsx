@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { cn } from '@/utils/utils';
+import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Checkbox, ErrorText, TextArea, TextInput } from '../ui';
 import { ScreenLoading } from '../ui/Loading/LoadingSpinner';
-import { Dispatch, SetStateAction, useEffect } from 'react';
 import PickList from './PickList';
 
 type RecordFormProps = {
@@ -14,18 +14,9 @@ type RecordFormProps = {
   typeProperty?: any;
   formId?: string;
   className?: string;
-  setIsLoading?: Dispatch<SetStateAction<boolean>>;
 };
 
-const RecordForm = ({
-  currentData = {},
-  onSubmit,
-  stages,
-  typeProperty,
-  formId = '',
-  className,
-  setIsLoading = (isLoading) => {}
-}: RecordFormProps) => {
+const RecordForm = ({ currentData = {}, onSubmit, stages, typeProperty, formId = '', className }: RecordFormProps) => {
   const {
     register,
     handleSubmit,

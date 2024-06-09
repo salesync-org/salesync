@@ -3,7 +3,7 @@ import { cn } from '@/utils/utils';
 import { Controller, useForm } from 'react-hook-form';
 import { Checkbox, ErrorText, TextArea, TextInput } from '../ui';
 import { ScreenLoading } from '../ui/Loading/LoadingSpinner';
-import { useEffect } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 import PickList from './PickList';
 
 type RecordFormProps = {
@@ -14,9 +14,18 @@ type RecordFormProps = {
   typeProperty?: any;
   formId?: string;
   className?: string;
+  setIsLoading?: Dispatch<SetStateAction<boolean>>;
 };
 
-const RecordForm = ({ currentData = {}, onSubmit, stages, typeProperty, formId = '', className }: RecordFormProps) => {
+const RecordForm = ({
+  currentData = {},
+  onSubmit,
+  stages,
+  typeProperty,
+  formId = '',
+  className,
+  setIsLoading = (isLoading) => {}
+}: RecordFormProps) => {
   const {
     register,
     handleSubmit,

@@ -1,0 +1,7 @@
+services:
+  service-container:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - TOKEN_KEY_LOCATION=/app/auth-publickey.pem

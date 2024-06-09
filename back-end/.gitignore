@@ -9,3 +9,4 @@
 *-local/
 *.env
 /env/
+/record-service/artifacts/record-service.jar

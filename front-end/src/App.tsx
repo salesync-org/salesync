@@ -1,11 +1,13 @@
 import { Suspense, lazy } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import ConfigLayout from './components/Layout/ConfigLayout';
-import LoadingSpinner from './components/ui/Loading/LoadingSpinner';
 import { Toaster } from './components/ui/Toast';
-import PrivateRoute from './pages/PrivateRoute/PrivateRoute';
-import ObjectManager from './pages/Settings/ObjectManager';
-import TypePropertyManager from './pages/Settings/TypePropertyManager';
+
+const ConfigLayout = lazy(() => import('./components/Layout/ConfigLayout'));
+const LoadingSpinner = lazy(() => import('./components/ui/Loading/LoadingSpinner'));
+const PrivateRoute = lazy(() => import('./pages/PrivateRoute/PrivateRoute'));
+const ObjectManager = lazy(() => import('./pages/Settings/ObjectManager'));
+const TypePropertyManager = lazy(() => import('./pages/Settings/TypePropertyManager'));
+const CompanyRedirect = lazy(() => import('./components/Layout/CompanyRedirect'));
 const UpdateReport = lazy(() => import('./components/Records/UpdateReport'));
 const ReportLayout = lazy(() => import('./components/Records/ReportLayout'));
 const ReportDetail = lazy(() => import('./components/Records/ReportDetail'));
@@ -52,8 +54,8 @@ function App() {
           <Route path='/:companyName/login' element={<LogIn />}></Route>
           <Route path='/:companyName/' element={<PrivateRoute />}>
             <Route element={<ConfigLayout />}>
-              <Route path='' element={<Navigate to='/section/home' />} />
-              <Route path='home' element={<Navigate to='/section/home' />} />
+              <Route path='' element={<CompanyRedirect />} />
+              <Route path='home' element={<CompanyRedirect />} />
               <Route path='section/home' element={<HomeLayout />} />
               <Route path='section/:domainName/' element={<SectionDomain />} />
               <Route path='section/:domainName/report/' element={<ReportLayout />}>

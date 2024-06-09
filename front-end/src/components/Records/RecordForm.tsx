@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { cn } from '@/utils/utils';
+import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Checkbox, ErrorText, TextArea, TextInput } from '../ui';
 import { ScreenLoading } from '../ui/Loading/LoadingSpinner';
-import { useEffect } from 'react';
 import PickList from './PickList';
 
 type RecordFormProps = {

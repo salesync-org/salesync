@@ -39,3 +39,4 @@ back-end/record-service/local.env
 back-end/processIds.txt
 back-end/quick_run.ps1
 back-end/Stop-AllProcesses.ps1
+/init-local/

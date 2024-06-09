@@ -25,10 +25,10 @@ interface RecordSectionProps {
 const customTypeIcon = `${iconBaseUrl}/salesync_custom_type.png`;
 
 const RecordSection = ({ type }: RecordSectionProps) => {
-  const { showModal } = useGlobalModalContext();
   const { typeId, companyName = '' } = useParams();
   const [search, setSearch] = useState('');
   const [canCreate, setCanCreate] = useState(false);
+  const [canDelete, setCanDelete] = useState(false);
   const { hasPermission } = useAuth();
 
   const [recordFilter, setRecordFilter] = useState<RecordsFilter>({
@@ -56,6 +56,9 @@ const RecordSection = ({ type }: RecordSectionProps) => {
     const checkPermission = async () => {
       const canCreate = await hasPermission('create');
       setCanCreate(canCreate);
+      const canDeleteOwn = await hasPermission('delete-own');
+      const canDeleteAll = await hasPermission('delete-all');
+      setCanDelete(canDeleteOwn || canDeleteAll);
     };
     checkPermission();
   }, []);
@@ -63,7 +66,7 @@ const RecordSection = ({ type }: RecordSectionProps) => {
   const { showModal, isLoading } = useGlobalModalContext();
 
   const icon = `${iconBaseUrl}/salesync_${type?.name.toLowerCase() || 'custom_type'}.png`;
-  const recordsQuery: RecordsQueryResponse = useRecords(companyName, typeId, recordFilter);
+  const recordsQuery: RecordsQueryResponse = useRecords(companyName, typeId ?? '', recordFilter);
   const propertiesQuery: PropertiesQueryResponse = useProperties(companyName, typeId);
 
   if (!type || !typeId) {
@@ -76,6 +79,9 @@ const RecordSection = ({ type }: RecordSectionProps) => {
 
   const handleDeleteList = async () => {
     const rowSelection = localStorage.getItem('rowSelection') ? JSON.parse(localStorage.getItem('rowSelection')!) : [];
+    if (!rowSelection.length) {
+      return;
+    }
 
     try {
       await recordApi.deleteRecord(companyName, rowSelection);
@@ -146,24 +152,11 @@ const RecordSection = ({ type }: RecordSectionProps) => {
               </Button>
               <Tooltip id='filterTable' />
               <ButtonGroup>
-                <Button intent='normal' zoom={false} className='space-x-2' onClick={handleDeleteList}>
-                  <p>Delete</p>
-                </Button>
-                <Button
-                  intent='normal'
-                  zoom={false}
-                  className='space-x-2'
-                  onClick={() => {
-                    let modal = MODAL_TYPES.CREATE_RECORD_MODAL;
-                    if (type.name === 'Report') {
-                      modal = MODAL_TYPES.REPORT_MODAL;
-                    }
-                    showModal(modal, { typeId, recordFilter });
-                  }}
-                >
-                  <Plus size='1rem' />
-                  <p>New</p>
-                </Button>
+                {canDelete && (
+                  <Button intent='normal' zoom={false} className='space-x-2' onClick={handleDeleteList}>
+                    <p>Delete</p>
+                  </Button>
+                )}
               </ButtonGroup>
               {canCreate && (
                 <ButtonGroup>

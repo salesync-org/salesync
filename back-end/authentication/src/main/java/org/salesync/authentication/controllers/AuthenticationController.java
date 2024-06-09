@@ -8,6 +8,7 @@ import org.salesync.authentication.constants.Routes;
 import org.salesync.authentication.dtos.*;
 import org.salesync.authentication.services.register.RegisterService;
 import org.salesync.authentication.utils.StringUtility;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,11 @@ import java.nio.file.AccessDeniedException;
 @AllArgsConstructor
 public class AuthenticationController {
     RegisterService registerService;
+
+    @RabbitListener
+    private void dump() {
+
+    }
 
     @PostMapping(Routes.AUTH_COMPANY_CREATE)
     ResponseEntity<AccessTokenResponse> createRealm(@RequestBody CompanyRegisterDto companyRegisterDTO)

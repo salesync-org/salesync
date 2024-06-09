@@ -136,6 +136,8 @@ const RecordModal = () => {
         description: 'Failed to create record',
         variant: 'destructive'
       });
+    } finally {
+      hideModal();
     }
   };
 

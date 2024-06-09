@@ -13,7 +13,6 @@ import java.util.UUID;
 @SuperBuilder
 @NoArgsConstructor
 @Data
-
 public class BaseEntity {
     @Id
     @Column(name = "id")

@@ -10,7 +10,7 @@ export type RecordsQueryResponse = {
   refetch: any;
 };
 
-const useRecords = (
+const useRecordsNormal = (
   companyName: string,
   typeId: string,
   recordFilter: RecordsFilter = {
@@ -21,14 +21,11 @@ const useRecords = (
     pageSize: 300
   }
 ) => {
-  const key = ['records', typeId, recordFilter];
+  const key = ['recordsNormal', typeId, recordFilter];
   const { data, error, isLoading, refetch, isRefetching } = useQuery(
     key,
     async () => {
-      const res = recordFilter.searchTerm
-        ? await recordApi.getRecords(companyName, typeId, recordFilter)
-        : await recordApi.getRecordsNormal(companyName, typeId, recordFilter);
-      return res;
+      return recordApi.getRecordsNormal(companyName, typeId, recordFilter);
     },
     {
       refetchOnWindowFocus: false,
@@ -45,4 +42,4 @@ const useRecords = (
   const returnResponse: RecordsQueryResponse = { data, error, isLoading, isRefetching, key, refetch };
   return returnResponse;
 };
-export default useRecords;
+export default useRecordsNormal;

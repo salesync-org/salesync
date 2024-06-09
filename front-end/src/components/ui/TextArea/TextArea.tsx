@@ -49,7 +49,7 @@ const TextArea: React.FC<TextAreaProps> = ({
       )}
       <div
         className={cn(
-          'flex h-20',
+          'flex',
           disabled && 'opacity-80',
           'transform-all duration-[50ms] ease-in-out',
           'rounded placeholder:text-opacity-50',

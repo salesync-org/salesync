@@ -13,11 +13,20 @@ public interface RecordRepository extends JpaRepository<Record, UUID> {
     @Query(value = "SELECT * FROM get_filtered_records(:userId, :name, :typeId, :searchTerm, :isAsc) where company_name=:companyName", nativeQuery = true
     )
 
-    Page<Record> getFilteredRecord(UUID userId, String name, UUID typeId, String searchTerm, boolean isAsc, Pageable pageable, String companyName);
+    Page<Record> getAllFilteredRecord(UUID userId, String name, UUID typeId, String searchTerm, boolean isAsc, Pageable pageable, String companyName);
+
+    @Query(value = "SELECT * FROM get_own_filtered_records(:userId, :name, :typeId, :searchTerm, :isAsc) where company_name=:companyName", nativeQuery = true
+    )
+
+    Page<Record> getOwnFilteredRecord(UUID userId, String name, UUID typeId, String searchTerm, boolean isAsc, Pageable pageable, String companyName);
 
     @Query(value = "SELECT * FROM get_filtered_records_and_sort_by_name(:userId, :typeId, :searchTerm, :isAsc) where company_name=:companyName", nativeQuery = true
     )
-    Page<Record> getFilteredRecordsAndOrderByName(UUID userId, UUID typeId, String searchTerm, boolean isAsc, Pageable pageable, String companyName);
+    Page<Record> getAllFilteredRecordsAndOrderByName(UUID userId, UUID typeId, String searchTerm, boolean isAsc, Pageable pageable, String companyName);
+
+    @Query(value = "SELECT * FROM get_own_filtered_records_and_sort_by_name(:userId, :typeId, :searchTerm, :isAsc) where company_name=:companyName", nativeQuery = true
+    )
+    Page<Record> getOwnFilteredRecordsAndOrderByName(UUID userId, UUID typeId, String searchTerm, boolean isAsc, Pageable pageable, String companyName);
 
     List<Record> findAllByCompanyName(String companyName);
 }

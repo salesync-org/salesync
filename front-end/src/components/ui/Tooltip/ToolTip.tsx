@@ -9,7 +9,8 @@ const ToolTip = ({ ...props }) => {
         color: isDark ? '#092645' : 'white',
         backgroundColor: isDark ? 'white' : '#092645',
         borderRadius: '0.5rem',
-        position: 'fixed'
+        position: 'fixed',
+        zIndex: 9999
       }}
       {...props}
     />

@@ -73,3 +73,13 @@ export const getUsers = async (realmId: string) => {
     throw error;
   }
 };
+
+export const getSimpleUser = async (realmId: string, userId: string) => {
+  try {
+    const response = await instance.get(`${BASE_URL}/${realmId}/user/${userId}`);
+    return response.data as SimpleUser;
+  } catch (error) {
+    console.error('Error getting user:', error);
+    throw error;
+  }
+};

@@ -6,11 +6,15 @@ import Panel from '@/components/ui/Panel/Panel';
 import TextInput from '@/components/ui/TextInput/TextInput';
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 // import { Type } from '@/type';
-import icon from 'assets/type-icon/lead_icon.png';
 import { Filter, Plus, RefreshCw } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Tooltip } from 'react-tooltip';
+import LoadingSpinnerSmall from '../ui/Loading/LoadingSpinnerSmall';
+import useRecords, { RecordsQueryResponse } from '@/hooks/record-service/useRecords';
+import useProperties, { PropertiesQueryResponse } from '@/hooks/type-service/useProperties';
+import useAuth from '@/hooks/useAuth';
+const iconBaseUrl = `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/system/icons`;
 import { useToast } from '../ui/Toast';
 import { useQueryClient } from 'react-query';
 
@@ -18,10 +22,22 @@ interface RecordSectionProps {
   type: Type | LayoutType | null | undefined;
 }
 
+const customTypeIcon = `${iconBaseUrl}/salesync_custom_type.png`;
+
 const RecordSection = ({ type }: RecordSectionProps) => {
   const { showModal } = useGlobalModalContext();
   const { typeId, companyName = '' } = useParams();
   const [search, setSearch] = useState('');
+  const [canCreate, setCanCreate] = useState(false);
+  const { hasPermission } = useAuth();
+
+  const [recordFilter, setRecordFilter] = useState<RecordsFilter>({
+    searchTerm: '',
+    isAsc: false,
+    propertyName: null,
+    currentPage: 1,
+    pageSize: 3000
+  });
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -36,13 +52,19 @@ const RecordSection = ({ type }: RecordSectionProps) => {
     };
   }, [search]);
 
-  const [recordFilter, setRecordFilter] = useState<RecordsFilter>({
-    searchTerm: '',
-    isAsc: false,
-    propertyName: null,
-    currentPage: 1,
-    pageSize: 3000
-  });
+  useEffect(() => {
+    const checkPermission = async () => {
+      const canCreate = await hasPermission('create');
+      setCanCreate(canCreate);
+    };
+    checkPermission();
+  }, []);
+
+  const { showModal, isLoading } = useGlobalModalContext();
+
+  const icon = `${iconBaseUrl}/salesync_${type?.name.toLowerCase() || 'custom_type'}.png`;
+  const recordsQuery: RecordsQueryResponse = useRecords(companyName, typeId, recordFilter);
+  const propertiesQuery: PropertiesQueryResponse = useProperties(companyName, typeId);
 
   if (!type || !typeId) {
     return null;
@@ -81,8 +103,15 @@ const RecordSection = ({ type }: RecordSectionProps) => {
     <Panel className='fixed bottom-[10px] left-[10px] right-[10px] top-[108px] m-0 flex h-[calc(100dvh-120px)] max-w-[100vw] flex-col overflow-auto p-4'>
       <section className='px z-[100] flex flex-col items-center justify-between pt-4 md:flex-row'>
         <div className='flex items-center gap-2 space-x-2 align-middle'>
-          <div className='w-fit cursor-pointer overflow-hidden rounded-sm bg-primary-color'>
-            <img className='h-10 w-10' src={icon} alt={`Icon for ${type.name}`} />
+          <div className='w-fit cursor-pointer overflow-hidden rounded-sm'>
+            <img
+              className='h-10 w-10'
+              src={icon}
+              alt={`Icon for ${type.name}`}
+              onError={(e) => {
+                e.currentTarget.src = customTypeIcon;
+              }}
+            />
           </div>
           <div>
             <h5 className='leading-[10px]'>{type.name}</h5>
@@ -99,6 +128,9 @@ const RecordSection = ({ type }: RecordSectionProps) => {
                 data-tooltip-id='refreshTable'
                 data-tooltip-content='Refresh'
                 data-tooltip-place='top'
+                onClick={async () => {
+                  await recordsQuery.refetch();
+                }}
                 className='aspect-square p-0'
               >
                 <RefreshCw size='1rem' />
@@ -133,12 +165,40 @@ const RecordSection = ({ type }: RecordSectionProps) => {
                   <p>New</p>
                 </Button>
               </ButtonGroup>
+              {canCreate && (
+                <ButtonGroup>
+                  <Button
+                    intent='normal'
+                    zoom={false}
+                    className='space-x-2'
+                    onClick={() => {
+                      let modal = MODAL_TYPES.CREATE_RECORD_MODAL;
+                      if (type.name === 'Report') {
+                        modal = MODAL_TYPES.REPORT_MODAL;
+                      }
+                      showModal(modal, { typeId, recordFilter });
+                    }}
+                  >
+                    {isLoading ? (
+                      <LoadingSpinnerSmall className='h-[1.2rem] w-[1.2rem]'></LoadingSpinnerSmall>
+                    ) : (
+                      <Plus size='1rem' />
+                    )}
+                    <p>New</p>
+                  </Button>
+                </ButtonGroup>
+              )}
             </div>
           </div>
         </section>
       </section>
       <div className='-mx-4 mt-4 flex-grow'>
-        <RecordTable typeId={typeId} recordFilter={recordFilter} />
+        <RecordTable
+          recordsQuery={recordsQuery}
+          propertiesQuery={propertiesQuery}
+          typeId={typeId}
+          recordFilter={recordFilter}
+        />
       </div>
     </Panel>
   );

@@ -23,6 +23,7 @@ type LayoutType = {
   name: string;
   type_id: string;
   isPrimitiveType?: boolean;
+  saved?: boolean;
 };
 
 // type TypeProperty = {
@@ -69,8 +70,14 @@ type TypePropertyDetail = {
     propertyFields: [];
   };
   default_value: string;
-  fields: [];
+  fields: TypePropertyFieldDetail[];
 };
+
+type TypePropertyFieldDetail = {
+  id: string;
+  item_value: string;
+  property_field: PropertyField;
+}
 
 type PropertyField = {
   id: string;
@@ -353,6 +360,7 @@ type CompanyInfo = {
   name: string;
   avatar_url: string;
   address: string;
+  description: string;
   phone: string;
   tax_code: string;
 };
@@ -386,3 +394,15 @@ type SettingLayout = {
   adminSettingRole: boolean;
   items?: SettingLayout[];
 };
+
+type NotificationMessage = {
+  "id": string,
+  "title": string,
+  "content": string,
+  "url": string,
+  "action": string,
+  "sender_id": string,
+  "receiver_id": string,
+  "created_at": Date,
+  "is_read": boolean
+}

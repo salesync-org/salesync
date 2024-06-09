@@ -4,7 +4,7 @@ import RelationModal from '@/components/Relation/RelationModal';
 import SelectReportModal from '@/components/Report/SelectReportModal';
 import UserModal from '@/components/UserModal/UserModal';
 import RecordModal from '@/pages/Home/RecordModal';
-import React, { createContext, useContext, useState } from 'react';
+import React, { Dispatch, createContext, useContext, useState } from 'react';
 
 export const MODAL_TYPES = {
   CREATE_RECORD_MODAL: 'CREATE_RECORD_MODAL',
@@ -26,12 +26,16 @@ type GlobalModalContext = {
   showModal: (modalType: string, modalProps?: any) => void;
   hideModal: () => void;
   store: any;
+  isLoading: boolean;
+  setIsLoading: Dispatch<React.SetStateAction<boolean>>;
 };
 
 const initialState: GlobalModalContext = {
   showModal: () => {},
   hideModal: () => {},
-  store: {}
+  store: {},
+  isLoading: false,
+  setIsLoading: () => {}
 };
 
 const GlobalModalContext = createContext(initialState);
@@ -42,9 +46,11 @@ export const GlobalModalProvider: React.FC<{ children: React.ReactNode }> = ({ c
     modalType: '',
     modalProps: {}
   });
+  const [isLoading, setIsLoading] = useState(false);
   const { modalType, modalProps } = store;
 
   const showModal = (modalType: string, modalProps: any = {}) => {
+    setIsLoading(true);
     setStore({
       ...store,
       modalType,
@@ -53,6 +59,9 @@ export const GlobalModalProvider: React.FC<{ children: React.ReactNode }> = ({ c
   };
 
   const hideModal = () => {
+    if (isLoading) {
+      setIsLoading(false);
+    }
     setStore({
       ...store,
       modalType: '',
@@ -70,7 +79,7 @@ export const GlobalModalProvider: React.FC<{ children: React.ReactNode }> = ({ c
   };
 
   return (
-    <GlobalModalContext.Provider value={{ store, showModal, hideModal }}>
+    <GlobalModalContext.Provider value={{ store, showModal, hideModal, isLoading, setIsLoading }}>
       {renderComponent()}
       {children}
     </GlobalModalContext.Provider>

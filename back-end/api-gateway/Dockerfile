@@ -14,12 +14,10 @@ RUN mvn clean package -DskipTests
 FROM openjdk:17-alpine
 
 # Set the working directory in the container
-# Set the working directory in the container
 WORKDIR /app
 
 # Copy the built JAR file from the previous stage
 COPY --from=build /app/target/*.jar app.jar
-# Copy the built JAR file from the previous stage
-COPY --from=build /app/target/*.jar app.jar
+
 
 ENTRYPOINT ["java", "-jar", "app.jar"]

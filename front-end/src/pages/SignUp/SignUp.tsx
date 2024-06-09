@@ -11,6 +11,7 @@ import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import * as z from 'zod';
 import { cn, formatCompanyName } from '@/utils/utils';
+import LoadingSpinnerSmall from '@/components/ui/Loading/LoadingSpinnerSmall';
 
 interface State {
   name: string;
@@ -55,6 +56,10 @@ const SignUp = () => {
 
   const [errorCountry, setErrorCountry] = useState(false);
   const [errorCheck1, setErrorCheck1] = useState(false);
+  if (localStorage.getItem('theme') === 'dark' || document.documentElement.classList.contains('dark')) {
+    document.documentElement.classList.remove('dark');
+    localStorage.setItem('theme', 'light');
+  }
   // check1: acceptAgreement, check2: receiveMarketingCommunications
 
   const {
@@ -137,7 +142,6 @@ const SignUp = () => {
       setErrorCheck1(true);
       return;
     }
-
     try {
       await signUp({
         admin_info: {
@@ -156,9 +160,8 @@ const SignUp = () => {
         title: 'Success',
         description: 'Signed up successfully'
       });
-
       const formattedCompanyName = formatCompanyName(data.company);
-      navigate(`/${formattedCompanyName}/home`);
+      navigate(`/${formattedCompanyName}/section/home`);
     } catch (error) {
       console.error(error);
       toast({
@@ -389,13 +392,19 @@ const SignUp = () => {
                         Back
                       </Button>
                       <PrimaryButton type='submit' disabled={isSubmitting}>
-                        {isSubmitting ? 'Processing...' : 'Submit'}
+                        {isSubmitting && <LoadingSpinnerSmall className='h-[1.2rem] w-[1.2rem] fill-on-primary' />}
+                        <p>{isSubmitting ? 'Processing...' : 'Submit'}</p>
                       </PrimaryButton>
                     </div>
                     <div>
                       <span>Step 3 of 3</span>
                     </div>
                   </div>
+                  {isSubmitting && (
+                    <div className='flex justify-center rounded border-2 border-primary/30 bg-secondary/30 p-2 text-center align-middle text-sm text-primary'>
+                      This usually takes around 20 seconds.
+                    </div>
+                  )}
                 </>
               )}
             </form>

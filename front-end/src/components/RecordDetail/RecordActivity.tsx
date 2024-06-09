@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Icon, PrimaryButton, Switch } from '@/components/ui';
+import { Button, Icon } from '@/components/ui';
 import { useState } from 'react';
 import ButtonActivity from './ButtonActivity';
 import InforActivity from './InforActivity';
+// const iconBaseUrl = `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/system/icons`;
 
 type RecordActivityProps = {
   relations: any[];
 };
 
 const RecordActivity = ({ relations }: RecordActivityProps) => {
-  const [expand, setExpand] = useState(false);
+  const [expand, setExpand] = useState(true);
   // expand: upcoming and overdue
   // expand2: this month
 
@@ -46,10 +47,37 @@ const RecordActivity = ({ relations }: RecordActivityProps) => {
         <ButtonActivity
           name='New Task'
           icon='checklist'
-          color='bg-green-400'
+          color='bg-green-600'
           disabled={isButtonActivity}
           setDisabled={setIsButtonActivity}
         />
+        {/* <ButtonActivity
+          name='Email'
+          icon={`${iconBaseUrl}/salesync_email.png`}
+          color='bg-neutral-400'
+          disabled={isButtonActivity}
+          setDisabled={setIsButtonActivity}
+        />
+        <ButtonActivity
+          name='New Event'
+          icon={`${iconBaseUrl}/salesync_event.png`}
+          color='bg-purple-400'
+          disabled={isButtonActivity}
+          setDisabled={setIsButtonActivity}
+        />
+        <ButtonActivity
+          name='Log a Call'
+          icon={`${iconBaseUrl}/salesync_call.png`}
+          color='bg-teal-600'
+          disabled={isButtonActivity}
+          setDisabled={setIsButtonActivity}
+        />
+        <ButtonActivity
+          name='New Task'
+          icon={`${iconBaseUrl}/salesync_task.png`}
+          color='bg-green-400'
+          disabled={isButtonActivity}
+          setDisabled={setIsButtonActivity} */}
       </div>
 
       <div>
@@ -74,9 +102,9 @@ const RecordActivity = ({ relations }: RecordActivityProps) => {
           </>
         )}
       </div>
-      <PrimaryButton className='mx-auto mb-12 mt-4' onClick={() => {}}>
+      {/* <PrimaryButton className='mx-auto mb-12 mt-4' onClick={() => {}}>
         <span>Show All Activities</span>
-      </PrimaryButton>
+      </PrimaryButton> */}
     </div>
   );
 };

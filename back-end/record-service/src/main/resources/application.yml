@@ -38,3 +38,7 @@ eureka:
 
 token:
   key_location: ${TOKEN_KEY_LOCATION}
+
+elasticsearch:
+  url: ${ELASTICSEARCH_PROTOCOL}://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}/${ELASTICSEARCH_INDEX}/_search
+

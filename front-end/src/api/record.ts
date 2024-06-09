@@ -2,7 +2,6 @@ import axios from './axiosConfig';
 import { TYPE_SERVICE_URL } from '@/constants/api';
 
 const URL = import.meta.env.VITE_GATEWAY_HOST;
-
 export type RecordsFilter = {
   searchTerm: string;
   isAsc: boolean | null;
@@ -10,22 +9,153 @@ export type RecordsFilter = {
   currentPage: number;
   pageSize: number;
 };
+type Property = {
+  property_id: string | null;
+  property_name: string | null;
+  property_label: string | null;
+  item_value: string | null;
+};
+
+type HitSource = {
+  user_id: string;
+  '@version': string;
+  '@timestamp': string;
+  properties: Property[];
+  name: string;
+  record_id: string;
+  company_name: string | null;
+};
+
+type Hit = {
+  _index: string;
+  _type: string;
+  _id: string;
+  _score: number;
+  _source: HitSource;
+};
+
+type InputData = {
+  took: number;
+  timed_out: boolean;
+  _shards: {
+    total: number;
+    successful: number;
+    skipped: number;
+    failed: number;
+  };
+  hits: {
+    total: {
+      value: number;
+      relation: string;
+    };
+    max_score: number;
+    hits: Hit[];
+  };
+};
+
+type OutputProperty = {
+  id: string | null;
+  property_name: string | null;
+  property_label: string | null;
+  item_value: string | null;
+};
+
+type OutputRecord = {
+  id: string;
+  name: string;
+  user_id: string;
+  type: null;
+  current_stage_id: null;
+  properties: OutputProperty[];
+};
+
+export type OutputData = {
+  records: OutputRecord[];
+  total_size: number;
+  page_size: number;
+  current_page: number;
+};
+function mapData(input: InputData): OutputData {
+  const records: OutputRecord[] = input.hits.hits.map((hit) => {
+    const source = hit._source;
+    return {
+      id: source.record_id,
+      name: source.name,
+      user_id: source.user_id,
+      type: null,
+      current_stage_id: null,
+      properties: source.properties.map((prop) => ({
+        id: prop.property_id,
+        property_name: prop.property_name,
+        property_label: prop.property_label,
+        item_value: prop.item_value
+      }))
+    };
+  });
+
+  return {
+    records: records,
+    total_size: records.length,
+    page_size: 3000,
+    current_page: 1
+  };
+}
+
 class RecordApi {
   async getRecords(companyName: string, typeId: string, recordFilter: RecordsFilter) {
-    const response = await axios.post(`${URL}/${companyName}/records/list`, {
-      type_id: typeId,
-      search_term: recordFilter.searchTerm,
-      is_asc: recordFilter.isAsc,
-      property_name: recordFilter.propertyName,
-      current_page: recordFilter.currentPage,
-      page_size: recordFilter.pageSize
+    const response = await axios.post(`${URL}/${companyName}/records/elasticsearch`, {
+      query: {
+        bool: {
+          must: [
+            {
+              match: {
+                company_name: companyName
+              }
+            },
+            {
+              match: {
+                type_id: typeId
+              }
+            },
+            {
+              query_string: {
+                query: recordFilter.searchTerm ? `*${recordFilter.searchTerm}*` : '*',
+                fields: ['name', 'properties.item_value'],
+                default_operator: 'AND'
+              }
+            }
+          ]
+        }
+      }
     });
-    return response.data;
+    return mapData(response.data);
   }
 
-  async getAllRecords(companyName: string) {
-    const response = await axios.get(`${URL}/${companyName}/records`);
-    return response.data;
+  async getAllRecords(companyName: string, recordFilter: RecordsFilter) {
+    const from = (recordFilter.currentPage - 1) * recordFilter.pageSize;
+    const response = await axios.post(`${URL}/${companyName}/records/elasticsearch?from=1&to=2`, {
+      from,
+      size: recordFilter.pageSize,
+      query: {
+        bool: {
+          must: [
+            {
+              match: {
+                company_name: companyName
+              }
+            },
+            {
+              query_string: {
+                query: recordFilter.searchTerm ? `*${recordFilter.searchTerm}*` : '*',
+                fields: ['name', 'properties.item_value'],
+                default_operator: 'AND'
+              }
+            }
+          ]
+        }
+      }
+    });
+    return mapData(response.data);
   }
 
   async getRecordDetails(recordId: string) {

@@ -1,48 +1,74 @@
 package org.salesync.record_service.services.record;
 
-import lombok.Builder;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.salesync.record_service.components.RabbitMQProducer;
 import org.salesync.record_service.constants.Message;
-import org.salesync.record_service.dtos.*;
+import org.salesync.record_service.constants.enums.PermissionType;
+import org.salesync.record_service.dtos.CreateRecordRequestDto;
+import org.salesync.record_service.dtos.ListRecordsRequestDto;
+import org.salesync.record_service.dtos.ListRecordsResponseDto;
+import org.salesync.record_service.dtos.MessageDto;
+import org.salesync.record_service.dtos.RecordDto;
+import org.salesync.record_service.dtos.RecordTypePropertyDto;
+import org.salesync.record_service.dtos.RequestRecordDto;
+import org.salesync.record_service.dtos.RequestUpdateStageDto;
+import org.salesync.record_service.dtos.TypeDto;
 import org.salesync.record_service.dtos.record_type_relation_dto.ListRecordTypeRelationsDto;
 import org.salesync.record_service.dtos.record_type_relation_dto.RecordTypeRelationDto;
 import org.salesync.record_service.dtos.record_type_relation_dto.RelationItemDto;
 import org.salesync.record_service.dtos.record_type_relation_dto.RequestRecordTypeRelationDto;
 import org.salesync.record_service.entities.Record;
-import org.salesync.record_service.entities.*;
+import org.salesync.record_service.entities.RecordStage;
+import org.salesync.record_service.entities.RecordType;
+import org.salesync.record_service.entities.RecordTypeProperty;
+import org.salesync.record_service.entities.RecordTypeRelation;
 import org.salesync.record_service.exceptions.ConcurrentUpdateException;
 import org.salesync.record_service.exceptions.ObjectNotFoundException;
 import org.salesync.record_service.mappers.RecordMapper;
 import org.salesync.record_service.mappers.RecordTypePropertyMapper;
 import org.salesync.record_service.mappers.RecordTypeRelationMapper;
 import org.salesync.record_service.mappers.RelationItemMapper;
-import org.salesync.record_service.repositories.*;
+import org.salesync.record_service.repositories.RecordRepository;
+import org.salesync.record_service.repositories.RecordStageRepository;
+import org.salesync.record_service.repositories.RecordTypePropertyRepository;
+import org.salesync.record_service.repositories.RecordTypeRelationRepository;
 import org.salesync.record_service.services.token.TokenService;
 import org.salesync.record_service.utils.SecurityContextHelper;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-
 @Service
 @RequiredArgsConstructor
 @Transactional(rollbackFor = Throwable.class)
-@Builder
 public class RecordServiceImpl implements RecordService {
 
     private final RecordRepository recordRepository;
-    private final RecordTypeRepository recordTypeRepository;
     private final RecordTypePropertyRepository recordTypePropertyRepository;
     private final RecordTypeRelationRepository recordTypeRelationRepository;
     private final RecordStageRepository recordStageRepository;
@@ -53,23 +79,43 @@ public class RecordServiceImpl implements RecordService {
     private final RestTemplate restTemplate;
     private final RabbitMQProducer rabbitMQProducer;
     private final TokenService tokenService;
+    private final RestTemplateBuilder restTemplateBuilder;
+
+    @Value("${elasticsearch.url}")
+    private String elasticsearchUrl;
 
     @Override
     public ListRecordsResponseDto getFilteredRecords(ListRecordsRequestDto requestDto, String companyName) {
-        Pageable pageRequest = PageRequest.of(requestDto.getCurrentPage() - 1, requestDto.getPageSize());
-        Page<Record> page;
-        if (requestDto.getPropertyName() != null) {
-            page = recordRepository.getFilteredRecord(
-                    UUID.fromString(SecurityContextHelper.getContextUserId()), requestDto.getPropertyName(), requestDto.getTypeId(), requestDto.getSearchTerm(), requestDto.isAsc(), pageRequest, companyName
-            );
-        } else {
-            page = recordRepository.getFilteredRecordsAndOrderByName(
-                    UUID.fromString(SecurityContextHelper.getContextUserId()), requestDto.getTypeId(), requestDto.getSearchTerm(), requestDto.isAsc(), pageRequest, companyName
-            );
-        }
-        List<RecordDto> recordDtos = page.getContent().stream().map(recordMapper::recordToRecordDto).toList();
 
-        return ListRecordsResponseDto.builder().records(recordDtos).totalSize(page.getTotalElements()).pageSize(page.getSize()).currentPage(page.getNumber() + 1).build();
+        List<String> roles = SecurityContextHelper.getContextAuthorities();
+
+        Pageable pageRequest = PageRequest.of(requestDto.getCurrentPage() - 1, requestDto.getPageSize());
+        Page<Record> page = null;
+        if (requestDto.getPropertyName() != null) {
+            if (roles.contains("read-all")) {
+                page = recordRepository.getAllFilteredRecord(
+                        UUID.fromString(SecurityContextHelper.getContextUserId()), requestDto.getPropertyName(), requestDto.getTypeId(), requestDto.getSearchTerm(), requestDto.isAsc(), pageRequest, companyName
+                );
+            } else if (roles.contains("read-own")) {
+                page = recordRepository.getOwnFilteredRecord(
+                        UUID.fromString(SecurityContextHelper.getContextUserId()), requestDto.getPropertyName(), requestDto.getTypeId(), requestDto.getSearchTerm(), requestDto.isAsc(), pageRequest, companyName
+                );
+            }
+        } else {
+
+            if (roles.contains("read-all")) {
+                page = recordRepository.getAllFilteredRecordsAndOrderByName(
+                        UUID.fromString(SecurityContextHelper.getContextUserId()), requestDto.getTypeId(), requestDto.getSearchTerm(), requestDto.isAsc(), pageRequest, companyName
+                );
+            } else if (roles.contains("read-own")) {
+                page = recordRepository.getOwnFilteredRecordsAndOrderByName(
+                        UUID.fromString(SecurityContextHelper.getContextUserId()), requestDto.getTypeId(), requestDto.getSearchTerm(), requestDto.isAsc(), pageRequest, companyName
+                );
+            }
+        }
+        final List<RecordDto> recordDtos = page != null ? page.getContent().stream().map(recordMapper::recordToRecordDto).toList() : Collections.emptyList();
+
+        return ListRecordsResponseDto.builder().records(recordDtos).totalSize(Optional.ofNullable(page).map(Page::getTotalElements).orElse(0L)).pageSize(Optional.ofNullable(page).map(Page::getSize).orElse(0)).currentPage(Optional.ofNullable(page).map(Page::getNumber).orElse(0) + 1).build();
     }
 
     @Override
@@ -144,7 +190,11 @@ public class RecordServiceImpl implements RecordService {
             if (!userContextId.equals(record.getUserId().toString())) {
                 throw new AccessDeniedException("You are not allowed to delete this record");
             }
-            recordRepository.delete(record);
+            record.getRecordProperties().forEach(properties -> {
+                properties.setDeleted(true);
+            });
+            record.setDeleted(true);
+            recordRepository.save(record);
         });
 
     }
@@ -152,7 +202,8 @@ public class RecordServiceImpl implements RecordService {
     @Override
     public ListRecordTypeRelationsDto getListRecordTypeRelationsById(UUID sourceRecordId, String token, String realm) {
 
-        List<RecordTypeRelation> listRecordTypeRelations = recordTypeRelationRepository.findBySourceRecordId(sourceRecordId);
+        List<RecordTypeRelation> listRecordTypeRelations = recordTypeRelationRepository.findBySourceRecordId(
+                sourceRecordId);
         RecordDto sourceRecordDto;
         Record sourceRecord;
 
@@ -186,9 +237,11 @@ public class RecordServiceImpl implements RecordService {
 
         return ListRecordTypeRelationsDto.builder().sourceRecord(sourceRecordDto).relations(
                 listRecordTypeRelations.stream().map(recordTypeRelation -> {
-                    RecordDto destinationRecordDto = recordMapper.recordToRecordDto(recordTypeRelation.getDestinationRecord());
-                    TypeDto typeDto = findTypeById(recordTypeRelation.getDestinationRecord().getRecordType().getTypeId(), allType);
-//                            System.out.println(recordTypeRelation.getDestinationRecord().getId());
+                    RecordDto destinationRecordDto = recordMapper.recordToRecordDto(
+                            recordTypeRelation.getDestinationRecord());
+                    TypeDto typeDto = findTypeById(
+                            recordTypeRelation.getDestinationRecord().getRecordType().getTypeId(), allType);
+                    //                            System.out.println(recordTypeRelation.getDestinationRecord().getId());
 
                     RelationItemDto item = relationItemMapper.recordTypeRelationToRelationItemDto(recordTypeRelation);
                     destinationRecordDto.setType(typeDto);
@@ -274,6 +327,9 @@ public class RecordServiceImpl implements RecordService {
             recordEntity.getRecordProperties().add(recordTypeProperty);
         }
 
+        String userId = tokenService.extractClaim(token.split(" ")[1], claims -> claims.get("userId", String.class));
+        rabbitMQProducer.sendMessage("record", MessageDto.builder().content("${" + userId + "} Updated " + recordEntity.getName()).title("Record Updated").createdAt(new Date()).action("update").isRead(false).url("/record/" + recordEntity.getId()).senderId(UUID.fromString(userId)).receiverId(recordEntity.getUserId()).build());
+
         return recordMapper.recordToRecordDto(recordRepository.save(recordEntity));
     }
 
@@ -281,6 +337,45 @@ public class RecordServiceImpl implements RecordService {
     public List<RecordDto> createListRecord(String realm, String token, List<CreateRecordRequestDto> createRecordRequestDtos) {
         return createRecordRequestDtos.stream().map(createRecordRequestDto -> createRecordByTypeId(
                 realm, createRecordRequestDto.getTypeId().toString(), token, createRecordRequestDto)).toList();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Object getRecordInElasticsearch(HttpServletRequest request) throws IOException {
+        List<String> permissions = SecurityContextHelper.getContextAuthorities();
+        String userId = SecurityContextHelper.getContextUserId();
+        if (!"POST".equalsIgnoreCase(request.getMethod())) {
+            return null;
+        }
+        // Read the request body using InputStream
+        InputStream inputStream = request.getInputStream();
+        byte[] requestBodyBytes = inputStream.readAllBytes();
+        String requestBody = new String(requestBodyBytes, StandardCharsets.UTF_8);
+        // Create ObjectMapper instance
+        ObjectMapper objectMapper = new ObjectMapper();
+        // Convert JSON string to Object
+        Map requestBodyMap = objectMapper.readValue(requestBody, Map.class);
+
+        // Get the 'query.bool.must' part of the JSON
+        List<Object> mustList = (List<Object>) ((Map<String, Object>) ((Map<String, Object>) requestBodyMap.get(
+                "query")).get("bool")).get("must");
+
+        // Create the new JSON object to add
+        Map<String, Object> deletedMatch = Map.of("match", Map.of("deleted", false));
+
+        mustList.add(deletedMatch);
+
+        if (!permissions.contains(PermissionType.READ_ALL.getPermission())) {
+
+            // Create the new JSON object to add
+            Map<String, Object> newUserMatch = Map.of("match", Map.of("user_id", userId));
+
+            // Add the new JSON object to the 'must' list
+            mustList.add(newUserMatch);
+
+        }
+
+        return restTemplateBuilder.build().postForObject(elasticsearchUrl, requestBodyMap, Object.class);
     }
 
     public TypeDto findTypeById(UUID typeId, List<TypeDto> allType) {

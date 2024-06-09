@@ -10,7 +10,7 @@ export const SettingDropDown = ({
 }: {
   title: string;
   items: SettingLayout[];
-  adminPermission: boolean;
+  adminPermission: boolean | null;
 }) => {
   const location = useLocation();
   const [open, setOpen] = useState(() => {
@@ -41,6 +41,7 @@ export const SettingDropDown = ({
               name={item.name}
               href={`/${companyName}/${item.path}`}
               lock={!(!item.adminSettingRole || adminPermission)}
+              loading={item.adminSettingRole == null}
             />
           ))}
         </div>

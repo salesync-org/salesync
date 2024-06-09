@@ -2,7 +2,7 @@ import { Button, Panel } from '@/components/ui';
 import useType from '@/hooks/type-service/useType';
 import { Chart as ChartJS, ArcElement, Tooltip, Title, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
-import { Link, NavLink, useParams } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import ChartSkeleton from './ChartSkeleton';
 import useStages from '@/hooks/type-service/useStage';
 import useRecords from '@/hooks/record-service/useRecords';

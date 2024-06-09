@@ -5,18 +5,25 @@ import { useLocation, useParams } from 'react-router-dom';
 import { createUser, getUsers } from '@/api/users';
 import { loadRoles } from '@/api/roles';
 import UserTable from '@/components/ui/Table/UserTable';
+import LoadingSpinnerSmall from '@/components/ui/Loading/LoadingSpinnerSmall';
+
+const blankUser = {
+  email: '',
+  role: '',
+  first_name: '',
+  last_name: '',
+  job_title: 'None',
+  phone: 'None'
+};
 
 const UserSetting = () => {
   const { companyName } = useParams();
-  const [email, setEmail] = useState('');
+  const [newUser, setNewUser] = useState<NewUser>(blankUser);
   const [roles, setRoles] = useState<Role[]>([]);
+  const [isSending, setIsSending] = useState<boolean>(false);
   const [users, setUsers] = useState<SimpleUser[]>([]);
-  const [profile, setProfile] = useState('');
 
-  const [errors, setErrors] = useState({
-    email: '',
-    profile: ''
-  });
+  const [errors, setErrors] = useState<NewUser>(blankUser);
   const location = useLocation();
   useEffect(() => {
     const getProfiles = async () => {
@@ -34,34 +41,35 @@ const UserSetting = () => {
     loadUsers();
   }, []);
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    const user: NewUser = {
-      email: email,
-      role: profile,
-      first_name: email.slice(0, email.indexOf('@')),
-      last_name: '',
-      job_title: 'None',
-      phone: 'None'
-    };
-
-    if (!email) {
-      setErrors((prev) => ({ ...prev, email: 'Email is required' }));
-      return;
-    }
-
-    if (!profile) {
-      setErrors((prev) => ({ ...prev, profile: 'Profile is required' }));
-      return;
-    }
+    setIsSending(true);
+    Object.entries(newUser).forEach(([key, value]) => {
+      if (value === '') {
+        setErrors((prev) => ({ ...prev, [key]: `Field is required` }));
+      }
+    });
 
     const token = localStorage.getItem('access_token');
     const companyName = location.pathname.split('/')[1];
 
     if (companyName && token) {
-      createUser(companyName, user, token ? token : '');
-      setEmail('');
-      setProfile('');
+      createUser(companyName, newUser, token ? token : '').then(() => {
+        setIsSending(false);
+        setUsers((prev) => [
+          ...prev,
+          {
+            avatar_url: 'default',
+            first_name: newUser.first_name,
+            last_name: newUser.last_name,
+            roles: [newUser.role],
+            email: newUser.email,
+            user_id: '1',
+            user_name: newUser.email.split('@')[0]
+          }
+        ]);
+      });
+      setNewUser(blankUser);
     }
   };
 
@@ -80,40 +88,67 @@ const UserSetting = () => {
         </div>
         <form className='flex w-full flex-col place-content-center gap-2 p-6'>
           <div className='flex flex-col items-center rounded-xl border-[1px] border-input-stroke p-5 dark:border-input-stroke-dark'>
-            <div className='w-1/2'>
-              <TextInput
-                value={email}
-                className='w-full'
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
-                header='Email'
-                placeholder='Enter an email address'
-                isError={!!errors.email}
-              ></TextInput>
-              {errors.email && <ErrorText className='text-sm text-red-500' text={errors.email} />}
-              <DropDown
-                isError={!!errors.profile}
-                defaultValue='Choose Profile'
-                value='Choose Profile'
-                onValueChange={(newValue) => setProfile(newValue)}
-                className='w-full'
-                header='Profile'
-              >
-                {roles &&
-                  roles.map((role) => (
-                    <DropDownItem title={convertToHyphenFormat(role.role_name)} value={role.role_name}></DropDownItem>
-                  ))}
-              </DropDown>
-              {errors.email && <ErrorText className='text-sm text-red-500' text={errors.profile} />}
+            <div className='flex w-full space-x-4'>
+              <div className='flex-grow'>
+                <TextInput
+                  value={newUser.first_name}
+                  className='w-full'
+                  onChange={(e) => {
+                    setNewUser((prev) => ({ ...prev, first_name: e.target.value }));
+                  }}
+                  header='First Name'
+                  placeholder='Enter the user first name'
+                  isError={!!errors.first_name}
+                ></TextInput>
+                {errors.first_name && <ErrorText className='text-sm text-red-500' text={errors.first_name} />}
+                <TextInput
+                  value={newUser.last_name}
+                  className='w-full'
+                  onChange={(e) => {
+                    setNewUser((prev) => ({ ...prev, last_name: e.target.value }));
+                  }}
+                  header='Last Name'
+                  placeholder='Enter the user last name'
+                  isError={!!errors.last_name}
+                ></TextInput>
+                {errors.last_name && <ErrorText className='text-sm text-red-500' text={errors.last_name} />}
+              </div>
+              <div className='flex-grow'>
+                <TextInput
+                  value={newUser.email}
+                  className='w-full'
+                  onChange={(e) => {
+                    setNewUser((prev) => ({ ...prev, email: e.target.value }));
+                  }}
+                  header='Email'
+                  placeholder="Enter the user's email"
+                  isError={!!errors.email}
+                ></TextInput>
+                {errors.email && <ErrorText className='text-sm text-red-500' text={errors.email} />}
+                <DropDown
+                  isError={!!errors.role}
+                  defaultValue='Choose Profile'
+                  value='Choose Profile'
+                  onValueChange={(newValue) => setNewUser((prev) => ({ ...prev, role: newValue }))}
+                  className='w-full'
+                  header='Profile'
+                >
+                  {roles &&
+                    roles.map((role) => (
+                      <DropDownItem title={convertToHyphenFormat(role.role_name)} value={role.role_name}></DropDownItem>
+                    ))}
+                </DropDown>
+                {errors.email && <ErrorText className='text-sm text-red-500' text={errors.role} />}
+              </div>
             </div>
             <PrimaryButton
-              className='mt-5'
+              className='mt-5 self-end'
               onClick={(e) => {
                 handleSubmit(e);
               }}
             >
-              Send Invitation
+              {isSending && <LoadingSpinnerSmall className='h-[1.2rem] w-[1.2rem]'></LoadingSpinnerSmall>}
+              <p>Send Invitation</p>
             </PrimaryButton>
           </div>
         </form>

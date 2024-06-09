@@ -1,12 +1,14 @@
 import NavigationButton from '@/components/NavigationButton/NavigationButton';
 import { SidebarSetting } from '@/components/SettingLayout/SideBarSetting';
 import { Panel } from '@/components/ui';
+import LoadingSpinner from '@/components/ui/Loading/LoadingSpinner';
 import useType from '@/hooks/type-service/useType';
 import useAuth from '@/hooks/useAuth';
 import { cn } from '@/utils/utils';
 import { Building, Layers, Settings, User } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { Outlet, useLocation, useParams } from 'react-router-dom';
+import noPermissionImage from '@/assets/system/no_permission.png';
 
 const settings: SettingLayout[] = [
   {
@@ -64,7 +66,7 @@ const SettingLayout = () => {
   const { hasPermission } = useAuth();
   const { typeId } = useParams();
   const { types } = useType();
-  const adminPermission = useRef<boolean>(false);
+  const [adminPermission, setAdminPermimssion] = useState<boolean | null>(null);
   const settingPathObject = settings.find((setting) => {
     if (!setting.path && setting.items) {
       return setting.items.some((item) => location.pathname.includes(item.path!));
@@ -73,7 +75,7 @@ const SettingLayout = () => {
   });
 
   let title = '';
-  let Icon = Settings;
+  // let Icon = Settings;
 
   const header = settings.find((setting) => {
     if (!setting.path && setting.items) {
@@ -89,10 +91,10 @@ const SettingLayout = () => {
   if (header.items) {
     const item = header.items.find((item) => location.pathname.includes(item.path!));
     title = item?.name || '';
-    Icon = item?.Icon || Settings;
+    // Icon = item?.Icon || Settings;
   } else {
     title = header.name;
-    Icon = header.Icon || Settings;
+    // Icon = header.Icon || Settings;
   }
 
   if (typeId) {
@@ -102,9 +104,9 @@ const SettingLayout = () => {
   useEffect(() => {
     const checkPermission = async () => {
       if (await hasPermission('admin-settings')) {
-        adminPermission.current = true;
+        setAdminPermimssion(true);
       } else {
-        adminPermission.current = false;
+        setAdminPermimssion(false);
       }
     };
     checkPermission();
@@ -125,27 +127,34 @@ const SettingLayout = () => {
               'hover:w-fit hover:opacity-100 md:static md:w-fit md:max-w-full md:overflow-auto md:opacity-100 md:hover:w-fit'
             )}
           >
-            <SidebarSetting settings={settings} adminPermission={adminPermission.current} />
+            <SidebarSetting settings={settings} adminPermission={adminPermission} />
           </div>
         </div>
         <section className='w-full'>
           <header className='mb-4 h-[88px] w-full rounded-md bg-panel dark:bg-panel-dark'>
             <div className='flex h-full items-center px-6'>
-              <div className='rounded-lg bg-primary-color p-2'>
-                <Icon size={28} color='#fff' />
+              <div className='rounded-lg p-2'>
+                <img src={`${import.meta.env.VITE_STORAGE_SERVICE_HOST}/system/icons/salesync_settings.png`}></img>
               </div>
               <h1 className='pl-4 text-2xl font-bold'>{title}</h1>
             </div>
           </header>
           <div className='h-[calc(100%-88px-16px)]'>
-            {adminPermission.current && settingPathObject?.adminSettingRole ? (
+            {adminPermission && settingPathObject?.adminSettingRole ? (
               <Outlet />
             ) : !settingPathObject?.adminSettingRole ? (
               <Outlet />
+            ) : adminPermission == false ? (
+              <Panel className='mx-0 flex h-full flex-col justify-center overflow-auto'>
+                <img src={noPermissionImage} className='h-2/3 min-h-[200px] self-center'></img>
+                <div className='w-full text-center text-xl font-semibold'>
+                  You don't have sufficient permissions to view this page.
+                </div>
+              </Panel>
             ) : (
               <Panel className='mx-0 h-full'>
                 <div className='w-full text-center text-xl font-semibold'>
-                  You don't have sufficient permissions to view this page.
+                  <LoadingSpinner></LoadingSpinner>
                 </div>
               </Panel>
             )}

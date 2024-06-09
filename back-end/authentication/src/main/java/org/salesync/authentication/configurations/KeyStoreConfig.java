@@ -49,8 +49,7 @@ public class KeyStoreConfig {
             assert keystorePassword != null;
             keystore.load(inputKeyStore, keystorePassword.toCharArray());
             Certificate certificate = keystore.getCertificate(keyAlias);
-            logger.info(String.format("PublicKey loaded from keystore: %s",
-                    certificate.getPublicKey().getFormat()));
+            logger.info(String.format("PublicKey loaded from keystore: %s", certificate.getPublicKey().getFormat()));
             return certificate.getPublicKey();
         } catch (Exception e) {
             e.printStackTrace();

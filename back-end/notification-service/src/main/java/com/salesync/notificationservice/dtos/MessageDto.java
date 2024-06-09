@@ -6,12 +6,13 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.lang.Comparable;
 import java.util.Date;
 import java.util.UUID;
 
 @Builder
 @Data
-public class MessageDto implements Serializable {
+public class MessageDto implements Serializable, Comparable<MessageDto> {
 
     private static final long serialVersionUID = -2408414599486046563L;
     UUID id;
@@ -35,4 +36,8 @@ public class MessageDto implements Serializable {
     private String url;
 
     private String action;
+
+    public int compareTo(MessageDto other) {
+        return this.getCreatedAt().compareTo(other.getCreatedAt());
+    }
 }

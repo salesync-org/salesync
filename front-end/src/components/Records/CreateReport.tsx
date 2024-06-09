@@ -18,8 +18,7 @@ const CreateReport = () => {
   const [isUpdateName, setIsUpdateName] = useState(false);
   const [showPropertyIds, setShowPropertyIds] = useState<string[]>([]);
   const [createLoading, setCreateLoading] = useState(false);
-  const { typeReportId = '' } = useParams();
-  const { companyName = '' } = useParams();
+  const { typeReportId = '', companyName = '', domainName = '' } = useParams();
   const { data: recordData, isLoading: isRecordLoading } = useRecords(companyName, typeReportId);
   const { data: propertyData, isLoading: isPropertyLoading } = useProperties(companyName, typeReportId);
   const { types, isLoading: isTypeLoading } = useType();
@@ -83,7 +82,7 @@ const CreateReport = () => {
           description: 'Report has been created successfully'
         });
         queryClient.invalidateQueries(['records']);
-        navigate(`/${companyName}/all/report/${res.id}`);
+        navigate(`/${companyName}/section/${domainName}/report/${res.id}`);
       }
     } catch (error) {
       console.error(error);
@@ -98,7 +97,7 @@ const CreateReport = () => {
   };
 
   return (
-    <Panel className='m-0 flex h-[calc(100dvh-135px)] flex-col p-0'>
+    <Panel className='m-0 flex h-[calc(100dvh-135px)] max-w-[100vw] flex-col p-0'>
       <header className='flex min-h-[64px] items-center justify-between border-b px-10 py-6'>
         <div className='flex flex-col'>
           <h2 className='text-lg font-medium'>REPORT</h2>
@@ -132,7 +131,7 @@ const CreateReport = () => {
             setShowProperties={setShowPropertyIds}
           />
         </section>
-        <section>
+        <section className='overflow-scroll'>
           {showPropertyIds.length > 0 ? <RecordTable typeId={typeReportId} showPropertyIds={showPropertyIds} /> : null}
         </section>
       </div>

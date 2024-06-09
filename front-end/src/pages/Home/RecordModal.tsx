@@ -9,12 +9,17 @@ import useStages from '@/hooks/type-service/useStage';
 import { useQueryClient } from 'react-query';
 import { useLocation } from 'react-router-dom';
 import ErrorToaster from '../Error/ErrorToaster';
+import { useState } from 'react';
+import { delay } from 'msw';
 
 const RecordModal = () => {
   const {
     hideModal,
     store: { modalProps, modalType }
   } = useGlobalModalContext();
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const {
     typeId,
     recordFilter = {
@@ -60,21 +65,30 @@ const RecordModal = () => {
       })
     };
 
-    const res = await recordApi.createRecord(companyName, typeId, req);
+    try {
+      const res = await recordApi.createRecord(companyName, typeId, req);
 
-    if (res) {
+      if (res) {
+        toast({
+          title: 'Success',
+          description: 'Create record successfully'
+        });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        queryClient.setQueryData(['records', typeId, recordFilter], (oldData: any) => {
+          return {
+            ...oldData,
+            records: [res, ...oldData.records]
+          };
+        });
+        hideModal();
+      }
+    } catch (error) {
+      console.log('test erroreoreo');
       toast({
-        title: 'Success',
-        description: 'Create record successfully'
+        title: 'Error',
+        description: 'Failed to create record',
+        variant: 'destructive'
       });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      queryClient.setQueryData(['records', typeId, recordFilter], (oldData: any) => {
-        return {
-          ...oldData,
-          records: [res, ...oldData.records]
-        };
-      });
-      hideModal();
     }
   };
 
@@ -95,39 +109,26 @@ const RecordModal = () => {
       })
     };
 
-    const res = await recordApi.updateRecord(companyName, updatedRecord.id, updatedRecord);
-
-    if (res) {
-      toast({
-        title: 'Success',
-        description: 'Update record successfully'
-      });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      queryClient.setQueryData(['record', updatedRecord.id], (oldData: any) => {
-        return {
-          ...oldData,
-          source_record: {
-            ...oldData.source_record,
-            ...updatedRecord
-          }
-        };
-      });
-
-      hideModal();
-    }
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onSubmit = async (data: any) => {
     try {
-      if (!data['Name'] || data['stage'] === '') {
-        throw new Error('Name is required');
-      }
+      const res = await recordApi.updateRecord(companyName, updatedRecord.id, updatedRecord);
 
-      if (!isUpdateForm) {
-        handleCreateRecord(data);
-      } else {
-        handleUpdateRecord(data);
+      if (res) {
+        toast({
+          title: 'Success',
+          description: 'Update record successfully'
+        });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        queryClient.setQueryData(['record', updatedRecord.id], (oldData: any) => {
+          return {
+            ...oldData,
+            source_record: {
+              ...oldData.source_record,
+              ...updatedRecord
+            }
+          };
+        });
+
+        hideModal();
       }
     } catch (error) {
       console.error(error);
@@ -139,12 +140,39 @@ const RecordModal = () => {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onSubmit = async (data: any) => {
+    try {
+      setIsSubmitting(true);
+      if (!data['Name'] || data['stage'] === '') {
+        throw new Error('Name is required');
+      }
+
+      if (!isUpdateForm) {
+        handleCreateRecord(data);
+      } else {
+        handleUpdateRecord(data);
+      }
+    } catch (error) {
+      console.error(error);
+      console.log('asdsakdnasjdasd');
+      toast({
+        title: 'Error',
+        description: 'Failed to create record',
+        variant: 'destructive'
+      });
+    } finally {
+      hideModal();
+      setIsSubmitting(false);
+    }
+  };
+
   const formId = 'create-record-form';
   return (
     <Modal
       isOpen={modalType === MODAL_TYPES.CREATE_RECORD_MODAL}
       onClose={hideModal}
-      className='relative h-[600px]'
+      className=''
       title={`${isUpdateForm ? 'Update' : 'Create'} ${typeProperty.name}`}
     >
       <div className='overflow-y-auto'>
@@ -160,10 +188,12 @@ const RecordModal = () => {
           />
         )}
       </div>
-      <Panel className='absolute bottom-0 left-0 right-0 m-0 -mt-4 flex h-10 items-center justify-center bg-gray-100 bg-opacity-90 px-3  py-10 shadow-inner'>
+      <Panel className=' m-0 flex h-10 items-center justify-center bg-gray-100 bg-opacity-90 px-3  py-10 shadow-inner'>
         <ModalFooter className='m-0 '>
-          <Button onClick={hideModal}>Cancel</Button>
-          <PrimaryButton form={formId} type='submit'>
+          <Button disabled={isSubmitting} onClick={hideModal}>
+            Cancel
+          </Button>
+          <PrimaryButton disabled={isSubmitting} form={formId} type='submit'>
             Save
           </PrimaryButton>
         </ModalFooter>

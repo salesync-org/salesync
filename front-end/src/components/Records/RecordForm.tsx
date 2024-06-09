@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { cn } from '@/utils/utils';
 import { Controller, useForm } from 'react-hook-form';
-import { Checkbox, DropDown, DropDownItem, ErrorText, Item, TextArea, TextInput } from '../ui';
+import { Checkbox, ErrorText, TextArea, TextInput } from '../ui';
 import { ScreenLoading } from '../ui/Loading/LoadingSpinner';
-import { useEffect } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 import PickList from './PickList';
 
 type RecordFormProps = {
@@ -14,9 +14,18 @@ type RecordFormProps = {
   typeProperty?: any;
   formId?: string;
   className?: string;
+  setIsLoading?: Dispatch<SetStateAction<boolean>>;
 };
 
-const RecordForm = ({ currentData = {}, onSubmit, stages, typeProperty, formId = '', className }: RecordFormProps) => {
+const RecordForm = ({
+  currentData = {},
+  onSubmit,
+  stages,
+  typeProperty,
+  formId = '',
+  className,
+  setIsLoading = (isLoading) => {}
+}: RecordFormProps) => {
   const {
     register,
     handleSubmit,
@@ -128,7 +137,7 @@ const RecordForm = ({ currentData = {}, onSubmit, stages, typeProperty, formId =
         <div>
           <TextArea
             {...props}
-            className='h-[100px] w-full'
+            className='w-full'
             isError={!!errors[property.name]}
             validation={{ required: isRequired, maxLength }}
             isRequired={isRequired}
@@ -173,24 +182,27 @@ const RecordForm = ({ currentData = {}, onSubmit, stages, typeProperty, formId =
         />
       ),
       PickList: (
-        <Controller
-          control={control}
-          name={property.name}
-          render={({ field: { value, onChange } }) => {
-            const fields: FieldItem[] = property.fields;
-            const items = fields
-              .find((field) => field.property_field.label === 'Values (Separated by lines)')
-              ?.item_value.split('\n');
+        <>
+          <p className={cn('my-1')}>{property.label}</p>
+          <Controller
+            control={control}
+            name={property.name}
+            render={({ field: { value, onChange } }) => {
+              const fields: FieldItem[] = property.fields;
+              const items = fields
+                .find((field) => field.property_field.label === 'Values (Separated by lines)')
+                ?.item_value.split(/[\r\n]|\|\n|\\n/g);
 
-            // eslint-disable-next-line react-hooks/rules-of-hooks
-            useEffect(() => {
-              const defaultValue = fields.find((field) => field.property_field.label === 'Default Value')?.item_value;
-              setValue(property.name, value || defaultValue || '');
-              // eslint-disable-next-line react-hooks/exhaustive-deps
-            }, []);
-            return <PickList value={value} onChange={onChange} items={items} />;
-          }}
-        />
+              // eslint-disable-next-line react-hooks/rules-of-hooks
+              useEffect(() => {
+                const defaultValue = fields.find((field) => field.property_field.label === 'Default Value')?.item_value;
+                setValue(property.name, value || defaultValue || '');
+                // eslint-disable-next-line react-hooks/exhaustive-deps
+              }, []);
+              return <PickList value={value} onChange={onChange} items={items} />;
+            }}
+          />
+        </>
       )
     };
   };
@@ -222,21 +234,26 @@ const RecordForm = ({ currentData = {}, onSubmit, stages, typeProperty, formId =
           <div>loading</div>
         )}
         {stages && stages?.length > 0 && (
-          <Controller
-            control={control}
-            name='stage'
-            render={({ field: { onChange, value } }) => (
-              <div className=''>
-                <DropDown header='Status' value={value} onValueChange={onChange}>
-                  {stages.map((stage: Stage) => (
-                    <DropDownItem title={stage.name} value={stage.id} key={stage.id}>
-                      <Item title={stage.name}></Item>
-                    </DropDownItem>
-                  ))}
-                </DropDown>
-              </div>
-            )}
-          />
+          <>
+            <p className={cn('my-1')}>{'Current Stage'}</p>
+            <Controller
+              control={control}
+              name='stage'
+              render={({ field: { onChange } }) => {
+                const items = stages.map((stage) => {
+                  return stage.name;
+                });
+                return (
+                  <PickList
+                    onChange={(value) => {
+                      onChange(stages.find((stage) => stage.name === value)?.id);
+                    }}
+                    items={items ?? []}
+                  />
+                );
+              }}
+            />
+          </>
         )}
       </div>
     </form>

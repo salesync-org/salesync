@@ -13,36 +13,42 @@ import org.junit.Test;
 import java.util.UUID;
 
 public class StageUpdateSeqRequestDtoValidationTest {
-    private Validator validator;
-    private ValidatorFactory factory;
+	private Validator validator;
+	private ValidatorFactory factory;
 
-    @Before
-    public void setUp() {
-        factory = Validation.buildDefaultValidatorFactory();
-        validator = factory.getValidator();
-    }
+	@Before
+	public void setUp() {
+		factory = Validation.buildDefaultValidatorFactory();
+		validator = factory.getValidator();
+	}
 
-    @After
-    public void tearDown() {
-        factory.close();
-    }
+	@After
+	public void tearDown() {
+		factory.close();
+	}
 
-    @Test
-    public void testStageIdIsNull() {
-        // given
-        StageUpdateSeqNumberRequestDto stageUpdateSeqNumberRequestDto = StageUpdateSeqNumberRequestDto.builder().sequenceNumber(1).build();
+	@Test
+	public void testStageIdIsNull() {
+		// given
+		StageUpdateSeqNumberRequestDto stageUpdateSeqNumberRequestDto = StageUpdateSeqNumberRequestDto.builder()
+				.sequenceNumber(1)
+				.build();
 
-        // when // then
-        Assert.assertThrows(ValidationException.class, () -> validator.validate(stageUpdateSeqNumberRequestDto, StageUpdateSeqNumberRequestDto.class));
-    }
+		// when // then
+		Assert.assertThrows(ValidationException.class,
+				() -> validator.validate(stageUpdateSeqNumberRequestDto, StageUpdateSeqNumberRequestDto.class));
+	}
 
-    @Test
-    public void testSequenceNumberIsNull() {
-        // given
-        StageUpdateSeqNumberRequestDto stageUpdateSeqNumberRequestDto = StageUpdateSeqNumberRequestDto.builder().stageId(UUID.randomUUID()).build();
+	@Test
+	public void testSequenceNumberIsNull() {
+		// given
+		StageUpdateSeqNumberRequestDto stageUpdateSeqNumberRequestDto = StageUpdateSeqNumberRequestDto.builder()
+				.stageId(UUID.randomUUID())
+				.build();
 
-        // when // then
-        Assert.assertThrows(ValidationException.class, () -> validator.validate(stageUpdateSeqNumberRequestDto, StageUpdateSeqNumberRequestDto.class));
-    }
+		// when // then
+		Assert.assertThrows(ValidationException.class,
+				() -> validator.validate(stageUpdateSeqNumberRequestDto, StageUpdateSeqNumberRequestDto.class));
+	}
 
 }

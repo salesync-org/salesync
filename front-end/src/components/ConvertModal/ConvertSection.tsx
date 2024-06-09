@@ -101,8 +101,10 @@ export const ConvertSection = ({
   };
 
   return (
-    <div className='grid w-full grid-cols-2 rounded-md bg-slate-100 p-4'>
-      <section className={cn('col-span-1 grid grid-cols-12 border-r')}>
+    <div className='grid w-full grid-cols-2 rounded-md bg-slate-100 p-4 dark:bg-secondary-dark/20'>
+      <section
+        className={cn('col-span-1 grid grid-cols-12 border-r border-input-stroke dark:border-input-stroke-dark')}
+      >
         <div className='col-span-3 -mt-1 flex cursor-pointer gap-2' onClick={() => setIsExpand(!isExpand)}>
           <ChevronRight
             size={20}
@@ -162,7 +164,7 @@ export const ConvertSection = ({
               postfixIcon='search'
             />
             {record && (
-              <section className='absolute top-[0px] flex h-[36px] w-full bg-slate-50'>
+              <section className='absolute top-[0px] flex h-[36px] w-full bg-slate-50 dark:bg-slate-700'>
                 <div className='flex w-full items-center justify-between gap-2 px-2 py-1'>
                   <p className='text-xs font-medium'>{record.name}</p>
                   <X
@@ -179,13 +181,13 @@ export const ConvertSection = ({
             {showHint && (
               <ul
                 className={cn(
-                  'absolute top-[40px] z-[9999] flex w-full flex-col divide-y overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 ease-in-out'
+                  'absolute top-[40px] z-[9999] flex w-full flex-col divide-y overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 ease-in-out dark:bg-black'
                 )}
               >
                 {records &&
                   records.records.map((record: RecordPropertyResponse) => (
                     <li
-                      className='w-full cursor-pointer bg-white px-3 py-2 hover:bg-primary-color/10'
+                      className='w-full cursor-pointer bg-panel-dark px-3 py-2 hover:bg-primary-color/10 dark:bg-black'
                       onMouseDown={(e) => {
                         e.preventDefault();
                         setRecord(record);

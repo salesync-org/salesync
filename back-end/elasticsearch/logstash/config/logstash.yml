@@ -1,5 +1,9 @@
 pipeline:
   batch:
-    delay: 50
-    size: 125
-xpack.monitoring.enabled: false
+    size: 1000
+  workers: 4
+xpack:
+  monitoring:
+    enabled: false
+queue:
+  type: persisted

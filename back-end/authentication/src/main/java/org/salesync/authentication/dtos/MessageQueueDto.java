@@ -9,9 +9,9 @@ import java.io.Serializable;
 
 import org.salesync.authentication.enums.ActionType;
 
-    @Builder
-    @Getter
-    @Setter
+@Builder
+@Getter
+@Setter
 public class MessageQueueDto implements Serializable {
     @Serial
     private static final long serialVersionUID = -8443591765231358078L;

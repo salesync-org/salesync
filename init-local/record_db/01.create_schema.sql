@@ -1,6 +1,7 @@
-GRANT ALL PRIVILEGES ON DATABASE salesync_record_service TO record_service;
-CREATE ROLE postgres WITH LOGIN SUPERUSER PASSWORD 'strong_password';
+-- GRANT ALL PRIVILEGES ON DATABASE salesync_record_service TO record_service;
+-- CREATE ROLE postgres WITH LOGIN SUPERUSER PASSWORD 'strong_password';
 
+\c salesync_record_service;
 
 
 DROP TABLE IF EXISTS public.record CASCADE;

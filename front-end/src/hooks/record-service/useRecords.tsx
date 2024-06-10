@@ -19,13 +19,14 @@ const useRecords = (
     propertyName: null,
     currentPage: 1,
     pageSize: 300
-  }
+  },
+  searchBoost: boolean = true
 ) => {
   const key = ['records', typeId, recordFilter];
   const { data, error, isLoading, refetch, isRefetching } = useQuery(
     key,
     async () => {
-      const res = recordFilter.searchTerm
+      const res = searchBoost
         ? await recordApi.getRecords(companyName, typeId, recordFilter)
         : await recordApi.getRecordsNormal(companyName, typeId, recordFilter);
       return res;

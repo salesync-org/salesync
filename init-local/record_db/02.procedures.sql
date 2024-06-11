@@ -42,11 +42,13 @@ BEGIN
              JOIN public.record_type rt ON rt.record_id = r.record_id
     WHERE rt.type_id = type_id_ref
       AND rtp.name = _name
+	
       AND rtp.item_value LIKE ('%' || search_term || '%');
     RETURN QUERY
         SELECT r.*
         FROM public.record r
                  JOIN temp_record_order tro ON r.record_id = tro.record_id
+	WHERE r.deleted = false
         ORDER BY CASE WHEN is_asc = true THEN tro.sort_order END,
                  CASE WHEN is_asc = false THEN tro.sort_order END DESC;
 
@@ -83,6 +85,8 @@ BEGIN
         FROM public.record r
                  JOIN temp_record_order tro ON r.record_id = tro.record_id
         WHERE r.user_id = _user_id
+	AND r.deleted = false
+
         ORDER BY CASE WHEN is_asc = true THEN tro.sort_order END,
                  CASE WHEN is_asc = false THEN tro.sort_order END DESC;
 
@@ -111,6 +115,8 @@ BEGIN
                          AND rtp.item_value LIKE ('%' || search_term || '%')) r2
                       ON r1.record_id = r2.record_id
         WHERE r1.user_id = _user_id
+	AND r1.deleted = false
+
         ORDER BY CASE WHEN is_asc = true THEN r1.name END,
                  CASE WHEN is_asc = false THEN r1.name END DESC;
 END;
@@ -135,8 +141,8 @@ BEGIN
                                 JOIN public.record_type_property rtp
                                      ON rtp.record_id = r.record_id
                        WHERE rt.type_id = type_id_ref
-                         AND rtp.item_value LIKE ('%' || search_term || '%')) r2
-                      ON r1.record_id = r2.record_id
+                         AND rtp.item_value LIKE ('%' || search_term || '%')) 
+		r2 ON r1.record_id = r2.record_id AND r1.deleted = false
         ORDER BY CASE WHEN is_asc = true THEN r1.name END,
                  CASE WHEN is_asc = false THEN r1.name END DESC;
 END;

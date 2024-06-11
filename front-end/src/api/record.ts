@@ -131,6 +131,18 @@ class RecordApi {
     return mapData(response.data);
   }
 
+  async getRecordsNormal(companyName: string, typeId: string, recordFilter: RecordsFilter) {
+    const response = await axios.post(`${URL}/${companyName}/records/list`, {
+      type_id: typeId,
+      search_term: recordFilter.searchTerm,
+      is_asc: recordFilter.isAsc,
+      property_name: recordFilter.propertyName,
+      current_page: recordFilter.currentPage,
+      page_size: recordFilter.pageSize
+    });
+    return response.data;
+  }
+
   async getAllRecords(companyName: string, recordFilter: RecordsFilter) {
     const from = (recordFilter.currentPage - 1) * recordFilter.pageSize;
     const response = await axios.post(`${URL}/${companyName}/records/elasticsearch?from=1&to=2`, {

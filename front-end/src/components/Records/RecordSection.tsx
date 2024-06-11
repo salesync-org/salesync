@@ -29,6 +29,7 @@ const RecordSection = ({ type }: RecordSectionProps) => {
   const [search, setSearch] = useState('');
   const [canCreate, setCanCreate] = useState(false);
   const [canDelete, setCanDelete] = useState(false);
+  const [quickSearch, setQuickSearch] = useState(false);
   const { hasPermission } = useAuth();
 
   const [recordFilter, setRecordFilter] = useState<RecordsFilter>({
@@ -44,10 +45,12 @@ const RecordSection = ({ type }: RecordSectionProps) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       // setDebounceSearch(search);
+      setQuickSearch(true);
       setRecordFilter({ ...recordFilter, searchTerm: search });
     }, 500);
 
     return () => {
+      setQuickSearch(false);
       clearTimeout(timer);
     };
   }, [search]);
@@ -66,7 +69,7 @@ const RecordSection = ({ type }: RecordSectionProps) => {
   const { showModal, isLoading } = useGlobalModalContext();
 
   const icon = `${iconBaseUrl}/salesync_${type?.name.toLowerCase() || 'custom_type'}.png`;
-  const recordsQuery: RecordsQueryResponse = useRecords(companyName, typeId ?? '', recordFilter);
+  const recordsQuery: RecordsQueryResponse = useRecords(companyName, typeId ?? '', recordFilter, quickSearch);
   const propertiesQuery: PropertiesQueryResponse = useProperties(companyName, typeId);
 
   if (!type || !typeId) {

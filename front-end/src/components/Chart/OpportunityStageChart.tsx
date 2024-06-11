@@ -1,13 +1,13 @@
 import { Button, Panel } from '@/components/ui';
+import useRecordsNormal from '@/hooks/record-service/useRecordsNormal';
+import useStages from '@/hooks/type-service/useStage';
 import useType from '@/hooks/type-service/useType';
-import { Chart as ChartJS, ArcElement, Tooltip, Title, Legend } from 'chart.js';
+import { generateChartColor } from '@/utils/utils';
+import { ArcElement, Chart as ChartJS, Legend, Title, Tooltip } from 'chart.js';
+import { ChevronRight } from 'lucide-react';
 import { Doughnut } from 'react-chartjs-2';
 import { NavLink, useParams } from 'react-router-dom';
 import ChartSkeleton from './ChartSkeleton';
-import useStages from '@/hooks/type-service/useStage';
-import useRecords from '@/hooks/record-service/useRecords';
-import { generateChartColor } from '@/utils/utils';
-import { ChevronRight } from 'lucide-react';
 
 ChartJS.register(ArcElement, Tooltip, Title, Legend);
 
@@ -17,7 +17,7 @@ const OpportunityStageChart = () => {
   const typeId = Array.isArray(types) ? types.find((type) => type.name === 'Opportunity')?.id || '' : '';
   const { data: opportunityStages, isLoading: opportunityStageLoading } = useStages(companyName, typeId);
 
-  const { data: opportunityRecords, isLoading: opportunityLoading } = useRecords(
+  const { data: opportunityRecords, isLoading: opportunityLoading } = useRecordsNormal(
     companyName,
     Array.isArray(types) ? types.find((type) => type.name === 'Opportunity')?.id || '' : ''
   );
@@ -44,7 +44,7 @@ const OpportunityStageChart = () => {
 
   for (const record of records) {
     const stageId = record.current_stage_id;
-    const stageName = stageMap[stageId];
+    const stageName = stageMap[stageId] ?? 'None';
     if (!labels.includes(stageName)) {
       labels.push(stageName);
       chartData.push(1);

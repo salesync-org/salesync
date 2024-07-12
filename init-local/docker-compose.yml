@@ -2,9 +2,9 @@ networks:
   elastic:
 
 services:
-  elasticsearch:
+  salesync_elastic:
     image: elasticsearch:7.17.20
-    container_name: elasticsearch
+    container_name: salesync_elastic
     environment:
       # - xpack.security.enabled=true
       # - xpack.security.audit.enabled=true
@@ -23,19 +23,19 @@ services:
 
   Logstash:
     image: logstash:7.17.20
-    container_name: logstash
+    container_name: salesync_logstash
     restart: unless-stopped
     volumes:
       - ./elasticsearch/logstash/config:/usr/share/logstash/config
       - ./elasticsearch/postgresql-42.7.3.jar:/usr/share/logstash/bin/postgresql-42.7.3.jar
     command: logstash -f /usr/share/logstash/config/logstash.conf
     depends_on:
-      - elasticsearch
+      - salesync_elastic
     ports:
       - "9600:9600"
     env_file:
       - path: ./elasticsearch/.env
-        required: true # default
+        required: false # default
       - path: ./elasticsearch/.local.env
         required: false
     # environment:
@@ -53,64 +53,64 @@ services:
       - elastic
 
   record_db:
-      image: 'postgres:latest'
-      environment:
-        - 'POSTGRES_DB=salesync_record_service'
-        - 'POSTGRES_PASSWORD=record_service'
-        - 'POSTGRES_USER=record_service'
-      volumes:
-        - ./record_db:/docker-entrypoint-initdb.d
-      ports:
-        - '54323:5432'
-  
-  type_db:
-    image: 'postgres:latest'
+    image: "postgres:latest"
     environment:
-      - 'POSTGRES_DB=salesync_type_service'
-      - 'POSTGRES_PASSWORD=type_service'
-      - 'POSTGRES_USER=type_service'
+      - "POSTGRES_DB=salesync_record_service"
+      - "POSTGRES_PASSWORD=record_service"
+      - "POSTGRES_USER=record_service"
+    volumes:
+      - ./record_db:/docker-entrypoint-initdb.d
+    ports:
+      - "54323:5432"
+
+  type_db:
+    image: "postgres:latest"
+    environment:
+      - "POSTGRES_DB=salesync_type_service"
+      - "POSTGRES_PASSWORD=type_service"
+      - "POSTGRES_USER=type_service"
     volumes:
       - ./type_db:/docker-entrypoint-initdb.d
     ports:
-      - '54322:5432'
+      - "54322:5432"
 
   auth_db:
-    image: 'postgres:latest'
+    image: "postgres:latest"
     environment:
-      - 'POSTGRES_DB=salesync_authentication'
-      - 'POSTGRES_PASSWORD=authentication'
-      - 'POSTGRES_USER=authentication'
+      - "POSTGRES_DB=salesync_authentication"
+      - "POSTGRES_PASSWORD=authentication"
+      - "POSTGRES_USER=authentication"
     volumes:
       - ./auth_db:/docker-entrypoint-initdb.d
     ports:
-      - '12345:5432'
+      - "12345:5432"
 
   keycloak:
-    image: 'quay.io/keycloak/keycloak:24.0.1'
-    container_name: 'authentication' 
+    image: "quay.io/keycloak/keycloak:24.0.1"
+    container_name: "authentication"
     ports:
       - "9090:8080"
-    command: 'start-dev'
+    command: "start-dev"
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
 
   noti_db:
-    image: 'postgres:latest'
+    image: "postgres:latest"
     environment:
-      - 'POSTGRES_DB=salesync_notification_service'
-      - 'POSTGRES_PASSWORD=notification_service'
-      - 'POSTGRES_USER=notification_service'
+      - "POSTGRES_DB=salesync_notification_service"
+      - "POSTGRES_PASSWORD=notification_service"
+      - "POSTGRES_USER=notification_service"
     volumes:
       - ./noti_db:/docker-entrypoint-initdb.d
     ports:
-      - '5439:5432'
-  
+      - "5439:5432"
+
   rabbitmq:
     image: rabbitmq:3-management
     ports:
-      - "5672:5672"  # RabbitMQ standard port
-      - "15672:15672"  # RabbitMQ management UI
+      - "5672:5672" # RabbitMQ standard port
+      - "15672:15672" # RabbitMQ management UI
     environment:
-      RABBITMQ_DEFAULT_USER: "salesync"  # Change to your desired username
-      RABBITMQ_DEFAULT_PASS: "salesync"  # Change to your desired password
+      RABBITMQ_DEFAULT_USER: "salesync" # Change to your desired username
+      RABBITMQ_DEFAULT_PASS: "salesync" # Change to your desired password

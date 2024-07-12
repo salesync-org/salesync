@@ -33,4 +33,3 @@ build/
 .vscode/
 *.env
 /src/main/resources/application-dev.properties
-/src/main/resources/application-build.properties

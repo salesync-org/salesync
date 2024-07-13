@@ -18,7 +18,7 @@ const AvatarGroup = ({ users, maxAvatars }: AvatarGroupProps) => {
   return (
     <div className='flex items-center -space-x-2'>
       {users.length == 0 && <CircleOff size='1.5rem' />}
-      {users &&
+      {Array.isArray(users) &&
         users.map((user, index) => (
           <img
             key={index}

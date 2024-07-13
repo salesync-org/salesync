@@ -8,9 +8,10 @@ type PickListProps = {
 };
 
 const PickList = ({ value, onChange, items = [] }: PickListProps) => {
-  const [defaultValue, setDefaultValue] = useState('Choose an option');
+  const [defaultValue, setDefaultValue] = useState(items.length > 0 ? items[0] : '');
   return (
     <Select
+      defaultValue={defaultValue}
       value={!value ? defaultValue : value}
       onValueChange={(newValue) => {
         if (!value) {

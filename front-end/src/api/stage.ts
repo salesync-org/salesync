@@ -32,6 +32,23 @@ class StageApi {
       throw new Error(`${response.data.message}`);
     }
   }
+
+  async updateSequenceNumber(companyName: string, typeId: string, sequences: Stage[]) {
+    const response = await axios.put(
+      `${URL}/${companyName}/stages/update-sequence-number/${typeId}`,
+      sequences.map((sequence, index) => {
+        return {
+          stage_id: sequence.id,
+          sequence_number: index
+        };
+      })
+    );
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`${response.data.message}`);
+    }
+  }
 }
 
 const stageApi = new StageApi();

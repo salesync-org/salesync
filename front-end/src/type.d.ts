@@ -406,3 +406,4 @@ type NotificationMessage = {
   "created_at": Date,
   "is_read": boolean
 }
+

@@ -75,14 +75,20 @@ const StageSetting = ({ typeId }: StageSettingProps) => {
     await stageApi.updateStage(companyName ?? '', stage);
   }, 500);
 
+  const handleUpdateSequence = debounce(async (stage: Stage[]) => {
+    await stageApi.updateSequenceNumber(companyName ?? '', typeId, stage);
+  }, 500);
+
   function handleOnDragEnd(result: any) {
     if (!result.destination) return;
     const items = Array.from(visibleStages);
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
     setVisibleStages(items);
-    handleUpdateStage({ ...reorderedItem, sequence_number: result.destination.index + 1 });
+    handleUpdateSequence(items);
   }
+
+  console.log(visibleStages);
 
   return (
     <div className='h-full py-2 '>
@@ -128,7 +134,7 @@ const StageSetting = ({ typeId }: StageSettingProps) => {
                                   )}
                                 >
                                   {editStage != null && editStage.id === stage.id ? (
-                                    <div className='spacae-x-4 flex items-center justify-center'>
+                                    <div className='flex items-center justify-center space-x-4'>
                                       <TextInput
                                         value={editStage.name}
                                         onChange={(e) => {

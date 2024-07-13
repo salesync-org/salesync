@@ -67,7 +67,7 @@ export const createColumns = (companyName: string, properties: any[], records: a
         ),
         cell: ({ row }: { row: any }) => {
           let href = `/${companyName}/section/${domainName}/record/${row.getValue('id')}`;
-          if (property.label === 'Report Name') {
+          if (property.label === 'ReportName') {
             href = `/${companyName}/section/${domainName}/report/${row.getValue('id')}`;
           }
           return (

@@ -9,6 +9,8 @@ import { TextInput } from '../ui';
 import LoadingSpinner from '../ui/Loading/LoadingSpinner';
 import { useToast } from '../ui/Toast';
 import { Status } from './ConvertModal';
+import useStages from '@/hooks/type-service/useStage';
+import useType from '@/hooks/type-service/useType';
 
 type ConvertSectionProps = {
   typeProperties: TypeProperty;
@@ -36,6 +38,15 @@ export const ConvertSection = ({
   const [showHint, setShowHint] = useState(false);
   const [debounceSearch, setDebounceSearch] = useState('');
 
+  const { types = [], isLoading: isTypesLoading } = useType(companyName);
+
+  console.log({ types });
+
+  const { data: stages, isLoading: isStagesLoading } = useStages(
+    companyName,
+    types.find((type) => type.name === typeProperties.name)?.id || ''
+  );
+
   const { toast } = useToast();
 
   const recordFilter: RecordsFilter = {
@@ -47,7 +58,7 @@ export const ConvertSection = ({
   };
 
   const { data: records, isLoading } = useRecords(companyName, typeProperties.id, recordFilter);
-  if (isLoading) {
+  if (isLoading || isStagesLoading || isTypesLoading) {
     return <LoadingSpinner />;
   }
 
@@ -134,6 +145,7 @@ export const ConvertSection = ({
             <RecordForm
               currentData={currentData}
               formId={formId}
+              stages={stages}
               typeProperty={typeProperties}
               onSubmit={onSubmit}
               className='pb-4'
@@ -187,7 +199,7 @@ export const ConvertSection = ({
                 {records &&
                   records.records.map((record: RecordPropertyResponse) => (
                     <li
-                      className='w-full cursor-pointer bg-panel-dark px-3 py-2 hover:bg-primary-color/10 dark:bg-black'
+                      className='w-full cursor-pointer bg-input-background-light px-3 py-2 hover:bg-primary-color/10 dark:bg-black'
                       onMouseDown={(e) => {
                         e.preventDefault();
                         setRecord(record);

@@ -199,6 +199,9 @@ const RecordForm = ({ currentData = {}, onSubmit, stages, typeProperty, formId =
   };
 
   const onFormSubmit = (data: Record<string, string>) => {
+    if ('stage' in data && !data.stage && stages?.[0]?.id) {
+      data.stage = stages?.[0]?.id;
+    }
     onSubmit(data);
   };
 

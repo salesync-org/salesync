@@ -36,6 +36,8 @@ const RelationSection = ({ title, relations = [], destinationType, recordId }: R
       action: createNewRelation
     }
   ];
+
+  console.log({ relations });
   return (
     <Panel className='p-0'>
       <header className='flex min-h-[65px] items-center justify-between bg-slate-500/10 px-4'>
@@ -49,7 +51,10 @@ const RelationSection = ({ title, relations = [], destinationType, recordId }: R
           {relations.map((relation) => (
             <li key={relation.id}>
               <div className='flex items-center justify-between'>
-                <Link className='text-base font-semibold text-primary-color' to={'#'}>
+                <Link
+                  className='text-base font-semibold text-primary-color'
+                  to={`/${companyName}/section/sales/record/${relation.destination_record.id}`}
+                >
                   {relation.destination_record.name}
                 </Link>
 
@@ -74,11 +79,6 @@ const RelationSection = ({ title, relations = [], destinationType, recordId }: R
           ))}
         </ul>
       </section>
-      <footer className='grid place-content-center py-4'>
-        <Link className='text-sm font-semibold text-primary' to={'#'}>
-          View All
-        </Link>
-      </footer>
     </Panel>
   );
 };

@@ -11,6 +11,7 @@ public final class Route {
         public static final String TYPE_DETAILS = "/details/{typeId}";
         public static final String CREATE_TYPE_RELATION = "/create-type-relation";
         public static final String UPDATE_PROPERTY = "/update-property";
+        public static final String RENAME = "/rename";
     }
 
     public static final class Relation {

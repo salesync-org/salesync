@@ -19,62 +19,68 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class TypeController {
 
-    private final TypeService typeService;
+	private final TypeService typeService;
 
-    @GetMapping(Route.Type.TYPE_ID)
-    public ResponseEntity<TypeDTO> getType(@PathVariable UUID typeId) {
-        return ResponseEntity.ok(typeService.getType(typeId));
-    }
+	@GetMapping(Route.Type.TYPE_ID)
+	public ResponseEntity<TypeDTO> getType(@PathVariable UUID typeId) {
+		return ResponseEntity.ok(typeService.getType(typeId));
+	}
 
-    @PostMapping
-    public ResponseEntity<TypeDTO> createType(@PathVariable String realm, @Valid @RequestBody TypeDTO typeDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(typeService.createType(realm, typeDTO));
-    }
+	@PostMapping
+	public ResponseEntity<TypeDTO> createType(@PathVariable String realm, @Valid @RequestBody TypeDTO typeDTO) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(typeService.createType(realm, typeDTO));
+	}
 
-    @GetMapping
-    public ResponseEntity<List<TypeDTO>> getAllType(@PathVariable String realm) {
+	@GetMapping
+	public ResponseEntity<List<TypeDTO>> getAllType(@PathVariable String realm) {
 
-        return ResponseEntity.ok(typeService.getAllType(realm));
-    }
+		return ResponseEntity.ok(typeService.getAllType(realm));
+	}
 
-    @GetMapping(Route.Type.GET_RELATION)
-    public ResponseEntity<List<TypeRelationDTO>> getAllRelationsByType(@PathVariable UUID typeId) {
-        return ResponseEntity.ok(typeService.getAllRelationsByType(typeId));
-    }
+	@GetMapping(Route.Type.GET_RELATION)
+	public ResponseEntity<List<TypeRelationDTO>> getAllRelationsByType(@PathVariable UUID typeId) {
+		return ResponseEntity.ok(typeService.getAllRelationsByType(typeId));
+	}
 
-    @PostMapping(Route.Type.CREATE_RELATION)
-    public ResponseEntity<TypeRelationResponseDTO> createLink(@RequestBody TypeRelationDTO typeRelationDTO) {
-        return ResponseEntity.ok(typeService.makeRelation(typeRelationDTO));
-    }
+	@PostMapping(Route.Type.CREATE_RELATION)
+	public ResponseEntity<TypeRelationResponseDTO> createLink(@RequestBody TypeRelationDTO typeRelationDTO) {
+		return ResponseEntity.ok(typeService.makeRelation(typeRelationDTO));
+	}
 
-    @PutMapping
-    public ResponseEntity<TypeRelationResponseDTO> updateTypeRelation(@RequestBody TypeRelationDTO typeRelationDTO) {
-        return ResponseEntity.ok(typeService.updateLabelOfTypeRelation(typeRelationDTO));
-    }
+	@PutMapping
+	public ResponseEntity<TypeRelationResponseDTO> updateTypeRelation(@RequestBody TypeRelationDTO typeRelationDTO) {
+		return ResponseEntity.ok(typeService.updateLabelOfTypeRelation(typeRelationDTO));
+	}
 
-    @GetMapping(Route.Type.TYPE_DETAILS)
-    public ResponseEntity<Type> getTypeDetails(@PathVariable UUID typeId) {
-        return ResponseEntity.ok(typeService.getTypeDetailsById(typeId));
-    }
+	@GetMapping(Route.Type.TYPE_DETAILS)
+	public ResponseEntity<Type> getTypeDetails(@PathVariable UUID typeId) {
+		return ResponseEntity.ok(typeService.getTypeDetailsById(typeId));
+	}
 
-    @PostMapping(Route.Type.CREATE_PROPERTY)
-    public ResponseEntity<TypeProperty> createProperty(@RequestBody RequestCreatePropertyDto requestCreatePropertyDto) {
-        return ResponseEntity.ok(typeService.createProperty(requestCreatePropertyDto));
-    }
+	@PostMapping(Route.Type.CREATE_PROPERTY)
+	public ResponseEntity<TypeProperty> createProperty(@RequestBody RequestCreatePropertyDto requestCreatePropertyDto) {
+		return ResponseEntity.ok(typeService.createProperty(requestCreatePropertyDto));
+	}
 
-    @PutMapping(Route.Type.UPDATE_PROPERTY)
-    public ResponseEntity<TypeProperty> updateProperty(@RequestBody RequestEditPropertyDto requestEditPropertyDto) {
-        return ResponseEntity.ok(typeService.updateProperty(requestEditPropertyDto));
-    }
+	@PutMapping(Route.Type.UPDATE_PROPERTY)
+	public ResponseEntity<TypeProperty> updateProperty(@RequestBody RequestEditPropertyDto requestEditPropertyDto) {
+		return ResponseEntity.ok(typeService.updateProperty(requestEditPropertyDto));
+	}
 
-    @PostMapping(Route.Type.CREATE_TYPE_RELATION)
-    public ResponseEntity<RelationTypeResponseDto> createRelationType(@Valid @RequestBody RelationTypeRequestDto request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(typeService.createRelationType(request));
-    }
+	@PostMapping(Route.Type.CREATE_TYPE_RELATION)
+	public ResponseEntity<RelationTypeResponseDto> createRelationType(
+			@Valid @RequestBody RelationTypeRequestDto request) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(typeService.createRelationType(request));
+	}
 
-    @DeleteMapping(Route.Type.DELETE_PROPERTY)
-    public ResponseEntity<String> deleteProperty(@PathVariable UUID typePropId) {
-        return ResponseEntity.ok(typeService.deleteProperty(typePropId));
-    }
+	@DeleteMapping(Route.Type.DELETE_PROPERTY)
+	public ResponseEntity<String> deleteProperty(@PathVariable UUID typePropId) {
+		return ResponseEntity.ok(typeService.deleteProperty(typePropId));
+	}
+
+	@PutMapping(Route.Type.RENAME + Route.Type.TYPE_ID)
+	public ResponseEntity<TypeDTO> renameType(@PathVariable UUID typeId, @RequestBody RenameRequest request) {
+		return ResponseEntity.ok(typeService.renameType(typeId, request));
+	}
 
 }

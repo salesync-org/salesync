@@ -31,4 +31,6 @@ public interface TypeService {
     String deleteProperty(UUID typePropId);
 
     TypeProperty updateProperty(RequestEditPropertyDto requestEditPropertyDto);
+
+    TypeDTO renameType(UUID typeId, RenameRequest request);
 }

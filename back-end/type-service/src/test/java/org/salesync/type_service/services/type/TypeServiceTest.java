@@ -60,7 +60,7 @@ public class TypeServiceTest {
 		).build();
 		Type type = Type.builder().name("Type").template(template).companyName(companyName).build();
 		Mockito.when(templateRepository.findById(Mockito.eq(templateId))).thenReturn(Optional.of(template));
-		Mockito.when(typeRepository.save(Mockito.eq(type))).thenReturn(type);
+		Mockito.when(typeRepository.saveAndFlush(Mockito.eq(type))).thenReturn(type);
 		// when
 		TypeDTO result = typeService.createType(companyName, typeDTO);
 		// then

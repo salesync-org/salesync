@@ -1,5 +1,6 @@
 package com.salesync.typeservice.services.type;
 
+import com.salesync.typeservice.constants.PermissionType;
 import com.salesync.typeservice.dtos.*;
 import com.salesync.typeservice.entities.*;
 import com.salesync.typeservice.exceptions.ObjectNotFoundException;
@@ -8,8 +9,11 @@ import com.salesync.typeservice.mapper.RelationMapper;
 import com.salesync.typeservice.mapper.TypeMapper;
 import com.salesync.typeservice.mapper.TypeRelationMapper;
 import com.salesync.typeservice.repositories.*;
+import com.salesync.typeservice.utils.SecurityContextHelper;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,10 +55,11 @@ public class TypeServiceImpl implements TypeService {
 						Template.class.getSimpleName(), typeDTO.getTemplate().getId().toString()
 				));
 
-		Type savedType = typeRepository.save(
+		Type savedType = typeRepository.saveAndFlush(
 				Type.builder().name(typeDTO.getName()).template(template).companyName(companyName).build()
 		);
 
+		typeRepository.assignTemplate(template.getId(), savedType.getId());
 		return typeMapper.typeToTypeDTO(savedType);
 
 	}
@@ -355,5 +360,19 @@ public class TypeServiceImpl implements TypeService {
 		typePropertyRepository.save(typeProperty);
 
 		return typeProperty;
+	}
+
+	@Override
+	public TypeDTO renameType(UUID typeId, RenameRequest request) {
+		List<String> permissions = SecurityContextHelper.getContextAuthorities();
+		if(permissions.contains(PermissionType.ADMIN_SETTINGS.getPermission())) {
+			Type type = typeRepository.findById(typeId).orElseThrow(() -> new ObjectNotFoundException(
+					Type.class.getSimpleName(), typeId.toString()
+			));
+			type.setName(StringUtils.isEmpty(request.getNewName()) ? type.getName() : request.getNewName());
+			Type savedType = typeRepository.save(type);
+			return typeMapper.typeToTypeDTO(savedType);
+		}
+		throw new AccessDeniedException("You do not have permission to rename type");
 	}
 }

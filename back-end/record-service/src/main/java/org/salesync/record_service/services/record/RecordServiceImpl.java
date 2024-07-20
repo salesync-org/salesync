@@ -195,6 +195,13 @@ public class RecordServiceImpl implements RecordService {
             });
             record.setDeleted(true);
             recordRepository.save(record);
+
+            //delete all relation
+            List<RecordTypeRelation> sourceRecords= recordTypeRelationRepository.findSrcRecordId(recordId);
+            List<RecordTypeRelation> destinationRecords= recordTypeRelationRepository.findAllByDestRecordId(recordId);
+
+            recordTypeRelationRepository.deleteAll(sourceRecords);
+            recordTypeRelationRepository.deleteAll(destinationRecords);
         });
 
     }

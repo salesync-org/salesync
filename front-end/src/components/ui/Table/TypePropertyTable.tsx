@@ -148,8 +148,6 @@ const TypePropertyTable = ({ propertyDetailList, onPropertyDelete, onPropertyEdi
                 fields?: PropertyField[] | undefined;
               }>
             ) => {
-              console.log('Fields took:');
-              console.log(fields);
               setUpdatingForm((prev) => {
                 if (prev === null) {
                   return null;

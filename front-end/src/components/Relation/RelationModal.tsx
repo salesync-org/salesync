@@ -30,8 +30,6 @@ const RelationModal = () => {
   const { recordId, companyName, typeId } = modalProps;
   const navigate = useNavigate();
 
-  console.log({ typeId });
-
   useEffect(() => {
     const handleConvert = async () => {
       const recordRelation = localStorage.getItem('record-relation')

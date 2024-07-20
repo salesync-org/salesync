@@ -42,12 +42,9 @@ const List = ({
   }, [open]);
 
   const handleTabKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    console.log('event.key: ', event.key);
     if (event.key === 'Enter') {
       const options = menuRef.current?.querySelectorAll('a');
       if (options) {
-        console.log('href');
-        console.log(options![0].getAttribute('href'));
         if (
           options![0].getAttribute('href') !== 'javascript:void(0)' &&
           options![0].getAttribute('href') !== undefined &&

@@ -40,8 +40,6 @@ export const ConvertSection = ({
 
   const { types = [], isLoading: isTypesLoading } = useType(companyName);
 
-  console.log({ types });
-
   const { data: stages, isLoading: isStagesLoading } = useStages(
     companyName,
     types.find((type) => type.name === typeProperties.name)?.id || ''
@@ -68,7 +66,6 @@ export const ConvertSection = ({
 
   const onSubmit = async (data: any) => {
     try {
-      console.log({ formId, data });
       const req = {
         record_name: data['Name'],
         stage_id: data.stage,

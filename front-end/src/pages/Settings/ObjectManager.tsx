@@ -70,7 +70,6 @@ const ObjectManager = () => {
     try {
       const res = await typeApi.createType(companyName ?? '', newType ?? {});
       if (res) {
-        console.log('Create Type successfully');
         setTypeSearchResult([res, ...(types || [])]);
         queryClient.invalidateQueries('types');
         return res;
@@ -167,7 +166,6 @@ const ObjectManager = () => {
                 className='w-full'
                 value={newType?.template.name ?? ''}
                 onValueChange={(value) => {
-                  console.log('value is' + value);
                   setNewType({
                     template: templates.find((template) => template.id == value) ?? { id: '', name: '' },
                     id: '',

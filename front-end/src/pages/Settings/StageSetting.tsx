@@ -57,7 +57,6 @@ const StageSetting = ({ typeId }: StageSettingProps) => {
     };
     setNewStage('');
     const stageResponse = await stageApi.createStage(companyName ?? '', stageRequest);
-    console.log(stageResponse);
     setVisibleStages([...visibleStages, stageResponse]);
   };
 
@@ -88,7 +87,6 @@ const StageSetting = ({ typeId }: StageSettingProps) => {
     handleUpdateSequence(items);
   }
 
-  console.log(visibleStages);
 
   return (
     <div className='h-full py-2 '>

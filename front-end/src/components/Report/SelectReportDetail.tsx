@@ -32,7 +32,6 @@ const SelectReportDetail = ({ selectedType, onDetailClose, typeName }: SelectRep
     return null;
   }
 
-  console.log({ typeProperties });
   return (
     <div className='flex h-full flex-col'>
       <header className='flex justify-between border-b pb-5'>

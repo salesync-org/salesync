@@ -37,7 +37,6 @@ const RelationSection = ({ title, relations = [], destinationType, recordId }: R
     }
   ];
 
-  console.log({ relations });
   return (
     <Panel className='p-0'>
       <header className='flex min-h-[65px] items-center justify-between bg-slate-500/10 px-4'>

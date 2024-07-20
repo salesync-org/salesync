@@ -35,8 +35,6 @@ const UpdateReport = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  console.log(report);
-
   useEffect(() => {
     if (report) {
       setReportName(report.source_record.name);
@@ -145,7 +143,6 @@ const UpdateReport = () => {
 };
 
 const SelectColumns = ({ typeProperties, setShowProperties, showProperties }: any) => {
-  console.log({ typeProperties });
   const [selects, setSelects] = useState(() => {
     return typeProperties.properties.map((property: any) => {
       return {

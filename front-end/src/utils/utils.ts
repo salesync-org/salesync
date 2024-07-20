@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { read, utils, writeFile } from 'xlsx';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -76,4 +77,40 @@ export const generateChartColor = (size: number) => {
   }
 
   return { backgroundColor, borderColor };
+};
+
+export const createTemplate = (properties: any[]) => {
+  return properties.reduce((acc, property) => {
+    return { ...acc, [property.name]: '' };
+  }, {});
+};
+
+export const exportToExcel = (data: unknown[]) => {
+  const ws = utils.json_to_sheet(data);
+  const wb = utils.book_new();
+  utils.book_append_sheet(wb, ws, 'Data');
+
+  const name = `template-${new Date().toLocaleString()}.xlsx`;
+  writeFile(wb, name);
+};
+
+export const importFromExcel = async (file: File, callback: (jsonData: any) => Promise<void>) => {
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    const data = new Uint8Array(e.target?.result as ArrayBuffer);
+    const workbook = read(data, { type: 'array' });
+    const sheetName = workbook.SheetNames[0];
+    const sheet = workbook.Sheets[sheetName];
+    const jsonData = utils.sheet_to_json(sheet);
+    await callback(jsonData);
+  };
+
+  reader.readAsArrayBuffer(file);
+};
+export const exportTableTemplate = (properties: any[]) => {
+  const template = createTemplate(properties);
+
+  exportToExcel([template]);
+
+  return template;
 };

@@ -40,7 +40,6 @@ const PersonalInfomationSetting = () => {
       uploadAvatar(`avatar_${userLoaded.user_id}`, file).then(async (res) => {
         if (res && res.status === 200) {
           const newUser = { ...userLoaded, avatar_url: `avatar_${userLoaded.user_id}` };
-          console.log(newUser);
           setUserInfo(newUser);
           await updateUser(companyName ?? '', newUser as User).then(() => {
             toast({

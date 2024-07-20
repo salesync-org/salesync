@@ -15,7 +15,6 @@ const VerifyEmail = () => {
       try {
         setLoading(true);
         const accessToken = searchParams.get('key');
-        console.log('token' + accessToken);
         if (!accessToken || !companyName) {
           throw new Error('Invalid verification link');
         }

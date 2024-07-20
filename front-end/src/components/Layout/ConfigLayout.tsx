@@ -37,11 +37,6 @@ const ConfigLayout = () => {
         layoutOrder.name.toLowerCase().replace(' ', '') === altDomainName
     )?.types ?? [];
 
-  // if (!typeId && types.length > 0) {
-  //   console.log('navigate to ' + types?.[0].type_id);
-  //   return <Navigate to={`/${companyName}/section/${domainName}/${types[0].type_id}`} />;
-  // }
-
   const findValidType = () => {
     const typeFound = types.find((type) => type.type_id === typeId);
     if (typeFound) {

@@ -38,11 +38,8 @@ const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
     const stompClient = Stomp.over(socket);
 
     stompClient.connect({}, () => {
-      console.log('Connected to WebSocket server!');
-
       // Subscribe to receive messages on the user-specific destination
       stompClient.subscribe(`/user/${username}/receiver`, (message) => {
-        console.log('Received message:', message.body);
         const newMessage: NotificationMessage = JSON.parse(message.body);
         setNewMessageCount((prevCount) => prevCount + 1); // Update new message count
         setNotifications((prevNotifications) => [...prevNotifications, newMessage]); // Update state in a controlled manner

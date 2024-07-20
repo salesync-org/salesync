@@ -68,7 +68,20 @@ const ObjectManager = () => {
   //create Type sample data and add to types
   const handleCreateType = async () => {
     try {
-      const res = await typeApi.createType(companyName ?? '', newType ?? {});
+      const res = await typeApi.createType(companyName ?? '', newType);
+      if (res) {
+        setTypeSearchResult([res, ...(types || [])]);
+        queryClient.invalidateQueries('types');
+        return res;
+      }
+    } catch (error) {
+      console.error('Create Type failed', error);
+    }
+  };
+
+  const handleEditType = async () => {
+    try {
+      const res = await typeApi.editType(companyName ?? '', newType ?? undefined);
       if (res) {
         setTypeSearchResult([res, ...(types || [])]);
         queryClient.invalidateQueries('types');
@@ -82,6 +95,11 @@ const ObjectManager = () => {
   //Handle submit when creating new type
   const handleSubmit = () => {
     if (!newType) {
+      return;
+    }
+    if (newType.id) {
+      handleEditType();
+      setNewType(null);
       return;
     }
     setNewType(null);
@@ -121,7 +139,12 @@ const ObjectManager = () => {
           </div>
           <div className='h-full min-h-full overflow-scroll'>
             {typeSearchResult ? (
-              <TypeTable types={typeSearchResult}></TypeTable>
+              <TypeTable
+                types={typeSearchResult}
+                setEditType={(type) => {
+                  setNewType(type);
+                }}
+              ></TypeTable>
             ) : (
               <div className='flex h-full items-center justify-center'>
                 <LoadingSpinner />
@@ -140,7 +163,7 @@ const ObjectManager = () => {
         onClose={() => {
           setNewType(null);
         }}
-        title='Create new Type'
+        title={newType?.id ? 'Edit Type' : 'Create Type'}
       >
         <form>
           <div className='grid grid-cols-5 place-content-center gap-3'>
@@ -148,7 +171,7 @@ const ObjectManager = () => {
               <TextInput
                 onChange={(e) =>
                   setNewType({
-                    id: '',
+                    id: newType?.id ?? '',
                     template: newType?.template ?? { id: '', name: '' },
                     name: e.target.value ?? ''
                   })
@@ -164,13 +187,18 @@ const ObjectManager = () => {
                 header='Template'
                 defaultValue='Select a Template'
                 className='w-full'
-                value={newType?.template.name ?? ''}
+                disabled={newType?.id ? true : false}
+                value={newType?.template.id ?? ''}
                 onValueChange={(value) => {
-                  setNewType({
-                    template: templates.find((template) => template.id == value) ?? { id: '', name: '' },
-                    id: '',
-                    name: newType?.name ?? ''
-                  });
+                  setNewType(
+                    newType
+                      ? {
+                          id: newType.id,
+                          name: newType.name,
+                          template: templates.find((template) => template.id == value) ?? { id: '', name: '' }
+                        }
+                      : null
+                  );
                 }}
               >
                 {templates.map((template) => (

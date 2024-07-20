@@ -35,7 +35,7 @@ export const standardTypes = [
   'Task'
 ];
 
-const TypeTable = ({ types }: { types: Type[] }) => {
+const TypeTable = ({ types, setEditType }: { types: Type[]; setEditType: (type: Type) => void }) => {
   const { companyName } = useParams();
   const navigate = useNavigate();
   return (
@@ -84,6 +84,16 @@ const TypeTable = ({ types }: { types: Type[] }) => {
                           <DropdownMenuLabel>{`${type.name} Settings`}</DropdownMenuLabel>
                           <DropdownMenuSeparator className='border-[.2px] border-input-stroke-light px-2 dark:border-input-stroke-dark' />
                           <DropdownMenuGroup>
+                            <DropdownMenuItem
+                              onClick={() => {
+                                setEditType(type);
+                              }}
+                            >
+                              <div className='flex items-center space-x-2'>
+                                <Box size='1rem' />
+                                <p>Edit</p>
+                              </div>
+                            </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() => {
                                 navigate(`/${companyName}/setting/object-manager/${type.id}?tab=properties`);

@@ -115,9 +115,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const roles: Role[] = await getRoles(companyName);
     const userRoles = roles.filter((role) => user?.roles?.includes(role.role_name));
     const permissions = userRoles.map((role) => role.permissions).flat();
-    console.log('testing hasPermission');
-    console.log(permissions);
-    console.log(permissions.filter((p) => p.permission_name === permission).length);
     return permissions.filter((p) => p.permission_name === permission).length > 0;
   };
 

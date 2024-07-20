@@ -6,7 +6,7 @@ import Panel from '@/components/ui/Panel/Panel';
 import TextInput from '@/components/ui/TextInput/TextInput';
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 // import { Type } from '@/type';
-import { Filter, Plus, RefreshCw } from 'lucide-react';
+import { Filter, Import, Plus, RefreshCw } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Tooltip } from 'react-tooltip';
@@ -17,6 +17,7 @@ import useAuth from '@/hooks/useAuth';
 const iconBaseUrl = `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/system/icons`;
 import { useToast } from '../ui/Toast';
 import { useQueryClient } from 'react-query';
+import RecordImportModal from './RecordImportModal';
 
 interface RecordSectionProps {
   type: Type | LayoutType | null | undefined;
@@ -25,7 +26,8 @@ interface RecordSectionProps {
 const customTypeIcon = `${iconBaseUrl}/salesync_custom_type.png`;
 
 const RecordSection = ({ type }: RecordSectionProps) => {
-  const { typeId, companyName = '' } = useParams();
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const { typeId = '', companyName = '' } = useParams();
   const [search, setSearch] = useState('');
   const [canCreate, setCanCreate] = useState(false);
   const [canDelete, setCanDelete] = useState(false);
@@ -66,7 +68,7 @@ const RecordSection = ({ type }: RecordSectionProps) => {
     checkPermission();
   }, []);
 
-  const { showModal, isLoading } = useGlobalModalContext();
+  const { showModal, isLoading, store } = useGlobalModalContext();
 
   const icon = `${iconBaseUrl}/salesync_${type?.name.toLowerCase() || 'custom_type'}.png`;
   const recordsQuery: RecordsQueryResponse = useRecords(companyName, typeId ?? '', recordFilter, quickSearch);
@@ -104,9 +106,6 @@ const RecordSection = ({ type }: RecordSectionProps) => {
       });
     }
   };
-
-  const row = localStorage.getItem('rowSelection') ? JSON.parse(localStorage.getItem('rowSelection')!) : [];
-  console.log(row);
 
   return (
     <Panel className='fixed bottom-[10px] left-[10px] right-[10px] top-[108px] m-0 flex h-[calc(100dvh-120px)] max-w-[100vw] flex-col overflow-auto p-4'>
@@ -175,12 +174,16 @@ const RecordSection = ({ type }: RecordSectionProps) => {
                       showModal(modal, { typeId, recordFilter });
                     }}
                   >
-                    {isLoading ? (
+                    {isLoading && store.modalType === MODAL_TYPES.CREATE_RECORD_MODAL ? (
                       <LoadingSpinnerSmall className='h-[1.2rem] w-[1.2rem]'></LoadingSpinnerSmall>
                     ) : (
                       <Plus size='1rem' />
                     )}
                     <p>New</p>
+                  </Button>
+                  <Button intent='normal' zoom={false} className='space-x-2' onClick={() => setIsImportModalOpen(true)}>
+                    <Import size='1rem' />
+                    <p>Import</p>
                   </Button>
                 </ButtonGroup>
               )}
@@ -196,6 +199,8 @@ const RecordSection = ({ type }: RecordSectionProps) => {
           recordFilter={recordFilter}
         />
       </div>
+
+      <RecordImportModal isOpen={isImportModalOpen} onClose={() => setIsImportModalOpen(false)} />
     </Panel>
   );
 };

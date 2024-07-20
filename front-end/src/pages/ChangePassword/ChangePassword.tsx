@@ -47,7 +47,6 @@ const ChangePassword = () => {
 
   const onSubmit = async (data: ChangePasswordSchemaType) => {
     const res = await auth.changePassword(companyName!, userId!, data.password);
-    console.log(res);
     if (res) {
       // navigate to login
       navigate(`/${companyName}/login`);

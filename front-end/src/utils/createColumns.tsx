@@ -30,7 +30,6 @@ export const createColumns = (companyName: string, properties: any[], records: a
         />
       ),
       cell: ({ row }: any) => {
-        // console.log(row.getIsSelected());
         return (
           <Checkbox
             checked={row.getIsSelected()}

@@ -75,6 +75,18 @@ export type OutputData = {
   page_size: number;
   current_page: number;
 };
+
+export type BulkRecordRequestType = {
+  properties: {
+    id: string;
+    property_name: string;
+    property_label: string;
+    item_value: string;
+  }[];
+  record_name: string;
+  stage_id?: string;
+  type_id: string;
+};
 function mapData(input: InputData): OutputData {
   const records: OutputRecord[] = input.hits.hits.map((hit) => {
     const source = hit._source;
@@ -223,6 +235,11 @@ class RecordApi {
       destination_record_id: targetRecordId,
       type_relation_id: sourceRecordId
     });
+    return response.data;
+  }
+
+  async createBulkRecords(companyName: string, data: BulkRecordRequestType[]) {
+    const response = await axios.post(`${URL}/${companyName}/records/create-list`, data);
     return response.data;
   }
 }

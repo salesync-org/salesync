@@ -15,7 +15,10 @@ import java.util.UUID;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class RecordTypeRelationDto {
     UUID id;
+
     RecordDto sourceRecord;
+
     RecordDto destinationRecord;
+
     UUID typeRelationId;
 }

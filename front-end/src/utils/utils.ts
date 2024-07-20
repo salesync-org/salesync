@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { read, readFile, utils, writeFile } from 'xlsx';
+import { read, utils, writeFile } from 'xlsx';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

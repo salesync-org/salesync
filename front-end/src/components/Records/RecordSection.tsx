@@ -17,6 +17,7 @@ import useAuth from '@/hooks/useAuth';
 const iconBaseUrl = `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/system/icons`;
 import { useToast } from '../ui/Toast';
 import { useQueryClient } from 'react-query';
+import RecordImportModal from './RecordImportModal';
 
 interface RecordSectionProps {
   type: Type | LayoutType | null | undefined;
@@ -25,6 +26,7 @@ interface RecordSectionProps {
 const customTypeIcon = `${iconBaseUrl}/salesync_custom_type.png`;
 
 const RecordSection = ({ type }: RecordSectionProps) => {
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const { typeId = '', companyName = '' } = useParams();
   const [search, setSearch] = useState('');
   const [canCreate, setCanCreate] = useState(false);
@@ -179,14 +181,7 @@ const RecordSection = ({ type }: RecordSectionProps) => {
                     )}
                     <p>New</p>
                   </Button>
-                  <Button
-                    intent='normal'
-                    zoom={false}
-                    className='space-x-2'
-                    onClick={() => {
-                      showModal(MODAL_TYPES.IMPORT_MODAL, { typeId, recordFilter });
-                    }}
-                  >
+                  <Button intent='normal' zoom={false} className='space-x-2' onClick={() => setIsImportModalOpen(true)}>
                     <Import size='1rem' />
                     <p>Import</p>
                   </Button>
@@ -204,6 +199,8 @@ const RecordSection = ({ type }: RecordSectionProps) => {
           recordFilter={recordFilter}
         />
       </div>
+
+      <RecordImportModal isOpen={isImportModalOpen} onClose={() => setIsImportModalOpen(false)} />
     </Panel>
   );
 };

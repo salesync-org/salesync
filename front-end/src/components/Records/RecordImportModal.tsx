@@ -1,24 +1,23 @@
+import recordApi, { BulkRecordRequestType } from '@/api/record';
+import fileImage from '@/assets/system/file_upload.png';
 import { Modal, PrimaryButton } from '@/components/ui';
 import { useToast } from '@/components/ui/Toast';
-import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 import useProperties, { PropertiesQueryResponse } from '@/hooks/type-service/useProperties';
 import useStages from '@/hooks/type-service/useStage';
+import { exportTableTemplate, importFromExcel } from '@/utils/utils';
+import { Download } from 'lucide-react';
 import { useQueryClient } from 'react-query';
 import { useParams } from 'react-router-dom';
-import fileImage from '@/assets/system/file_upload.png';
-import { Download } from 'lucide-react';
-import { exportTableTemplate, importFromExcel } from '@/utils/utils';
-import recordApi, { BulkRecordRequestType } from '@/api/record';
 
-const RecordImportModal = () => {
-  const {
-    hideModal,
-    store: { modalProps, modalType }
-  } = useGlobalModalContext();
+type RecordImportModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+};
+
+const RecordImportModal = ({ isOpen, onClose }: RecordImportModalProps) => {
   const { typeId = '', companyName = '' } = useParams();
   const { data: stages = [] } = useStages(companyName, typeId);
   const propertiesQuery: PropertiesQueryResponse = useProperties(companyName, typeId);
-  const {} = modalProps;
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
@@ -51,6 +50,8 @@ const RecordImportModal = () => {
         description: 'Import failed. Please try again later.',
         variant: 'destructive'
       });
+    } finally {
+      onClose();
     }
   }
   const handleSubmitFile = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -64,7 +65,7 @@ const RecordImportModal = () => {
   const propertiesQueryData = propertiesQuery.data;
 
   return (
-    <Modal isOpen={modalType === MODAL_TYPES.IMPORT_MODAL} onClose={hideModal} title=''>
+    <Modal isOpen={isOpen} onClose={onClose} title=''>
       <div className='overflow-y-auto'>
         <section className='grid grid-cols-2 bg-clip-border'>
           <div className='absolute left-0 top-0 h-full w-1/2 origin-top-left overflow-hidden rounded-l-lg bg-gradient-to-b from-primary to-slate-100'>

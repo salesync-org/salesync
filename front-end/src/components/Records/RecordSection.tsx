@@ -18,6 +18,7 @@ const iconBaseUrl = `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/system/icons`;
 import { useToast } from '../ui/Toast';
 import { useQueryClient } from 'react-query';
 import { exportTableTemplate, importFromExcel } from '@/utils/utils';
+import useStages from '@/hooks/type-service/useStage';
 
 interface RecordSectionProps {
   type: Type | LayoutType | null | undefined;
@@ -72,6 +73,7 @@ const RecordSection = ({ type }: RecordSectionProps) => {
   const icon = `${iconBaseUrl}/salesync_${type?.name.toLowerCase() || 'custom_type'}.png`;
   const recordsQuery: RecordsQueryResponse = useRecords(companyName, typeId ?? '', recordFilter, quickSearch);
   const propertiesQuery: PropertiesQueryResponse = useProperties(companyName, typeId);
+  const { data: stages = [] } = useStages(companyName, typeId);
 
   if (!type || !typeId) {
     return null;
@@ -106,7 +108,6 @@ const RecordSection = ({ type }: RecordSectionProps) => {
     }
   };
   async function importRecords(data: Record<string, string>[] = []) {
-    console.log({ data });
     const requestData: BulkRecordRequestType[] = data.map((record) => {
       return {
         properties: Object.keys(record).map((key) => ({
@@ -116,11 +117,10 @@ const RecordSection = ({ type }: RecordSectionProps) => {
           item_value: record[key]
         })),
         record_name: record.Name,
-        type_id: typeId
+        type_id: typeId,
+        stage_id: stages?.[0]?.id
       };
     });
-
-    console.log({ requestData });
 
     try {
       await recordApi.createBulkRecords(companyName, requestData);

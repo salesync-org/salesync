@@ -6,6 +6,7 @@ const ExportButton = () => {
     const records: Record<string, string>[] = recordsFromStorage ? JSON.parse(recordsFromStorage) : [];
 
     if (records) {
+      records.forEach((record) => delete record.id);
       const ws = utils.json_to_sheet(records);
       const wb = utils.book_new();
       utils.book_append_sheet(wb, ws, 'Data');

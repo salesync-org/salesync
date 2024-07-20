@@ -190,13 +190,13 @@ export const ConvertSection = ({
             {showHint && (
               <ul
                 className={cn(
-                  'absolute top-[40px] z-[9999] flex w-full flex-col divide-y overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 ease-in-out dark:bg-black'
+                  'absolute top-[40px] z-[9999] flex w-full flex-col divide-y overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 ease-in-out dark:bg-background-dark'
                 )}
               >
                 {records &&
                   records.records.map((record: RecordPropertyResponse) => (
                     <li
-                      className='w-full cursor-pointer bg-input-background-light px-3 py-2 hover:bg-primary-color/10 dark:bg-black'
+                      className='w-full cursor-pointer bg-input-background-light px-3 py-2 hover:bg-primary-color/10 dark:bg-background-dark'
                       onMouseDown={(e) => {
                         e.preventDefault();
                         setRecord(record);

@@ -73,7 +73,7 @@ const ConfigLayout = () => {
 
   return (
     <div className='flex min-h-dvh'>
-      <div className='flex h-dvh flex-grow flex-col'>
+      <div className='flex h-dvh w-full flex-grow flex-col'>
         <Header />
         <div className='mx-auto mt-16 w-full flex-grow'>
           <section className='fixed left-0 right-0 z-50 flex h-[40px] items-center bg-panel px-6 dark:bg-panel-dark'>

@@ -14,19 +14,10 @@ export interface ModalProps {
 }
 
 export const ModalFooter = ({ children, className }: { children: React.ReactNode; className?: string }) => {
-  return (
-    <div className={cn('flex items-center justify-end space-x-4 rounded dark:bg-slate-800', className)}>{children}</div>
-  );
+  return <div className={cn('flex w-full  items-center justify-end space-x-4 rounded', className)}>{children}</div>;
 };
 
 const Modal = ({ children, title, isOpen, onClose, className, isStatic = true }: ModalProps) => {
-  // const handleCloseWhenClickOutside = (e: React.MouseEvent<HTMLDivElement>) => {
-  //   if (isStatic) return;
-
-  //   if (e.target === e.currentTarget) {
-  //     onOpenChange(false);
-  //   }
-  // };
   const ref = useRef<HTMLDivElement>(null);
   useClickOutside([ref], () => {
     !isStatic && onClose();

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ConvertModal from '@/components/ConvertModal/ConvertModal';
+import RecordImportModal from '@/components/Records/RecordImportModal';
 import RelationModal from '@/components/Relation/RelationModal';
 import SelectReportModal from '@/components/Report/SelectReportModal';
 import UserModal from '@/components/UserModal/UserModal';
@@ -11,7 +12,8 @@ export const MODAL_TYPES = {
   USER_MODAL: 'USER_MODAL',
   CONVERT_MODAL: 'CONVERT_MODAL',
   RELATION_MODAL: 'RELATION_MODAL',
-  REPORT_MODAL: 'REPORT_MODAL'
+  REPORT_MODAL: 'REPORT_MODAL',
+  IMPORT_MODAL: 'IMPORT_MODAL'
 };
 
 const MODAL_COMPONENTS: any = {
@@ -19,7 +21,8 @@ const MODAL_COMPONENTS: any = {
   [MODAL_TYPES.USER_MODAL]: UserModal,
   [MODAL_TYPES.CONVERT_MODAL]: ConvertModal,
   [MODAL_TYPES.RELATION_MODAL]: RelationModal,
-  [MODAL_TYPES.REPORT_MODAL]: SelectReportModal
+  [MODAL_TYPES.REPORT_MODAL]: SelectReportModal,
+  [MODAL_TYPES.IMPORT_MODAL]: RecordImportModal
 };
 
 type GlobalModalContext = {

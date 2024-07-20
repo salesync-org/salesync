@@ -1,4 +1,4 @@
-import recordApi, { BulkRecordRequestType, RecordsFilter } from '@/api/record';
+import recordApi, { RecordsFilter } from '@/api/record';
 import RecordTable from '@/components/Records/RecordTable';
 import { ButtonGroup } from '@/components/ui';
 import Button from '@/components/ui/Button/Button';
@@ -6,7 +6,7 @@ import Panel from '@/components/ui/Panel/Panel';
 import TextInput from '@/components/ui/TextInput/TextInput';
 import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext';
 // import { Type } from '@/type';
-import { Filter, Plus, RefreshCw } from 'lucide-react';
+import { Filter, Import, Plus, RefreshCw } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Tooltip } from 'react-tooltip';
@@ -17,8 +17,6 @@ import useAuth from '@/hooks/useAuth';
 const iconBaseUrl = `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/system/icons`;
 import { useToast } from '../ui/Toast';
 import { useQueryClient } from 'react-query';
-import { exportTableTemplate, importFromExcel } from '@/utils/utils';
-import useStages from '@/hooks/type-service/useStage';
 
 interface RecordSectionProps {
   type: Type | LayoutType | null | undefined;
@@ -68,12 +66,11 @@ const RecordSection = ({ type }: RecordSectionProps) => {
     checkPermission();
   }, []);
 
-  const { showModal, isLoading } = useGlobalModalContext();
+  const { showModal, isLoading, store } = useGlobalModalContext();
 
   const icon = `${iconBaseUrl}/salesync_${type?.name.toLowerCase() || 'custom_type'}.png`;
   const recordsQuery: RecordsQueryResponse = useRecords(companyName, typeId ?? '', recordFilter, quickSearch);
   const propertiesQuery: PropertiesQueryResponse = useProperties(companyName, typeId);
-  const { data: stages = [] } = useStages(companyName, typeId);
 
   if (!type || !typeId) {
     return null;
@@ -107,49 +104,6 @@ const RecordSection = ({ type }: RecordSectionProps) => {
       });
     }
   };
-  async function importRecords(data: Record<string, string>[] = []) {
-    const requestData: BulkRecordRequestType[] = data.map((record) => {
-      return {
-        properties: Object.keys(record).map((key) => ({
-          id: '',
-          property_name: key,
-          property_label: key,
-          item_value: record[key]
-        })),
-        record_name: record.Name,
-        type_id: typeId,
-        stage_id: stages?.[0]?.id
-      };
-    });
-
-    try {
-      await recordApi.createBulkRecords(companyName, requestData);
-      queryClient.invalidateQueries(['records', typeId]);
-      toast({
-        title: 'Success',
-        description: 'Record(s) imported successfully'
-      });
-    } catch (error) {
-      console.error(error);
-      toast({
-        title: 'Error',
-        description: 'Import failed. Please try again later.',
-        variant: 'destructive'
-      });
-    }
-  }
-  const handleSubmitFile = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const file = (e.target as HTMLFormElement).filename.files?.[0];
-    if (!file) {
-      return;
-    }
-    await importFromExcel(file, importRecords);
-  };
-
-  const row = localStorage.getItem('rowSelection') ? JSON.parse(localStorage.getItem('rowSelection')!) : [];
-
-  const propertiesQueryData = propertiesQuery.data;
 
   return (
     <Panel className='fixed bottom-[10px] left-[10px] right-[10px] top-[108px] m-0 flex h-[calc(100dvh-120px)] max-w-[100vw] flex-col overflow-auto p-4'>
@@ -211,32 +165,6 @@ const RecordSection = ({ type }: RecordSectionProps) => {
                     zoom={false}
                     className='space-x-2'
                     onClick={() => {
-                      exportTableTemplate(propertiesQueryData?.properties ?? []);
-                    }}
-                  >
-                    {isLoading ? (
-                      <LoadingSpinnerSmall className='h-[1.2rem] w-[1.2rem]'></LoadingSpinnerSmall>
-                    ) : (
-                      <Plus size='1rem' />
-                    )}
-                    <p>Export</p>
-                  </Button>
-                  <form onSubmit={handleSubmitFile}>
-                    <input type='file' name='filename' />
-                    <Button type='submit' intent='normal' zoom={false} className='space-x-2'>
-                      {isLoading ? (
-                        <LoadingSpinnerSmall className='h-[1.2rem] w-[1.2rem]'></LoadingSpinnerSmall>
-                      ) : (
-                        <Plus size='1rem' />
-                      )}
-                      <p>Import</p>
-                    </Button>
-                  </form>
-                  <Button
-                    intent='normal'
-                    zoom={false}
-                    className='space-x-2'
-                    onClick={() => {
                       let modal = MODAL_TYPES.CREATE_RECORD_MODAL;
                       if (type.name === 'Report') {
                         modal = MODAL_TYPES.REPORT_MODAL;
@@ -244,12 +172,23 @@ const RecordSection = ({ type }: RecordSectionProps) => {
                       showModal(modal, { typeId, recordFilter });
                     }}
                   >
-                    {isLoading ? (
+                    {isLoading && store.modalType === MODAL_TYPES.CREATE_RECORD_MODAL ? (
                       <LoadingSpinnerSmall className='h-[1.2rem] w-[1.2rem]'></LoadingSpinnerSmall>
                     ) : (
                       <Plus size='1rem' />
                     )}
                     <p>New</p>
+                  </Button>
+                  <Button
+                    intent='normal'
+                    zoom={false}
+                    className='space-x-2'
+                    onClick={() => {
+                      showModal(MODAL_TYPES.IMPORT_MODAL, { typeId, recordFilter });
+                    }}
+                  >
+                    <Import size='1rem' />
+                    <p>Import</p>
                   </Button>
                 </ButtonGroup>
               )}

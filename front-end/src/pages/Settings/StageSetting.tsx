@@ -53,7 +53,14 @@ const StageSetting = ({ typeId }: StageSettingProps) => {
       id: '',
       name: newStage,
       sequenceNumber: visibleStages.length + 1,
-      type: visibleStages[0].type ?? undefined
+      type: {
+        id: typeId,
+        name: '',
+        template: {
+          id: '',
+          name: 'StageObject'
+        }
+      } satisfies Type
     };
     setNewStage('');
     const stageResponse = await stageApi.createStage(companyName ?? '', stageRequest);

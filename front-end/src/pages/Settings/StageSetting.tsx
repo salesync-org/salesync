@@ -114,7 +114,7 @@ const StageSetting = ({ typeId }: StageSettingProps) => {
         </PrimaryButton>
       </div>
       <header className='h-full overflow-y-scroll'>
-        {visibleStages.length > 0 ? (
+        {visibleStages.length >= 0 ? (
           <DragDropContext onDragEnd={handleOnDragEnd}>
             <StrictModeDroppable droppableId='characters'>
               {(provided) => (

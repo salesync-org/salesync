@@ -23,6 +23,16 @@ class TypeApi {
     return res.data;
   }
 
+  async editType(companyName: string, data?: Type) {
+    if (!data) {
+      return;
+    }
+    const res = await instance.put(`${BASE_URL}/${companyName}/types/rename/${data.id}`, {
+      new_name: data.name
+    });
+    return res.data;
+  }
+
   async createTypeProperty(companyName: string, data: any) {
     const res = await instance.post(`${BASE_URL}/${companyName}/types/create-property`, data);
     return res.data;

@@ -106,7 +106,8 @@ const RecordSection = ({ type }: RecordSectionProps) => {
   };
 
   const row = localStorage.getItem('rowSelection') ? JSON.parse(localStorage.getItem('rowSelection')!) : [];
-  console.log(row);
+
+  console.log({ recordsQuery, propertiesQuery });
 
   return (
     <Panel className='fixed bottom-[10px] left-[10px] right-[10px] top-[108px] m-0 flex h-[calc(100dvh-120px)] max-w-[100vw] flex-col overflow-auto p-4'>

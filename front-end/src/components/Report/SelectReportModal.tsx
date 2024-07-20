@@ -28,7 +28,6 @@ const SelectReportModal = () => {
     setSelectedType(undefined);
   };
 
-  console.log(selectedType);
   return (
     <Modal
       isOpen={modalType === MODAL_TYPES.REPORT_MODAL}

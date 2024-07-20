@@ -82,7 +82,6 @@ const RecordModal = () => {
         hideModal();
       }
     } catch (error) {
-      console.log('test erroreoreo');
       toast({
         title: 'Error',
         description: 'Failed to create record',
@@ -154,7 +153,6 @@ const RecordModal = () => {
       }
     } catch (error) {
       console.error(error);
-      console.log('asdsakdnasjdasd');
       toast({
         title: 'Error',
         description: 'Failed to create record',

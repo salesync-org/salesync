@@ -16,7 +16,6 @@ interface InforActivityProps {
 }
 
 const InforActivity: React.FC<InforActivityProps> = ({ className, data, type }) => {
-  console.log(data);
   const [expand, setExpand] = useState(false);
   const [iconName, setIconName] = useState('calendar_month');
   const [iconColor, setIconColor] = useState('bg-purple-400');
@@ -67,7 +66,6 @@ const InforActivity: React.FC<InforActivityProps> = ({ className, data, type }) 
       }
     }
 
-    console.log({ type });
     if (type.name === 'Event') {
       setIconName('calendar_month');
       setIconColor('bg-purple-400');

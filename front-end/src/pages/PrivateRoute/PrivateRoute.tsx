@@ -17,7 +17,6 @@ const PrivateRoute = () => {
 
   if (!isAuthenticated) {
     const redirectUrl = encodeURIComponent(location.pathname);
-    console.log(redirectUrl);
     return <Navigate to={`/${companyName}/login?redirectUrl=${redirectUrl}`} />;
   }
 

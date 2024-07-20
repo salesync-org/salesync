@@ -31,7 +31,6 @@ const RelationForm = ({
   currentData,
   companyName
 }: RelationFormProps) => {
-  // console.log({ typeProperties });
   const [isExpand, setIsExpand] = useState(false);
   const [search, setSearch] = useState('');
   const [showHint, setShowHint] = useState(false);

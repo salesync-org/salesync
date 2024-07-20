@@ -68,14 +68,14 @@ const ShortSelectReportDetail = ({ name }: { name: string }) => {
 
 const FieldsSearchInput = ({ value, onChange }: { value: string; onChange: (value: string) => void }) => {
   return (
-    <form className='flex items-center rounded-md border border-gray-200 bg-white px-4 transition-all focus-within:border-[2px] focus-within:border-blue-500'>
+    <form className='flex items-center rounded-md border border-gray-200 bg-white px-4 transition-all focus-within:border-[2px] focus-within:border-blue-500 dark:bg-background-dark'>
       <Search size={20} />
       <input
         value={value}
         onChange={(e) => onChange(e.target.value)}
         type='text'
         placeholder='Quick lookup'
-        className='w-full border-none px-3 py-2 focus:outline-none'
+        className='w-full border-none px-3 py-2 focus:outline-none dark:bg-background-dark'
       />
     </form>
   );

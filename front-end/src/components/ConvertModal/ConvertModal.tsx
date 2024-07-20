@@ -202,7 +202,7 @@ const ConvertModal = () => {
           companyName={companyName}
         />
       </div>
-      <ModalFooter className='absolute bottom-0 left-0 right-0 m-0 flex h-10 w-full items-center justify-center bg-gray-100 bg-opacity-90 px-3 py-10 shadow-inner'>
+      <ModalFooter className='absolute bottom-0 left-0 right-0 m-0 flex h-10 w-full items-center justify-center bg-gray-100 bg-opacity-90 px-3 py-10 shadow-inner dark:bg-background-dark'>
         <Button disabled={loading} onClick={hideModal}>
           Cancel
         </Button>

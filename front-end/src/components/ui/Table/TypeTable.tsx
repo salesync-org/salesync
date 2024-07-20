@@ -52,6 +52,7 @@ const TypeTable = ({ types }: { types: Type[] }) => {
           </TableHeader>
           <TableBody className='h-full overflow-y-scroll'>
             {types.map((type, index) => {
+              if (type.name === 'Report') return null;
               return (
                 <TableRow key={index}>
                   <TableCell className='w-4/12'>{type.name}</TableCell>

@@ -1,4 +1,4 @@
-import recordApi, { RecordsFilter } from '@/api/record';
+import recordApi, { BulkRecordRequestType, RecordsFilter } from '@/api/record';
 import RecordTable from '@/components/Records/RecordTable';
 import { ButtonGroup } from '@/components/ui';
 import Button from '@/components/ui/Button/Button';
@@ -17,6 +17,7 @@ import useAuth from '@/hooks/useAuth';
 const iconBaseUrl = `${import.meta.env.VITE_STORAGE_SERVICE_HOST}/system/icons`;
 import { useToast } from '../ui/Toast';
 import { useQueryClient } from 'react-query';
+import { exportTableTemplate, importFromExcel } from '@/utils/utils';
 
 interface RecordSectionProps {
   type: Type | LayoutType | null | undefined;
@@ -25,7 +26,7 @@ interface RecordSectionProps {
 const customTypeIcon = `${iconBaseUrl}/salesync_custom_type.png`;
 
 const RecordSection = ({ type }: RecordSectionProps) => {
-  const { typeId, companyName = '' } = useParams();
+  const { typeId = '', companyName = '' } = useParams();
   const [search, setSearch] = useState('');
   const [canCreate, setCanCreate] = useState(false);
   const [canDelete, setCanDelete] = useState(false);
@@ -104,10 +105,51 @@ const RecordSection = ({ type }: RecordSectionProps) => {
       });
     }
   };
+  async function importRecords(data: Record<string, string>[] = []) {
+    console.log({ data });
+    const requestData: BulkRecordRequestType[] = data.map((record) => {
+      return {
+        properties: Object.keys(record).map((key) => ({
+          id: '',
+          property_name: key,
+          property_label: key,
+          item_value: record[key]
+        })),
+        record_name: record.Name,
+        type_id: typeId
+      };
+    });
+
+    console.log({ requestData });
+
+    try {
+      await recordApi.createBulkRecords(companyName, requestData);
+      queryClient.invalidateQueries(['records', typeId]);
+      toast({
+        title: 'Success',
+        description: 'Record(s) imported successfully'
+      });
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: 'Error',
+        description: 'Import failed. Please try again later.',
+        variant: 'destructive'
+      });
+    }
+  }
+  const handleSubmitFile = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const file = (e.target as HTMLFormElement).filename.files?.[0];
+    if (!file) {
+      return;
+    }
+    await importFromExcel(file, importRecords);
+  };
 
   const row = localStorage.getItem('rowSelection') ? JSON.parse(localStorage.getItem('rowSelection')!) : [];
 
-  console.log({ recordsQuery, propertiesQuery });
+  const propertiesQueryData = propertiesQuery.data;
 
   return (
     <Panel className='fixed bottom-[10px] left-[10px] right-[10px] top-[108px] m-0 flex h-[calc(100dvh-120px)] max-w-[100vw] flex-col overflow-auto p-4'>
@@ -164,6 +206,32 @@ const RecordSection = ({ type }: RecordSectionProps) => {
               </ButtonGroup>
               {canCreate && (
                 <ButtonGroup>
+                  <Button
+                    intent='normal'
+                    zoom={false}
+                    className='space-x-2'
+                    onClick={() => {
+                      exportTableTemplate(propertiesQueryData?.properties ?? []);
+                    }}
+                  >
+                    {isLoading ? (
+                      <LoadingSpinnerSmall className='h-[1.2rem] w-[1.2rem]'></LoadingSpinnerSmall>
+                    ) : (
+                      <Plus size='1rem' />
+                    )}
+                    <p>Export</p>
+                  </Button>
+                  <form onSubmit={handleSubmitFile}>
+                    <input type='file' name='filename' />
+                    <Button type='submit' intent='normal' zoom={false} className='space-x-2'>
+                      {isLoading ? (
+                        <LoadingSpinnerSmall className='h-[1.2rem] w-[1.2rem]'></LoadingSpinnerSmall>
+                      ) : (
+                        <Plus size='1rem' />
+                      )}
+                      <p>Import</p>
+                    </Button>
+                  </form>
                   <Button
                     intent='normal'
                     zoom={false}

@@ -7,23 +7,36 @@ import { PropertiesQueryResponse } from '@/hooks/type-service/useProperties';
 import ErrorToaster from '@/pages/Error/ErrorToaster';
 import { createColumns } from '@/utils/createColumns';
 import { formatRecords } from '@/utils/utils';
-import { useParams } from 'react-router-dom';
-import { Skeleton } from '../ui';
+import { useParams, useSearchParams } from 'react-router-dom';
+import { Pagination, Skeleton } from '../ui';
 import { DataTable } from './data-table';
+import { Dispatch, SetStateAction } from 'react';
 
 interface RecordTableProps {
   typeId: string;
-  recordFilter?: RecordsFilter;
+  recordFilter: RecordsFilter;
   showPropertyIds?: string[];
   recordsQuery?: RecordsQueryResponse;
   propertiesQuery?: PropertiesQueryResponse;
   className?: string;
+  setRecordFilter: Dispatch<SetStateAction<RecordsFilter>>;
 }
 
-const RecordTable = ({ typeId, recordFilter, showPropertyIds, recordsQuery, propertiesQuery }: RecordTableProps) => {
+const RecordTable = ({
+  typeId,
+  recordFilter,
+  showPropertyIds,
+  recordsQuery,
+  propertiesQuery,
+  setRecordFilter
+}: RecordTableProps) => {
   const { companyName = '' } = useParams();
+  const [searchParams] = useSearchParams();
+
+  const page = searchParams.get('page') ?? 1;
 
   if (!recordsQuery) {
+    console.log('adssadasdas');
     recordsQuery = useRecords(companyName, typeId, recordFilter);
   }
 
@@ -34,6 +47,8 @@ const RecordTable = ({ typeId, recordFilter, showPropertyIds, recordsQuery, prop
   if (!recordsQuery || !propertiesQuery) {
     return <ErrorToaster errorMessage='Error loading table ' />;
   }
+
+  console.log({ recordsQuery });
 
   if (recordsQuery.isLoading || propertiesQuery.isLoading || recordsQuery.isRefetching) {
     return <RecordTableSkeleton />;
@@ -53,10 +68,28 @@ const RecordTable = ({ typeId, recordFilter, showPropertyIds, recordsQuery, prop
   const records = recordsQuery.data.records;
   const tableData = formatRecords(records);
   const columns = createColumns(companyName, tempPropertyData!.properties!, records);
+  let totalPages = Math.ceil(recordsQuery?.data?.total_size / (recordFilter?.pageSize ?? 12)) ?? 1;
+
+  if (recordsQuery?.data?.hits?.total?.value) {
+    console.log('SASasa');
+    totalPages = Math.ceil(recordsQuery.data.hits.total.value / (recordFilter?.pageSize ?? 12));
+  }
+
+  console.log({ totalPages, recordsQuery });
 
   return (
-    <div className='h-full px-4 py-2'>
+    <div className='h-full space-y-4 px-4 py-2'>
       <DataTable columns={columns} data={tableData} />
+      <Pagination
+        currentPage={+page}
+        onPageChange={(page) =>
+          setRecordFilter({
+            ...recordFilter,
+            currentPage: +page
+          })
+        }
+        totalPages={totalPages}
+      />
     </div>
   );
 };

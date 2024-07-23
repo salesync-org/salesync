@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import recordApi from '@/api/record';
+import recordApi, { RecordsFilter } from '@/api/record';
 import useRecord from '@/hooks/record-service/useRecord';
 import useRecords from '@/hooks/record-service/useRecords';
 import useProperties from '@/hooks/type-service/useProperties';
@@ -20,6 +20,13 @@ const UpdateReport = () => {
   const [showPropertyIds, setShowPropertyIds] = useState<string[]>([]);
   const [typeReportId, setTypeReportId] = useState('');
   const [updateLoading, setUpdateLoading] = useState(false);
+  const [recordFilter, setRecordFilter] = useState<RecordsFilter>({
+    searchTerm: '',
+    isAsc: false,
+    propertyName: null,
+    currentPage: 1,
+    pageSize: 30
+  });
   const { companyName = '', domainName = '' } = useParams();
   const { data: recordData, isLoading: isRecordLoading } = useRecords(companyName, typeReportId);
   const { data: propertyData, isLoading: isPropertyLoading } = useProperties(companyName, typeReportId);
@@ -135,7 +142,14 @@ const UpdateReport = () => {
           )}
         </section>
         <section>
-          {showPropertyIds.length > 0 ? <RecordTable typeId={typeReportId} showPropertyIds={showPropertyIds} /> : null}
+          {showPropertyIds.length > 0 ? (
+            <RecordTable
+              recordFilter={recordFilter}
+              setRecordFilter={setRecordFilter}
+              typeId={typeReportId}
+              showPropertyIds={showPropertyIds}
+            />
+          ) : null}
         </section>
       </div>
     </Panel>

@@ -7,9 +7,18 @@ import LoadingSpinner from '../ui/Loading/LoadingSpinner';
 import { useToast } from '../ui/Toast';
 import RecordTable from './RecordTable';
 import ExportButton from './ExportButton';
+import { useState } from 'react';
+import { RecordsFilter } from '@/api/record';
 
 const ReportDetail = () => {
   const { reportId = '', companyName = '', domainName = '' } = useParams();
+  const [recordFilter, setRecordFilter] = useState<RecordsFilter>({
+    searchTerm: '',
+    isAsc: false,
+    propertyName: null,
+    currentPage: 1,
+    pageSize: 30
+  });
   const { data: record, isLoading: isRecordLoading } = useRecord(companyName, reportId);
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -69,7 +78,12 @@ const ReportDetail = () => {
       </header>
       <div className='flex min-w-full grow overflow-auto'>
         {reportProperties && reportProperties?.length > 0 ? (
-          <RecordTable typeId={reportTypeId} showPropertyIds={reportProperties} />
+          <RecordTable
+            recordFilter={recordFilter}
+            setRecordFilter={setRecordFilter}
+            typeId={reportTypeId}
+            showPropertyIds={reportProperties}
+          />
         ) : null}
       </div>
     </Panel>

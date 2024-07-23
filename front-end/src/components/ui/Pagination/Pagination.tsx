@@ -1,6 +1,8 @@
 import React from 'react';
 import Button from '../Button/Button';
 import Icon from '../Icon/Icon';
+import { useSearchParams } from 'react-router-dom';
+import { Ellipsis } from 'lucide-react';
 
 interface PaginationProps {
   totalPages: number;
@@ -9,9 +11,14 @@ interface PaginationProps {
 }
 
 const Pagination: React.FC<PaginationProps> = ({ totalPages = 0, currentPage = 0, onPageChange }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
       onPageChange(page);
+      const params = new URLSearchParams(searchParams);
+      params.set('page', page.toString());
+
+      setSearchParams(params);
     }
   };
 
@@ -47,13 +54,17 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages = 0, currentPage = 0
           </Button>
         );
       }
-      pageButtons.push(<span key='dots-1'>...</span>);
+      pageButtons.push(
+        <span key='dots-1'>
+          <Ellipsis />
+        </span>
+      );
       pageButtons.push(
         <Button
           key={totalPages}
           onClick={() => handlePageChange(totalPages)}
           intent={currentPage === totalPages ? 'primary' : 'normal'}
-          rounded
+          rounded='icon'
         >
           {totalPages}
         </Button>
@@ -73,7 +84,11 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages = 0, currentPage = 0
           1
         </Button>
       );
-      pageButtons.push(<span key='dots-2'>...</span>);
+      pageButtons.push(
+        <span key='dots-2'>
+          <Ellipsis />
+        </span>
+      );
 
       for (let i = totalPages - 4; i <= totalPages; i++) {
         pageButtons.push(
@@ -100,7 +115,11 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages = 0, currentPage = 0
           1
         </Button>
       );
-      pageButtons.push(<span key='dots-3'>...</span>);
+      pageButtons.push(
+        <span key='dots-3'>
+          <Ellipsis />
+        </span>
+      );
 
       for (let i = currentPage - 1; i <= currentPage + 1; i++) {
         pageButtons.push(
@@ -132,7 +151,7 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages = 0, currentPage = 0
   };
 
   return (
-    <div className='flex items-center justify-center [&_*]:text-sm'>
+    <div className='flex items-center justify-center space-x-1 [&_*]:text-sm'>
       <Button rounded='icon' onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
         <Icon name='chevron_left' />
       </Button>

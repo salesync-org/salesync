@@ -214,12 +214,14 @@ public class RecordServiceImpl implements RecordService {
 			);
 			List<String> permissions = SecurityContextHelper.getContextAuthorities();
 
-			if(permissions.contains(PermissionType.DELETE_OWN.getPermission())) {
+			if(!permissions.contains(PermissionType.DELETE_ALL.getPermission())
+			&& !permissions.contains(PermissionType.DELETE_OWN.getPermission())
+			) {
+				throw new AccessDeniedException("You are not allowed to delete this record");
+			} else if(permissions.contains(PermissionType.DELETE_OWN.getPermission())) {
 				if(!userContextId.equals(record.getUserId().toString())) {
 					throw new AccessDeniedException("You are not allowed to delete this record");
 				}
-			} else if(!permissions.contains(PermissionType.DELETE_ALL.getPermission())) {
-				throw new AccessDeniedException("You are not allowed to delete this record");
 			}
 
 			record.getRecordProperties().forEach(properties -> {

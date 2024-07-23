@@ -113,7 +113,7 @@ const RecordDetail = () => {
             />
             <div className='flex flex-col'>
               <div className=''>{record.source_record.type.name}</div>
-              <div className='text-xl font-bold'>{record.source_record.name}</div>
+              <div className='text-xl font-bold'>{formattedRecord.name ?? record.source_record.name}</div>
             </div>
           </div>
           <ButtonGroup>

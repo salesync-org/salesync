@@ -67,6 +67,11 @@ const TabLayoutModal = ({ isOpen, onClose, openingTabId, layoutName, ...props }:
     setSectionAdd(null);
   };
 
+  const handleSectionDelete = async (sectionName: string) => {
+    const newLayoutOrders = layoutOrders.filter((layoutOrder) => layoutOrder.name !== sectionName);
+    handleUpdateSectionList(newLayoutOrders);
+  };
+
   const handleUpdateTypeList = debounce(async (types: LayoutType[]) => {
     const newLayoutOrders = layoutOrders.map((layoutOrder) => {
       if (layoutOrder.name === selectedTab) {
@@ -157,14 +162,19 @@ const TabLayoutModal = ({ isOpen, onClose, openingTabId, layoutName, ...props }:
                                 className={cn(
                                   'relative cursor-pointer rounded px-2 py-2 transition-all hover:bg-secondary/20',
                                   layoutOrder.name === selectedTab && 'animate-appearing bg-secondary/10',
-                                  layoutOrder.name === 'Home' && 'cursor-not-allowed hover:bg-transparent',
+                                  layoutOrder.name === 'Home' ? 'cursor-not-allowed hover:bg-transparent' : 'group',
                                   'align-center flex'
                                 )}
-                                onClick={() => {
-                                  if (layoutOrder.name === 'Home') return;
-                                  setSelectedTab(layoutOrder.name);
-                                }}
                               >
+                                <button
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    handleSectionDelete(layoutOrder.name);
+                                  }}
+                                  className='absolute right-0 top-1/2 hidden h-6 w-6 origin-center -translate-y-1/2 justify-center rounded-full border-0 bg-transparent p-0 text-center hover:bg-transparent active:bg-transparent group-hover:block'
+                                >
+                                  <X size='1rem'></X>
+                                </button>
                                 <Icon
                                   className='ml-2 grid size-8 place-content-center rounded-md bg-primary-border-secondary text-xl text-white'
                                   name={layoutOrder.icon}
@@ -172,7 +182,15 @@ const TabLayoutModal = ({ isOpen, onClose, openingTabId, layoutName, ...props }:
                                 {layoutOrder.name === selectedTab && (
                                   <span className='absolute bottom-0 left-0 top-0 w-[4px] bg-primary'></span>
                                 )}
-                                <p className='self-center px-4'>{layoutOrder.name}</p>
+                                <p
+                                  className='self-center px-4'
+                                  onClick={() => {
+                                    if (layoutOrder.name === 'Home') return;
+                                    setSelectedTab(layoutOrder.name);
+                                  }}
+                                >
+                                  {layoutOrder.name}
+                                </p>
                               </div>
                             </li>
                           )}

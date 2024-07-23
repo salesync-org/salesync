@@ -150,7 +150,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const layoutOrders = updatedUser.settings.layout_order.map((layoutOrder) => {
         const filteredLayoutOrderTypes = layoutOrder.types.filter((type) => {
           // Don't save to server if the tab is a record tab but user didn't pin it
-          return !(type.isPrimitiveType === false && type.saved === false);
+          return !(type.isPrimitiveType === false && type.saved === false) && type.type_id;
         });
         return { ...layoutOrder, types: filteredLayoutOrderTypes };
       });

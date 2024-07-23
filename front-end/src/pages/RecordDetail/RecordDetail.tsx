@@ -97,7 +97,6 @@ const RecordDetail = () => {
   const templateName = record.source_record.type.template.name ?? '';
   const templateClassName = templateLayoutClassName[templateName] ?? '';
   const shouldShowActivity = templateName !== 'Activity';
-
   return (
     <div className='flex flex-col'>
       <section className='pt-12'>
@@ -113,7 +112,7 @@ const RecordDetail = () => {
             />
             <div className='flex flex-col'>
               <div className=''>{record.source_record.type.name}</div>
-              <div className='text-xl font-bold'>{formattedRecord.name ?? record.source_record.name}</div>
+              <div className='text-xl font-bold'>{formattedRecord['Name'] ?? record.source_record.name}</div>
             </div>
           </div>
           <ButtonGroup>

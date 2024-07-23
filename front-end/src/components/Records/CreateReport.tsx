@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import recordApi from '@/api/record';
+import recordApi, { RecordsFilter } from '@/api/record';
 import useRecords from '@/hooks/record-service/useRecords';
 import useProperties from '@/hooks/type-service/useProperties';
 import useType from '@/hooks/type-service/useType';
@@ -22,6 +22,13 @@ const CreateReport = () => {
   const { data: recordData, isLoading: isRecordLoading } = useRecords(companyName, typeReportId);
   const { data: propertyData, isLoading: isPropertyLoading } = useProperties(companyName, typeReportId);
   const { types, isLoading: isTypeLoading } = useType();
+  const [recordFilter, setRecordFilter] = useState<RecordsFilter>({
+    searchTerm: '',
+    isAsc: false,
+    propertyName: null,
+    currentPage: 1,
+    pageSize: 30
+  });
   const { data: reportProperties, isLoading: isReportLoading } = useProperties(
     companyName,
     types?.find((type: any) => type.name === 'Report')?.id
@@ -132,7 +139,14 @@ const CreateReport = () => {
           />
         </section>
         <section className='overflow-scroll'>
-          {showPropertyIds.length > 0 ? <RecordTable typeId={typeReportId} showPropertyIds={showPropertyIds} /> : null}
+          {showPropertyIds.length > 0 ? (
+            <RecordTable
+              recordFilter={recordFilter}
+              setRecordFilter={setRecordFilter}
+              typeId={typeReportId}
+              showPropertyIds={showPropertyIds}
+            />
+          ) : null}
         </section>
       </div>
     </Panel>

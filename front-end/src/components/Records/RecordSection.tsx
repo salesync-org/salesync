@@ -8,7 +8,7 @@ import { MODAL_TYPES, useGlobalModalContext } from '@/context/GlobalModalContext
 // import { Type } from '@/type';
 import { Filter, Import, Plus, RefreshCw } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { Tooltip } from 'react-tooltip';
 import LoadingSpinnerSmall from '../ui/Loading/LoadingSpinnerSmall';
 import useRecords, { RecordsQueryResponse } from '@/hooks/record-service/useRecords';
@@ -39,7 +39,7 @@ const RecordSection = ({ type }: RecordSectionProps) => {
     isAsc: false,
     propertyName: null,
     currentPage: 1,
-    pageSize: 3000
+    pageSize: 12
   });
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -47,8 +47,10 @@ const RecordSection = ({ type }: RecordSectionProps) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       // setDebounceSearch(search);
-      setQuickSearch(true);
-      setRecordFilter({ ...recordFilter, searchTerm: search });
+      if (search) {
+        setQuickSearch(true);
+        setRecordFilter({ ...recordFilter, searchTerm: search });
+      }
     }, 500);
 
     return () => {
@@ -194,6 +196,7 @@ const RecordSection = ({ type }: RecordSectionProps) => {
       <div className='-mx-4 mt-4 flex-grow'>
         <RecordTable
           recordsQuery={recordsQuery}
+          setRecordFilter={setRecordFilter}
           propertiesQuery={propertiesQuery}
           typeId={typeId}
           recordFilter={recordFilter}

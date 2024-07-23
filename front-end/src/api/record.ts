@@ -116,6 +116,8 @@ function mapData(input: InputData): OutputData {
 class RecordApi {
   async getRecords(companyName: string, typeId: string, recordFilter: RecordsFilter) {
     const response = await axios.post(`${URL}/${companyName}/records/elasticsearch`, {
+      from: (recordFilter.currentPage - 1) * recordFilter.pageSize,
+      size: recordFilter.pageSize,
       query: {
         bool: {
           must: [
@@ -149,8 +151,8 @@ class RecordApi {
       search_term: recordFilter.searchTerm,
       is_asc: recordFilter.isAsc,
       property_name: recordFilter.propertyName,
-      current_page: recordFilter.currentPage,
-      page_size: recordFilter.pageSize
+      current_page: recordFilter.currentPage ?? 1,
+      page_size: recordFilter.pageSize ?? 6
     });
     return response.data;
   }

@@ -20,7 +20,7 @@ const useRecords = (
     currentPage: 1,
     pageSize: 300
   },
-  searchBoost: boolean = true
+  searchBoost: boolean = false
 ) => {
   const key = ['records', typeId, recordFilter];
   const { data, error, isLoading, refetch, isRefetching } = useQuery(
@@ -35,7 +35,8 @@ const useRecords = (
       refetchOnWindowFocus: false,
       staleTime: 1000 * 60 * 5,
       refetchOnMount: 'always',
-      enabled: !!typeId
+      enabled: !!typeId,
+      cacheTime: 0
     }
   );
 

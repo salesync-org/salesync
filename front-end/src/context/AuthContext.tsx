@@ -72,7 +72,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
     const loadUsers = async () => {
       const companyUsers = await getUsers(companyName);
-      setUsers(companyUsers);
+      setUsers(companyUsers ?? []);
     };
 
     authenticated();
